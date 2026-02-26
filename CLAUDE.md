@@ -15,12 +15,18 @@ employee at the best company in the world.
 - `vba/` — VBA modules (.bas files)
 - `sql/` — SQL scripts
 - `python/` — Python scripts
-- `docs/day-to-day/` — day to day reference docs
+- `docs/day-to-day/` — day-to-day reference docs
 - `docs/overview/` — project overview docs
 - `docs/setup/` — setup guides
-- `training/` — coworker training materials
-- `qa/` — QA tracking
-- `tasks/` — session management (todo.md, lessons.md)
+- `training/` — final reviewed guides ready for coworkers
+- `qa/` — QA tracking, test plans, checklists, and bug logs
+- `tasks/` — session management files, todo.md and lessons.md
+- `excel/` — contains the main demo P&L Excel file, uploaded each session
+- `DemofileChartBuild/` — chart sheet files for the demo P&L, work in progress
+- `NewTesting/` — experimental code, research, and ideas not ready for main project yet
+- `CompletePackageStorage/` — final production-ready files and backups
+  - `CompletePackageStorage/production/` — live, ready-to-go final files
+  - `CompletePackageStorage/backups/` — versioned backups
 
 ## My Audience
 Training docs and guides are written for non-technical Finance & Accounting staff.
@@ -89,5 +95,6 @@ Before delivering ANYTHING ask yourself:
 - If any answer is no — fix it before delivering
 
 ## Current Status
-- Setting up repo and file structure
+- Repo structure audit complete (2026-02-26)
+- Cleanup and documentation update in progress
 - Next: Upload existing files from local APCLDmerge_ALL folder into GitHub
