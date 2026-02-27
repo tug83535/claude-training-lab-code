@@ -32,8 +32,8 @@ Option Explicit
 '===============================================================================
 
 ' --- Category & Action Data ---
-Private Const CAT_COUNT As Long = 14
-Private Const ACT_COUNT As Long = 50
+Private Const CAT_COUNT As Long = 15
+Private Const ACT_COUNT As Long = 62
 
 '===============================================================================
 ' LaunchCommandCenter - Show UserForm or fall back to InputBox
@@ -137,7 +137,7 @@ Public Sub BuildCommandCenter()
         ' Version Label
         Set ctrl = frm.Controls.Add("Forms.Label.1", "lblVersion")
         With ctrl
-            .Caption = "v" & APP_VERSION & " | " & ThisWorkbook.Worksheets.Count & " sheets | 50 actions"
+            .Caption = "v" & APP_VERSION & " | " & ThisWorkbook.Worksheets.Count & " sheets | 62 actions"
             .Left = 12: .Top = 30: .Width = 350: .Height = 14
             .Font.Size = 8: .Font.Italic = True
             .ForeColor = &H808080
@@ -303,8 +303,8 @@ Private Function GetFormCode() As String
     
     ' --- LoadActions - Define all 50 actions ---
     s = s & "Private Sub LoadActions()" & vbCrLf
-    s = s & "    m_ActionCount = 50" & vbCrLf
-    s = s & "    ReDim m_Actions(1 To 50)" & vbCrLf
+    s = s & "    m_ActionCount = 62" & vbCrLf
+    s = s & "    ReDim m_Actions(1 To 62)" & vbCrLf
     s = s & "    Dim i As Long" & vbCrLf
     s = s & "    Dim d As Variant" & vbCrLf
     s = s & "    d = Array( _" & vbCrLf
@@ -357,8 +357,20 @@ Private Function GetFormCode() As String
     s = s & "        ""Advanced"", ""Cross-Sheet Validation"", _" & vbCrLf
     s = s & "        ""Advanced"", ""Executive Mode Toggle"", _" & vbCrLf
     s = s & "        ""Advanced"", ""Force Recalculate All"", _" & vbCrLf
-    s = s & "        ""Advanced"", ""About This Toolkit"")" & vbCrLf
-    s = s & "    For i = 1 To 50" & vbCrLf
+    s = s & "        ""Advanced"", ""About This Toolkit"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Delete All Blank Rows"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Unhide All Worksheets"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Sort Sheets Alphabetically"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Toggle Freeze Panes"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Convert Formulas to Values"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""AutoFit All Columns"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Protect All Sheets"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Unprotect All Sheets"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Find && Replace (All Sheets)"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Highlight Hardcoded Numbers"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Toggle Presentation Mode"", _" & vbCrLf
+    s = s & "        ""Sheet Tools"", ""Unmerge and Fill Down"")" & vbCrLf
+    s = s & "    For i = 1 To 62" & vbCrLf
     s = s & "        m_Actions(i).Num = i" & vbCrLf
     s = s & "        m_Actions(i).Category = d((i - 1) * 2)" & vbCrLf
     s = s & "        m_Actions(i).Label = d((i - 1) * 2 + 1)" & vbCrLf
@@ -373,7 +385,7 @@ Private Function GetFormCode() As String
     s = s & "    cats = Array(""Monthly Operations"", ""Analysis"", ""Data Quality"", _" & vbCrLf
     s = s & "        ""Reporting"", ""Utilities"", ""Data & Import"", ""Forecasting"", _" & vbCrLf
     s = s & "        ""Scenarios"", ""Allocation"", ""Consolidation"", _" & vbCrLf
-    s = s & "        ""Version Control"", ""Governance"", ""Admin & Testing"", ""Advanced"")" & vbCrLf
+    s = s & "        ""Version Control"", ""Governance"", ""Admin & Testing"", ""Advanced"", ""Sheet Tools"")" & vbCrLf
     s = s & "    Dim c As Variant" & vbCrLf
     s = s & "    For Each c In cats" & vbCrLf
     s = s & "        lstCategories.AddItem CStr(c)" & vbCrLf
@@ -401,7 +413,7 @@ Private Function GetFormCode() As String
     s = s & "    End If" & vbCrLf
     s = s & "    Dim srch As String: srch = LCase(Trim(txtSearch.Text))" & vbCrLf
     s = s & "    Dim cnt As Long: cnt = 0" & vbCrLf
-    s = s & "    ReDim m_FilteredNums(1 To 50)" & vbCrLf
+    s = s & "    ReDim m_FilteredNums(1 To 62)" & vbCrLf
     s = s & "    Dim i As Long" & vbCrLf
     s = s & "    For i = 1 To m_ActionCount" & vbCrLf
     s = s & "        Dim catMatch As Boolean" & vbCrLf
@@ -557,7 +569,21 @@ Public Sub ExecuteAction(ByVal num As Long)
         Case 48: modNavigation.ToggleExecutiveMode
         Case 49: modPerformance.ForceRecalc
         Case 50: ShowAbout
-        
+
+        ' --- Sheet Tools (51-62) ---
+        Case 51: modUtilities.DeleteBlankRows
+        Case 52: modUtilities.UnhideAllSheets
+        Case 53: modUtilities.SortSheetsAlphabetically
+        Case 54: modUtilities.ToggleFreezePanes
+        Case 55: modUtilities.ConvertToValues
+        Case 56: modUtilities.AutoFitAllColumns
+        Case 57: modUtilities.ProtectAllSheets
+        Case 58: modUtilities.UnprotectAllSheets
+        Case 59: modUtilities.FindReplaceAllSheets
+        Case 60: modUtilities.HighlightHardcodedNumbers
+        Case 61: modUtilities.TogglePresentationMode
+        Case 62: modUtilities.UnmergeAndFillDown
+
         Case Else
             MsgBox "Unknown action #" & num, vbExclamation, APP_NAME
     End Select
@@ -574,7 +600,7 @@ End Sub
 Private Sub ShowAbout()
     MsgBox "KEYSTONE BENEFITECH AUTOMATION TOOLKIT" & vbCrLf & _
            "Version " & APP_VERSION & " | Build " & APP_BUILD_DATE & vbCrLf & vbCrLf & _
-           "29 VBA modules | 50 menu options" & vbCrLf & _
+           "30 VBA modules | 62 menu options" & vbCrLf & _
            "Built for: Keystone BenefitTech, Inc." & vbCrLf & _
            "Model: P&L Reporting & Allocation" & vbCrLf & vbCrLf & _
            "UserForm Command Center (BUG-038 resolved)" & vbCrLf & _
