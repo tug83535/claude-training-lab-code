@@ -18,7 +18,6 @@
 - [ ] Commit missing VBA .bas files for modules referenced in ExecuteAction() but not in repo: modLogger, modImport, modForecast, modScenario, modAllocation, modConsolidation, modVersionControl, modAdmin, modIntegrationTest, modAWSRecompute, modSensitivity (and others — see CLAUDE.md session summary)
 - [ ] Update docs/overview/CODE_COMPARISON_REPORT.md — it is outdated, was written before modUtilities_v2.1 was committed; 12 of the 25 "Not Yet Built" items are now actually built
 - [ ] Build: Timestamp Audit Trail on Cell Changes (Worksheet_Change event) — highest priority remaining VBA gap
-- [ ] Build: Backup Workbook with Timestamp macro
 - [ ] Build: Export All Charts to PowerPoint macro
 - [ ] Fully read and audit remaining 9 Python scripts (pnl_allocation_simulator, pnl_forecast, pnl_month_end, pnl_ap_matcher, pnl_dashboard, pnl_email_report, pnl_cli, pnl_tests, pnl_snapshot)
 - [ ] Audit DemofileChartBuild/ folder contents

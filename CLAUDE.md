@@ -186,5 +186,11 @@ modVersionControl, modAdmin, modIntegrationTest, modAWSRecompute, modSensitivity
 7. Commit and push all changes to branch `claude/review-project-status-ntucB`
 8. Read remaining 9 Python scripts (full audit still pending)
 9. Build: Timestamp Audit Trail on Cell Changes (highest-priority remaining VBA feature)
-10. Build: Backup Workbook with Timestamp
-11. Build: Export All Charts to PowerPoint
+10. Build: Export All Charts to PowerPoint
+
+## Session Continuation Notes (same day, 2026-02-27)
+- User confirmed they do NOT want a Backup Workbook macro — do not propose this feature
+- Excel file (KeystoneBenefitTech_PL_Model.xlsx) is always a binary file — Claude cannot read it directly; all sheet knowledge comes from ARCHITECTURE_DIAGRAM.md and modConfig_v2.1.bas constants — permanent limitation
+- User is new to GitHub; Pull Request / merge process was explained (feature branch → master via PR on github.com)
+- Missing VBA modules confirmed NOT built by any prior Claude account — must be provided from user's local APCLDmerge_ALL folder OR built from scratch in a future session
+- modLogger.bas is the most critical missing module — all other VBA modules depend on it for runtime logging

@@ -45,3 +45,8 @@
 - Always compare config values across layers: VBA constants, Python config, and SQL tables can all define the same values (fiscal year, revenue shares, sheet names) — mismatches cause silent errors
 - Revenue shares defined in Python pnl_config.py must match the allocation_shares table in SQL transformations.sql — found mismatch this session (iGO=55% Python vs 50% SQL)
 - SQL scripts that reference tables must use the exact table name from the script that creates them — found `fact_gl_transactions` vs `fact_gl` mismatch in pnl_enhancements.sql
+
+## User Feature Preferences
+- User confirmed they do NOT want a "Backup Workbook with Timestamp" macro — do not propose or rebuild this
+- Always log user feature rejections here so future Claude accounts don't re-propose them
+- When proposing new features, review this section first to avoid suggesting features the user has already declined
