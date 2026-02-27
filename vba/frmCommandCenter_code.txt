@@ -43,11 +43,11 @@ Private Sub UserForm_Initialize()
 End Sub
 
 '===============================================================================
-' LoadActions - Define all 50 actions (category + label pairs)
+' LoadActions - Define all 62 actions (category + label pairs)
 '===============================================================================
 Private Sub LoadActions()
-    m_ActionCount = 50
-    ReDim m_Actions(1 To 50)
+    m_ActionCount = 62
+    ReDim m_Actions(1 To 62)
     Dim i As Long
     Dim d As Variant
     d = Array( _
@@ -100,8 +100,20 @@ Private Sub LoadActions()
         "Advanced", "Cross-Sheet Validation", _
         "Advanced", "Executive Mode Toggle", _
         "Advanced", "Force Recalculate All", _
-        "Advanced", "About This Toolkit")
-    For i = 1 To 50
+        "Advanced", "About This Toolkit", _
+        "Sheet Tools", "Delete Blank Rows", _
+        "Sheet Tools", "Unhide All Sheets", _
+        "Sheet Tools", "Sort Sheets Alphabetically", _
+        "Sheet Tools", "Toggle Freeze Panes", _
+        "Sheet Tools", "Convert Selection to Values", _
+        "Sheet Tools", "AutoFit All Columns", _
+        "Sheet Tools", "Protect All Sheets", _
+        "Sheet Tools", "Unprotect All Sheets", _
+        "Sheet Tools", "Find & Replace All Sheets", _
+        "Sheet Tools", "Highlight Hardcoded Numbers", _
+        "Sheet Tools", "Toggle Presentation Mode", _
+        "Sheet Tools", "Unmerge and Fill Down")
+    For i = 1 To 62
         m_Actions(i).Num = i
         m_Actions(i).Category = d((i - 1) * 2)
         m_Actions(i).Label = d((i - 1) * 2 + 1)
@@ -118,7 +130,8 @@ Private Sub LoadCategories()
     cats = Array("Monthly Operations", "Analysis", "Data Quality", _
         "Reporting", "Utilities", "Data & Import", "Forecasting", _
         "Scenarios", "Allocation", "Consolidation", _
-        "Version Control", "Governance", "Admin & Testing", "Advanced")
+        "Version Control", "Governance", "Admin & Testing", "Advanced", _
+        "Sheet Tools")
     Dim c As Variant
     For Each c In cats
         lstCategories.AddItem CStr(c)
@@ -149,7 +162,7 @@ Private Sub FilterActions()
     End If
     Dim srch As String: srch = LCase(Trim(txtSearch.Text))
     Dim cnt As Long: cnt = 0
-    ReDim m_FilteredNums(1 To 50)
+    ReDim m_FilteredNums(1 To 62)
     Dim i As Long
     For i = 1 To m_ActionCount
         Dim catMatch As Boolean
