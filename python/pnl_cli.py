@@ -218,6 +218,27 @@ def cmd_charts(args):
         print("Error: chart_generator module not found")
 
 
+def cmd_monte_carlo(args):
+    """Run Monte Carlo P&L risk simulation."""
+    from pnl_monte_carlo import MonteCarloSimulator
+    sim = MonteCarloSimulator(
+        file_path   = args.file,
+        iterations  = args.iterations,
+        seed        = args.seed,
+        share_conc  = args.concentration,
+        shock_prob  = args.shock_prob,
+        shock_size  = args.shock_size,
+    )
+    sim.load().run().print_results()
+    if not args.no_chart:
+        try:
+            sim.plot(save_path=args.chart_path)
+        except Exception as e:
+            print(f"  ⚠ Chart generation failed: {e}")
+    if args.export:
+        sim.export(output_path=args.export)
+
+
 def cmd_run_all(args):
     """Run the full pipeline."""
     print(f"\n{'='*55}")
@@ -258,6 +279,7 @@ Examples:
   python pnl_cli.py close --month 3 --export
   python pnl_cli.py forecast --months 6 --method ets
   python pnl_cli.py simulate --presets
+  python pnl_cli.py monte-carlo --iterations 50000 --export results.xlsx
   python pnl_cli.py dashboard
   python pnl_cli.py run-all
 """
@@ -316,6 +338,25 @@ Examples:
     p_cht = sub.add_parser("charts", help="Generate charts")
     p_cht.add_argument("--output-dir", default=None)
 
+    # monte-carlo
+    p_mc = sub.add_parser("monte-carlo", help="Monte Carlo P&L risk simulation")
+    p_mc.add_argument("--iterations", "-n", type=int, default=10000,
+                      help="Number of iterations (default: 10,000)")
+    p_mc.add_argument("--seed",             type=int,   default=None,
+                      help="Random seed for reproducible results")
+    p_mc.add_argument("--concentration",    type=float, default=10.0,
+                      help="Dirichlet concentration for share distribution (default: 10.0)")
+    p_mc.add_argument("--shock-prob",       type=float, default=0.0,
+                      help="Probability of expense shock per iteration (default: 0.0)")
+    p_mc.add_argument("--shock-size",       type=float, default=0.25,
+                      help="Shock size as fraction of spend (default: 0.25)")
+    p_mc.add_argument("--export", "-e",     default=None, metavar="PATH",
+                      help="Export results to Excel at this path")
+    p_mc.add_argument("--chart-path",       default=None, metavar="PATH",
+                      help="Save chart to this path (PNG)")
+    p_mc.add_argument("--no-chart",         action="store_true",
+                      help="Skip chart generation")
+
     # run-all
     sub.add_parser("run-all", help="Run full pipeline")
 
@@ -336,6 +377,7 @@ Examples:
         "email": cmd_email,
         "compare": cmd_compare,
         "charts": cmd_charts,
+        "monte-carlo": cmd_monte_carlo,
         "run-all": cmd_run_all,
     }
 

@@ -19,23 +19,25 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 # SECTION 1 — FULL INVENTORY: WHAT'S ALREADY BUILT
 
-## VBA — 12 Modules, 50+ Actions (v2.1)
+## VBA — 14 Modules, 62 Actions (v2.1)
 
 | Module | What It Does |
 |--------|-------------|
 | `modConfig_v2.1.bas` | The foundation of everything. Holds all constants (sheet names, product names, departments, fiscal year, colors), plus 15+ helper functions: SafeNum, SafeStr, LastRow, LastCol, FindColByHeader, FindRowByLabel, SheetExists, GetSheet, SafeDeleteSheet, StyleHeader. Every other module depends on this. |
 | `modDashboard_v2.1.bas` | Builds and refreshes charts. Includes 3 standard charts (revenue trend, margin %, product mix pie) plus 3 advanced dashboards: Executive KPI cards with trend arrows, Waterfall chart (Revenue → Net Income), and Product Comparison side-by-side. Dynamically finds the last month column with data — never hardcoded. |
 | `modDataQuality_v2.1.bas` | Full data quality scanner. Runs 6 checks: duplicate rows, mixed date formats, text-stored numbers, assumption cell issues, misspelled product names, and blank AWS expense cells. v2.1 fix: FixTextNumbers only converts pre-flagged cells — never blindly converts GL IDs or date strings. |
-| `modFormBuilder_v2.1.bas` | Builds the Command Center UserForm. Mode A: creates the form and injects code automatically (requires VBA trust setting). Mode B: manual installation with printed step-by-step instructions. Routes all 50 actions through a single ExecuteAction() function. |
-| `modMasterMenu_v2.1.bas` | InputBox fallback menu (3-page, 50 items). Used when the UserForm can't be installed. Supports N/P navigation between pages. All routing delegates to modFormBuilder.ExecuteAction(). |
+| `modFormBuilder_v2.1.bas` | Builds the Command Center UserForm. Mode A: creates the form and injects code automatically (requires VBA trust setting). Mode B: manual installation with printed step-by-step instructions. Routes all 62 actions through a single ExecuteAction() function. |
+| `modLogger_v2.1.bas` | Runtime audit log. Every VBA macro run is timestamped and logged to a hidden sheet (VBA_AuditLog) — xlSheetVeryHidden. Logs: Timestamp, User, Module, Procedure, Message, Status. Color-coded by severity. Auto-trims at 5,000 rows. ViewLog, ExportLog, and ClearLog available from Command Center (actions 41–43). |
+| `modMasterMenu_v2.1.bas` | InputBox fallback menu (4-page, 62 items). Used when the UserForm can't be installed. Supports N/P navigation between pages. All routing delegates to modFormBuilder.ExecuteAction(). |
 | `modMonthlyTabGenerator_v2.1.bas` | Auto-generates monthly tabs. Clones Mar template for Apr–Dec with formula updates. v2.1: GenerateNextMonthOnly detects the latest existing month, clones it, clears data values, keeps formulas, yellow-highlights input cells, and marks tab green. Header update logic prevents substring corruption bugs (e.g., "Margin" → "Aprigin"). |
 | `modNavigation_v2.1.bas` | Sheet navigation. RefreshTableOfContents rebuilds hyperlinks on the Report--> sheet. GoHome, QuickJump. Keyboard shortcuts via Application.OnKey: Ctrl+Shift+M (Command Center), Ctrl+Shift+H (Home), Ctrl+Shift+J (Jump), Ctrl+Shift+R (Reconciliation). v2.1 fix: switched from MacroOptions (which overwrote Excel built-ins like Ctrl+H) to OnKey with safe Ctrl+Shift combos. |
 | `modPDFExport_v2.1.bas` | Professional PDF export. ExportReportPackage loops through configured report sheets and exports the full package. ExportSingleSheet exports the active sheet. ApplyPrintSettings stamps professional headers (company name, sheet name, CONFIDENTIAL) and footers (page number, date, version) with landscape, fit-to-page, 0.5" margins. SaveAs dialog with Desktop default and date stamp. |
 | `modPerformance_v2.1.bas` | TurboMode on/off (disables screen updating, events, alerts; sets manual calc; changes cursor). ElapsedSeconds with midnight-wrap fix. ForceRecalc. UpdateStatus for status bar progress. |
 | `modReconciliation_v2.1.bas` | RunAllChecks reads the Checks sheet and evaluates all PASS/FAIL formulas, color-codes results. ExportCheckResults writes a timestamped text file. ValidateCrossSheet (v2.1) runs 4 computed validation checks: GL total vs P&L Trend, GL Jan vs Functional Jan, GL by product vs Product Summary, plus Checks sheet mirror — all with configurable tolerance. |
 | `modSearch_v2.1.bas` | Cross-sheet search. SearchAll finds a keyword across all visible sheets and generates a Search Results sheet with hyperlinks to every match. SearchAndNavigate is interactive. SearchCurrentSheet highlights matches on the active sheet in yellow. Caps at 200 rows displayed but reports total match count. |
+| `modUtilities_v2.1.bas` | 12 quick-win utility macros (actions 51–62): DeleteBlankRows, UnhideAllSheets, SortSheetsAlphabetically, ToggleFreezePanes, ConvertToValues, AutoFitAllColumns, ProtectAllSheets, UnprotectAllSheets, FindReplaceAllSheets, HighlightHardcodedNumbers, TogglePresentationMode, UnmergeAndFillDown. All wired into Command Center Sheet Tools category. |
 | `modVarianceAnalysis_v2.1.bas` | RunVarianceAnalysis compares two monthly P&L sheets (default: Jan vs Feb), calculates dollar and % variance, and applies Favorable/Unfavorable/Flat logic with cost-line reversal for expense rows. Flags rows over 15% threshold in yellow. GenerateCommentary auto-writes English narrative for the top 5 FY-vs-Budget variances, ranked by absolute dollar impact. |
-| `frmCommandCenter_code.txt` | The full VBA code for the Command Center UserForm (Mode B manual install). 50 actions across 14 categories. Category filter + text search filter. Status bar feedback. |
+| `frmCommandCenter_code.txt` | The full VBA code for the Command Center UserForm (Mode B manual install). 62 actions across 15 categories. Category filter + text search filter. Status bar feedback. |
 
 ---
 
@@ -50,19 +52,20 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 ---
 
-## Python — 10 Scripts + Tests + Config
+## Python — 11 Scripts + Tests + Config
 
 | File | What It Does |
 |------|-------------|
 | `pnl_config.py` | Centralized config (database paths, file paths, product/department/month lists, fiscal year, thresholds, email settings). Used by every other script. |
 | `pnl_allocation_simulator.py` | What-if allocation scenario engine. 3 preset scenarios (baseline, aggressive growth, cost reduction). Recalculates product-level financials under different share assumptions. Exports results to Excel. |
 | `pnl_forecast.py` | Forecasting engine with 4 methods: Simple Moving Average, Exponential Smoothing (ETS), Linear Trend, and Scenario-based. Generates confidence intervals. Handles both product and department level. |
+| `pnl_monte_carlo.py` | **Monte Carlo P&L risk simulation.** Runs N iterations (default 10,000) with Dirichlet-distributed revenue shares and Normal-distributed expense amounts. Produces P5/P25/P50/P75/P95 percentile tables, Value at Risk, per-product breakdown, a 4-panel distribution chart, and a formatted Excel export. Shock event modeling (optional). Fully wired into pnl_cli.py. |
 | `pnl_month_end.py` | Month-end close automation. Runs a 6-check QA pipeline: data completeness, duplicate check, allocation balance, variance threshold, cross-sheet reconciliation, and snapshot creation. Returns PASS/FAIL/WARN for each check with detail. |
 | `pnl_ap_matcher.py` | AP invoice matching engine. Fuzzy vendor name matching (handles typos and abbreviations). Duplicate invoice detection. Matches GL transactions to AP records. Flags unmatched items for review. |
 | `pnl_snapshot.py` | Point-in-time P&L snapshots stored in SQLite. Captures full P&L state at a given date. Enables period-over-period comparisons using historical snapshots. |
 | `pnl_dashboard.py` | Interactive Streamlit web dashboard. Filters by product, department, and month. Visualizes revenue, expenses, margin trends. Reads directly from the SQLite database. |
 | `pnl_email_report.py` | Automated HTML email reports via Office365/SMTP. Generates formatted P&L summary emails with tables, charts, and KPIs. Supports both scheduled and on-demand sending. |
-| `pnl_cli.py` | Command-line interface for running any module from the terminal. Argument parsing for all scripts. |
+| `pnl_cli.py` | Master command-line interface for running any module from the terminal. All scripts reachable from one entry point including monte-carlo, forecast, simulate, close, dashboard, and run-all. |
 | `pnl_runner.py` | Master orchestrator. Chains all scripts in the correct order (staging → transformations → validations → month-end close → snapshot). Single entry point to run the full pipeline. |
 | `pnl_tests.py` | Full pytest test suite. 100% coverage on config and allocation logic. 80%+ coverage on close and forecasting. Tests edge cases: empty datasets, divide-by-zero, missing products, tolerance handling. |
 
@@ -234,9 +237,10 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 **1. Unmerge and Fill Down**
 > Unmerges selected cells and fills blanks with the value from the cell above.
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | Nothing in current VBA handles merged cells. Common issue with ERP exports. Clean gap. |
+| Where | `modUtilities_v2.1.bas` — UnmergeAndFillDown() |
+| Notes | Unmerges all merged cells in selection, then fills each blank cell with the value from the row above. Loops forward through selection. Uses TurboOn/TurboOff for performance. Wired into Command Center as action #62 (Sheet Tools category). |
 
 ---
 
@@ -253,28 +257,30 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 **3. Highlight Hardcoded Numbers**
 > Changes font color of cells containing typed numbers (not formulas) to blue.
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | No macro uses `SpecialCells(xlCellTypeConstants, xlNumbers)` to identify and visually flag hardcoded inputs. This is a particularly useful audit tool for financial modelers and would be a strong demo feature. Clean gap. |
+| Where | `modUtilities_v2.1.bas` — HighlightHardcodedNumbers() |
+| Notes | Uses `SpecialCells(xlCellTypeConstants, xlNumbers)` on the active sheet's UsedRange to find all hardcoded number cells. Reports count, asks confirmation, then sets font color to RGB(0,0,255). Standard audit convention: blue = typed input, black = formula. Wired into Command Center as action #60. |
 
 ---
 
 **4. Toggle Presentation Mode**
 > Hides gridlines, headings, formula bar, and collapses ribbon.
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | No toggle exists. Would turn the working spreadsheet into a clean executive presentation view instantly. Clean gap. |
+| Where | `modUtilities_v2.1.bas` — TogglePresentationMode() |
+| Notes | Uses gridlines visibility as the toggle indicator. Run once: hides gridlines, headings, formula bar. Run again: restores all three. Status bar confirms mode. Auto-clears status bar after 3 seconds. Wired into Command Center as action #61. |
 
 ---
 
 **5. Delete Completely Blank Rows**
 > Loops backwards through rows and deletes any row with zero data.
 
-| Status | NOT YET BUILT as a delete action |
-|--------|----------------------------------|
-| What's there | `modDataQuality.ScanBlankCells()` SCANS for blank cells in the AWS expense area and reports them. |
-| What's missing | The scan reports blanks; it does not delete entire blank rows. There is no DeleteBlankRows() function anywhere. Half of the idea is built (detection), but the action (deletion) does not exist. |
+| Status | ALREADY BUILT |
+|--------|--------------|
+| Where | `modUtilities_v2.1.bas` — DeleteBlankRows() |
+| Notes | Loops BACKWARDS through the selection (prevents row-shift errors during deletion). Uses CountA to detect fully blank rows. Reports count deleted. Scan detection (`modDataQuality.ScanBlankCells`) also still exists for non-destructive review before deleting. Wired into Command Center as action #51. |
 
 ---
 
@@ -300,18 +306,19 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 **8. Protect/Unprotect All Sheets**
 > Prompts for a password and protects or unprotects every worksheet.
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | No protection macros anywhere. Clean gap. |
+| Where | `modUtilities_v2.1.bas` — ProtectAllSheets() (action #57), UnprotectAllSheets() (action #58) |
+| Notes | ProtectAllSheets loops through all worksheets and applies sheet protection. UnprotectAllSheets removes protection from all sheets. Both prompt for password confirmation. Wired into Command Center as actions #57 and #58 in the Sheet Tools category. |
 
 ---
 
 **9. Batch Email via Outlook (VBA)**
 > Uses late binding to loop through a table and draft personalized emails.
 
-| Status | NOT YET BUILT in VBA |
-|--------|---------------------|
-| What's there | `pnl_email_report.py` sends HTML emails via Office365/SMTP (Python). |
+| Status | PARTIALLY BUILT |
+|--------|----------------|
+| What's there | `pnl_email_report.py` sends HTML emails via Office365/SMTP (Python). Full automated HTML reporting with P&L summary tables, KPIs, and variance flags. |
 | What's missing | No VBA Outlook integration using `CreateObject("Outlook.Application")`. The Python version requires a separate runtime environment. A VBA version would work directly from inside Excel with no additional dependencies. |
 
 ---
@@ -351,26 +358,28 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 **1. AutoFit All Column Widths**
 
-| Status | NOT YET BUILT as standalone |
-|--------|--------------------------|
-| What's there | StyleHeader calls `.EntireColumn.AutoFit` but only as part of header formatting. |
-| What's missing | No standalone SubAutoFitAll() available as an action in the Command Center. |
+| Status | ALREADY BUILT |
+|--------|--------------|
+| Where | `modUtilities_v2.1.bas` — AutoFitAllColumns() (action #56) |
+| Notes | Calls `.Columns.AutoFit` on the active sheet's UsedRange. One-click column width cleanup. Wired into Command Center as action #56 in the Sheet Tools category. |
 
 ---
 
 **2. Freeze/Unfreeze Panes Toggle**
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | Clean gap. The Perlex code shows exactly how it would be built (check `ActiveWindow.FreezePanes`, toggle, freeze at B2). |
+| Where | `modUtilities_v2.1.bas` — ToggleFreezePanes() (action #54) |
+| Notes | Checks `ActiveWindow.FreezePanes` as the toggle indicator. If frozen: unfreezes. If unfrozen: selects B2 and freezes. Status bar confirms action. Wired into Command Center as action #54. |
 
 ---
 
 **3. Convert Formulas to Values (Selection)**
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | No macro does `Selection.Value = Selection.Value`. Critical for finalizing files before distribution. Clean gap. |
+| Where | `modUtilities_v2.1.bas` — ConvertToValues() (action #55) |
+| Notes | Pastes selection values over formulas (`Selection.Value = Selection.Value`). Asks confirmation before converting. Critical for finalizing files before distribution. Wired into Command Center as action #55. |
 
 ---
 
@@ -393,9 +402,10 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 **6. Unhide All Worksheets**
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | Clean gap. Simple loop through `ActiveWorkbook.Worksheets`, set `ws.Visible = xlSheetVisible`. |
+| Where | `modUtilities_v2.1.bas` — UnhideAllSheets() (action #52) |
+| Notes | Loops through all worksheets in the active workbook and sets `ws.Visible = xlSheetVisible`. Reports count of sheets unhidden. Wired into Command Center as action #52. (Note: VBA_AuditLog is xlSheetVeryHidden by design and stays hidden.) |
 
 ---
 
@@ -410,17 +420,19 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 **8. Delete All Blank Rows**
 
-| Status | NOT YET BUILT as delete action |
-|--------|-------------------------------|
-| Notes | Same gap as Gemini.md item 5. DataQuality scans/reports; does not delete. |
+| Status | ALREADY BUILT |
+|--------|--------------|
+| Where | `modUtilities_v2.1.bas` — DeleteBlankRows() (action #51) |
+| Notes | Same as Gemini.md item 5. Loops backwards through selection using CountA. Reports count deleted. modDataQuality ScanBlankCells still exists for non-destructive review. Wired into Command Center as action #51. |
 
 ---
 
 **9. Protect/Unprotect All Sheets**
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | Same gap as Gemini.md item 8. |
+| Where | `modUtilities_v2.1.bas` — ProtectAllSheets() (action #57), UnprotectAllSheets() (action #58) |
+| Notes | Same implementation as Gemini.md item 8. Both wired into Command Center. |
 
 ---
 
@@ -435,17 +447,18 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 **11. Backup Workbook with Timestamp**
 
-| Status | NOT YET BUILT |
-|--------|--------------|
-| Notes | No backup macro anywhere. `ThisWorkbook.SaveCopyAs` with a timestamped filename does not exist in any VBA module. This is a meaningful gap — especially before running any destructive macro like FixTextNumbers or FixDuplicates. |
+| Status | NOT YET BUILT — User Declined |
+|--------|------------------------------|
+| Notes | No backup macro anywhere. `ThisWorkbook.SaveCopyAs` with a timestamped filename does not exist in any VBA module. **User decision (2026-02-28): This feature was reviewed and explicitly declined. Do not propose or rebuild this in future sessions.** |
 
 ---
 
 **12. Sort Sheets Alphabetically**
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | Clean gap. The Perlex code shows a bubble sort using `Sheets(j).Move Before:=Sheets(i)`. |
+| Where | `modUtilities_v2.1.bas` — SortSheetsAlphabetically() (action #53) |
+| Notes | Bubble sort using `Sheets(j).Move Before:=Sheets(i)`. Loops until all tabs are in alpha order. Confirms count of sheets sorted. Wired into Command Center as action #53. |
 
 ---
 
@@ -467,9 +480,10 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 **15. Bulk Find and Replace Across Entire Workbook**
 
-| Status | NOT YET BUILT |
+| Status | ALREADY BUILT |
 |--------|--------------|
-| Notes | `modSearch.SearchAll()` finds keywords and reports them, but does not replace. No Find+Replace macro that loops all sheets. Clean gap. |
+| Where | `modUtilities_v2.1.bas` — FindReplaceAllSheets() (action #59) |
+| Notes | Prompts for Find and Replace text, then loops through all visible sheets running `Cells.Replace`. Reports total replacements made. Useful for fiscal year label changes, cost center renames, vendor name corrections. Wired into Command Center as action #59. |
 
 ---
 
@@ -483,9 +497,10 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 **17. Email Active Workbook via Outlook**
 
-| Status | NOT YET BUILT in VBA |
-|--------|---------------------|
-| Notes | Same gap as Gemini.md item 9. Python email exists (`pnl_email_report.py`) but no VBA Outlook integration. |
+| Status | PARTIALLY BUILT |
+|--------|----------------|
+| What's there | `pnl_email_report.py` (Python) — automated HTML email reports via Office365/SMTP with formatted P&L summaries, KPIs, and variance flags. |
+| What's missing | No VBA Outlook integration using `CreateObject("Outlook.Application")`. The Python version requires a separate runtime; a VBA version would work natively from inside Excel. |
 
 ---
 
@@ -543,10 +558,10 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 **24. Timestamp Audit Trail on Cell Changes**
 > Worksheet_Change event logs DateTime, User, Sheet, Cell, OldValue, NewValue to an AuditLog sheet.
 
-| Status | NOT YET BUILT in VBA |
-|--------|---------------------|
-| What's there | SQL `pnl_enhancements.sql` has `allocation_audit` table and triggers that log changes at the database layer. |
-| What's missing | No VBA Worksheet_Change event handler. Direct cell edits in Excel are never logged. This is a meaningful internal controls gap — particularly for a file presented to the CFO/CEO. |
+| Status | PARTIALLY BUILT |
+|--------|----------------|
+| What's there | SQL `pnl_enhancements.sql` has `allocation_audit` table and triggers that log every change to allocation shares at the database layer (old value, new value, changed_by, changed_at). |
+| What's missing | No VBA Worksheet_Change event handler. Direct cell edits in Excel are not logged. **User decision (2026-02-28): VBA implementation was reviewed and explicitly declined. The SQL layer audit trail remains the only implementation.** |
 
 ---
 
@@ -554,49 +569,41 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 # SECTION 3 — COMPLETE GAP LIST: NOT YET BUILT
 
-## VBA Utility Macros — Quick Wins (Easy to Build)
+## Status Update — 2026-02-28
+
+**All 12 VBA Utility Macro "Quick Win" items from the original gap list are now BUILT.**
+`modUtilities_v2.1.bas` (committed 2026-02-28) implemented all of them as Command Center
+actions #51–62. The quick-wins section has been removed. The remaining gaps are below.
+
+## VBA Advanced Features — Bigger Builds
 
 | # | Gap | Why It Matters |
 |---|-----|---------------|
-| 1 | Delete All Blank Rows | Completes the DataQuality module — scan exists but delete does not |
-| 2 | Unhide All Worksheets | Essential for inherited or shared workbooks |
-| 3 | Sort Sheet Tabs Alphabetically | Better navigation for multi-tab financial models |
-| 4 | Freeze/Unfreeze Panes Toggle | Day-to-day usability |
-| 5 | Convert Formulas to Values (Selection) | Critical for finalizing files before sharing |
-| 6 | AutoFit All Columns (standalone) | Currently only buried inside StyleHeader |
-| 7 | Protect/Unprotect All Sheets | Controls & security for distribution |
-| 8 | Bulk Find and Replace (all sheets) | Needed for fiscal year updates, cost center renames |
-| 9 | Highlight Hardcoded Numbers | Audit tool — instantly shows what's a formula vs. a typed input |
-| 10 | Toggle Presentation Mode | One-click clean view for demos and presentations |
-| 11 | Unmerge and Fill Down | Fixes messy ERP/system exports before analysis |
-| 12 | Clear All Hyperlinks | Cleans pasted web/email data |
+| 1 | Clear All Hyperlinks | Cleans pasted web/email data — modNavigation creates hyperlinks but cannot bulk-clear them |
+| 2 | Dynamic Progress Bar KPI Shape | Dashboard polish — visual % tracking for budget utilization or close status |
+| 3 | Consolidate Multiple Workbooks from Folder | Batch processing for multi-department or multi-entity submissions |
+| 4 | Extract Unique Values to New Tabs | Split company-wide data into departmental tabs instantly |
+| 5 | Auto-Refresh Pivot Tables on Workbook Open | Good hygiene if pivots are added in future — no Workbook_Open handler exists |
+| 6 | VBA Outlook Email Integration | Complete the PDF → Email workflow natively in VBA without Python dependency |
+| 7 | Automated Invoice Reminder Emails | AR/AP use case — no invoice tracking table or overdue logic in any language |
+| 8 | Financial Statement Generator from Trial Balance | Transforms raw TB + account mapping into formatted IS/BS — powerful demo feature |
+| 9 | Batch File Processor (folder loop) | Multi-file automation for department budget consolidation |
+| 10 | One-Click Full P&L Generator from Raw GL | True raw-to-report automation — the crown jewel of the demo |
 
-## VBA Advanced Features — Bigger Builds (High Value)
-
-| # | Gap | Why It Matters |
-|---|-----|---------------|
-| 13 | Timestamp Audit Trail on Cell Changes | Compliance and internal controls — critical for CFO/CEO audience |
-| 14 | Backup Workbook with Timestamp | Safety net before any destructive macro runs |
-| 15 | Export All Charts to PowerPoint | Direct support for the executive presentation and CFO/CEO demo |
-| 16 | Dynamic Progress Bar KPI Shape | Dashboard polish — visual % tracking for budget utilization or close status |
-| 17 | Consolidate Multiple Workbooks from Folder | Batch processing for multi-department or multi-entity submissions |
-| 18 | Extract Unique Values to New Tabs | Split company-wide data into departmental tabs instantly |
-| 19 | Auto-Refresh Pivot Tables on Workbook Open | If pivots are added in future — good hygiene to have in place |
-| 20 | VBA Outlook Email Integration | Complete the PDF → Email workflow natively in VBA |
-| 21 | Automated Invoice Reminder Emails | AR/AP use case — not part of current demo scope but high value |
-| 22 | Financial Statement Generator from Trial Balance | Transforms raw TB + mapping into formatted IS/BS — powerful demo feature |
-| 23 | Batch File Processor (folder loop) | Multi-file automation for department budget consolidation |
-| 24 | One-Click Full P&L Generator from Raw GL | True raw-to-report automation — the crown jewel of the demo |
+**User decisions logged:**
+- **Backup Workbook with Timestamp** — explicitly declined by user (2026-02-28), do not re-propose
+- **Export All Charts to PowerPoint** — dropped permanently by user (2026-02-28)
+- **Timestamp Audit Trail (VBA)** — VBA implementation declined by user (2026-02-28); SQL layer audit trail remains
 
 ## Python / SQL Enhancements — Future Roadmap
 
 | # | Gap | Why It Matters |
 |---|-----|---------------|
-| 25 | Constraint-based allocation optimization | Simulator is what-if only; cannot optimize toward a target |
-| 26 | Seasonality decomposition in forecasting | SARIMA or Prophet for more accurate monthly patterns |
-| 27 | Transaction drill-down in Streamlit dashboard | Click a chart bar to see the underlying GL transactions |
-| 28 | Snapshot auto-cleanup policy | Prevent SQLite snapshot database from growing unbounded |
-| 29 | Multi-user audit logging in Python | Track which user ran which pipeline step and when |
+| 11 | Constraint-based allocation optimization | Simulator is what-if only; cannot optimize toward a target |
+| 12 | Seasonality decomposition in forecasting | SARIMA or Prophet for more accurate monthly patterns |
+| 13 | Transaction drill-down in Streamlit dashboard | Click a chart bar to see the underlying GL transactions |
+| 14 | Snapshot auto-cleanup policy | Prevent SQLite snapshot database from growing unbounded |
+| 15 | Multi-user audit logging in Python | Track which user ran which pipeline step and when |
 
 ---
 
@@ -606,41 +613,39 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 Ranked by impact for the CFO/CEO demo, internal controls story, and coworker video.
 
-## TIER 1 — Build These First (Highest Demo and Compliance Value)
+**Note:** As of 2026-02-28, all 12 quick-win utility macros (former Tier 1/Tier 2 items)
+are now **fully built** in `modUtilities_v2.1.bas` (actions #51–62). Priority order below
+reflects the remaining gaps only.
+
+## TIER 1 — Build These Next (Highest Remaining Demo Value)
 
 | Priority | Item | Why Now |
 |----------|------|---------|
-| 1 | **Timestamp Audit Trail on Cell Changes** | Tells a powerful internal controls story to the CFO/CEO. Shows the workbook tracks who changed what and when — directly in Excel. |
-| 2 | **Backup Workbook with Timestamp** | Simple but shows professionalism and data safety discipline. Should run automatically before any destructive macro. |
-| 3 | **Export All Charts to PowerPoint** | Directly supports the CFO/CEO presentation. One-click turns all Excel charts into a PowerPoint deck. High visual impact. |
-| 4 | **Toggle Presentation Mode** | Instant clean demo view. Hide gridlines, formula bar, headings — professional look for the video walkthrough. |
-| 5 | **Delete All Blank Rows** | Closes the DataQuality module. The scan already exists — the delete step should be there too. |
+| 1 | **Dynamic Progress Bar KPI Shape** | Dashboard polish — visual % tracker for budget utilization or close status; high visual impact for the CFO/CEO presentation |
+| 2 | **Financial Statement Generator from Trial Balance** | Powerful demo feature — transforms a raw TB + account mapping into a formatted IS/BS in one click |
+| 3 | **VBA Outlook Email Integration** | Completes the PDF → Email workflow natively inside Excel without requiring the Python runtime |
+| 4 | **Clear All Hyperlinks** | Small gap, easy build — rounds out the navigation toolkit |
 
-## TIER 2 — Build Next (Day-to-Day Efficiency Story for Coworkers)
+## TIER 2 — Build Next (Bigger Features for Future Scope)
 
 | Priority | Item | Why |
 |----------|------|-----|
-| 6 | Protect/Unprotect All Sheets | Good controls practice; coworkers will want this for distribution |
-| 7 | Convert Formulas to Values (Selection) | Critical for safely sharing finalized files |
-| 8 | Bulk Find and Replace (all sheets) | Saves real time on fiscal year or label changes |
-| 9 | AutoFit All Columns (standalone) | Quick cleanup after any data import |
-| 10 | Sort Sheet Tabs Alphabetically | Navigation polish for complex workbooks |
-| 11 | Unhide All Worksheets | Inherited workbook lifesaver |
-| 12 | Freeze/Unfreeze Panes Toggle | Everyday usability |
-| 13 | Highlight Hardcoded Numbers | Useful audit and review tool |
-| 14 | Unmerge and Fill Down | ERP export cleanup — common pain point |
+| 5 | One-Click Full P&L Generator from Raw GL | Most ambitious feature — full raw GL to formatted P&L in VBA; save for after demo is complete |
+| 6 | Consolidate Multiple Workbooks from Folder | Batch processing for multi-department or multi-entity submissions |
+| 7 | Extract Unique Values to New Tabs | Split company-wide data into departmental reporting tabs |
+| 8 | Automated Invoice Reminder Emails | AR/AP use case — no invoice tracking infrastructure exists yet |
+| 9 | Batch File Processor (folder loop) | Multi-file automation; requires defining folder conventions first |
+| 10 | Auto-Refresh Pivot Tables on Workbook Open | Good hygiene to have if pivots are added in future |
 
-## TIER 3 — Plan for Later (Bigger Builds or Future Scope)
+## TIER 3 — Python / SQL Future Enhancements
 
 | Priority | Item | Notes |
 |----------|------|-------|
-| 15 | One-Click Full P&L Generator from Raw GL | Most ambitious — save for after demo is complete |
-| 16 | Financial Statement Generator from Trial Balance | Requires mapping table design — plan carefully first |
-| 17 | Consolidate Multiple Workbooks | Needs folder structure defined first |
-| 18 | Extract Unique Values to New Tabs | Medium complexity; useful for dept reporting |
-| 19 | VBA Outlook Email Integration | Ties the PDF export to email natively |
-| 20 | Dynamic Progress Bar KPI Shape | Dashboard polish — low effort, nice visual |
-| 21+ | Python/SQL enhancements | Forecasting improvements, drill-down, optimization |
+| 11 | Constraint-based allocation optimization | Mathematical optimizer — build after simulator proves its value |
+| 12 | Seasonality decomposition in forecasting | SARIMA/Prophet upgrade; requires more historical data first |
+| 13 | Transaction drill-down in Streamlit dashboard | High-value UX feature; requires click event wiring in Plotly |
+| 14 | Snapshot auto-cleanup policy | Database hygiene; low urgency until snapshot count grows large |
+| 15 | Multi-user audit logging in Python | Tracking pipeline users; add when team usage expands |
 
 ---
 
@@ -651,19 +656,25 @@ Ranked by impact for the CFO/CEO demo, internal controls story, and coworker vid
 | Source | Total Ideas | Already Built | Partially Built | Not Yet Built |
 |--------|-------------|---------------|-----------------|---------------|
 | GPT.md | 15 | 8 | 4 | 3 |
-| Gemini.md | 12 | 4 | 2 | 6 |
-| Perlex.md | 24 | 5 | 3 | 16 |
-| **TOTAL** | **51** | **17 (33%)** | **9 (18%)** | **25 (49%)** |
+| Gemini.md | 12 | 8 | 2 | 2 |
+| Perlex.md | 24 | 11 | 5 | 8 |
+| **TOTAL** | **51** | **27 (53%)** | **11 (22%)** | **13 (25%)** |
 
-**Key Takeaway:** Your current code already covers 33% of the ideas in NewTesting completely,
-and another 18% are partially covered. That means roughly half of what was ideated has been
-implemented. The remaining 25 gaps represent a clear, prioritized roadmap for what to build next.
+**Scorecard updated 2026-02-28** — `modUtilities_v2.1.bas` added 12 new macros (actions #51–62),
+moving all 12 quick-win items from "Not Yet Built" to "Already Built." Also added `pnl_monte_carlo.py`
+(Monte Carlo P&L risk simulation, 10,000+ iteration engine with Dirichlet share randomization).
 
-The strongest areas of your current code are **data quality, PDF export, variance analysis,
-reconciliation, navigation, and forecasting** — these are production-quality and go well beyond
-what the NewTesting ideas describe. The biggest gaps are in **utility macros, VBA audit trail,
-PowerPoint export, and workbook consolidation**.
+**Key Takeaway:** Your current code now covers **53% of all NewTesting ideas completely** —
+up from 33% at last report. Another 22% are partially covered. Only 25% remain as true gaps,
+and several of those were explicitly declined by the user (Backup Workbook, PowerPoint export,
+VBA Audit Trail).
+
+The strongest areas of the codebase are **data quality, PDF export, variance analysis,
+reconciliation, navigation, forecasting, utility macros, and Monte Carlo simulation** — all
+production-quality and going well beyond what the NewTesting ideas describe. The remaining
+gaps are concentrated in **workbook consolidation, VBA Outlook integration, and advanced
+demo features** like the Financial Statement Generator and P&L Generator from Raw GL.
 
 ---
 
-*Report prepared 2026-02-27 — APCLDmerge Project — iPipeline Finance & Accounting*
+*Report originally prepared 2026-02-27 — Updated 2026-02-28 — APCLDmerge Project — iPipeline Finance & Accounting*

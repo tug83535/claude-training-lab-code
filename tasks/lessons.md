@@ -48,5 +48,24 @@
 
 ## User Feature Preferences
 - User confirmed they do NOT want a "Backup Workbook with Timestamp" macro — do not propose or rebuild this
+- User confirmed they do NOT want a VBA Timestamp Audit Trail (Worksheet_Change event) — SQL layer audit trail in pnl_enhancements.sql is sufficient; do not propose rebuilding in VBA
+- User confirmed they do NOT want "Export All Charts to PowerPoint" — dropped permanently; do not re-propose
 - Always log user feature rejections here so future Claude accounts don't re-propose them
 - When proposing new features, review this section first to avoid suggesting features the user has already declined
+
+## Context Recovery After Session Limits
+- When resuming from a compressed context, always read the current file state FIRST before making any edits — do not trust the summary's description of what was already edited
+- Prior session summaries may describe edits as "complete" when the session was cut off mid-task — verify with a fresh file read
+- Read both the source file AND the task summary; if they conflict, the file is the truth
+- For large multi-section documents, read the full file before editing any section — avoids duplicate edits or missing context
+
+## Verifying Claims Before Reporting Gaps
+- Always check git log and actual committed files before saying something is "missing" or "not built"
+- In this project: modLogger was reported missing but already existed; pnl_enhancements.sql bug was reported but already fixed; frmCommandCenter_code.txt was reported outdated but already updated — all stale CLAUDE.md entries
+- The session summary in CLAUDE.md can itself become stale — treat it as a starting point, not gospel
+
+## Monte Carlo / Statistical Modeling
+- For allocation share randomization, use Dirichlet distribution (not uniform random) — Dirichlet guarantees shares always sum to exactly 1.0 and respects the shape/concentration of the original distribution
+- Dirichlet alpha vector = base_shares * concentration_parameter (higher concentration = tighter clustering around the mean)
+- For expense randomization, Normal distribution is appropriate (truncated at zero for amounts that can't go negative)
+- Always expose key simulation parameters (iterations, seed, concentration, shock_prob) as CLI arguments for reproducibility and testing
