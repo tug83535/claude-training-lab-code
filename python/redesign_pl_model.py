@@ -227,13 +227,23 @@ def auto_widths(ws, min_col=1, max_col=None, min_w=12, max_w=22):
 
 
 def remove_gridlines(ws):
-    """Remove gridlines from sheet view (preserving freeze panes)."""
+    """Remove gridlines and fix view/selection elements for Excel compat."""
+    from openpyxl.worksheet.views import SheetView, Pane, Selection
     # Remove any duplicate views — Excel expects exactly 1
     while len(ws.views.sheetView) > 1:
         ws.views.sheetView.pop()
-    # Set showGridLines on the single remaining view
-    if ws.views.sheetView:
-        ws.views.sheetView[0].showGridLines = False
+    if not ws.views.sheetView:
+        return
+    sv = ws.views.sheetView[0]
+    sv.showGridLines = False
+    # Fix openpyxl's freeze_panes bug: it creates duplicate/invalid
+    # selection elements that cause Excel "Repaired Records: View" errors.
+    # When only ySplit is set (horizontal freeze), valid panes are
+    # "topLeft" and "bottomLeft" only — "bottomRight" is invalid.
+    if sv.pane is not None and sv.pane.ySplit and not sv.pane.xSplit:
+        sv.pane.activePane = 'bottomLeft'
+        # Keep exactly one selection for bottomLeft pane
+        sv.selection = [Selection(pane='bottomLeft', activeCell='A1', sqref='A1')]
 
 
 def freeze_at(ws, row):
