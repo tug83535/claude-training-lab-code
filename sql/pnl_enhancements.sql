@@ -80,7 +80,7 @@ FROM dim_budget b
 LEFT JOIN (
     SELECT product, department, month,
            SUM(abs_amount) AS actual_spend
-    FROM fact_gl_transactions
+    FROM fact_gl
     WHERE product != '' AND department != ''
     GROUP BY product, department, month
 ) a ON b.product = a.product AND b.department = a.department AND b.month = a.month
@@ -106,7 +106,7 @@ FROM dim_budget b
 LEFT JOIN (
     SELECT product, department, month,
            SUM(abs_amount) AS actual_spend
-    FROM fact_gl_transactions
+    FROM fact_gl
     WHERE product != '' AND department != ''
     GROUP BY product, department, month
 ) a ON b.product = a.product AND b.department = a.department AND b.month = a.month
@@ -178,7 +178,7 @@ END;
 DROP VIEW IF EXISTS v_rolling_12m_product;
 CREATE VIEW v_rolling_12m_product AS
 WITH max_month AS (
-    SELECT MAX(month) AS latest FROM fact_gl_transactions WHERE month IS NOT NULL
+    SELECT MAX(month) AS latest FROM fact_gl WHERE month IS NOT NULL
 ),
 ttm AS (
     SELECT
@@ -188,7 +188,7 @@ ttm AS (
         COUNT(*)            AS ttm_txns,
         COUNT(DISTINCT f.vendor)      AS ttm_vendors,
         COUNT(DISTINCT f.department)  AS ttm_departments
-    FROM fact_gl_transactions f, max_month m
+    FROM fact_gl f, max_month m
     WHERE f.product != ''
       AND f.month BETWEEN (m.latest - 11) AND m.latest
     GROUP BY f.product
@@ -197,7 +197,7 @@ prior_ttm AS (
     SELECT
         f.product,
         SUM(f.abs_amount) AS prior_abs_spend
-    FROM fact_gl_transactions f, max_month m
+    FROM fact_gl f, max_month m
     WHERE f.product != ''
       AND f.month BETWEEN (m.latest - 23) AND (m.latest - 12)
     GROUP BY f.product
@@ -215,7 +215,7 @@ SELECT
         ELSE NULL
     END AS yoy_change_pct,
     ROUND(t.ttm_abs_spend * 100.0 / NULLIF(
-        (SELECT SUM(abs_amount) FROM fact_gl_transactions f2, max_month m2
+        (SELECT SUM(abs_amount) FROM fact_gl f2, max_month m2
          WHERE f2.product != '' AND f2.month BETWEEN (m2.latest - 11) AND m2.latest), 0
     ), 2) AS pct_of_total
 FROM ttm t
@@ -226,7 +226,7 @@ ORDER BY t.ttm_abs_spend DESC;
 DROP VIEW IF EXISTS v_rolling_12m_department;
 CREATE VIEW v_rolling_12m_department AS
 WITH max_month AS (
-    SELECT MAX(month) AS latest FROM fact_gl_transactions WHERE month IS NOT NULL
+    SELECT MAX(month) AS latest FROM fact_gl WHERE month IS NOT NULL
 )
 SELECT
     f.department,
@@ -236,10 +236,10 @@ SELECT
     COUNT(DISTINCT f.vendor)        AS ttm_vendors,
     COUNT(DISTINCT f.product)       AS products_served,
     ROUND(SUM(f.abs_amount) * 100.0 / NULLIF(
-        (SELECT SUM(abs_amount) FROM fact_gl_transactions f2, max_month m2
+        (SELECT SUM(abs_amount) FROM fact_gl f2, max_month m2
          WHERE f2.department != '' AND f2.month BETWEEN (m2.latest - 11) AND m2.latest), 0
     ), 2) AS pct_of_total
-FROM fact_gl_transactions f, max_month m
+FROM fact_gl f, max_month m
 WHERE f.department != ''
   AND f.month BETWEEN (m.latest - 11) AND m.latest
 GROUP BY f.department
@@ -260,7 +260,7 @@ WITH vendor_monthly AS (
         vendor,
         month,
         SUM(abs_amount) AS monthly_spend
-    FROM fact_gl_transactions
+    FROM fact_gl
     WHERE vendor != '' AND month IS NOT NULL
     GROUP BY vendor, month
 ),
@@ -359,7 +359,7 @@ SELECT
         ) < 1.0 THEN 'PASS'
         ELSE 'FAIL'
     END AS status
-FROM fact_gl_transactions f
+FROM fact_gl f
 LEFT JOIN dim_department dd ON f.department_id = dd.department_id
 WHERE f.department != ''
 GROUP BY f.department, dd.allocation_method
@@ -371,26 +371,26 @@ SELECT
     dp.revenue_share                AS configured_share,
     ROUND(
         SUM(f.abs_amount) * 100.0 / NULLIF(
-            (SELECT SUM(abs_amount) FROM fact_gl_transactions WHERE product != ''), 0
+            (SELECT SUM(abs_amount) FROM fact_gl WHERE product != ''), 0
         ), 2
     )                               AS actual_spend_pct,
     ROUND(
         SUM(f.abs_amount) * 100.0 / NULLIF(
-            (SELECT SUM(abs_amount) FROM fact_gl_transactions WHERE product != ''), 0
+            (SELECT SUM(abs_amount) FROM fact_gl WHERE product != ''), 0
         ) - dp.revenue_share * 100, 2
     )                               AS gap_pct_points,
     CASE
         WHEN ABS(
             SUM(f.abs_amount) * 100.0 / NULLIF(
-                (SELECT SUM(abs_amount) FROM fact_gl_transactions WHERE product != ''), 0
+                (SELECT SUM(abs_amount) FROM fact_gl WHERE product != ''), 0
             ) - dp.revenue_share * 100
         ) < 5 THEN 'ALIGNED'
         WHEN SUM(f.abs_amount) * 100.0 / NULLIF(
-            (SELECT SUM(abs_amount) FROM fact_gl_transactions WHERE product != ''), 0
+            (SELECT SUM(abs_amount) FROM fact_gl WHERE product != ''), 0
         ) > dp.revenue_share * 100 THEN 'OVER-ALLOCATED'
         ELSE 'UNDER-ALLOCATED'
     END AS alignment_status
-FROM fact_gl_transactions f
+FROM fact_gl f
 LEFT JOIN dim_product dp ON f.product_id = dp.product_id
 WHERE f.product != ''
 GROUP BY dp.product_name, dp.revenue_share

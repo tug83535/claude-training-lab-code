@@ -25,11 +25,12 @@ CREATE TABLE IF NOT EXISTS allocation_shares (
 );
 
 -- Default revenue shares (must sum to 1.0)
+-- Synchronized with python/pnl_config.py REVENUE_SHARES — 2026-02-28
 INSERT OR IGNORE INTO allocation_shares (share_type, product_name, share_pct) VALUES
-    ('revenue', 'iGO',         0.50),
-    ('revenue', 'Affirm',      0.25),
-    ('revenue', 'InsureSight',  0.15),
-    ('revenue', 'DocFast',     0.10);
+    ('revenue', 'iGO',         0.55),
+    ('revenue', 'Affirm',      0.28),
+    ('revenue', 'InsureSight',  0.12),
+    ('revenue', 'DocFast',     0.05);
 
 -- Default AWS compute shares
 INSERT OR IGNORE INTO allocation_shares (share_type, product_name, share_pct) VALUES
@@ -265,7 +266,7 @@ ORDER BY ec.category_name, dt.month;
 --         "Product", "TotalAmount", List.Sum),
 --     -- Add revenue share allocation
 --     ShareTable = #table({"Product","Share"}, {
---         {"iGO",0.50}, {"Affirm",0.25}, {"InsureSight",0.15}, {"DocFast",0.10}
+--         {"iGO",0.55}, {"Affirm",0.28}, {"InsureSight",0.12}, {"DocFast",0.05}
 --     }),
 --     Merged = Table.NestedJoin(Pivoted, {"Department"}, Pivoted, {"Department"},
 --         "Self", JoinKind.Inner)

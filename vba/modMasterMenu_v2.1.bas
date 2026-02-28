@@ -41,6 +41,7 @@ PageLoop:
         Case 1: choice = ShowPage1()
         Case 2: choice = ShowPage2()
         Case 3: choice = ShowPage3()
+        Case 4: choice = ShowPage4()
     End Select
     
     ' User cancelled
@@ -48,24 +49,24 @@ PageLoop:
     
     ' Page navigation
     If UCase(choice) = "N" Or UCase(choice) = "NEXT" Then
-        If page < 3 Then page = page + 1 Else page = 1
+        If page < 4 Then page = page + 1 Else page = 1
         GoTo PageLoop
     End If
     If UCase(choice) = "P" Or UCase(choice) = "PREV" Then
-        If page > 1 Then page = page - 1 Else page = 3
+        If page > 1 Then page = page - 1 Else page = 4
         GoTo PageLoop
     End If
-    
+
     ' Validate numeric input
     If Not IsNumeric(choice) Then
-        MsgBox "Please enter an action number (1-50), N for next page, or P for previous.", _
+        MsgBox "Please enter an action number (1-62), N for next page, or P for previous.", _
                vbExclamation, APP_NAME
         GoTo PageLoop
     End If
-    
+
     Dim num As Long: num = CLng(choice)
-    If num < 1 Or num > 50 Then
-        MsgBox "Please enter a number between 1 and 50.", vbExclamation, APP_NAME
+    If num < 1 Or num > 62 Then
+        MsgBox "Please enter a number between 1 and 62.", vbExclamation, APP_NAME
         GoTo PageLoop
     End If
     
@@ -175,6 +176,34 @@ Private Function ShowPage3() As String
         "TIP: Install the Command Center UserForm for" & vbCrLf & _
         "a better experience. Press Ctrl+Shift+M after" & vbCrLf & _
         "running modFormBuilder.BuildCommandCenter." & vbCrLf & vbCrLf & _
-        "Enter # (1-50) | P=Prev | Cancel=Exit:", _
+        "Enter # (1-62) | N=Next | P=Prev | Cancel=Exit:", _
+        APP_NAME & " - Command Center")
+End Function
+
+'===============================================================================
+' ShowPage4 - Items 51-62 (Sheet Tools)
+'===============================================================================
+Private Function ShowPage4() As String
+    ShowPage4 = InputBox( _
+        "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 4/4]" & vbCrLf & _
+        String(50, "=") & vbCrLf & vbCrLf & _
+        "SHEET TOOLS" & vbCrLf & _
+        "  51. Delete All Blank Rows" & vbCrLf & _
+        "  52. Unhide All Worksheets" & vbCrLf & _
+        "  53. Sort Sheets Alphabetically" & vbCrLf & _
+        "  54. Toggle Freeze Panes" & vbCrLf & _
+        "  55. Convert Formulas to Values" & vbCrLf & _
+        "  56. AutoFit All Columns" & vbCrLf & _
+        "  57. Protect All Sheets" & vbCrLf & _
+        "  58. Unprotect All Sheets" & vbCrLf & _
+        "  59. Find & Replace (All Sheets)" & vbCrLf & _
+        "  60. Highlight Hardcoded Numbers" & vbCrLf & _
+        "  61. Toggle Presentation Mode" & vbCrLf & _
+        "  62. Unmerge and Fill Down" & vbCrLf & vbCrLf & _
+        String(50, "-") & vbCrLf & _
+        "TIP: Install the Command Center UserForm for" & vbCrLf & _
+        "a better experience. Press Ctrl+Shift+M after" & vbCrLf & _
+        "running modFormBuilder.BuildCommandCenter." & vbCrLf & vbCrLf & _
+        "Enter # (1-62) | P=Prev | Cancel=Exit:", _
         APP_NAME & " - Command Center")
 End Function
