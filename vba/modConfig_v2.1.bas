@@ -135,6 +135,9 @@ Public Const PDF_SUBFOLDER   As String = "\PDF_Exports\"
 ' --- Variance Threshold --- CHANGE THIS to adjust sensitivity
 Public Const VARIANCE_PCT    As Double = 0.15  ' 15% MoM threshold
 
+' --- Reconciliation Tolerance --- CHANGE THIS to adjust pass/fail sensitivity
+Public Const RECON_TOLERANCE As Double = 1     ' $1 tolerance for cross-sheet validation
+
 ' --- Application Info ---
 Public Const APP_NAME        As String = "Keystone BenefitTech Automation Toolkit"
 Public Const APP_VERSION     As String = "2.1.0"

@@ -159,7 +159,7 @@ Public Sub AssignShortcuts()
     On Error Resume Next
     Application.OnKey "^+h", "GoHome"              ' Ctrl+Shift+H
     Application.OnKey "^+j", "QuickJump"           ' Ctrl+Shift+J
-    Application.OnKey "^+r", "RunAllChecks"        ' Ctrl+Shift+R
+    Application.OnKey "^+r", "modReconciliation.RunAllChecks"  ' Ctrl+Shift+R
     Application.OnKey "^+m", "LaunchCommandCenter" ' Ctrl+Shift+M
     On Error GoTo 0
 End Sub
@@ -168,7 +168,60 @@ End Sub
 ' ClearShortcuts - Unbind all custom shortcuts (call from Workbook_BeforeClose)
 ' Restores default Excel key behavior when the workbook is closed.
 '===============================================================================
-Public Sub ClearShortcuts()
+'===============================================================================
+' ToggleExecutiveMode - Hide utility/working sheets, show only report sheets
+' Called by ExecuteAction (Action #48)
+'===============================================================================
+Public Sub ToggleExecutiveMode()
+    On Error GoTo ErrHandler
+
+    ' Define which sheets are "executive view" (visible in exec mode)
+    Dim execSheets As Variant
+    execSheets = Array(SH_REPORT, SH_PL_TREND, SH_PROD_SUMMARY, SH_CHECKS)
+
+    ' Check current state: if working sheets are hidden, we're IN exec mode
+    Dim inExecMode As Boolean: inExecMode = False
+    If SheetExists(SH_HIDDEN) Then
+        inExecMode = (ThisWorkbook.Worksheets(SH_HIDDEN).Visible <> xlSheetVisible)
+    End If
+
+    If inExecMode Then
+        ' EXIT exec mode — unhide everything
+        Dim ws As Worksheet
+        For Each ws In ThisWorkbook.Worksheets
+            If ws.Name <> SH_LOG Then ws.Visible = xlSheetVisible
+        Next ws
+        modLogger.LogAction "modNavigation", "ToggleExecutiveMode", "Executive mode OFF — all sheets visible"
+        MsgBox "Executive Mode OFF" & vbCrLf & "All sheets are now visible.", vbInformation, APP_NAME
+    Else
+        ' ENTER exec mode — hide non-executive sheets
+        Dim s As Long
+        For Each ws In ThisWorkbook.Worksheets
+            Dim isExec As Boolean: isExec = False
+            For s = LBound(execSheets) To UBound(execSheets)
+                If ws.Name = CStr(execSheets(s)) Then isExec = True: Exit For
+            Next s
+            ' Also keep monthly summary sheets visible
+            If InStr(ws.Name, "Functional P&L Summary") > 0 Then isExec = True
+            If Not isExec Then ws.Visible = xlSheetVeryHidden
+        Next ws
+
+        ' Make sure Report sheet is active
+        If SheetExists(SH_REPORT) Then
+            ThisWorkbook.Worksheets(SH_REPORT).Activate
+        End If
+        modLogger.LogAction "modNavigation", "ToggleExecutiveMode", "Executive mode ON — showing report sheets only"
+        MsgBox "Executive Mode ON" & vbCrLf & "Only report sheets are visible." & vbCrLf & _
+               "Run again to restore all sheets.", vbInformation, APP_NAME
+    End If
+    Exit Sub
+
+ErrHandler:
+    MsgBox "Executive Mode error: " & Err.Description, vbCritical, APP_NAME
+End Sub
+
+'===============================================================================
+' ClearShortcuts - Unbind all custom shortcuts (call from Workbook_BeforeClose)
     On Error Resume Next
     Application.OnKey "^+h"    ' Reset to default
     Application.OnKey "^+j"    ' Reset to default

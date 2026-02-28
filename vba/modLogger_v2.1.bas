@@ -185,6 +185,39 @@ End Sub
 
 
 '===============================================================================
+' ViewLog - Make the audit log visible and navigate to it
+' Called by ExecuteAction (Action #41)
+'===============================================================================
+Public Sub ViewLog()
+    Dim ws As Worksheet
+    Set ws = GetLogSheet()
+
+    Dim lastRow As Long
+    lastRow = ws.Cells(ws.Rows.Count, COL_TIMESTAMP).End(xlUp).Row
+
+    If lastRow < LOG_DATA_ROW Then
+        MsgBox "The audit log is empty." & vbCrLf & vbCrLf & _
+               "Run some actions first and they will be recorded here.", _
+               vbInformation, APP_NAME
+        Exit Sub
+    End If
+
+    ' Temporarily make the sheet visible so the user can see it
+    ws.Visible = xlSheetVisible
+    ws.Activate
+    ws.Range("A1").Select
+    ws.Columns("A:F").AutoFit
+
+    MsgBox "Audit Log: " & (lastRow - LOG_DATA_ROW + 1) & " entries." & vbCrLf & vbCrLf & _
+           "The log sheet is now visible. It will be re-hidden" & vbCrLf & _
+           "the next time a macro runs.", _
+           vbInformation, APP_NAME
+
+    ' Re-hide the sheet after the user dismisses the message
+    ws.Visible = xlSheetVeryHidden
+End Sub
+
+'===============================================================================
 ' GetLogSheet - Returns the VBA_AuditLog worksheet, creating it if needed
 ' This is the only place the log sheet is created — always use this function.
 '===============================================================================

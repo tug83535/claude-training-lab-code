@@ -709,7 +709,7 @@ Public Sub GetFormInstallGuide()
     g = g & "Step 4: Verify" & vbCrLf
     g = g & "  - Save the workbook (Ctrl+S)" & vbCrLf
     g = g & "  - Press Ctrl+Shift+M from any sheet" & vbCrLf
-    g = g & "  - Command Center should open with 50 actions" & vbCrLf
+    g = g & "  - Command Center should open with 62 actions" & vbCrLf
     g = g & "  - Try clicking categories, searching, running an action" & vbCrLf & vbCrLf
     
     g = g & String(70, "=") & vbCrLf

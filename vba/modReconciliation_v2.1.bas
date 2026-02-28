@@ -226,7 +226,13 @@ Public Sub ValidateCrossSheet()
         After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     wsVal.Name = valName
     
-    modConfig.StyleHeader wsVal, "CROSS-SHEET DATA VALIDATION", 4, _
+    ' Write title
+    wsVal.Range("A1").Value = "CROSS-SHEET DATA VALIDATION"
+    wsVal.Range("A1").Font.Bold = True
+    wsVal.Range("A1").Font.Size = 14
+    wsVal.Range("A1").Font.Color = CLR_NAVY
+
+    modConfig.StyleHeader wsVal, 4, _
         Array("Check #", "Description", "Sheet A", "Value A", _
               "Sheet B", "Value B", "Difference", "Status")
     
