@@ -227,8 +227,13 @@ def auto_widths(ws, min_col=1, max_col=None, min_w=12, max_w=22):
 
 
 def remove_gridlines(ws):
-    """Remove gridlines from sheet view."""
-    ws.views.sheetView[0].showGridLines = False
+    """Remove gridlines from sheet view (preserving freeze panes)."""
+    # Remove any duplicate views — Excel expects exactly 1
+    while len(ws.views.sheetView) > 1:
+        ws.views.sheetView.pop()
+    # Set showGridLines on the single remaining view
+    if ws.views.sheetView:
+        ws.views.sheetView[0].showGridLines = False
 
 
 def freeze_at(ws, row):
