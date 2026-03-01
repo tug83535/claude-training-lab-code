@@ -24,9 +24,14 @@ employee at the best company in the world.
 - `excel/` — contains the main demo P&L Excel file, uploaded each session
 - `DemofileChartBuild/` — chart sheet files for the demo P&L, work in progress
 - `NewTesting/` — experimental code, research, and ideas not ready for main project yet
+- `UniversalToolsForAllFiles/` — future Excel Add-In package for tools that work on any file (backlog, not needed for demo)
 - `CompletePackageStorage/` — final production-ready files and backups
   - `CompletePackageStorage/production/` — live, ready-to-go final files
   - `CompletePackageStorage/backups/` — versioned backups
+
+## Sharing Plan
+- **Scenario 1 (Primary — Demo + coworkers):** Share the finished `.xlsm` file directly. All 32 macros are already inside it. Coworkers open the file and use the Command Center. This is the plan for the CFO/CEO demo and general coworker access.
+- **Scenario 2 (Future backlog):** Package 8 universal tools (Data Sanitizer, Find Negatives/Zeros/Round Numbers, Find External Links, Audit Hidden Sheets, Cross-Sheet Search) into `KBT_UniversalTools.xlam` for coworkers who want to run those tools on their own separate Excel files. Source files staged in `UniversalToolsForAllFiles/`. Do this AFTER the demo.
 
 ## My Audience
 Training docs and guides are written for non-technical Finance & Accounting staff.

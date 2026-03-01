@@ -1,8 +1,8 @@
 # KBT P&L Toolkit — Test Plan
 
 > **Version:** 2.1.0
-> **Date:** 2026-02-20
-> **Scope:** Verification of all 15 pre-audit issues, integration testing, and regression testing.
+> **Date:** 2026-03-01
+> **Scope:** Verification of all 15 pre-audit issues, integration testing, regression testing, and 8 new v2.1 modules.
 
 ---
 
@@ -55,12 +55,12 @@
 
 ### Category T1 — Compilation & Load (8 tests)
 
-Verifies all 29 VBA modules compile without error and all Python scripts import cleanly.
+Verifies all 32 VBA modules compile without error and all Python scripts import cleanly.
 
 | Test ID | Test Name | Procedure | Pass Criteria |
 |---------|-----------|-----------|---------------|
 | T1.01 | VBA project compiles | Open VBA Editor → Debug → Compile VBAProject | Zero compile errors |
-| T1.02 | All 29 modules present | Check Project Explorer modules list | All 29 module names visible |
+| T1.02 | All 32 modules present | Check Project Explorer modules list | All 32 module names visible |
 | T1.03 | Option Explicit on all | Search all modules for "Option Explicit" | Found in every module |
 | T1.04 | modConfig loads | Immediate Window: `?APP_VERSION` | Returns "2.1.0" |
 | T1.05 | Python pnl_config imports | `python pnl_config.py` | Prints config summary, no errors |
@@ -86,7 +86,7 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 
 | Test ID | Test Name | Issue | Procedure | Pass Criteria |
 |---------|-----------|-------|-----------|---------------|
-| T3.01 | 50 items in menu | ISSUE-006 | Press Ctrl+Shift+M, count items in "All Actions" | Shows 50 actions |
+| T3.01 | 62 items in menu | ISSUE-006 | Press Ctrl+Shift+M, count items in "All Actions" | Shows 62 actions |
 | T3.02 | UserForm launches | ISSUE-006 | Press Ctrl+Shift+M | frmCommandCenter appears (or InputBox fallback) |
 | T3.03 | Category filtering | — | Select each category in the form | Action list filters correctly |
 | T3.04 | Search filtering | — | Type "variance" in search box | Shows relevant actions only |
@@ -132,6 +132,43 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 | T7.03 | End-to-end month close | Execute all OPERATIONS_RUNBOOK month-close steps (3.1–3.12) | All steps complete without error |
 | T7.04 | Python month-end close | `python pnl_runner.py month-end --month 1` | CloseReport generated with check results |
 
+### Category T8 — New v2.1 Modules (13 tests)
+
+Tests for the 8 modules added in the 2026-03-01 session.
+
+**modDataGuards**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.01 | ValidateAssumptionsPresence | Run ValidateAssumptionsPresence | Returns True if all drivers filled; returns False + lists blanks if any are empty |
+| T8.02 | FindNegativeAmounts | Run FindNegativeAmounts | GL Amount cells with values < 0 highlighted red; message box shows count |
+| T8.03 | FindZeroAmounts | Run FindZeroAmounts | GL Amount cells equal to 0 highlighted yellow; message box shows count |
+| T8.04 | FindSuspiciousRoundNumbers | Run FindSuspiciousRoundNumbers | GL Amount cells ≥ $1,000 and exactly divisible by 1,000 highlighted orange |
+
+**modDataSanitizer**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.05 | PreviewSanitizeChanges | Run PreviewSanitizeChanges | "Sanitizer Preview" sheet created with color-coded cells; no values changed in source data |
+| T8.06 | RunFullSanitize — date safety | Run RunFullSanitize on a sheet with date cells | Date cells unchanged; numeric text cells converted |
+| T8.07 | RunFullSanitize — header skip | Run RunFullSanitize | Columns with headers like "Customer ID", "Date", "Name" are entirely skipped |
+
+**modAuditTools**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.08 | AppendChangeLogEntry | Run AppendChangeLogEntry, enter a note | Entry appears in Change Log sheet with timestamp, user, and version |
+| T8.09 | FindExternalLinks | Run FindExternalLinks on a workbook with no external links | Message says "No external links found" or report shows zero rows |
+| T8.10 | AuditHiddenSheets | Run AuditHiddenSheets | Message box lists all hidden and very-hidden sheets by name |
+
+**modMonthlyTabGenerator — AddNextMonthToModel**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.11 | Correct next month detected | Run AddNextMonthToModel | Confirmation popup shows the correct next calendar month |
+| T8.12 | Trend columns marked yellow | Run AddNextMonthToModel → confirm | Next month's column on P&L Monthly Trend and Functional P&L Monthly Trend is highlighted yellow |
+| T8.13 | New summary tab created | Run AddNextMonthToModel → confirm | New "Functional P&L Summary - [Month] 25" tab created with green tab color and [NEW - DATA NEEDED] stamp |
+
 ---
 
 ## 4. Test Execution Procedure
@@ -139,7 +176,7 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 ### Pre-Test Setup
 1. Start with a fresh copy of `KeystoneBenefitTech_PL_Model.xlsx`
 2. Enable macros and Trust Access per IMPLEMENTATION_GUIDE.md
-3. Import all 29 VBA modules
+3. Import all 32 VBA modules from the `vba/` folder
 4. Build the frmCommandCenter (Mode A or B)
 5. Verify Python environment: `pip install -r requirements.txt`
 

@@ -30,10 +30,11 @@
 - [ ] Place completed guides in `training/` folder
 
 ### Phase 4: Final Package
+- [ ] **Scenario 1 — Share the demo file:** Save final tested workbook as `.xlsm`, place on SharePoint/shared drive so coworkers can open it and use the Command Center directly
 - [ ] Copy final tested Excel file to `CompletePackageStorage/production/`
 - [ ] Copy training guides to `CompletePackageStorage/production/`
 - [ ] Record demo video
-- [ ] Final PR to merge `claude/review-branch-progress-pP7Qf` → `main`
+- [ ] Final PR to merge `claude/ideas-newtesting-wDuOY` → `main`
 
 ---
 
@@ -42,6 +43,7 @@
 - [ ] Financial Statement Generator from Trial Balance (requires account mapping design)
 - [ ] VBA Outlook Email Integration (PDF → Email in one workflow)
 - [ ] Build remaining monthly summary tabs (Apr-Dec) using modMonthlyTabGenerator
+- [ ] **Scenario 2 — Universal Tools Add-In:** Package the 8 universal tools (Data Sanitizer, Find Negatives/Zeros/Round Numbers, Find External Links, Audit Hidden Sheets, Cross-Sheet Search) into `KBT_UniversalTools.xlam` so coworkers can use them on their own files. Source files staged in `UniversalToolsForAllFiles/`. Write coworker install guide when ready.
 
 ---
 

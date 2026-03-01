@@ -37,7 +37,7 @@ If your organization uses Trusted Locations instead of macro settings:
 
 ## 2. Importing VBA Modules
 
-All 29 `.bas` module files are in the `03_Code/VBA/` folder.
+All 32 `.bas` module files are in the `vba/` folder of this repository.
 
 ### Import Procedure
 
@@ -45,25 +45,30 @@ All 29 `.bas` module files are in the `03_Code/VBA/` folder.
 2. Press **Alt+F11** to open the VBA Editor.
 3. In the **Project Explorer** (left panel), find your workbook under "VBAProject".
 4. Right-click on **Modules** → **Import File...**
-5. Navigate to `03_Code/VBA/`, select all `.bas` files, click **Open**.
-6. Verify all 29 modules appear under the Modules folder.
+5. Navigate to the `vba/` folder, select all `.bas` files, click **Open**.
+6. Verify all 32 modules appear under the Modules folder.
 7. Press **Alt+Q** to return to Excel.
 8. Press **Ctrl+S** to save (choose `.xlsm` format if prompted).
 
-### Module Inventory (29 files)
+### Module Inventory (32 files)
 
 **Foundation (4):**
-modConfig, modPerformance, modLogger, ThisWorkbook (events)
+modConfig, modPerformance, modLogger, modFormBuilder
 
-**Core Features (15):**
+**Core Original (10):**
 modNavigation, modMonthlyTabGenerator, modReconciliation, modDataQuality,
-modVarianceAnalysis, modSensitivity, modDashboard, modPDFExport,
-modAWSRecompute, modMasterMenu, modValidation, modSnapshot,
-modConditionalFormat, modEmailSummary, modSearch
+modVarianceAnalysis, modDashboard, modPDFExport, modMasterMenu, modSearch, modUtilities
 
-**Advanced (10):**
-modAdmin, modAllocation, modForecast, modFormatting, modFormBuilder,
-modImport, modIntegrationTest, modRefresh, modScenario, modSetup
+**Advanced — Added 2026-02-28 (10):**
+modSensitivity, modAWSRecompute, modImport, modForecast, modScenario,
+modAllocation, modConsolidation, modVersionControl, modAdmin, modIntegrationTest
+
+**New Ideas — Added 2026-03-01 (8):**
+modDemoTools, modDataGuards, modDrillDown, modAuditTools,
+modETLBridge, modTrendReports, modDataSanitizer, modDashboard (updated — not a new file)
+
+> Note: modDashboard and modMonthlyTabGenerator were updated in the 2026-03-01 session,
+> not added fresh. Import them once — they replace the earlier versions.
 
 ### Verifying the Import
 
@@ -76,7 +81,7 @@ After importing, press **Alt+F11** and check:
 
 ## 3. Building the frmCommandCenter UserForm
 
-The Command Center is a UserForm that provides point-and-click access to all 50 toolkit actions. There are two ways to create it.
+The Command Center is a UserForm that provides point-and-click access to all 62 toolkit actions. There are two ways to create it.
 
 ### Mode A — Automatic Build (Recommended)
 
@@ -108,7 +113,7 @@ If Trust Access is blocked or Mode A fails:
 
 ### InputBox Fallback
 
-If the UserForm is not installed, pressing Ctrl+Shift+M will fall back to a 3-page InputBox menu. This provides the same 50 actions but without the search and category filtering. Type the action number and press OK.
+If the UserForm is not installed, pressing Ctrl+Shift+M will fall back to a 3-page InputBox menu. This provides the same 62 actions but without the search and category filtering. Type the action number and press OK.
 
 ---
 
@@ -237,7 +242,7 @@ FY_LABEL = "FY2026"         # was "FY2025"
 │                    USER INTERFACE LAYER                       │
 │  ┌────────────────┐  ┌───────────────┐  ┌────────────────┐  │
 │  │ frmCommandCenter│  │ InputBox      │  │ Keyboard       │  │
-│  │ (50 actions)   │  │ (fallback)    │  │ Shortcuts      │  │
+│  │ (62 actions)   │  │ (fallback)    │  │ Shortcuts      │  │
 │  └───────┬────────┘  └──────┬────────┘  └───────┬────────┘  │
 │          └──────────────────┼───────────────────┘            │
 │                             ▼                                │
@@ -272,7 +277,7 @@ FY_LABEL = "FY2026"         # was "FY2025"
 | Symptom | Cause | Fix |
 |---------|-------|-----|
 | "Compile error: Variable not defined" | `Option Explicit` + missing declaration | Reimport the module — the v2.1 files have all declarations |
-| "Sub or Function not defined" | Missing module | Check that all 29 `.bas` files are imported |
+| "Sub or Function not defined" | Missing module | Check that all 32 `.bas` files are imported |
 | "Subscript out of range" on sheet access | Sheet name doesn't match constant | Verify tab names match `modConfig` constants exactly |
 | "Programmatic access to VBA project" error | Trust Access not enabled | Enable in Trust Center (Step 1.5) or use Mode B manual install |
 | UserForm controls misaligned | Screen DPI scaling | The form is built for 100% DPI; adjust `Width`/`Height` in Properties if needed |
