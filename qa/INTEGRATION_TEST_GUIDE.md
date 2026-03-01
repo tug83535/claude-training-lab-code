@@ -24,7 +24,7 @@ Before running tests, verify:
 
 ```
 □  Workbook is open and macros are enabled
-□  All 29 VBA modules are imported
+□  All 32 VBA modules are imported
 □  No other macros are currently running
 □  The workbook has not been filtered or grouped
 □  Calculation mode is set to Automatic (Formulas → Calculation → Automatic)

@@ -13,7 +13,7 @@
 - VBA module compilation and cross-module dependency verification
 - Python script import chain and UTF-8 encoding verification
 - Workbook data integrity (GL totals, reconciliation checks, formula errors)
-- Command Center functionality (all 50 actions reachable)
+- Command Center functionality (all 62 actions reachable)
 - Documentation completeness
 
 ### Out of Scope
@@ -132,9 +132,9 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 | T7.03 | End-to-end month close | Execute all OPERATIONS_RUNBOOK month-close steps (3.1–3.12) | All steps complete without error |
 | T7.04 | Python month-end close | `python pnl_runner.py month-end --month 1` | CloseReport generated with check results |
 
-### Category T8 — New v2.1 Modules (13 tests)
+### Category T8 — New v2.1 Modules (29 tests)
 
-Tests for the 8 modules added in the 2026-03-01 session.
+Tests for the 8 modules added in the 2026-03-01 session, plus verification of 4 bug fixes from the pre-import code review.
 
 **modDataGuards**
 
@@ -169,6 +169,51 @@ Tests for the 8 modules added in the 2026-03-01 session.
 | T8.12 | Trend columns marked yellow | Run AddNextMonthToModel → confirm | Next month's column on P&L Monthly Trend and Functional P&L Monthly Trend is highlighted yellow |
 | T8.13 | New summary tab created | Run AddNextMonthToModel → confirm | New "Functional P&L Summary - [Month] 25" tab created with green tab color and [NEW - DATA NEEDED] stamp |
 
+**modDemoTools**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.14 | AddControlSheetButtons | Run AddControlSheetButtons | 5 buttons appear on the Report--> sheet with correct labels: "Run Reconciliation", "Build Dashboard", "Data Quality Check", "Export PDF", "Validate Assumptions". Message box confirms "5 control buttons added" |
+| T8.15 | Demo buttons call correct macros | Click each of the 5 buttons created by T8.14 | Each button runs the correct macro (e.g., "Data Quality Check" runs modDataQuality.ScanAll, "Export PDF" runs modPDFExport.ExportReportPackage). No "macro not found" errors |
+| T8.16 | SetParameterizedPrintArea | Run SetParameterizedPrintArea | Print area is set on a Functional P&L Summary sheet. Message says "Print area set on '[sheet name]'". Go to File > Print Preview — the sheet fits to 1 page portrait with company header |
+| T8.17 | CreatePrintableExecSummary | Run CreatePrintableExecSummary | New "Exec Summary - Print" sheet created with: company title, FY label, date, 4 KPI cells (Revenue, Gross Margin %, OpEx, Net Income), product breakdown table with 4 products, navy tab color |
+
+**modDrillDown**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.18 | AddReconciliationDrillLinks | Run AddReconciliationDrillLinks | Column F on the Checks sheet gets a "Drill To Data" header and blue "View Data" hyperlinks on every check row. Message box shows count of links added |
+| T8.19 | Drill links navigate to GL | Click any "View Data" hyperlink created by T8.18 | Excel jumps to the CrossfireHiddenWorksheet (GL sheet), which is made visible. No error |
+| T8.20 | AutoPopulateReconciliationChecks | Run AutoPopulateReconciliationChecks | Checks sheet is fully recalculated. Cell E1 shows "Last Refreshed:" with current timestamp. Message says "All named ranges verified" (or lists any missing named ranges) |
+| T8.21 | ApplyReconciliationHeatmap | Run ApplyReconciliationHeatmap | Checks sheet column D (Difference) is color-coded: green for < $1, yellow for $1–$100, red for > $100. Column E (Status) is green for PASS, red for FAIL |
+| T8.22 | RunGoldenFileCompare — first run | Run RunGoldenFileCompare for the first time (no GoldenBaseline sheet exists) | Confirmation prompt asks "Save current FY Total values as the baseline now?" → click Yes → message confirms baseline saved with row count. A very-hidden "GoldenBaseline" sheet is created |
+| T8.23 | RunGoldenFileCompare — compare run | Run RunGoldenFileCompare a second time (after GoldenBaseline exists) | "Golden Compare Report" sheet created with columns: Row Label, Golden Value, Current Value, Difference, Status. Each row shows MATCH (green) or CHANGED (red). Message shows count of changed lines |
+
+**modETLBridge**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.24 | TriggerETLLocally — no script | Run TriggerETLLocally when kbt_etl_pipeline.py is NOT in the workbook folder | A file browser dialog opens asking you to locate the script. Clicking Cancel exits cleanly with no error |
+| T8.25 | ImportETLOutput — no output file | Run ImportETLOutput when KBT_Cleaned.xlsx does NOT exist in the workbook folder | A file browser dialog opens asking you to locate the file. Clicking Cancel exits cleanly with no error |
+
+**modTrendReports**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.26 | CreateRolling12MonthView | Run CreateRolling12MonthView | "Rolling 12-Month P&L" sheet created with: company title, generated date, navy headers for each month, P&L line items with dollar values, and a line chart titled "Revenue — Rolling [N] Months". Tab color is navy |
+| T8.27 | ArchiveReconciliationResults | Run ArchiveReconciliationResults → click Yes to confirm | "Recon Archive" sheet created (or appended to if it exists). Each check row from the Checks sheet is copied with a timestamp. A bold SUMMARY row is added at the bottom with PASS/FAIL counts. Message shows the pass/fail totals |
+| T8.28 | CreateReconciliationTrendChart — no archive | Run CreateReconciliationTrendChart when NO "Recon Archive" sheet exists | Message says "No reconciliation archive found" and tells you to run ArchiveReconciliationResults first. No error |
+| T8.29 | CreateReconciliationTrendChart — with archive | Run CreateReconciliationTrendChart AFTER running ArchiveReconciliationResults at least once | "Recon Trend Chart" sheet created with a data table (Run Date, PASS, FAIL) and a clustered column chart showing green bars (PASS) and red bars (FAIL). Tab color is green |
+
+**Bug Fix Verifications (commit c232ca7)**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.30 | Demo buttons use correct macro names | Run AddControlSheetButtons → in the VBA Editor, check each button's OnAction property | "Data Quality Check" button calls `modDataQuality.ScanAll` (not RunAllChecks). "Export PDF" button calls `modPDFExport.ExportReportPackage` (not ExportAllSheets) |
+| T8.31 | ClearShortcuts runs without error | In the Immediate Window, run `modNavigation.ClearShortcuts` | Runs without compile error or "Sub or Function not defined" error. All Ctrl+Shift shortcuts are unbound |
+| T8.32 | Rolling 12 chart range correct | Run CreateRolling12MonthView → right-click the chart → Select Data | The series Values range points to the Total Revenue row (the same row used by revRow), not an offset or overcomplicated formula. Data points match the revenue values in the table |
+| T8.33 | GenerateCommentary StyleHeader works | Run GenerateCommentary (after running Variance Analysis via Command 6 first) | "Variance Commentary" sheet is created with navy/white header row. No "Type mismatch" or "argument not optional" error from StyleHeader |
+
 ---
 
 ## 4. Test Execution Procedure
@@ -188,6 +233,7 @@ Tests for the 8 modules added in the 2026-03-01 session.
 5. **T5 (Advanced)** — Tests Phase 3 features
 6. **T6 (Data Integrity)** — Tests workbook data
 7. **T7 (Integration)** — Full system tests
+8. **T8 (New v2.1 Modules)** — Tests the 8 new modules + 4 bug fix verifications
 
 ### Recording Results
 For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
@@ -204,6 +250,7 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 - **T5 tests:** 5 of 6 PASS minimum
 - **T6 tests:** All PASS
 - **T7 tests:** 3 of 4 PASS minimum (Python month-end may skip if no Python env)
+- **T8 tests:** 25 of 29 PASS minimum (T8.24, T8.25 may SKIP if you have the ETL script/output file present; T8.28 is superseded if you already ran ArchiveReconciliationResults; T8.22 can only run once per baseline)
 
 ### Known Acceptable Failures
 - T6.06 (Reconciliation): The existing workbook has 6 FAIL checks on the Checks sheet. These are pre-existing data discrepancies between Natural P&L and Functional P&L Summary sheets, not toolkit bugs. See VALIDATION_REPORT.md for details.
