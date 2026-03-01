@@ -1,19 +1,22 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
 ## Current Status (2026-03-01)
-- **Branch:** `claude/ideas-newtesting-wDuOY` (Ideas branch — based on review-branch-progress-pP7Qf)
-- **VBA Modules:** 32 built (.bas files in repo), all 62 Command Center actions covered
+- **Branch:** `claude/review-code-testing-s4dsQ` (live testing branch)
+- **VBA Modules:** 31 imported into Excel workbook — Debug > Compile passes (greyed out = clean)
 - **Python Scripts:** 14 complete and functional
-- **Excel File:** `KeystoneBenefitTech_PL_Model.xlsx` — iPipeline Fortune 100 redesign
-- **Overall:** New idea modules + sanitizer + month expander added. Next phase: import, test, demo prep.
+- **Excel File:** Workbook open with all 31 modules imported and error-free
+- **Overall:** Compile errors resolved. Blocked on frmCommandCenter auto-build: "Too many line continuations" bug in modFormBuilder — fix in progress.
 
 ---
 
 ## Next Up — Demo Readiness (Priority Order)
 
 ### Phase 1: Make It Real (Import + Live Test)
-- [ ] Import all 32 .bas files into the Excel workbook via VBA Editor (Alt+F11 → File → Import)
-- [ ] Create the UserForm `frmCommandCenter` in the workbook using `frmCommandCenter_code.txt`
+- [x] Import all 31 .bas files into the Excel workbook via VBA Editor
+- [x] Fix modAllocation VB_Name attribute mismatch (was importing as AuditTools — fixed)
+- [x] Fix all compile errors — Debug > Compile now passes clean
+- [ ] **BUG TO FIX:** modFormBuilder "Too many line continuations" — GetFormCode() uses a 62-item Array() that exceeds VBA's 24-continuation limit. Fix: replace with individual AddAction calls (no continuations needed). Fix is in modFormBuilder_v2.1.bas, lines 304–378.
+- [ ] Re-import fixed modFormBuilder into Excel, then re-run LaunchCommandCenter → YES to auto-build frmCommandCenter
 - [ ] Live test every Command Center action (1-62) in Excel — log pass/fail for each
 - [ ] Fix any runtime issues discovered during testing
 - [ ] Verify all hidden sheets are created properly (VBA_AuditLog, Scenarios, Version History, etc.)
