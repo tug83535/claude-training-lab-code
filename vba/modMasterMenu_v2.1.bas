@@ -18,8 +18,8 @@ Option Explicit
 '
 ' VERSION:  2.1.0
 ' CHANGES:  v2.0 -> v2.1:
-'           + ISSUE-006: Expanded from 36 items to 50 items
-'           + Split into 3-page InputBox to stay within character limits
+'           + ISSUE-006: Expanded from 36 items to 62 items
+'           + Split into 4-page InputBox to stay within character limits
 '           + All routing now delegates to modFormBuilder.ExecuteAction
 '             (single-point routing — no duplicate Select Case)
 '           + Ctrl+Shift+M now routes to LaunchCommandCenter (primary)
@@ -27,7 +27,7 @@ Option Explicit
 '===============================================================================
 
 '===============================================================================
-' ShowMasterMenu - 3-page InputBox fallback (50 items)
+' ShowMasterMenu - 4-page InputBox fallback (62 items)
 ' Called by modFormBuilder.LaunchCommandCenter when UserForm unavailable.
 '===============================================================================
 Public Sub ShowMasterMenu()
@@ -82,128 +82,128 @@ End Sub
 ' ShowPage1 - Items 1-20 (Operations, Analysis, Data Quality, Reporting, Utilities)
 '===============================================================================
 Private Function ShowPage1() As String
-    ShowPage1 = InputBox( _
-        "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 1/3]" & vbCrLf & _
-        String(50, "=") & vbCrLf & vbCrLf & _
-        "MONTHLY OPERATIONS" & vbCrLf & _
-        "  1.  Generate Monthly Tabs (Apr-Dec)" & vbCrLf & _
-        "  2.  Delete Generated Tabs" & vbCrLf & _
-        "  3.  Run Reconciliation Checks" & vbCrLf & _
-        "  4.  Export Reconciliation Report" & vbCrLf & vbCrLf & _
-        "ANALYSIS" & vbCrLf & _
-        "  5.  Run Sensitivity Analysis" & vbCrLf & _
-        "  6.  Run Variance Analysis" & vbCrLf & vbCrLf & _
-        "DATA QUALITY" & vbCrLf & _
-        "  7.  Scan for Data Quality Issues" & vbCrLf & _
-        "  8.  Fix Text-Stored Numbers" & vbCrLf & _
-        "  9.  Fix Duplicate Rows" & vbCrLf & vbCrLf & _
-        "REPORTING" & vbCrLf & _
-        "  10. Export Report Package (PDF)" & vbCrLf & _
-        "  11. Export Active Sheet (PDF)" & vbCrLf & _
-        "  12. Build Dashboard Charts" & vbCrLf & vbCrLf & _
-        "UTILITIES" & vbCrLf & _
-        "  13. Refresh Table of Contents" & vbCrLf & _
-        "  14. Recalculate AWS Allocations" & vbCrLf & _
-        "  15. Quick Jump to Sheet" & vbCrLf & _
-        "  16. Go Home (Report-->)" & vbCrLf & vbCrLf & _
-        "DATA & IMPORT" & vbCrLf & _
-        "  17. Import GL Data (CSV/Excel)" & vbCrLf & vbCrLf & _
-        "FORECASTING" & vbCrLf & _
-        "  18. Update Rolling Forecast" & vbCrLf & _
-        "  19. Append Month to Trend" & vbCrLf & vbCrLf & _
-        "SCENARIOS" & vbCrLf & _
-        "  20. Save Scenario" & vbCrLf & vbCrLf & _
-        "Enter # (1-50) | N=Next Page | Cancel=Exit:", _
-        APP_NAME & " - Command Center")
+    Dim msg As String
+    msg = "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 1/4]" & vbCrLf
+    msg = msg & String(50, "=") & vbCrLf & vbCrLf
+    msg = msg & "MONTHLY OPERATIONS" & vbCrLf
+    msg = msg & "  1.  Generate Monthly Tabs (Apr-Dec)" & vbCrLf
+    msg = msg & "  2.  Delete Generated Tabs" & vbCrLf
+    msg = msg & "  3.  Run Reconciliation Checks" & vbCrLf
+    msg = msg & "  4.  Export Reconciliation Report" & vbCrLf & vbCrLf
+    msg = msg & "ANALYSIS" & vbCrLf
+    msg = msg & "  5.  Run Sensitivity Analysis" & vbCrLf
+    msg = msg & "  6.  Run Variance Analysis" & vbCrLf & vbCrLf
+    msg = msg & "DATA QUALITY" & vbCrLf
+    msg = msg & "  7.  Scan for Data Quality Issues" & vbCrLf
+    msg = msg & "  8.  Fix Text-Stored Numbers" & vbCrLf
+    msg = msg & "  9.  Fix Duplicate Rows" & vbCrLf & vbCrLf
+    msg = msg & "REPORTING" & vbCrLf
+    msg = msg & "  10. Export Report Package (PDF)" & vbCrLf
+    msg = msg & "  11. Export Active Sheet (PDF)" & vbCrLf
+    msg = msg & "  12. Build Dashboard Charts" & vbCrLf & vbCrLf
+    msg = msg & "UTILITIES" & vbCrLf
+    msg = msg & "  13. Refresh Table of Contents" & vbCrLf
+    msg = msg & "  14. Recalculate AWS Allocations" & vbCrLf
+    msg = msg & "  15. Quick Jump to Sheet" & vbCrLf
+    msg = msg & "  16. Go Home (Report-->)" & vbCrLf & vbCrLf
+    msg = msg & "DATA & IMPORT" & vbCrLf
+    msg = msg & "  17. Import GL Data (CSV/Excel)" & vbCrLf & vbCrLf
+    msg = msg & "FORECASTING" & vbCrLf
+    msg = msg & "  18. Update Rolling Forecast" & vbCrLf
+    msg = msg & "  19. Append Month to Trend" & vbCrLf & vbCrLf
+    msg = msg & "SCENARIOS" & vbCrLf
+    msg = msg & "  20. Save Scenario" & vbCrLf & vbCrLf
+    msg = msg & "Enter # (1-62) | N=Next Page | Cancel=Exit:"
+    ShowPage1 = InputBox(msg, APP_NAME & " - Command Center")
 End Function
 
 '===============================================================================
 ' ShowPage2 - Items 21-40 (Scenarios, Allocation, Consolidation, VC, Governance)
 '===============================================================================
 Private Function ShowPage2() As String
-    ShowPage2 = InputBox( _
-        "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 2/3]" & vbCrLf & _
-        String(50, "=") & vbCrLf & vbCrLf & _
-        "SCENARIOS (cont.)" & vbCrLf & _
-        "  21. Load Scenario" & vbCrLf & _
-        "  22. Compare Scenarios" & vbCrLf & _
-        "  23. Delete Scenario" & vbCrLf & vbCrLf & _
-        "ALLOCATION" & vbCrLf & _
-        "  24. Run Allocation Engine" & vbCrLf & _
-        "  25. Allocation Preview" & vbCrLf & vbCrLf & _
-        "CONSOLIDATION" & vbCrLf & _
-        "  26. Consolidation Menu" & vbCrLf & _
-        "  27. Add Entity" & vbCrLf & _
-        "  28. Generate Consolidated" & vbCrLf & _
-        "  29. List Entities" & vbCrLf & _
-        "  30. Add Elimination" & vbCrLf & vbCrLf & _
-        "VERSION CONTROL" & vbCrLf & _
-        "  31. Version Control Menu" & vbCrLf & _
-        "  32. Save Version" & vbCrLf & _
-        "  33. Compare Versions" & vbCrLf & _
-        "  34. Restore Version" & vbCrLf & _
-        "  35. List Versions" & vbCrLf & vbCrLf & _
-        "GOVERNANCE" & vbCrLf & _
-        "  36. Auto-Documentation" & vbCrLf & _
-        "  37. Change Management Menu" & vbCrLf & _
-        "  38. Add Change Request" & vbCrLf & _
-        "  39. Update CR Status" & vbCrLf & _
-        "  40. CR Summary Report" & vbCrLf & vbCrLf & _
-        "Enter # (1-50) | N=Next | P=Prev | Cancel=Exit:", _
-        APP_NAME & " - Command Center")
+    Dim msg As String
+    msg = "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 2/4]" & vbCrLf
+    msg = msg & String(50, "=") & vbCrLf & vbCrLf
+    msg = msg & "SCENARIOS (cont.)" & vbCrLf
+    msg = msg & "  21. Load Scenario" & vbCrLf
+    msg = msg & "  22. Compare Scenarios" & vbCrLf
+    msg = msg & "  23. Delete Scenario" & vbCrLf & vbCrLf
+    msg = msg & "ALLOCATION" & vbCrLf
+    msg = msg & "  24. Run Allocation Engine" & vbCrLf
+    msg = msg & "  25. Allocation Preview" & vbCrLf & vbCrLf
+    msg = msg & "CONSOLIDATION" & vbCrLf
+    msg = msg & "  26. Consolidation Menu" & vbCrLf
+    msg = msg & "  27. Add Entity" & vbCrLf
+    msg = msg & "  28. Generate Consolidated" & vbCrLf
+    msg = msg & "  29. List Entities" & vbCrLf
+    msg = msg & "  30. Add Elimination" & vbCrLf & vbCrLf
+    msg = msg & "VERSION CONTROL" & vbCrLf
+    msg = msg & "  31. Version Control Menu" & vbCrLf
+    msg = msg & "  32. Save Version" & vbCrLf
+    msg = msg & "  33. Compare Versions" & vbCrLf
+    msg = msg & "  34. Restore Version" & vbCrLf
+    msg = msg & "  35. List Versions" & vbCrLf & vbCrLf
+    msg = msg & "GOVERNANCE" & vbCrLf
+    msg = msg & "  36. Auto-Documentation" & vbCrLf
+    msg = msg & "  37. Change Management Menu" & vbCrLf
+    msg = msg & "  38. Add Change Request" & vbCrLf
+    msg = msg & "  39. Update CR Status" & vbCrLf
+    msg = msg & "  40. CR Summary Report" & vbCrLf & vbCrLf
+    msg = msg & "Enter # (1-62) | N=Next | P=Prev | Cancel=Exit:"
+    ShowPage2 = InputBox(msg, APP_NAME & " - Command Center")
 End Function
 
 '===============================================================================
 ' ShowPage3 - Items 41-50 (Admin & Testing, Advanced)
 '===============================================================================
 Private Function ShowPage3() As String
-    ShowPage3 = InputBox( _
-        "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 3/3]" & vbCrLf & _
-        String(50, "=") & vbCrLf & vbCrLf & _
-        "ADMIN & TESTING" & vbCrLf & _
-        "  41. View Audit Log" & vbCrLf & _
-        "  42. Export Audit Log" & vbCrLf & _
-        "  43. Clear Audit Log" & vbCrLf & _
-        "  44. Full Integration Test" & vbCrLf & _
-        "  45. Quick Health Check" & vbCrLf & vbCrLf & _
-        "ADVANCED" & vbCrLf & _
-        "  46. Variance Commentary" & vbCrLf & _
-        "  47. Cross-Sheet Validation" & vbCrLf & _
-        "  48. Executive Mode Toggle" & vbCrLf & _
-        "  49. Force Recalculate All" & vbCrLf & _
-        "  50. About This Toolkit" & vbCrLf & vbCrLf & _
-        String(50, "-") & vbCrLf & _
-        "TIP: Install the Command Center UserForm for" & vbCrLf & _
-        "a better experience. Press Ctrl+Shift+M after" & vbCrLf & _
-        "running modFormBuilder.BuildCommandCenter." & vbCrLf & vbCrLf & _
-        "Enter # (1-62) | N=Next | P=Prev | Cancel=Exit:", _
-        APP_NAME & " - Command Center")
+    Dim msg As String
+    msg = "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 3/4]" & vbCrLf
+    msg = msg & String(50, "=") & vbCrLf & vbCrLf
+    msg = msg & "ADMIN & TESTING" & vbCrLf
+    msg = msg & "  41. View Audit Log" & vbCrLf
+    msg = msg & "  42. Export Audit Log" & vbCrLf
+    msg = msg & "  43. Clear Audit Log" & vbCrLf
+    msg = msg & "  44. Full Integration Test" & vbCrLf
+    msg = msg & "  45. Quick Health Check" & vbCrLf & vbCrLf
+    msg = msg & "ADVANCED" & vbCrLf
+    msg = msg & "  46. Variance Commentary" & vbCrLf
+    msg = msg & "  47. Cross-Sheet Validation" & vbCrLf
+    msg = msg & "  48. Executive Mode Toggle" & vbCrLf
+    msg = msg & "  49. Force Recalculate All" & vbCrLf
+    msg = msg & "  50. About This Toolkit" & vbCrLf & vbCrLf
+    msg = msg & String(50, "-") & vbCrLf
+    msg = msg & "TIP: Install the Command Center UserForm for" & vbCrLf
+    msg = msg & "a better experience. Press Ctrl+Shift+M after" & vbCrLf
+    msg = msg & "running modFormBuilder.BuildCommandCenter." & vbCrLf & vbCrLf
+    msg = msg & "Enter # (1-62) | N=Next | P=Prev | Cancel=Exit:"
+    ShowPage3 = InputBox(msg, APP_NAME & " - Command Center")
 End Function
 
 '===============================================================================
 ' ShowPage4 - Items 51-62 (Sheet Tools)
 '===============================================================================
 Private Function ShowPage4() As String
-    ShowPage4 = InputBox( _
-        "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 4/4]" & vbCrLf & _
-        String(50, "=") & vbCrLf & vbCrLf & _
-        "SHEET TOOLS" & vbCrLf & _
-        "  51. Delete All Blank Rows" & vbCrLf & _
-        "  52. Unhide All Worksheets" & vbCrLf & _
-        "  53. Sort Sheets Alphabetically" & vbCrLf & _
-        "  54. Toggle Freeze Panes" & vbCrLf & _
-        "  55. Convert Formulas to Values" & vbCrLf & _
-        "  56. AutoFit All Columns" & vbCrLf & _
-        "  57. Protect All Sheets" & vbCrLf & _
-        "  58. Unprotect All Sheets" & vbCrLf & _
-        "  59. Find & Replace (All Sheets)" & vbCrLf & _
-        "  60. Highlight Hardcoded Numbers" & vbCrLf & _
-        "  61. Toggle Presentation Mode" & vbCrLf & _
-        "  62. Unmerge and Fill Down" & vbCrLf & vbCrLf & _
-        String(50, "-") & vbCrLf & _
-        "TIP: Install the Command Center UserForm for" & vbCrLf & _
-        "a better experience. Press Ctrl+Shift+M after" & vbCrLf & _
-        "running modFormBuilder.BuildCommandCenter." & vbCrLf & vbCrLf & _
-        "Enter # (1-62) | P=Prev | Cancel=Exit:", _
-        APP_NAME & " - Command Center")
+    Dim msg As String
+    msg = "KEYSTONE BENEFITTECH TOOLKIT v" & APP_VERSION & "  [Page 4/4]" & vbCrLf
+    msg = msg & String(50, "=") & vbCrLf & vbCrLf
+    msg = msg & "SHEET TOOLS" & vbCrLf
+    msg = msg & "  51. Delete All Blank Rows" & vbCrLf
+    msg = msg & "  52. Unhide All Worksheets" & vbCrLf
+    msg = msg & "  53. Sort Sheets Alphabetically" & vbCrLf
+    msg = msg & "  54. Toggle Freeze Panes" & vbCrLf
+    msg = msg & "  55. Convert Formulas to Values" & vbCrLf
+    msg = msg & "  56. AutoFit All Columns" & vbCrLf
+    msg = msg & "  57. Protect All Sheets" & vbCrLf
+    msg = msg & "  58. Unprotect All Sheets" & vbCrLf
+    msg = msg & "  59. Find & Replace (All Sheets)" & vbCrLf
+    msg = msg & "  60. Highlight Hardcoded Numbers" & vbCrLf
+    msg = msg & "  61. Toggle Presentation Mode" & vbCrLf
+    msg = msg & "  62. Unmerge and Fill Down" & vbCrLf & vbCrLf
+    msg = msg & String(50, "-") & vbCrLf
+    msg = msg & "TIP: Install the Command Center UserForm for" & vbCrLf
+    msg = msg & "a better experience. Press Ctrl+Shift+M after" & vbCrLf
+    msg = msg & "running modFormBuilder.BuildCommandCenter." & vbCrLf & vbCrLf
+    msg = msg & "Enter # (1-62) | P=Prev | Cancel=Exit:"
+    ShowPage4 = InputBox(msg, APP_NAME & " - Command Center")
 End Function
