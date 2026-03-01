@@ -1,0 +1,202 @@
+# VBA Examples (200) — Name — Purpose
+
+1. Refresh and Stamp — Refresh all queries and write last refresh timestamp to README.
+2. Run Data Quality Checks — Scan table for nulls, duplicates, non‑numeric amounts, floating tails.
+3. Run Reconciliations — Evaluate checks sheet against tolerance and write results.
+4. Export DQ Errors — Export DQ_Errors sheet to CSV for auditors.
+5. Protect Calculation Sheets — Protect sheets named Calc* and leave Assumptions editable.
+6. Unprotect with Audit Log — Unprotect sheet and append user/timestamp to change log.
+7. Pivot Refresh All — Refresh specific PivotTables and show progress.
+8. Create Dynamic TOC — Build a table of contents with hyperlinks to each sheet.
+9. Bulk Format Currency — Apply consistent currency number format to columns.
+10. Convert Text to Numbers — Convert text‑numbers to numeric values with logging.
+11. Detect Floating Tails — List rows where amounts have >2 decimal precision.
+12. Duplicate ID Report — Find and list duplicate TransactionIDs.
+13. Null Date Finder — List rows with missing or invalid dates.
+14. Non‑Numeric Amount Finder — Flag rows where Amount is not numeric.
+15. Create Pivot from Table — Create a pivot table from tbl_Transactions_CLEAN.
+16. Create Monthly Summary Pivot — Build a monthly P&L pivot automatically.
+17. Add Control Sheet Buttons — Add buttons and assign macros for common tasks.
+18. Create Reconciliation Drill Links — Add hyperlinks from checks to filtered transactions.
+19. Export Reconciliation PDF — Export ReconciliationResults sheet to PDF.
+20. Snapshot Backup Workbook — Save a dated backup copy to Backups folder.
+21. Append Load Run Metadata — Append LoadTimestamp, User, RowCount to load_runs sheet.
+22. Auto‑format Tables — Apply table styles and column widths to ListObjects.
+23. Create Validation Dropdowns — Populate Data Validation lists from dim_* tables.
+24. Mass Replace Vendor Codes — Replace vendor codes using a mapping table.
+25. Create TOC with Descriptions — TOC that includes sheet descriptions and owners.
+26. Export Filtered Rows — Export currently filtered table view to CSV.
+27. Import CSV Wizard — Prompt for CSV, preview, and import as table.
+28. Trim Text Fields — Trim leading/trailing spaces across selected columns.
+29. Remove Non‑Printable Characters — Clean control characters from text fields.
+30. Auto‑generate README — Populate README with owner, sources, last refresh.
+31. Create Load Manifest — Write manifest of source file, row counts, and checksum.
+32. Validate Named Ranges — Ensure required named ranges exist and warn if missing.
+33. Create TOC with Sheet Status — TOC showing sheet protection and last modified.
+34. Create KPI Cards — Populate KPI summary cells from table aggregates.
+35. Export Charts as Images — Save selected charts as PNG files.
+36. Create PowerPoint Slides — Export key charts to PowerPoint slides.
+37. Mass Rename Sheets — Standardize sheet names to a naming convention.
+38. Remove Unused Styles — Clean workbook styles to reduce file bloat.
+39. Compress Embedded Images — Remove or compress large images in workbook.
+40. Limit Used Range Cleanup — Reset used range to reduce file size.
+41. Convert Formulas to Values — Snapshot a sheet by converting formulas to values.
+42. Rebuild Pivot Cache — Recreate pivot cache for performance and consistency.
+43. Create Slicers for Pivot — Add slicers and connect to pivot tables.
+44. Create Dynamic Chart Titles — Link chart titles to selector cells.
+45. Conditional Chart Coloring — Color chart series based on variance sign.
+46. Create Monthly Snapshot Files — Save monthly summary as dated workbook.
+47. Automated Snapshot Archive — Move old snapshots to Archive folder by date.
+48. Validate Assumptions Presence — Block refresh if key assumptions are empty.
+49. Check Sum of Drivers — Validate allocation drivers sum to 100% and warn.
+50. Apply Protection Policy — Enforce sheet protection rules across workbook.
+51. Log Macro Runs — Append macro name, user, and timestamp to macro_runs sheet.
+52. Create Drill‑through Filter — Apply table filter based on check row parameters.
+53. Create Exception Email Draft — Compose an email body with failing checks summary.
+54. Create Approval Workflow — Add approval checkboxes and lock rows after approval.
+55. Auto‑populate Reconciliation Checks — Pull left/right values from named ranges.
+56. Create Reconciliation Heatmap — Conditional format ReconciliationResults by diff size.
+57. Export Exception List for Ops — Export failing checks to CSV for operations.
+58. Create Quick Search Box — Search transactions by ID and highlight row.
+59. Open Invoice PDF by ID — Open local invoice PDF based on TransactionID mapping.
+60. Create Drill‑down Report Sheet — Build a sheet that shows transactions for selected check.
+61. Auto‑generate Pivot Layouts — Create multiple pivot layouts for different audiences.
+62. Create Dynamic Slicer Panel — Build a control panel with slicers and selectors.
+63. Create Parameterized Print Area — Set print area based on selected month/product.
+64. Create Printable Executive Summary — Assemble key charts and KPIs for printing.
+65. Create Reconciliation Checklist — Checklist with pass/fail and notes per check.
+66. Auto‑fill Missing Categories — Suggest category based on vendor mapping and fill.
+67. Create Quick Fix Macro — Apply common fixes (trim, convert, round) to selected rows.
+68. Create Data Correction Log — Record manual corrections with user and reason.
+69. Create TOC with Links to Errors — TOC linking to DQ_Errors and ReconciliationResults.
+70. Create Floating Tail Examples — Copy sample floating‑tail rows to a sheet for training.
+71. Create Duplicate Grouping Sheet — Group duplicate IDs and show counts per group.
+72. Create Vendor Drill Sheet — Show all transactions for a selected vendor with totals.
+73. Create Department Rollup — Aggregate amounts by department and write summary.
+74. Create Product Rollup — Aggregate amounts by product and write summary.
+75. Create Top‑N Vendor Table — Show top 10 vendors by spend with drill links.
+76. Create Trend Chart for Vendor — Generate monthly trend chart for selected vendor.
+77. Create Rolling 12‑Month View — Build dynamic rolling 12‑month summary.
+78. Create Cohort Table — Build cohort analysis table by product launch month.
+79. Create Variance Waterfall — Build waterfall chart showing drivers of variance.
+80. Create Variance Decomposition Table — Show contribution by category to variance.
+81. Create Automated Commentary — Insert short commentary when variance exceeds threshold.
+82. Create KPI Threshold Alerts — Highlight KPI cells when thresholds breached.
+83. Create KPI Email Snippet — Draft short KPI summary for exec email.
+84. Create Snapshot of Pivot Values — Save pivot values to a static snapshot sheet.
+85. Create Dynamic Axis Scaling — Adjust chart axis min/max based on selected data.
+86. Create Small Multiples Grid — Generate grid of charts per product via loop.
+87. Create Drillable Vendor Table — Double‑click vendor to open filtered transactions.
+88. Create Conditional Commentary — Insert comments explaining large variances.
+89. Create Export for BI — Export cleaned table to CSV for BI ingestion.
+90. Create Golden File Compare — Compare current summary to golden values and flag diffs.
+91. Create Runbook Sheet — Add run instructions and commands for ETL and macros.
+92. Create Owner Contact List — Sheet listing owners for data, ETL, and reports.
+93. Create Change Log Entry on Save — Append version and notes when workbook saved.
+94. Create Version Stamp — Write workbook version to README on save.
+95. Create Incident Log — Record incidents and remediation steps in Incidents sheet.
+96. Create Permission Reminder — Warn if workbook saved to unsecured path.
+97. Create Mass Comment Inserter — Add standardized comments to flagged rows.
+98. Create Mass Delete Old Backups — Delete backups older than X days from Backups folder.
+99. Create Reindex Tables Macro — Reindex table row numbers after deletes.
+100. Create Table to CSV Exporter — Export any ListObject to CSV with one click.
+101. Create Table to Excel Copy — Copy table to new workbook and save as dated file.
+102. Create Quick Pivot Filter Restore — Save and restore pivot filter states.
+103. Create Named Range Updater — Update named ranges when tables change.
+104. Create Formula Auditor — List cells with volatile formulas (INDIRECT/OFFSET).
+105. Create Formula to Value Converter — Convert selected formulas to values for archive.
+106. Create External Link Finder — List external workbook links for review.
+107. Create Broken Link Fixer — Attempt to repair or remove broken external links.
+108. Create Unused Name Cleaner — List and optionally delete unused named ranges.
+109. Create Hidden Sheet Auditor — List hidden and very hidden sheets for governance.
+110. Create Macro Sign Reminder — Remind to sign macros and show signing status.
+111. Create Macro Security Check — Warn if macros are unsigned and org policy requires signing.
+112. Create Co‑authoring Warning — Warn users about co‑authoring risks with macros.
+113. Create Local Path Finder — Find hardcoded local file paths in formulas.
+114. Create Replace Local Paths — Replace local paths with relative or cloud placeholders.
+115. Create Data Masking Macro — Mask PII in a copy for demo sharing.
+116. Create Sample Data Generator — Generate synthetic sample rows for testing.
+117. Create Test Harness Runner — Run simple tests and write pass/fail to sheet.
+118. Create Quick QA Checklist — Step through QA items and mark complete.
+119. Create Macro to Run ETL Locally — Trigger local ETL script via Shell command.
+120. Create Macro to Import ETL Output — Import cleaned Excel output into workbook table.
+121. Create Atomic Refresh Guard — Prevent refresh while ETL temp file exists.
+122. Create Safe Rename Helper — Rename files safely via VBA for local workflows.
+123. Create Temp File Cleanup — Remove stale .tmp files in data folder.
+124. Create Local Scheduler Trigger — Create a scheduled task command snippet for users.
+125. Create Run Summary Email — Draft email summarizing ETL and DQ results.
+126. Create Quick Drill Filter Builder — Build filter string from check parameters.
+127. Create Hyperlink to Filtered View — Create hyperlink that opens filtered table view.
+128. Create Row Highlighting Macro — Highlight rows matching selected criteria.
+129. Create Conditional Row Coloring — Color rows by severity of DQ issue.
+130. Create Severity Score Column — Compute severity score for DQ issues and sort.
+131. Create Prioritized Fix List — Export top N fixes by severity for analysts.
+132. Create Auto‑assign Owner Macro — Assign owner to DQ issues based on mapping.
+133. Create Remediation Tracker — Track remediation status and comments per issue.
+134. Create SLA Reminder Macro — Remind owners when remediation SLA is breached.
+135. Create Auto‑close Resolved Issues — Close issues when corrected in source table.
+136. Create Cross‑sheet Consistency Checker — Ensure lookup tables match transaction values.
+137. Create Lookup Missing Keys Report — List rows with missing lookup keys.
+138. Create Canonicalization Suggestion Sheet — Suggest canonical vendor names for review.
+139. Create Accept Mapping Macro — Apply accepted vendor mappings to transactions.
+140. Create Undo Mapping Macro — Revert last applied mapping changes.
+141. Create Mapping Audit Trail — Log mapping changes with user and timestamp.
+142. Create Allocation Driver Validator — Ensure allocation drivers are valid and sum to 100%.
+143. Create Allocation Runner — Apply allocation rules from driver table to transactions.
+144. Create Allocation Results Export — Export allocated results to CSV for downstream use.
+145. Create Allocation Variance Check — Verify totals pre/post allocation conserve amounts.
+146. Create Allocation Drill Macro — Show transactions contributing to allocation differences.
+147. Create Currency Format Normalizer — Normalize currency formats across sheets.
+148. Create FX Rate Apply Macro — Apply FX rates from a table to amounts.
+149. Create FX Audit Report — Show rows with missing or stale FX rates.
+150. Create Negative Amount Finder — Flag negative amounts where not allowed.
+151. Create Zero Amount Finder — Flag zero amounts for review.
+152. Create Round‑trip Check — Detect transactions that net to zero across accounts.
+153. Create Invoice Gap Finder — Find gaps in invoice numbering sequences.
+154. Create Duplicate Invoice Across Vendors Finder — Detect same invoice number used by multiple vendors.
+155. Create Suspicious Round Number Finder — Flag many round amounts (e.g., multiples of 1000).
+156. Create Reconciliation Trend Chart — Chart count of failing checks over time.
+157. Create DQ Trend Table — Show DQ metrics by run date for trend analysis.
+158. Create DQ Dashboard Sheet — One‑page DQ summary with counts and top issues.
+159. Create DQ Export for Auditors — Package DQ_Errors and metadata into a zip for auditors.
+160. Create Quick Fix Apply Macro — Apply a chosen fix to all selected DQ rows.
+161. Create Reconciliation Auto‑approve — Auto‑mark small diffs as approved based on tolerance.
+162. Create Reconciliation Escalation Macro — Flag large diffs and notify owners via draft email.
+163. Create Reconciliation Historical Archive — Archive ReconciliationResults per run.
+164. Create Reconciliation Comparison Tool — Compare two runs of ReconciliationResults.
+165. Create Reconciliation Pivot Snapshot — Save pivotable snapshot of reconciliation checks.
+166. Create Reconciliation Drill to Source — Open source workbook and highlight offending rows.
+167. Create Quick Data Export for BI — Export canonical table with metadata for BI import.
+168. Create Local DB Load Macro — Export cleaned data to local SQLite via command.
+169. Create Sample Data Masking Macro — Mask PII in a copy for sharing.
+170. Create Test Data Injector — Insert synthetic edge cases for testing macros.
+171. Create Test Runner Macro — Run a set of validation macros and report pass/fail.
+172. Create Macro to Validate Column Types — Check that columns are numeric/date/text as expected.
+173. Create Macro to Enforce Column Order — Reorder columns to canonical schema.
+174. Create Macro to Add Missing Columns — Add required columns with default values if missing.
+175. Create Macro to Remove Extra Columns — Remove unexpected columns before export.
+176. Create Macro to Normalize Headers — Trim and standardize header names.
+177. Create Macro to Generate Sample CSV — Export a small sample CSV for QA.
+178. Create Macro to Compare Two Tables — Diff two tables and list added/removed rows.
+179. Create Macro to Compute RowHash — Compute SHA256 row hash for each row (via COM or shell).
+180. Create Macro to Verify RowHash Changes — Compare RowHash across runs and list changes.
+181. Create Macro to Import Mapping File — Import vendor/category mapping CSV into dim_* table.
+182. Create Macro to Validate Mapping Coverage — Show unmapped vendors/categories.
+183. Create Macro to Auto‑apply Simple Mappings — Apply exact match mappings automatically.
+184. Create Macro to Flag Fuzzy Matches — List fuzzy match suggestions for manual review.
+185. Create Macro to Export Mapping Suggestions — Export fuzzy suggestions to CSV for review.
+186. Create Macro to Recalculate All — Force full recalculation and report duration.
+187. Create Macro to Time Macro Runs — Measure and log macro execution times.
+188. Create Macro to Alert on Long Runs — Notify if macro exceeds expected duration.
+189. Create Macro to Pause/Resume Long Jobs — Allow user to pause and resume long processes.
+190. Create Macro to Show Progress Bar — Visual progress indicator for long loops.
+191. Create Macro to Batch Process Files — Loop through files in folder and run ETL/import steps.
+192. Create Macro to Validate File Naming Convention — Ensure source files follow naming rules.
+193. Create Macro to Auto‑archive Processed Files — Move processed source files to Archive folder.
+194. Create Macro to Restore Archived File — Restore last archived file to data folder.
+195. Create Macro to Generate Runbook PDF — Compile run steps into printable PDF (local).
+196. Create Macro to Export Error Summary to Clipboard — Copy DQ summary for quick paste.
+197. Create Macro to Insert Standard Comments — Insert templated comments for reviewers.
+198. Create Macro to Lock Final Report — Protect final report sheet and hide formulas.
+199. Create Macro to Unhide All Sheets — Reveal hidden sheets for admin review.
+200. Create Macro to Reset Demo Environment — Clear test data and restore sample state for demos.
