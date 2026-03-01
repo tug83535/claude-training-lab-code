@@ -251,7 +251,7 @@ Public Sub CreateExecutiveDashboard()
     modPerformance.UpdateStatus "Building summary table...", 0.7
     Dim tblRow As Long: tblRow = kpiRow + 5
     
-    modConfig.StyleHeader wsDash, "", tblRow, _
+    modConfig.StyleHeader wsDash, tblRow, _
         Array("Metric", "FY Actual", "Budget", "Variance $", "Variance %")
     
     Dim metrics As Variant: metrics = Array("Total Revenue", "Gross Profit", "Operating Expenses", "Net Income")
@@ -483,7 +483,7 @@ Public Sub ProductComparison()
         hdrs(p + 1) = CStr(products(p))
     Next p
     
-    modConfig.StyleHeader wsPC, "PRODUCT LINE COMPARISON - FY" & FISCAL_YEAR_4, 4, hdrs
+    modConfig.StyleHeader wsPC, 4, hdrs
     
     ' Metrics to compare (row labels)
     Dim metricNames As Variant
