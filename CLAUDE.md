@@ -27,6 +27,8 @@ employee at the best company in the world.
 - `CompletePackageStorage/` — final production-ready files and backups
   - `CompletePackageStorage/production/` — live, ready-to-go final files
   - `CompletePackageStorage/backups/` — versioned backups
+- `RecordingPlanDraft/` — draft video scripts and recording plans for the demo walkthrough
+  - `Demo_Script_Draft.md` — 45-minute demo script broken into 5 videos, pre-recording checklist, and project completion tracker
 
 ## My Audience
 Training docs and guides are written for non-technical Finance & Accounting staff.
@@ -97,4 +99,5 @@ Before delivering ANYTHING ask yourself:
 ## Current Status
 - Repo structure audit complete (2026-02-26)
 - Cleanup and documentation update in progress
+- RecordingPlanDraft/ folder created with full 5-video demo script (2026-03-01)
 - Next: Upload existing files from local APCLDmerge_ALL folder into GitHub
