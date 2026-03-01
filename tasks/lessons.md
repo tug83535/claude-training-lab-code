@@ -81,3 +81,27 @@
 - Dirichlet alpha vector = base_shares * concentration_parameter (higher concentration = tighter clustering around the mean)
 - For expense randomization, Normal distribution is appropriate (truncated at zero for amounts that can't go negative)
 - Always expose key simulation parameters (iterations, seed, concentration, shock_prob) as CLI arguments for reproducibility and testing
+
+## Multi-Account Branch Management (2026-02-28)
+- When running multiple Claude accounts into the same repo, each account creates its own branch — always run `git fetch --all` first to discover ALL remote branches before assuming what exists
+- Use `git merge-base --is-ancestor` to map branch ancestry before merging — this prevents redundant merges and identifies which branches already contain each other's work
+- When merging divergent branches, merge in order of least conflict first (e.g., Excel-only changes first, then code changes on top)
+- Always check for merge conflict markers (`<<<<<<<`) in all files after a merge — automated merge can silently leave markers in unexpected files
+
+## VBA .bas Files vs Excel Workbook (2026-02-28)
+- `.bas` files in the repo are **source code only** — they are NOT automatically part of the Excel workbook
+- To actually use the VBA code, every `.bas` file must be manually imported into the Excel workbook via VBA Editor: Alt+F11 → File → Import File
+- The UserForm (`frmCommandCenter`) must also be created manually in the workbook — the `.txt` file is just a reference
+- Having all 24 `.bas` files in the repo does NOT mean the Excel file has working macros — they are separate until imported
+- Always remind the user of this distinction: "code exists in repo" is not the same as "code works in Excel"
+
+## ExecuteAction as the Single Contract (2026-02-28)
+- The `ExecuteAction()` routing table in `modFormBuilder_v2.1.bas` is the contract for all 62 Command Center actions
+- Every new VBA module's public sub signatures must match EXACTLY what ExecuteAction calls (e.g., `modScenario.SaveScenario` not `modScenario.Save`)
+- Before building a new module, always read the ExecuteAction Case statement first to get the exact procedure names expected
+- Every VBA module follows the same pattern: modConfig constants + modPerformance TurboOn/TurboOff + modLogger.LogAction + On Error GoTo ErrHandler
+
+## Testing VBA Without Excel Access (2026-02-28)
+- Code review can catch signature mismatches, missing constants, and wrong argument counts — but only a live Excel test confirms runtime behavior
+- Always recommend live testing after building or fixing VBA modules
+- Common issues that only appear at runtime: missing sheet references, wrong column indexes, UserForm control names, late-binding object types
