@@ -137,8 +137,7 @@ Public Sub CreateRolling12MonthView()
         Dim ser As Series
         Set ser = .SeriesCollection.NewSeries
         ser.Name = "Total Revenue"
-        ser.Values = wsOut.Range(wsOut.Cells(revRow - DATA_ROW_REPORT + outR - (srcLastRow - DATA_ROW_REPORT + 1) + DATA_ROW_REPORT - 1, 2), _
-                                 wsOut.Cells(revRow - DATA_ROW_REPORT + outR - (srcLastRow - DATA_ROW_REPORT + 1) + DATA_ROW_REPORT - 1, windowSize + 1))
+        ser.Values = wsOut.Range(wsOut.Cells(revRow, 2), wsOut.Cells(revRow, windowSize + 1))
         ser.XValues = windowLabels
         .Axes(xlValue).TickLabels.NumberFormat = "$#,##0"
         .HasLegend = False

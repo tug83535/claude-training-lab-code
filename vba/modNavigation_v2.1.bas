@@ -165,10 +165,6 @@ Public Sub AssignShortcuts()
 End Sub
 
 '===============================================================================
-' ClearShortcuts - Unbind all custom shortcuts (call from Workbook_BeforeClose)
-' Restores default Excel key behavior when the workbook is closed.
-'===============================================================================
-'===============================================================================
 ' ToggleExecutiveMode - Hide utility/working sheets, show only report sheets
 ' Called by ExecuteAction (Action #48)
 '===============================================================================
@@ -222,6 +218,8 @@ End Sub
 
 '===============================================================================
 ' ClearShortcuts - Unbind all custom shortcuts (call from Workbook_BeforeClose)
+'===============================================================================
+Public Sub ClearShortcuts()
     On Error Resume Next
     Application.OnKey "^+h"    ' Reset to default
     Application.OnKey "^+j"    ' Reset to default

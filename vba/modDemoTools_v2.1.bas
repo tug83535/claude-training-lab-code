@@ -44,8 +44,8 @@ Public Sub AddControlSheetButtons()
     btnDefs = Array( _
         Array("Run Reconciliation",  "modReconciliation.RunAllChecks",    10,  20, 170, 28), _
         Array("Build Dashboard",     "modDashboard.BuildDashboard",        44,  20, 170, 28), _
-        Array("Data Quality Check",  "modDataQuality.RunAllChecks",        78,  20, 170, 28), _
-        Array("Export PDF",          "modPDFExport.ExportAllSheets",      112,  20, 170, 28), _
+        Array("Data Quality Check",  "modDataQuality.ScanAll",             78,  20, 170, 28), _
+        Array("Export PDF",          "modPDFExport.ExportReportPackage", 112,  20, 170, 28), _
         Array("Validate Assumptions","modDataGuards.ValidateAssumptionsPresence", 146, 20, 170, 28))
 
     Dim i As Long

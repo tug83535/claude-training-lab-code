@@ -313,8 +313,12 @@ NextComRow:
         After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     wsCom.Name = comName
     
-    modConfig.StyleHeader wsCom, _
-        "VARIANCE COMMENTARY - FY" & FISCAL_YEAR_4 & " Budget vs Actual", 4, _
+    wsCom.Range("A1").Value = "VARIANCE COMMENTARY - FY" & FISCAL_YEAR_4 & " Budget vs Actual"
+    wsCom.Range("A1").Font.Bold = True
+    wsCom.Range("A1").Font.Size = 14
+    wsCom.Range("A1").Font.Color = CLR_NAVY
+
+    modConfig.StyleHeader wsCom, 4, _
         Array("#", "Line Item", "FY Actual", "Budget", "Variance ($)", "Variance (%)", "Commentary")
     
     Dim topN As Long: topN = Application.Min(5, viCount)
