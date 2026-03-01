@@ -190,12 +190,12 @@ Public Sub AllocationPreview()
         If p < UBound(products) Then msg = msg & ", "
     Next p
 
-    Dim input As String
-    input = InputBox(msg, APP_NAME & " - Allocation Preview")
-    If input = "" Then Exit Sub
+    Dim userInput As String
+    userInput = InputBox(msg, APP_NAME & " - Allocation Preview")
+    If userInput = "" Then Exit Sub
 
     ' Parse shares
-    Dim parts As Variant: parts = Split(input, ",")
+    Dim parts As Variant: parts = Split(userInput, ",")
     If UBound(parts) <> UBound(products) Then
         MsgBox "Expected " & (UBound(products) + 1) & " values, got " & (UBound(parts) + 1) & ".", _
                vbExclamation, APP_NAME
