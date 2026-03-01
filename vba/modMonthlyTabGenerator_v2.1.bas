@@ -12,6 +12,7 @@ Option Explicit
 ' PUBLIC SUBS:
 '   GenerateMonthlyTabs   - Create all 9 tabs (Apr-Dec) from Mar template
 '   GenerateNextMonthOnly - Create just the next missing monthly tab
+'   AddNextMonthToModel   - Calendar-aware: mark next month column + clone tab
 '   DeleteGeneratedTabs   - Remove all auto-generated tabs (Apr-Dec)
 '
 ' VERSION:  2.1.0
@@ -23,6 +24,10 @@ Option Explicit
 '             Detects latest existing tab, clones it, updates refs,
 '             clears data values, marks cells needing input (yellow),
 '             stamps "[NEW - DATA NEEDED]"
+'           v2.1 Phase 3D -> v2.1 Phase 4:
+'           + Added AddNextMonthToModel: calendar-aware next-month prep
+'             Reads today's date, marks trend sheet column yellow, clones
+'             the current month's Functional P&L Summary tab to next month.
 '===============================================================================
 
 ' Column letters on Functional P&L - Monthly Trend for each month
@@ -242,6 +247,144 @@ End Sub
 
 '===============================================================================
 '
+' ===  CALENDAR-AWARE NEXT MONTH (v2.1 — Phase 4)  ============================
+'
+'===============================================================================
+
+'===============================================================================
+' AddNextMonthToModel - Reads today's date, prepares the NEXT calendar month.
+'
+' Example: today = Feb 15 → prepares March.
+'          today = Oct 3  → prepares November.
+'
+' Three actions performed:
+'   1. Marks the next month's column on "P&L - Monthly Trend" yellow.
+'   2. Marks the next month's column on "Functional P&L - Monthly Trend" yellow.
+'   3. Clones this month's Functional P&L Summary tab to create next month's tab.
+'===============================================================================
+Public Sub AddNextMonthToModel()
+    On Error GoTo ErrHandler
+
+    Dim curMonth As Long: curMonth = Month(Now)
+
+    If curMonth = 12 Then
+        MsgBox "December is the last month in the fiscal model." & vbCrLf & _
+               "Nothing to add.", vbInformation, APP_NAME
+        Exit Sub
+    End If
+
+    Dim mths As Variant: mths = modConfig.GetMonths()
+    Dim cols As Variant: cols = Split(MONTH_COLS, ",")
+
+    ' Month() is 1-based; mths/cols are 0-based.
+    ' e.g. today=Feb → curMonth=2 → nextMonthIdx=2 → mths(2)="Mar"  ✓
+    Dim nextMonthIdx  As Long:  nextMonthIdx  = curMonth
+    Dim nextMonthName As String: nextMonthName = mths(nextMonthIdx)
+    Dim nextMonthCol  As String: nextMonthCol  = cols(nextMonthIdx)
+    Dim curMonthName  As String: curMonthName  = mths(curMonth - 1)
+    Dim curMonthCol   As String: curMonthCol   = cols(curMonth - 1)
+
+    Dim newSummaryName As String
+    newSummaryName = "Functional P&L Summary - " & nextMonthName & " " & FISCAL_YEAR
+    Dim curSummaryName As String
+    curSummaryName = "Functional P&L Summary - " & curMonthName & " " & FISCAL_YEAR
+
+    Dim confirm As VbMsgBoxResult
+    confirm = MsgBox("Add next month to the P&L model?" & vbCrLf & vbCrLf & _
+                     "  Today:          " & Format(Now, "mmmm d, yyyy") & vbCrLf & _
+                     "  Current month:  " & curMonthName & " " & FISCAL_YEAR & vbCrLf & _
+                     "  Adding month:   " & nextMonthName & " " & FISCAL_YEAR & vbCrLf & vbCrLf & _
+                     "This will:" & vbCrLf & _
+                     "  - Mark the " & nextMonthName & " column yellow on both trend sheets" & vbCrLf & _
+                     "  - Create tab: '" & newSummaryName & "'", _
+                     vbYesNo + vbQuestion, APP_NAME)
+    If confirm = vbNo Then Exit Sub
+
+    modPerformance.TurboOn
+
+    Dim stepsDone As Long
+    Dim issues    As String
+
+    '── Step 1: Mark P&L Monthly Trend column ───────────────────────────────────
+    modPerformance.UpdateStatus "Marking " & nextMonthName & " on P&L Monthly Trend...", 0.2
+    If modConfig.SheetExists(SH_PL_TREND) Then
+        MarkTrendColumn ThisWorkbook.Worksheets(SH_PL_TREND), nextMonthCol, nextMonthName
+        stepsDone = stepsDone + 1
+    Else
+        issues = issues & vbCrLf & "  - Sheet '" & SH_PL_TREND & "' not found"
+    End If
+
+    '── Step 2: Mark Functional P&L Monthly Trend column ───────────────────────
+    modPerformance.UpdateStatus "Marking " & nextMonthName & " on Functional P&L Trend...", 0.4
+    If modConfig.SheetExists(SH_FUNC_TREND) Then
+        MarkTrendColumn ThisWorkbook.Worksheets(SH_FUNC_TREND), nextMonthCol, nextMonthName
+        stepsDone = stepsDone + 1
+    Else
+        issues = issues & vbCrLf & "  - Sheet '" & SH_FUNC_TREND & "' not found"
+    End If
+
+    '── Step 3: Clone current month's summary tab to next month ─────────────────
+    modPerformance.UpdateStatus "Creating " & nextMonthName & " summary tab...", 0.7
+    If modConfig.SheetExists(newSummaryName) Then
+        issues = issues & vbCrLf & "  - Tab '" & newSummaryName & "' already exists (skipped)"
+    ElseIf Not modConfig.SheetExists(curSummaryName) Then
+        issues = issues & vbCrLf & "  - Source tab '" & curSummaryName & "' not found (cannot clone)"
+    Else
+        ThisWorkbook.Worksheets(curSummaryName).Copy _
+            After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count)
+        Dim newWs As Worksheet: Set newWs = ActiveSheet
+        newWs.Name = newSummaryName
+
+        UpdateHeaderText newWs, curMonthName, nextMonthName
+        UpdateSheetFormulas newWs, curMonthCol, nextMonthCol, nextMonthName
+
+        ' Clear non-formula data values; mark yellow = needs input
+        Dim cell As Range
+        For Each cell In newWs.UsedRange
+            If Not cell.HasFormula Then
+                If IsNumeric(cell.Value) And cell.Value <> 0 Then
+                    cell.Value = 0
+                    cell.Interior.Color = RGB(255, 255, 180)
+                End If
+            End If
+        Next cell
+
+        newWs.Range("A1").Value = newWs.Range("A1").Value & "  [NEW - DATA NEEDED]"
+        newWs.Tab.Color = RGB(0, 176, 80)   ' green tab = new / pending
+        stepsDone = stepsDone + 1
+    End If
+
+    modPerformance.ForceRecalc
+
+    Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
+    modPerformance.TurboOff
+
+    modLogger.LogAction "modMonthlyTabGenerator", "AddNextMonthToModel", _
+        nextMonthName & " " & FISCAL_YEAR & " | " & stepsDone & " step(s) done", elapsed
+
+    Dim msg As String
+    msg = nextMonthName & " " & FISCAL_YEAR & " is ready!" & vbCrLf & vbCrLf & _
+          "  Actions completed: " & stepsDone & vbCrLf & vbCrLf & _
+          "  Yellow cells on the trend sheets = enter " & nextMonthName & " actuals." & vbCrLf & _
+          "  Yellow cells on '" & newSummaryName & "' = enter actuals." & vbCrLf & vbCrLf & _
+          "  When done: run Reconciliation to verify all figures."
+
+    If Len(issues) > 0 Then
+        msg = msg & vbCrLf & vbCrLf & "WARNINGS:" & issues
+    End If
+
+    MsgBox msg, IIf(Len(issues) > 0, vbExclamation, vbInformation), APP_NAME
+    Exit Sub
+
+ErrHandler:
+    modPerformance.TurboOff
+    modLogger.LogAction "modMonthlyTabGenerator", "ERROR-AddNextMonth", Err.Description
+    MsgBox "AddNextMonthToModel error: " & Err.Description, vbCritical, APP_NAME
+End Sub
+
+
+'===============================================================================
+'
 ' ===  DELETE / CLEANUP  =======================================================
 '
 '===============================================================================
@@ -280,6 +423,35 @@ End Sub
 ' ===  PRIVATE HELPERS  ========================================================
 '
 '===============================================================================
+
+'===============================================================================
+' MarkTrendColumn - Yellow-highlight data cells in a month's column on a trend
+' sheet and ensure the header label matches the expected month name.
+'===============================================================================
+Private Sub MarkTrendColumn(ByVal ws As Worksheet, _
+                             ByVal colLetter As String, _
+                             ByVal monthName As String)
+    Dim colNum  As Long: colNum  = ws.Range(colLetter & "1").Column
+    Dim lastRow As Long: lastRow = modConfig.LastRow(ws, 1)
+
+    ' Fix or confirm the header label
+    Dim hdrCell As Range: Set hdrCell = ws.Cells(HDR_ROW_REPORT, colNum)
+    If InStr(UCase(hdrCell.Value), UCase(monthName)) = 0 Then
+        hdrCell.Value = monthName & " " & FISCAL_YEAR
+    End If
+    hdrCell.Interior.Color = CLR_NAVY
+    hdrCell.Font.Color     = CLR_WHITE
+    hdrCell.Font.Bold      = True
+
+    ' Yellow-highlight all non-formula data cells in this column
+    Dim r As Long
+    For r = HDR_ROW_REPORT + 1 To lastRow
+        Dim cell As Range: Set cell = ws.Cells(r, colNum)
+        If Not cell.HasFormula Then
+            cell.Interior.Color = RGB(255, 255, 180)
+        End If
+    Next r
+End Sub
 
 '===============================================================================
 ' UpdateSheetFormulas - Rewrite column references in formulas

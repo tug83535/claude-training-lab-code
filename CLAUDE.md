@@ -99,8 +99,10 @@ Before delivering ANYTHING ask yourself:
 - All Python scripts complete — 14 scripts, all functional (2026-02-28)
 - 7 new VBA modules added from NewTesting ideas (2026-03-01) — see New Modules section below
 - modDashboard updated with 2 new subs (2026-03-01)
+- modDataSanitizer_v2.1.bas added — numeric-only sanitizer, protects dates/names/customer IDs (2026-03-01)
+- AddNextMonthToModel added to modMonthlyTabGenerator_v2.1.bas — calendar-aware month expander (2026-03-01)
 - Branch: `claude/ideas-newtesting-wDuOY` (new Ideas branch based on review-branch-progress-pP7Qf)
-- Next phase: Import ALL .bas files (now 31 total) into Excel workbook, live test, then demo prep
+- Next phase: Import ALL .bas files (now 32 total) into Excel workbook, live test, then demo prep
 
 ## Session Summary — 2026-03-01
 
@@ -119,7 +121,16 @@ Before delivering ANYTHING ask yourself:
 - `modTrendReports_v2.1.bas` — #77 CreateRolling12MonthView, #156 CreateReconciliationTrendChart, #163 ArchiveReconciliationResults
 - `modDashboard_v2.1.bas` updated — added #44 LinkDynamicChartTitles, #86 CreateSmallMultiplesGrid
 
-### Total VBA Module Count: 31 modules (was 24 + modDashboard additions)
+### Additional Modules (added same session)
+- `modDataSanitizer_v2.1.bas` — numeric-only sanitizer; never touches dates, names, or customer IDs
+  - SKIP_HEADER_KEYWORDS protects: id, date, name, code, customer, client, account, acct, company,
+    vendor, contact, employee, entity, description, dept, product, type, status, region, address, etc.
+- `modMonthlyTabGenerator_v2.1.bas` updated — new `AddNextMonthToModel` sub + `MarkTrendColumn` helper
+  - Calendar-aware: reads today's date, determines next month automatically
+  - Marks next month column yellow on both trend sheets (P&L Monthly Trend + Functional P&L Monthly Trend)
+  - Clones current month's Functional P&L Summary tab to create next month's tab
+
+### Total VBA Module Count: 32 modules (was 24 + 7 new + modDashboard updates + modDataSanitizer + modMonthlyTabGenerator update)
 
 ### NewTesting Files Reviewed
 - `Financial Model Correction Instructions.md` — 6-point fix checklist for Excel model
@@ -132,7 +143,7 @@ Before delivering ANYTHING ask yourself:
 - Audit doc's `ExportChecksPDF` = already in `modPDFExport`
 
 ### Next Steps (Updated)
-1. Import all 31 .bas files into Excel workbook (Alt+F11 → File → Import)
+1. Import all 32 .bas files into Excel workbook (Alt+F11 → File → Import)
 2. Create frmCommandCenter UserForm in the workbook
 3. Live test every Command Center action (1-62) — log pass/fail
 4. Run all new modDataGuards checks against real data (FindNegativeAmounts, etc.)

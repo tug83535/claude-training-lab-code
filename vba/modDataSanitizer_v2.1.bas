@@ -39,7 +39,8 @@ Option Explicit
 Private Const FP_DECIMAL_THRESHOLD As Long = 5
 
 ' Keywords in column headers that mean "do NOT sanitize this column"
-Private Const SKIP_HEADER_KEYWORDS As String = "id,date,name,code,ref,no.,#,uuid,email,phone,zip"
+' Covers IDs, dates, customer/client identifiers, and reference fields
+Private Const SKIP_HEADER_KEYWORDS As String = "id,date,name,code,ref,no.,#,uuid,email,phone,zip,customer,client,account,acct,company,vendor,contact,employee,user,member,entity,description,desc,category,dept,department,product,type,status,label,title,region,country,state,city,address"
 
 ' Sheets to skip entirely
 Private Const SKIP_SHEET_NAMES As String = "VBA_AuditLog,GoldenBaseline,Recon Archive"

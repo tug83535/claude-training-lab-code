@@ -1,18 +1,18 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-02-28)
-- **Branch:** `claude/review-branch-progress-pP7Qf` (unified — all 3 accounts merged)
-- **VBA Modules:** 24 built (.bas files in repo), all 62 Command Center actions covered
+## Current Status (2026-03-01)
+- **Branch:** `claude/ideas-newtesting-wDuOY` (Ideas branch — based on review-branch-progress-pP7Qf)
+- **VBA Modules:** 32 built (.bas files in repo), all 62 Command Center actions covered
 - **Python Scripts:** 14 complete and functional
 - **Excel File:** `KeystoneBenefitTech_PL_Model.xlsx` — iPipeline Fortune 100 redesign
-- **Overall:** Code is complete. Next phase is import, test, and demo prep.
+- **Overall:** New idea modules + sanitizer + month expander added. Next phase: import, test, demo prep.
 
 ---
 
 ## Next Up — Demo Readiness (Priority Order)
 
 ### Phase 1: Make It Real (Import + Live Test)
-- [ ] Import all 24 .bas files into the Excel workbook via VBA Editor (Alt+F11 → File → Import)
+- [ ] Import all 32 .bas files into the Excel workbook via VBA Editor (Alt+F11 → File → Import)
 - [ ] Create the UserForm `frmCommandCenter` in the workbook using `frmCommandCenter_code.txt`
 - [ ] Live test every Command Center action (1-62) in Excel — log pass/fail for each
 - [ ] Fix any runtime issues discovered during testing
@@ -49,6 +49,35 @@
 - ~~Backup Workbook with Timestamp macro~~ — user declined (2026-02-28)
 - ~~VBA Timestamp Audit Trail on Cell Changes~~ — user declined (2026-02-28)
 - ~~Export All Charts to PowerPoint~~ — user dropped permanently (2026-02-28)
+
+---
+
+## Completed — This Session (2026-03-01)
+
+### NewTesting File Review
+- [x] Reviewed 3 new files added to NewTesting/ (commit 075d457)
+- [x] Created new Ideas branch: `claude/ideas-newtesting-wDuOY`
+
+### 7 New VBA Modules Built (from VBA Examples 200 list)
+- [x] modDemoTools_v2.1.bas — #17 AddControlSheetButtons, #63 SetParameterizedPrintArea, #64 CreatePrintableExecSummary
+- [x] modDataGuards_v2.1.bas — #48 ValidateAssumptionsPresence, #49 CheckSumOfDrivers, #150 FindNegativeAmounts, #151 FindZeroAmounts, #155 FindSuspiciousRoundNumbers
+- [x] modDrillDown_v2.1.bas — #18 AddReconciliationDrillLinks, #55 AutoPopulateReconciliationChecks, #56 ApplyReconciliationHeatmap, #90 RunGoldenFileCompare
+- [x] modAuditTools_v2.1.bas — #93 AppendChangeLogEntry, #106 FindExternalLinks, #107 FixExternalLinks, #109 AuditHiddenSheets, #115 CreateMaskedCopy, #196 ExportErrorSummaryClipboard
+- [x] modETLBridge_v2.1.bas — #119 TriggerETLLocally, #120 ImportETLOutput
+- [x] modTrendReports_v2.1.bas — #77 CreateRolling12MonthView, #156 CreateReconciliationTrendChart, #163 ArchiveReconciliationResults
+- [x] modDashboard_v2.1.bas updated — added #44 LinkDynamicChartTitles, #86 CreateSmallMultiplesGrid
+
+### Data Sanitizer Module
+- [x] modDataSanitizer_v2.1.bas — numeric-only sanitizer (never touches dates, names, customer IDs)
+- [x] Updated SKIP_HEADER_KEYWORDS to include: customer, client, account, acct, company, vendor, contact, employee, entity, description, dept, product, type, status, label, region, country, city, address
+
+### Calendar-Aware Month Expander
+- [x] AddNextMonthToModel added to modMonthlyTabGenerator_v2.1.bas
+  - Reads today's date to determine next calendar month automatically
+  - Marks next month column yellow on P&L Monthly Trend
+  - Marks next month column yellow on Functional P&L Monthly Trend
+  - Clones current month's Functional P&L Summary tab to create next month's tab
+  - Added MarkTrendColumn private helper
 
 ---
 
