@@ -95,12 +95,57 @@ Before delivering ANYTHING ask yourself:
 - If any answer is no — fix it before delivering
 
 ## Current Status
-- All VBA code complete — 24 modules, all 62 Command Center actions covered (2026-02-28)
+- Original VBA system complete — 24 modules, all 62 Command Center actions covered (2026-02-28)
 - All Python scripts complete — 14 scripts, all functional (2026-02-28)
-- Branch: `claude/review-branch-progress-pP7Qf` (unified — all 3 accounts merged)
-- Next phase: Import .bas files into Excel workbook, live test, then demo prep
+- 7 new VBA modules added from NewTesting ideas (2026-03-01) — see New Modules section below
+- modDashboard updated with 2 new subs (2026-03-01)
+- Branch: `claude/ideas-newtesting-wDuOY` (new Ideas branch based on review-branch-progress-pP7Qf)
+- Next phase: Import ALL .bas files (now 31 total) into Excel workbook, live test, then demo prep
 
-## Current Session Summary — 2026-02-28
+## Session Summary — 2026-03-01
+
+### What Was Done This Session
+- Reviewed 3 new files added to NewTesting/ (commit 075d457 — "Add files via upload, New ideas")
+- Created new Ideas branch: `claude/ideas-newtesting-wDuOY` (based on review-branch-progress-pP7Qf)
+- Built 7 new VBA modules from the VBA Examples (200) idea list
+- Updated modDashboard with 2 new subs
+
+### New VBA Modules (7 new files in vba/)
+- `modDemoTools_v2.1.bas` — #17 AddControlSheetButtons, #63 SetParameterizedPrintArea, #64 CreatePrintableExecSummary
+- `modDataGuards_v2.1.bas` — #48 ValidateAssumptionsPresence, #49 CheckSumOfDrivers, #150 FindNegativeAmounts, #151 FindZeroAmounts, #155 FindSuspiciousRoundNumbers
+- `modDrillDown_v2.1.bas` — #18 AddReconciliationDrillLinks, #55 AutoPopulateReconciliationChecks, #56 ApplyReconciliationHeatmap, #90 RunGoldenFileCompare
+- `modAuditTools_v2.1.bas` — #93 AppendChangeLogEntry, #106 FindExternalLinks, #107 FixExternalLinks, #109 AuditHiddenSheets, #115 CreateMaskedCopy, #196 ExportErrorSummaryClipboard
+- `modETLBridge_v2.1.bas` — #119 TriggerETLLocally, #120 ImportETLOutput
+- `modTrendReports_v2.1.bas` — #77 CreateRolling12MonthView, #156 CreateReconciliationTrendChart, #163 ArchiveReconciliationResults
+- `modDashboard_v2.1.bas` updated — added #44 LinkDynamicChartTitles, #86 CreateSmallMultiplesGrid
+
+### Total VBA Module Count: 31 modules (was 24 + modDashboard additions)
+
+### NewTesting Files Reviewed
+- `Financial Model Correction Instructions.md` — 6-point fix checklist for Excel model
+- `2026-02-28T223817Z.md` — Full audit: 15 issues, 10 VBA macros, Python ETL, Power Query M-Code
+- `VBA Examples (200) — Name — Purpose.txt` — Catalog of 200 macro ideas (source for new modules above)
+
+### Key Overlap Notes (Do NOT double-import these)
+- Audit doc's `FixTextNumbers` = already in `modDataQuality`
+- Audit doc's `RunReconciliation` = already in `modReconciliation`
+- Audit doc's `ExportChecksPDF` = already in `modPDFExport`
+
+### Next Steps (Updated)
+1. Import all 31 .bas files into Excel workbook (Alt+F11 → File → Import)
+2. Create frmCommandCenter UserForm in the workbook
+3. Live test every Command Center action (1-62) — log pass/fail
+4. Run all new modDataGuards checks against real data (FindNegativeAmounts, etc.)
+5. Run RunGoldenFileCompare to save baseline before any changes
+6. Fix 6 Critical issues found in audit doc (floating-point, text-stored numbers, duplicates, etc.)
+7. Write demo video storyboard/script
+8. Build coworker training guide
+9. Copy final files to CompletePackageStorage/production/
+10. Record demo video
+
+---
+
+## Session Summary — 2026-02-28
 
 ### What Was Done This Session
 Major session: merged all 3 Claude accounts' branches, audited everything, built all missing

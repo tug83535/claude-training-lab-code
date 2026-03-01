@@ -915,3 +915,207 @@ Private Function FindProductMetric(ByVal ws As Worksheet, _
     
     FindProductMetric = 0
 End Function
+
+
+'===============================================================================
+'
+' ===  NEW DASHBOARD TOOLS (v2.1 — from NewTesting ideas #44, #86)  ============
+'
+'===============================================================================
+
+'===============================================================================
+' LinkDynamicChartTitles - Link all chart titles to a selector cell (#44)
+' Loops through every ChartObject on the Report--> sheet and rewrites the
+' chart title to include the current month value from the FPL Dynamic sheet
+' selector (cell B4). Run this after changing the month dropdown so all
+' chart titles update instantly without manual editing.
+'===============================================================================
+Public Sub LinkDynamicChartTitles()
+    On Error GoTo ErrHandler
+
+    If Not modConfig.SheetExists(SH_REPORT) Then
+        MsgBox "Report--> sheet not found.", vbCritical, APP_NAME
+        Exit Sub
+    End If
+
+    ' Read the selected month from FPL Summary - Dynamic B4 if it exists
+    Dim selectedMonth As String: selectedMonth = ""
+    If modConfig.SheetExists("FPL Summary - Dynamic") Then
+        selectedMonth = modConfig.SafeStr( _
+            ThisWorkbook.Worksheets("FPL Summary - Dynamic").Range("B4").Value)
+    End If
+    If Len(selectedMonth) = 0 Then
+        selectedMonth = Format(Date, "mmm")  ' Fall back to current month abbreviation
+    End If
+
+    Dim wsReport As Worksheet: Set wsReport = ThisWorkbook.Worksheets(SH_REPORT)
+    Dim updateCount As Long: updateCount = 0
+
+    Dim co As ChartObject
+    For Each co In wsReport.ChartObjects
+        On Error Resume Next
+        If co.Chart.HasTitle Then
+            Dim oldTitle As String: oldTitle = co.Chart.ChartTitle.Text
+            ' Append month to title if not already present
+            If InStr(oldTitle, selectedMonth) = 0 Then
+                ' Replace existing month abbreviation or append
+                Dim newTitle As String
+                Dim mths As Variant: mths = modConfig.GetMonths()
+                newTitle = oldTitle
+                Dim m As Long
+                For m = 0 To UBound(mths)
+                    newTitle = Replace(newTitle, " - " & CStr(mths(m)), "")
+                Next m
+                newTitle = newTitle & " - " & selectedMonth
+                co.Chart.ChartTitle.Text = newTitle
+                updateCount = updateCount + 1
+            End If
+        End If
+        On Error GoTo ErrHandler
+    Next co
+
+    modLogger.LogAction "modDashboard", "LinkDynamicChartTitles", _
+        updateCount & " chart title(s) updated to " & selectedMonth
+    MsgBox updateCount & " chart title(s) updated to show: " & selectedMonth, _
+           vbInformation, APP_NAME
+    Exit Sub
+
+ErrHandler:
+    MsgBox "LinkDynamicChartTitles error: " & Err.Description, vbCritical, APP_NAME
+End Sub
+
+'===============================================================================
+' CreateSmallMultiplesGrid - Generate one small chart per product (#86)
+' Creates a dedicated "Product Small Multiples" sheet with 4 small line charts
+' arranged in a 2x2 grid, one per product. Each chart shows that product's
+' monthly revenue across all populated months. A CFO-level visual that lets
+' you compare all 4 products at the same scale in one glance.
+'===============================================================================
+Public Sub CreateSmallMultiplesGrid()
+    On Error GoTo ErrHandler
+
+    If Not modConfig.SheetExists(SH_PL_TREND) Then
+        MsgBox "'" & SH_PL_TREND & "' not found.", vbCritical, APP_NAME
+        Exit Sub
+    End If
+
+    modPerformance.TurboOn
+    modPerformance.UpdateStatus "Building small multiples grid...", 0.1
+
+    Dim wsSrc As Worksheet: Set wsSrc = ThisWorkbook.Worksheets(SH_PL_TREND)
+    Dim products As Variant: products = modConfig.GetProducts()
+    Dim mths As Variant: mths = modConfig.GetMonths()
+
+    ' Detect last populated month
+    Dim lastDataCol As Long: lastDataCol = 1
+    Dim revRow As Long: revRow = modConfig.FindRowByLabel(wsSrc, "total revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = DATA_ROW_REPORT
+    Dim c As Long
+    For c = 13 To 2 Step -1
+        If modConfig.SafeNum(wsSrc.Cells(revRow, c).Value) <> 0 Then
+            lastDataCol = c: Exit For
+        End If
+    Next c
+    If lastDataCol < 2 Then lastDataCol = 13
+
+    Dim monthCount As Long: monthCount = lastDataCol - 1
+    Dim monthLabels() As String
+    ReDim monthLabels(0 To monthCount - 1)
+    Dim mi As Long
+    For mi = 0 To monthCount - 1
+        monthLabels(mi) = CStr(mths(mi))
+    Next mi
+
+    ' Create output sheet
+    Dim smName As String: smName = "Product Small Multiples"
+    modConfig.SafeDeleteSheet smName
+    Dim wsSM As Worksheet
+    Set wsSM = ThisWorkbook.Worksheets.Add( _
+        After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+    wsSM.Name = smName
+    wsSM.Cells.Interior.Color = RGB(245, 246, 250)
+
+    With wsSM.Range("A1")
+        .Value = "Product Revenue — Small Multiples (FY" & FISCAL_YEAR_4 & ")"
+        .Font.Size = 14: .Font.Bold = True: .Font.Color = CLR_NAVY
+    End With
+
+    ' Product colors for visual variety
+    Dim prodColors As Variant
+    prodColors = Array(RGB(31, 78, 121), RGB(68, 114, 196), _
+                       RGB(112, 173, 71), RGB(237, 125, 49))
+
+    ' Grid layout: 2 columns x 2 rows of charts
+    ' Each chart: width=350, height=200, margins: left=20/400, top=60/280
+    Dim chartLeft  As Variant: chartLeft  = Array(20, 390, 20, 390)
+    Dim chartTop   As Variant: chartTop   = Array(60, 60, 280, 280)
+    Dim chartW     As Long: chartW = 355
+    Dim chartH     As Long: chartH = 205
+
+    modPerformance.UpdateStatus "Creating 4 product charts...", 0.4
+
+    Dim p As Long
+    For p = 0 To Application.Min(3, UBound(products))
+        Dim productName As String: productName = CStr(products(p))
+
+        ' Find revenue row for this product
+        Dim pRevRow As Long: pRevRow = FindProductRevenueRow(wsSrc, productName)
+        If pRevRow = 0 Then GoTo NextProduct
+
+        ' Create chart
+        Dim co As ChartObject
+        Set co = wsSM.ChartObjects.Add( _
+            Left:=CLng(chartLeft(p)), Top:=CLng(chartTop(p)), _
+            Width:=chartW, Height:=chartH)
+        co.Name = "SM_" & productName
+
+        With co.Chart
+            .ChartType = xlLine
+            .HasTitle = True
+            .ChartTitle.Text = productName & " Revenue"
+            .ChartTitle.Font.Size = 10
+            .ChartTitle.Font.Bold = True
+            .ChartTitle.Font.Color = CLng(prodColors(p))
+
+            Dim ser As Series
+            Set ser = .SeriesCollection.NewSeries
+            ser.Name = productName
+            ser.Values = wsSrc.Range(wsSrc.Cells(pRevRow, 2), wsSrc.Cells(pRevRow, lastDataCol))
+            ser.XValues = monthLabels
+
+            On Error Resume Next
+            ser.Format.Line.ForeColor.RGB = CLng(prodColors(p))
+            ser.Format.Line.Weight = 2
+            On Error GoTo ErrHandler
+
+            .HasLegend = False
+            .PlotArea.Interior.Color = CLR_WHITE
+            .PlotArea.Border.LineStyle = 0
+
+            Dim ax As Axis
+            Set ax = .Axes(xlValue)
+            ax.TickLabels.NumberFormat = "$#,##0"
+            ax.TickLabels.Font.Size = 7
+
+            Set ax = .Axes(xlCategory)
+            ax.TickLabels.Font.Size = 7
+        End With
+NextProduct:
+    Next p
+
+    wsSM.Tab.Color = CLR_NAVY
+    wsSM.Activate
+
+    Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
+    modPerformance.TurboOff
+    modLogger.LogAction "modDashboard", "CreateSmallMultiplesGrid", _
+        UBound(products) + 1 & " product charts | " & monthCount & " months", elapsed
+    MsgBox "Small multiples grid created on '" & smName & "'." & vbCrLf & _
+           "4 product revenue charts at the same scale for easy comparison.", _
+           vbInformation, APP_NAME
+    Exit Sub
+
+ErrHandler:
+    modPerformance.TurboOff
+    MsgBox "CreateSmallMultiplesGrid error: " & Err.Description, vbCritical, APP_NAME
+End Sub
