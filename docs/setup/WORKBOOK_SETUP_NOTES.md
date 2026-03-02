@@ -23,7 +23,7 @@ See `IMPLEMENTATION_GUIDE.md`, Section 2 for the full procedure. Summary:
 
 1. Press **Alt+F11** to open the VBA Editor.
 2. Right-click the project → **Import File...**
-3. Select all 29 `.bas` files from `03_Code/VBA/`.
+3. Select all 32 `.bas` files from `03_Code/VBA/`.
 4. Press **Ctrl+S** to save.
 
 ### Step 3 — Build the Command Center
@@ -35,7 +35,7 @@ See `IMPLEMENTATION_GUIDE.md`, Section 3. Summary:
 
 ### Step 4 — Verify
 
-Press **Ctrl+Shift+M**. The Command Center should appear with 50 actions.
+Press **Ctrl+Shift+M**. The Command Center should appear with 62 actions.
 
 ---
 

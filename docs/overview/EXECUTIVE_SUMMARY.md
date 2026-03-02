@@ -14,7 +14,7 @@ Before automation, the monthly close required 15+ hours of manual work: copying 
 
 ### The Solution
 
-The toolkit delivers **50 automated commands** accessible through a single Command Center (Ctrl+Shift+M). A finance team member can now complete the full monthly close — from data import through executive report distribution — in under 2 hours with built-in quality gates at every step.
+The toolkit delivers **62 automated commands** accessible through a single Command Center (Ctrl+Shift+M). A finance team member can now complete the full monthly close — from data import through executive report distribution — in under 2 hours with built-in quality gates at every step.
 
 ### Key Outcomes
 
@@ -32,15 +32,15 @@ The toolkit delivers **50 automated commands** accessible through a single Comma
 
 The toolkit uses a layered architecture with clear separation of concerns:
 
-**User Interface Layer** — frmCommandCenter UserForm with category filtering, search, and keyboard shortcuts. InputBox fallback ensures functionality without Trust Access. All 50 actions routable through both paths.
+**User Interface Layer** — frmCommandCenter UserForm with category filtering, search, and keyboard shortcuts. InputBox fallback ensures functionality without Trust Access. All 62 actions routable through both paths.
 
-**Feature Layer** — 25 VBA modules organized by domain: Monthly Operations (tab generation, reconciliation), Analysis (variance, sensitivity), Data Quality (scan, fix), Reporting (PDF, dashboard, email), and Advanced (allocation, forecasting, scenarios, consolidation, version control, governance).
+**Feature Layer** — 32 VBA modules organized by domain: Monthly Operations (tab generation, reconciliation), Analysis (variance, sensitivity), Data Quality (scan, fix), Reporting (PDF, dashboard, email), and Advanced (allocation, forecasting, scenarios, consolidation, version control, governance).
 
 **Foundation Layer** — 4 modules providing centralized constants (modConfig), performance optimization (modPerformance with TurboOn/Off), audit logging (modLogger), and workbook initialization (ThisWorkbook events). All feature modules depend on this layer; it has no upward dependencies.
 
 **Data Layer** — The Excel workbook with 13 sheets following a strict layout contract (Row 1 = title, Row 4 = headers, Row 5+ = data). GL data in CrossfireHiddenWorksheet, reports on named tabs, checks on the Checks sheet.
 
-**Python Analytics Layer** (Optional) — 11 Python scripts providing parallel capabilities: interactive Streamlit dashboard, statistical forecasting, what-if allocation simulator, AP fuzzy matching, month-end close automation, and a unified CLI (`pnl_runner.py`). Runs externally alongside the workbook — not Python-in-Excel.
+**Python Analytics Layer** (Optional) — 14 Python scripts providing parallel capabilities: interactive Streamlit dashboard, statistical forecasting, what-if allocation simulator, AP fuzzy matching, month-end close automation, and a unified CLI (`pnl_runner.py`). Runs externally alongside the workbook — not Python-in-Excel.
 
 **SQL Layer** (Optional) — SQLite-compatible scripts for GL staging, allocation pivots, and data validation. Provides a portable data store alternative for larger datasets.
 
@@ -50,9 +50,8 @@ The toolkit uses a layered architecture with clear separation of concerns:
 
 | Component | Count | Lines of Code |
 |-----------|-------|---------------|
-| VBA Modules (delivered v2.1) | 14 | 5,962 |
-| VBA Modules (unchanged from v2.0) | 15 | ~4,500 (est.) |
-| Python Scripts | 12 | 4,807 |
+| VBA Modules (total v2.1) | 32 | ~10,500 (est.) |
+| Python Scripts | 14 | ~5,200 (est.) |
 | SQL Scripts | 4 | ~820 |
 | Documentation Files | 14 | ~3,550 |
 | **Total** | **~59 files** | **~19,600 lines** |

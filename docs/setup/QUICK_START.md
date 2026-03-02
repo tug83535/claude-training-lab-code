@@ -9,7 +9,7 @@
 
 - Windows PC with Excel Desktop (O365 or Excel 2019+)
 - The workbook: `KeystoneBenefitTech_PL_Model.xlsm`
-- The 29 VBA `.bas` module files (provided in the `03_Code/VBA/` folder)
+- The 32 VBA `.bas` module files (provided in the `03_Code/VBA/` folder)
 
 ---
 
@@ -31,7 +31,7 @@
 2. Press **Alt+F11** to open the VBA Editor.
 3. In the left panel, right-click on **VBAProject** → **Import File...**
 4. Navigate to the `03_Code/VBA/` folder.
-5. Select all 29 `.bas` files and click **Open**.
+5. Select all 32 `.bas` files and click **Open**.
 6. Verify: the left panel should now show all `mod*` modules under "Modules".
 7. Close the VBA Editor (Alt+Q or click the X).
 8. Save the workbook (**Ctrl+S**) — Excel may prompt to save as `.xlsm`.
@@ -42,7 +42,7 @@
 
 Press **Ctrl+Shift+M** anywhere in the workbook.
 
-You should see the Command Center — a UserForm with categories on the left and 50 available actions on the right:
+You should see the Command Center — a UserForm with categories on the left and 62 available actions on the right:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
@@ -61,14 +61,14 @@ You should see the Command Center — a UserForm with categories on the left and
 ║  │ Forecasting   │    │ 6 │ Variance Analysis       │    ║
 ║  │ Scenarios     │    │ 7 │ Scan Data Quality       │    ║
 ║  │ Allocation    │    │...│ ...                     │    ║
-║  │ Consolidation │    │50 │ About This Toolkit      │    ║
+║  │ Consolidation │    │62 │ About This Toolkit      │    ║
 ║  │ Version Ctrl  │    └───┴─────────────────────────┘    ║
 ║  │ Governance    │                                       ║
 ║  │ Admin & Test  │    Search: [_______________]          ║
 ║  │ Advanced      │                                       ║
 ║  └──────────────┘    [  Run  ]  [ Cancel ]               ║
 ║                                                          ║
-║  50 actions shown                                        ║
+║  62 actions shown                                        ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
@@ -143,6 +143,6 @@ python pnl_runner.py dashboard        # Opens interactive Streamlit dashboard
 ## Next Steps
 
 - **Full setup details** → `IMPLEMENTATION_GUIDE.md`
-- **All 50 commands explained** → `USER_TRAINING_GUIDE.md`
+- **All 62 commands explained** → `USER_TRAINING_GUIDE.md`
 - **Monthly workflow** → `OPERATIONS_RUNBOOK.md`
 - **Version history** → `CHANGELOG.md`

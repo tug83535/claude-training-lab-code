@@ -20,7 +20,7 @@ coworkers understand and use all the tools included in this project.
 
 ### Excel + VBA (The Centerpiece)
 The main file is `excel/KeystoneBenefitTech_PL_Model.xlsx` — a 13-sheet P&L
-model powered by VBA macros organized into 14 modules:
+model powered by VBA macros organized into 32 modules:
 
 | Module | What It Does |
 |--------|-------------|
@@ -38,6 +38,23 @@ model powered by VBA macros organized into 14 modules:
 | `modSearch` | Cross-sheet keyword search, 200-result cap, yellow highlights, hyperlinked results sheet. |
 | `modUtilities` | 12 utility macros (actions 51–62): delete blank rows, unhide all sheets, sort tabs, freeze panes, convert formulas to values, AutoFit columns, protect/unprotect sheets, find & replace all sheets, highlight hardcoded numbers, presentation mode, unmerge and fill down. |
 | `modLogger` | Runtime audit log. Every VBA macro run is timestamped and logged to a hidden sheet (VBA_AuditLog) with username, module, procedure, and status. |
+| `modSensitivity` | Sensitivity analysis on Assumptions sheet drivers. |
+| `modAWSRecompute` | AWS allocation validation and recalculation. |
+| `modImport` | CSV/Excel data import pipeline (Command 17). |
+| `modForecast` | Rolling forecast + append to trend sheets. |
+| `modScenario` | Scenario save, load, compare, and delete. |
+| `modAllocation` | Cost allocation engine + preview (Commands 24-25). |
+| `modConsolidation` | Multi-entity consolidation + IC eliminations (Commands 26-30). |
+| `modVersionControl` | Version save, compare, restore, and list (Commands 31-35). |
+| `modAdmin` | Auto-documentation and change management (Commands 36-40). |
+| `modIntegrationTest` | 18-test suite + quick health check (Commands 44-45). |
+| `modDemoTools` | Control sheet buttons, parameterized print areas, executive summary. |
+| `modDataGuards` | Validates assumptions presence, checks driver sums, finds negative/zero/round numbers. |
+| `modDrillDown` | Reconciliation drill links, heatmap, golden file compare. |
+| `modAuditTools` | Change log, external links finder/fixer, hidden sheet audit, masked copy. |
+| `modETLBridge` | Triggers ETL locally and imports ETL output. |
+| `modTrendReports` | Rolling 12-month view, reconciliation trend chart, archive results. |
+| `modDataSanitizer` | Numeric-only sanitizer — never touches dates, names, or customer IDs. |
 
 ---
 
@@ -52,7 +69,7 @@ model powered by VBA macros organized into 14 modules:
 
 ---
 
-### Python Toolkit (11 Scripts)
+### Python Toolkit (14 Scripts)
 
 | Script | What It Does |
 |--------|-------------|
@@ -68,6 +85,8 @@ model powered by VBA macros organized into 14 modules:
 | `pnl_ap_matcher.py` | AP invoice matching engine. Fuzzy vendor name matching, duplicate detection, unmatched items flagged for review. |
 | `pnl_tests.py` | Full pytest test suite. 100% coverage on config and allocation logic. 80%+ on close and forecasting. |
 | `pnl_cli.py` | Master command-line interface. Single entry point for every script. Run any module with one command. |
+| `build_charts.py` | Chart generation utility for the demo P&L file. |
+| `redesign_pl_model.py` | One-time script used to redesign the Excel workbook to Fortune 100 FP&A standard. |
 
 ---
 
@@ -103,9 +122,9 @@ python pnl_cli.py dashboard
 ```
 APCLDmerge/
 ├── excel/                  Main demo P&L Excel file (uploaded each session)
-├── vba/                    VBA modules (.bas files) — 14 modules, 62 actions
+├── vba/                    VBA modules (.bas files) — 32 modules, 62 actions
 ├── sql/                    SQL pipeline — 4 scripts, SQLite 3
-├── python/                 Python toolkit — 12 scripts
+├── python/                 Python toolkit — 14 scripts
 ├── docs/
 │   ├── overview/           Architecture diagram, code comparison report
 │   ├── day-to-day/         Quick-reference guides for daily operations
@@ -126,9 +145,9 @@ APCLDmerge/
 
 | Layer | Status |
 |-------|--------|
-| VBA Macros | 14 modules, 62 actions — fully operational |
+| VBA Macros | 32 modules, 62 actions — fully operational |
 | SQL Pipeline | 4 scripts — production-quality ETL + analytics |
-| Python Toolkit | 12 scripts including Monte Carlo simulation |
+| Python Toolkit | 14 scripts including Monte Carlo simulation |
 | Documentation | Architecture, runbook, training guides, QA reports |
 | Test Coverage | 100% on config/allocation, 80%+ on close/forecast |
 

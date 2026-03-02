@@ -14,7 +14,7 @@
 │    │  (UserForm)          │  │  (Fallback)     │  │                     │   │
 │    │                      │  │                 │  │  Ctrl+Shift+M Menu  │   │
 │    │  - 14 categories     │  │  3-page menu    │  │  Ctrl+Shift+H Home  │   │
-│    │  - 50 actions        │  │  50 items       │  │  Ctrl+Shift+J Jump  │   │
+│    │  - 62 actions        │  │  62 items       │  │  Ctrl+Shift+J Jump  │   │
 │    │  - Search filter     │  │  Type number    │  │  Ctrl+Shift+R Check │   │
 │    │  - Double-click run  │  │  Press OK       │  │                     │   │
 │    └──────────┬───────────┘  └───────┬─────────┘  └──────────┬──────────┘   │
@@ -30,7 +30,7 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                             │
 │                          FEATURE MODULE LAYER                                │
-│                        (25 VBA modules, ~8,500 LOC)                          │
+│                        (32 VBA modules, ~8,500 LOC)                          │
 │                                                                             │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────────────┐ │
 │  │ MONTHLY OPS     │  │ ANALYSIS        │  │ DATA QUALITY                │ │
@@ -171,7 +171,7 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                             │
 │                    PYTHON ANALYTICS LAYER (Optional, External)                │
-│                              (12 scripts, ~4,800 LOC)                        │
+│                              (14 scripts, ~5,200 LOC)                        │
 │                                                                             │
 │  ┌──────────────────────────────────────────────────────────────────────┐   │
 │  │  pnl_runner.py  ←── Unified CLI entry point                         │   │
