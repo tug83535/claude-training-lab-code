@@ -15,7 +15,7 @@
 - [x] Import all 31 .bas files into the Excel workbook via VBA Editor
 - [x] Fix modAllocation VB_Name attribute mismatch (was importing as AuditTools — fixed)
 - [x] Fix all compile errors — Debug > Compile now passes clean
-- [ ] **BUG TO FIX:** modFormBuilder "Too many line continuations" — GetFormCode() uses a 62-item Array() that exceeds VBA's 24-continuation limit. Fix: replace with individual AddAction calls (no continuations needed). Fix is in modFormBuilder_v2.1.bas, lines 304–378.
+- [x] **BUG FIXED:** modFormBuilder "Too many line continuations" — replaced single 62-item Array() with individual AddAction calls. No line continuations in generated code at all.
 - [ ] Re-import fixed modFormBuilder into Excel, then re-run LaunchCommandCenter → YES to auto-build frmCommandCenter
 - [ ] Live test every Command Center action (1-62) in Excel — log pass/fail for each
 - [ ] Fix any runtime issues discovered during testing

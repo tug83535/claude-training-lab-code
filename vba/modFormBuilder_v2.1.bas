@@ -301,80 +301,79 @@ Private Function GetFormCode() As String
     s = s & "    lstCategories.ListIndex = 0" & vbCrLf
     s = s & "End Sub" & vbCrLf & vbCrLf
     
-    ' --- LoadActions - Define all 50 actions ---
+    ' --- AddAction helper (avoids Array() line-continuation limit) ---
+    s = s & "Private Sub AddAction(n As Long, cat As String, lbl As String)" & vbCrLf
+    s = s & "    m_Actions(n).Num = n" & vbCrLf
+    s = s & "    m_Actions(n).Category = cat" & vbCrLf
+    s = s & "    m_Actions(n).Label = lbl" & vbCrLf
+    s = s & "End Sub" & vbCrLf & vbCrLf
+
+    ' --- LoadActions - one line per action, no line continuations ---
     s = s & "Private Sub LoadActions()" & vbCrLf
     s = s & "    m_ActionCount = 62" & vbCrLf
     s = s & "    ReDim m_Actions(1 To 62)" & vbCrLf
-    s = s & "    Dim i As Long" & vbCrLf
-    s = s & "    Dim d As Variant" & vbCrLf
-    s = s & "    d = Array( _" & vbCrLf
-    s = s & "        ""Monthly Operations"", ""Generate Monthly Tabs"", _" & vbCrLf
-    s = s & "        ""Monthly Operations"", ""Delete Generated Tabs"", _" & vbCrLf
-    s = s & "        ""Monthly Operations"", ""Run Reconciliation Checks"", _" & vbCrLf
-    s = s & "        ""Monthly Operations"", ""Export Reconciliation Report"", _" & vbCrLf
-    s = s & "        ""Analysis"", ""Run Sensitivity Analysis"", _" & vbCrLf
-    s = s & "        ""Analysis"", ""Run Variance Analysis"", _" & vbCrLf
-    s = s & "        ""Data Quality"", ""Scan for Data Quality Issues"", _" & vbCrLf
-    s = s & "        ""Data Quality"", ""Fix Text-Stored Numbers"", _" & vbCrLf
-    s = s & "        ""Data Quality"", ""Fix Duplicate Rows"", _" & vbCrLf
-    s = s & "        ""Reporting"", ""Export Report Package (PDF)"", _" & vbCrLf
-    s = s & "        ""Reporting"", ""Export Active Sheet (PDF)"", _" & vbCrLf
-    s = s & "        ""Reporting"", ""Build Dashboard Charts"", _" & vbCrLf
-    s = s & "        ""Utilities"", ""Refresh Table of Contents"", _" & vbCrLf
-    s = s & "        ""Utilities"", ""Recalculate AWS Allocations"", _" & vbCrLf
-    s = s & "        ""Utilities"", ""Quick Jump to Sheet"", _" & vbCrLf
-    s = s & "        ""Utilities"", ""Go Home (Report-->)"", _" & vbCrLf
-    s = s & "        ""Data & Import"", ""Import GL Data Pipeline"", _" & vbCrLf
-    s = s & "        ""Forecasting"", ""Rolling Forecast"", _" & vbCrLf
-    s = s & "        ""Forecasting"", ""Append Month to Trend"", _" & vbCrLf
-    s = s & "        ""Scenarios"", ""Save Current Scenario"", _" & vbCrLf
-    s = s & "        ""Scenarios"", ""Load Scenario"", _" & vbCrLf
-    s = s & "        ""Scenarios"", ""Compare Scenarios"", _" & vbCrLf
-    s = s & "        ""Scenarios"", ""Delete Scenario"", _" & vbCrLf
-    s = s & "        ""Allocation"", ""Run Allocation Engine"", _" & vbCrLf
-    s = s & "        ""Allocation"", ""Allocation Scenario Preview"", _" & vbCrLf
-    s = s & "        ""Consolidation"", ""Consolidation Menu"", _" & vbCrLf
-    s = s & "        ""Consolidation"", ""Add Entity File"", _" & vbCrLf
-    s = s & "        ""Consolidation"", ""Generate Consolidated P&&L"", _" & vbCrLf
-    s = s & "        ""Consolidation"", ""View Loaded Entities"", _" & vbCrLf
-    s = s & "        ""Consolidation"", ""Add Elimination Entry"", _" & vbCrLf
-    s = s & "        ""Version Control"", ""Version Control Menu"", _" & vbCrLf
-    s = s & "        ""Version Control"", ""Save Version"", _" & vbCrLf
-    s = s & "        ""Version Control"", ""Compare Versions"", _" & vbCrLf
-    s = s & "        ""Version Control"", ""Restore Version"", _" & vbCrLf
-    s = s & "        ""Version Control"", ""List Versions"", _" & vbCrLf
-    s = s & "        ""Governance"", ""Auto-Documentation"", _" & vbCrLf
-    s = s & "        ""Governance"", ""Change Management Menu"", _" & vbCrLf
-    s = s & "        ""Governance"", ""Add Change Request"", _" & vbCrLf
-    s = s & "        ""Governance"", ""Update CR Status"", _" & vbCrLf
-    s = s & "        ""Governance"", ""CR Summary Report"", _" & vbCrLf
-    s = s & "        ""Admin & Testing"", ""View Audit Log"", _" & vbCrLf
-    s = s & "        ""Admin & Testing"", ""Export Audit Log"", _" & vbCrLf
-    s = s & "        ""Admin & Testing"", ""Clear Audit Log"", _" & vbCrLf
-    s = s & "        ""Admin & Testing"", ""Full Integration Test"", _" & vbCrLf
-    s = s & "        ""Admin & Testing"", ""Quick Health Check"", _" & vbCrLf
-    s = s & "        ""Advanced"", ""Variance Commentary"", _" & vbCrLf
-    s = s & "        ""Advanced"", ""Cross-Sheet Validation"", _" & vbCrLf
-    s = s & "        ""Advanced"", ""Executive Mode Toggle"", _" & vbCrLf
-    s = s & "        ""Advanced"", ""Force Recalculate All"", _" & vbCrLf
-    s = s & "        ""Advanced"", ""About This Toolkit"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Delete All Blank Rows"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Unhide All Worksheets"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Sort Sheets Alphabetically"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Toggle Freeze Panes"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Convert Formulas to Values"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""AutoFit All Columns"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Protect All Sheets"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Unprotect All Sheets"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Find && Replace (All Sheets)"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Highlight Hardcoded Numbers"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Toggle Presentation Mode"", _" & vbCrLf
-    s = s & "        ""Sheet Tools"", ""Unmerge and Fill Down"")" & vbCrLf
-    s = s & "    For i = 1 To 62" & vbCrLf
-    s = s & "        m_Actions(i).Num = i" & vbCrLf
-    s = s & "        m_Actions(i).Category = d((i - 1) * 2)" & vbCrLf
-    s = s & "        m_Actions(i).Label = d((i - 1) * 2 + 1)" & vbCrLf
-    s = s & "    Next i" & vbCrLf
+    s = s & "    AddAction 1, ""Monthly Operations"", ""Generate Monthly Tabs""" & vbCrLf
+    s = s & "    AddAction 2, ""Monthly Operations"", ""Delete Generated Tabs""" & vbCrLf
+    s = s & "    AddAction 3, ""Monthly Operations"", ""Run Reconciliation Checks""" & vbCrLf
+    s = s & "    AddAction 4, ""Monthly Operations"", ""Export Reconciliation Report""" & vbCrLf
+    s = s & "    AddAction 5, ""Analysis"", ""Run Sensitivity Analysis""" & vbCrLf
+    s = s & "    AddAction 6, ""Analysis"", ""Run Variance Analysis""" & vbCrLf
+    s = s & "    AddAction 7, ""Data Quality"", ""Scan for Data Quality Issues""" & vbCrLf
+    s = s & "    AddAction 8, ""Data Quality"", ""Fix Text-Stored Numbers""" & vbCrLf
+    s = s & "    AddAction 9, ""Data Quality"", ""Fix Duplicate Rows""" & vbCrLf
+    s = s & "    AddAction 10, ""Reporting"", ""Export Report Package (PDF)""" & vbCrLf
+    s = s & "    AddAction 11, ""Reporting"", ""Export Active Sheet (PDF)""" & vbCrLf
+    s = s & "    AddAction 12, ""Reporting"", ""Build Dashboard Charts""" & vbCrLf
+    s = s & "    AddAction 13, ""Utilities"", ""Refresh Table of Contents""" & vbCrLf
+    s = s & "    AddAction 14, ""Utilities"", ""Recalculate AWS Allocations""" & vbCrLf
+    s = s & "    AddAction 15, ""Utilities"", ""Quick Jump to Sheet""" & vbCrLf
+    s = s & "    AddAction 16, ""Utilities"", ""Go Home (Report-->)""" & vbCrLf
+    s = s & "    AddAction 17, ""Data & Import"", ""Import GL Data Pipeline""" & vbCrLf
+    s = s & "    AddAction 18, ""Forecasting"", ""Rolling Forecast""" & vbCrLf
+    s = s & "    AddAction 19, ""Forecasting"", ""Append Month to Trend""" & vbCrLf
+    s = s & "    AddAction 20, ""Scenarios"", ""Save Current Scenario""" & vbCrLf
+    s = s & "    AddAction 21, ""Scenarios"", ""Load Scenario""" & vbCrLf
+    s = s & "    AddAction 22, ""Scenarios"", ""Compare Scenarios""" & vbCrLf
+    s = s & "    AddAction 23, ""Scenarios"", ""Delete Scenario""" & vbCrLf
+    s = s & "    AddAction 24, ""Allocation"", ""Run Allocation Engine""" & vbCrLf
+    s = s & "    AddAction 25, ""Allocation"", ""Allocation Scenario Preview""" & vbCrLf
+    s = s & "    AddAction 26, ""Consolidation"", ""Consolidation Menu""" & vbCrLf
+    s = s & "    AddAction 27, ""Consolidation"", ""Add Entity File""" & vbCrLf
+    s = s & "    AddAction 28, ""Consolidation"", ""Generate Consolidated P&L""" & vbCrLf
+    s = s & "    AddAction 29, ""Consolidation"", ""View Loaded Entities""" & vbCrLf
+    s = s & "    AddAction 30, ""Consolidation"", ""Add Elimination Entry""" & vbCrLf
+    s = s & "    AddAction 31, ""Version Control"", ""Version Control Menu""" & vbCrLf
+    s = s & "    AddAction 32, ""Version Control"", ""Save Version""" & vbCrLf
+    s = s & "    AddAction 33, ""Version Control"", ""Compare Versions""" & vbCrLf
+    s = s & "    AddAction 34, ""Version Control"", ""Restore Version""" & vbCrLf
+    s = s & "    AddAction 35, ""Version Control"", ""List Versions""" & vbCrLf
+    s = s & "    AddAction 36, ""Governance"", ""Auto-Documentation""" & vbCrLf
+    s = s & "    AddAction 37, ""Governance"", ""Change Management Menu""" & vbCrLf
+    s = s & "    AddAction 38, ""Governance"", ""Add Change Request""" & vbCrLf
+    s = s & "    AddAction 39, ""Governance"", ""Update CR Status""" & vbCrLf
+    s = s & "    AddAction 40, ""Governance"", ""CR Summary Report""" & vbCrLf
+    s = s & "    AddAction 41, ""Admin & Testing"", ""View Audit Log""" & vbCrLf
+    s = s & "    AddAction 42, ""Admin & Testing"", ""Export Audit Log""" & vbCrLf
+    s = s & "    AddAction 43, ""Admin & Testing"", ""Clear Audit Log""" & vbCrLf
+    s = s & "    AddAction 44, ""Admin & Testing"", ""Full Integration Test""" & vbCrLf
+    s = s & "    AddAction 45, ""Admin & Testing"", ""Quick Health Check""" & vbCrLf
+    s = s & "    AddAction 46, ""Advanced"", ""Variance Commentary""" & vbCrLf
+    s = s & "    AddAction 47, ""Advanced"", ""Cross-Sheet Validation""" & vbCrLf
+    s = s & "    AddAction 48, ""Advanced"", ""Executive Mode Toggle""" & vbCrLf
+    s = s & "    AddAction 49, ""Advanced"", ""Force Recalculate All""" & vbCrLf
+    s = s & "    AddAction 50, ""Advanced"", ""About This Toolkit""" & vbCrLf
+    s = s & "    AddAction 51, ""Sheet Tools"", ""Delete All Blank Rows""" & vbCrLf
+    s = s & "    AddAction 52, ""Sheet Tools"", ""Unhide All Worksheets""" & vbCrLf
+    s = s & "    AddAction 53, ""Sheet Tools"", ""Sort Sheets Alphabetically""" & vbCrLf
+    s = s & "    AddAction 54, ""Sheet Tools"", ""Toggle Freeze Panes""" & vbCrLf
+    s = s & "    AddAction 55, ""Sheet Tools"", ""Convert Formulas to Values""" & vbCrLf
+    s = s & "    AddAction 56, ""Sheet Tools"", ""AutoFit All Columns""" & vbCrLf
+    s = s & "    AddAction 57, ""Sheet Tools"", ""Protect All Sheets""" & vbCrLf
+    s = s & "    AddAction 58, ""Sheet Tools"", ""Unprotect All Sheets""" & vbCrLf
+    s = s & "    AddAction 59, ""Sheet Tools"", ""Find & Replace (All Sheets)""" & vbCrLf
+    s = s & "    AddAction 60, ""Sheet Tools"", ""Highlight Hardcoded Numbers""" & vbCrLf
+    s = s & "    AddAction 61, ""Sheet Tools"", ""Toggle Presentation Mode""" & vbCrLf
+    s = s & "    AddAction 62, ""Sheet Tools"", ""Unmerge and Fill Down""" & vbCrLf
     s = s & "End Sub" & vbCrLf & vbCrLf
     
     ' --- LoadCategories ---
