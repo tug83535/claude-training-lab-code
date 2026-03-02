@@ -11,16 +11,44 @@
 ### ⚠ ACCOUNT SWITCH NEEDED — Usage at ~90%
 The current Claude account is near its usage limit. The next Claude account must pick up from here.
 
-**Next account: pick up at T1.08 — requirements.txt install test.**
+**There are TWO active tracks. Pick up whichever the user directs:**
 
-Exact resume point:
-1. Read this file (tasks/todo.md) and tasks/lessons.md and CLAUDE.md first
-2. Read Testing_Issues/TESTING_ISSUES_LOG.md for full T1 test history
-3. Read qa/TEST_PLAN.md for the full test procedure
-4. Resume at **T1.08**: run `pip install -r requirements.txt` → verify all packages install cleanly
-5. Then proceed through T2, T3, T4 in order — all procedures are in TEST_PLAN.md
-6. Log all results in qa/TEST_RESULTS.md (create it if it doesn't exist yet)
-7. Any new issues found → add to Testing_Issues/TESTING_ISSUES_LOG.md
+---
+
+**TRACK A — Testing (T1.08 next)**
+1. Read this file, tasks/lessons.md, CLAUDE.md, and Testing_Issues/TESTING_ISSUES_LOG.md first
+2. Read qa/TEST_PLAN.md for the full test procedure
+3. Resume at **T1.08**: run `pip install -r requirements.txt` → verify all packages install cleanly
+4. Then proceed through T2, T3, T4 in order
+5. Log all results in qa/TEST_RESULTS.md (create it if it doesn't exist yet)
+6. Any new issues found → add to Testing_Issues/TESTING_ISSUES_LOG.md
+
+---
+
+**TRACK B — Universal Tools (UniversalBuild)**
+Connor uploaded 3 idea files to UniversalToolsForAllFiles/:
+- GrokALL.md — Grok-generated list (~70 VBA + ~40 Python universal tools)
+- PrelexALL.md — comprehensive catalog of 293 tools across 17 categories
+- Profiles.md — personal account reference (NOT a tools list; see security note below)
+
+A curated candidate list has been created at:
+`UniversalToolsForAllFiles/UniversalBuild/UNIVERSAL_BUILD_CANDIDATES.md`
+
+**Status:** Candidate list CREATED and committed (2026-03-02) — waiting for Connor's approval before building any code.
+- 23 Tier 1 VBA tools selected
+- 5 Tier 1 Python scripts selected
+- 20 Tier 2 VBA + 5 Tier 2 Python in backlog section
+- Full reasoning included for every selection
+
+Next steps once Connor approves:
+1. Build Tier 1 VBA tools as a Personal.xlsb Add-In (stored in UniversalToolsForAllFiles/vba/)
+2. Build Tier 1 Python tools as standalone scripts (stored in UniversalToolsForAllFiles/python/)
+3. Write a coworker install guide for the Add-In
+4. Write a coworker usage guide for the Python scripts
+
+**Security note:** Profiles.md contains personal account emails/credentials and should be removed from the repo. Flag this to Connor.
+
+---
 
 ---
 
