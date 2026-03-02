@@ -16,7 +16,7 @@
 - [x] Fix modAllocation VB_Name attribute mismatch (was importing as AuditTools — fixed)
 - [x] Fix all compile errors — Debug > Compile now passes clean
 - [x] **BUG FIXED:** modFormBuilder "Too many line continuations" — replaced single 62-item Array() with individual AddAction calls. No line continuations in generated code at all.
-- [ ] Re-import fixed modFormBuilder into Excel, then re-run LaunchCommandCenter → YES to auto-build frmCommandCenter
+- [x] Re-import fixed modFormBuilder into Excel, re-ran LaunchCommandCenter → form built successfully
 - [ ] Live test every Command Center action (1-62) in Excel — log pass/fail for each
 - [ ] Fix any runtime issues discovered during testing
 - [ ] Verify all hidden sheets are created properly (VBA_AuditLog, Scenarios, Version History, etc.)
