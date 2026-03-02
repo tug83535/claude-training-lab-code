@@ -26,19 +26,21 @@ The current Claude account is near its usage limit. The next Claude account must
 ---
 
 **TRACK B — Universal Tools (UniversalBuild)**
-Connor uploaded 3 idea files to UniversalToolsForAllFiles/:
+Connor uploaded idea files to UniversalToolsForAllFiles/:
 - GrokALL.md — Grok-generated list (~70 VBA + ~40 Python universal tools)
 - PrelexALL.md — comprehensive catalog of 293 tools across 17 categories
-- Profiles.md — personal account reference (NOT a tools list; see security note below)
+- GemAll.md — Gemini-generated list (~35 VBA + ~30 Python, Finance/audit focus)
+- Profiles.md — personal account reference (deleted from repo — was a security risk)
 
 A curated candidate list has been created at:
 `UniversalToolsForAllFiles/UniversalBuild/UNIVERSAL_BUILD_CANDIDATES.md`
 
 **Status:** Candidate list CREATED and committed (2026-03-02) — waiting for Connor's approval before building any code.
-- 23 Tier 1 VBA tools selected
+- 24 Tier 1 VBA tools selected
 - 5 Tier 1 Python scripts selected
-- 20 Tier 2 VBA + 5 Tier 2 Python in backlog section
-- Full reasoning included for every selection
+- 34 Tier 2 VBA + 13 Tier 2 Python in backlog section
+- 76 total candidates across all tiers
+- GemAll.md reviewed and folded in (2026-03-02) — 16 tools added
 
 Next steps once Connor approves:
 1. Build Tier 1 VBA tools as a Personal.xlsb Add-In (stored in UniversalToolsForAllFiles/vba/)
