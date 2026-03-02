@@ -64,7 +64,7 @@ Verifies all 32 VBA modules compile without error and all Python scripts import 
 | T1.03 | Option Explicit on all | Search all modules for "Option Explicit" | Found in every module |
 | T1.04 | modConfig loads | Immediate Window: `?APP_VERSION` | Returns "2.1.0" |
 | T1.05 | Python pnl_config imports | `python pnl_config.py` | Prints config summary, no errors |
-| T1.06 | All Python scripts import | `python -c "import pnl_X"` for each script | Zero ImportError |
+| T1.06 | All Python scripts import | `python -c "import pnl_config; import pnl_runner; import pnl_forecast; import pnl_tests; import pnl_month_end; import pnl_snapshot; import pnl_allocation_simulator; import pnl_ap_matcher; import pnl_dashboard; import pnl_email_report; import pnl_monte_carlo; import pnl_cli; print('All imports OK')"` | Prints "All imports OK" — Zero ImportError |
 | T1.07 | Python UTF-8 clean | Run scan_chars.py on all .py files | Zero mojibake codepoints |
 | T1.08 | requirements.txt complete | `pip install -r requirements.txt` | All packages install |
 
