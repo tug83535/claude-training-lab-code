@@ -1,11 +1,26 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-03-01)
+## Current Status (2026-03-02)
 - **Branch:** `claude/review-code-testing-s4dsQ` (live testing branch)
-- **VBA Modules:** 31 imported into Excel workbook — Debug > Compile passes (greyed out = clean)
+- **VBA Modules:** 32 imported into Excel workbook — Debug > Compile passes (greyed out = clean)
 - **Python Scripts:** 14 complete and functional
-- **Excel File:** Workbook open with all 31 modules imported and error-free
-- **Overall:** Compile errors resolved. Blocked on frmCommandCenter auto-build: "Too many line continuations" bug in modFormBuilder — fix in progress.
+- **Excel File:** Workbook open with all 32 modules imported and error-free
+- **Testing Phase:** T1 in progress — T1.01 through T1.07 complete; T1.08 not yet run
+- **Overall:** All T1 tests through T1.07 resolved. T1.07 was a false positive — confirmed all 14 Python files are valid UTF-8. See Testing_Issues/ for full log.
+
+### ⚠ ACCOUNT SWITCH NEEDED — Usage at ~90%
+The current Claude account is near its usage limit. The next Claude account must pick up from here.
+
+**Next account: pick up at T1.08 — requirements.txt install test.**
+
+Exact resume point:
+1. Read this file (tasks/todo.md) and tasks/lessons.md and CLAUDE.md first
+2. Read Testing_Issues/TESTING_ISSUES_LOG.md for full T1 test history
+3. Read qa/TEST_PLAN.md for the full test procedure
+4. Resume at **T1.08**: run `pip install -r requirements.txt` → verify all packages install cleanly
+5. Then proceed through T2, T3, T4 in order — all procedures are in TEST_PLAN.md
+6. Log all results in qa/TEST_RESULTS.md (create it if it doesn't exist yet)
+7. Any new issues found → add to Testing_Issues/TESTING_ISSUES_LOG.md
 
 ---
 
@@ -54,6 +69,21 @@
 - ~~Backup Workbook with Timestamp macro~~ — user declined (2026-02-28)
 - ~~VBA Timestamp Audit Trail on Cell Changes~~ — user declined (2026-02-28)
 - ~~Export All Charts to PowerPoint~~ — user dropped permanently (2026-02-28)
+
+---
+
+## Completed — This Session (2026-03-02)
+
+### T1 Testing — T1.01 through T1.07
+- [x] T1.01 — PASS — VBA project compiled with zero errors
+- [x] T1.02 — PASS — All 32 modules visible in Project Explorer
+- [x] T1.03 — PASS — Option Explicit found in all modules
+- [x] T1.04 — PASS — ?APP_VERSION returned "2.1.0"
+- [x] T1.05 — PASS — pnl_config.py printed full config summary, all shares sum to 1.00. Source file warning is cosmetic (file was renamed), not a bug.
+- [x] T1.06 — PASS — All 14 Python scripts imported successfully, printed "All imports OK"
+- [x] T1.07 — INVESTIGATED AND RESOLVED — Original scan flagged all 14 files for non-ASCII bytes. Investigation confirmed: all 14 files are valid UTF-8. Characters are intentional Unicode (em dashes, arrows, check marks, box-drawing, Greek letters, emoji) — NOT mojibake. TEST_PLAN.md updated with full explanation. This test is PASS.
+- [x] TEST_PLAN.md updated — T1.07 and T4.01 pass criteria clarified
+- [x] Testing_Issues/TESTING_ISSUES_LOG.md created — full log of all T1 issues found
 
 ---
 

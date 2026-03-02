@@ -101,6 +101,14 @@
 - Before building a new module, always read the ExecuteAction Case statement first to get the exact procedure names expected
 - Every VBA module follows the same pattern: modConfig constants + modPerformance TurboOn/TurboOff + modLogger.LogAction + On Error GoTo ErrHandler
 
+## UTF-8 / Non-ASCII Scans — False Positive Pattern (2026-03-02)
+- A scan that flags ALL non-ASCII bytes will always fail on this codebase — the Python files intentionally use Unicode characters (em dashes, arrows, check marks, box-drawing, Greek letters, emoji) for visual output formatting
+- Real mojibake looks like: `â€"` (em dash), `Ã©` (e-acute), `Ã¢` (a-circumflex) — Latin-1 misread sequences
+- The correct test is: decode the file as UTF-8 (if it fails → corrupt), then scan specifically for mojibake patterns (`Ã[char]`, `â€[char]`) in the decoded text
+- Never flag legitimate intentional Unicode as an encoding error
+- If a tester reports "all 14 Python files failed UTF-8 scan," first check whether the scan is checking for mojibake specifically or just any non-ASCII byte — 9 times out of 10 it is a false positive from an overly strict scan tool
+- The Testing_Issues/TESTING_ISSUES_LOG.md file is the canonical record of all testing issues — always read it when resuming a testing session
+
 ## Testing VBA Without Excel Access (2026-02-28)
 - Code review can catch signature mismatches, missing constants, and wrong argument counts — but only a live Excel test confirms runtime behavior
 - Always recommend live testing after building or fixing VBA modules

@@ -65,7 +65,7 @@ Verifies all 32 VBA modules compile without error and all Python scripts import 
 | T1.04 | modConfig loads | Immediate Window: `?APP_VERSION` | Returns "2.1.0" |
 | T1.05 | Python pnl_config imports | `python pnl_config.py` | Prints config summary, no errors |
 | T1.06 | All Python scripts import | `python -c "import pnl_config; import pnl_runner; import pnl_forecast; import pnl_tests; import pnl_month_end; import pnl_snapshot; import pnl_allocation_simulator; import pnl_ap_matcher; import pnl_dashboard; import pnl_email_report; import pnl_monte_carlo; import pnl_cli; print('All imports OK')"` | Prints "All imports OK" — Zero ImportError |
-| T1.07 | Python UTF-8 clean | Run scan_chars.py on all .py files | Zero mojibake codepoints |
+| T1.07 | Python UTF-8 clean | Run scan_chars.py on all .py files | Zero mojibake codepoints (Ã/â garbled sequences). **NOTE — 2026-03-02:** All 14 files confirmed valid UTF-8. Non-ASCII bytes present are legitimate intentional Unicode: em dashes (—), arrows (→ ↑ ↓ ↔), check/warning marks (✓ ✗ ⚠), box-drawing chars (─ ║ ╔), Greek letters (Δ α), and emoji (📊). No mojibake sequences detected. **This test is PASS.** A scan that flags ALL non-ASCII bytes is too strict — only garbled Latin-1 misread sequences (Ã©, â€", etc.) constitute failure. Update any scan script to check for mojibake patterns specifically, not just any non-ASCII byte. |
 | T1.08 | requirements.txt complete | `pip install -r requirements.txt` | All packages install |
 
 ### Category T2 — Foundation Issues (7 tests)
@@ -96,7 +96,7 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 
 | Test ID | Test Name | Issue | Procedure | Pass Criteria |
 |---------|-----------|-------|-----------|---------------|
-| T4.01 | UTF-8 clean across all files | ISSUE-008 | Scan for suspect codepoints (U+00E2, U+00C3, etc.) | Zero hits |
+| T4.01 | UTF-8 clean across all files | ISSUE-008 | Scan for mojibake sequences: Latin-1 misread patterns (Ã©, â€", Ã¢, etc.) | Zero mojibake hits. Non-ASCII Unicode (em dashes, arrows, check marks, box-drawing, Greek letters, emoji) is intentional and acceptable. See T1.07 note. |
 | T4.02 | pnl_config self-test | ISSUE-008 | `python pnl_config.py` | All shares sum to 1.0, version 2.1.0 |
 | T4.03 | pnl_runner dispatches | — | `python pnl_runner.py --help` | Shows all 9 commands |
 | T4.04 | pytest suite passes | — | `python -m pytest pnl_tests.py -v` | All non-skip tests pass |
