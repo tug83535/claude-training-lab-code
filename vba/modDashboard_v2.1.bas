@@ -142,20 +142,33 @@ Public Sub CreateExecutiveDashboard()
     modPerformance.UpdateStatus "Building Executive Dashboard...", 0.1
     
     '--- Gather data from P&L Trend ---
+    ' BUG FIX (T5.01): Use HDR_ROW_REPORT (row 4) for all header lookups.
+    ' P&L Trend layout: Row 1 = Company title, Row 2 = Subtitle,
+    ' Row 3 = Blank, Row 4 = Column headers (Jan, Feb, ... FY Total, Budget).
+    ' Previously read row 1, which returned the company title row — causing
+    ' tLastCol, fyCol, and budCol to all resolve incorrectly ($0 revenue, no charts).
     Dim wsTrend As Worksheet: Set wsTrend = ThisWorkbook.Worksheets(SH_PL_TREND)
     Dim tLastRow As Long: tLastRow = wsTrend.Cells(wsTrend.Rows.Count, 1).End(xlUp).Row
-    Dim tLastCol As Long: tLastCol = wsTrend.Cells(1, wsTrend.Columns.Count).End(xlToLeft).Column
-    
+    Dim tLastCol As Long: tLastCol = wsTrend.Cells(HDR_ROW_REPORT, wsTrend.Columns.Count).End(xlToLeft).Column
+
+    Debug.Print "[ExecDash] Trend sheet: " & SH_PL_TREND & _
+                " | HDR_ROW_REPORT=" & HDR_ROW_REPORT & _
+                " | tLastRow=" & tLastRow & " | tLastCol=" & tLastCol
+
     Dim fyCol As Long: fyCol = FindFYTotalCol(wsTrend)
-    
-    ' Find budget column
+    Debug.Print "[ExecDash] FY Total column found: " & fyCol & _
+                " (header = """ & wsTrend.Cells(HDR_ROW_REPORT, fyCol).Value & """)"
+
+    ' Find budget column — search row 4 (HDR_ROW_REPORT), not row 1
     Dim budCol As Long: budCol = 0
     Dim c As Long
     For c = 2 To tLastCol
-        If InStr(LCase(CStr(wsTrend.Cells(1, c).Value)), "budget") > 0 Then budCol = c: Exit For
+        If InStr(LCase(CStr(wsTrend.Cells(HDR_ROW_REPORT, c).Value)), "budget") > 0 Then budCol = c: Exit For
     Next c
     If budCol = 0 Then budCol = tLastCol
-    
+    Debug.Print "[ExecDash] Budget column found: " & budCol & _
+                " (header = """ & wsTrend.Cells(HDR_ROW_REPORT, budCol).Value & """)"
+
     ' Find key P&L summary rows
     Dim revRow As Long, gpRow As Long, opexRow As Long, niRow As Long
     Dim r As Long
@@ -167,13 +180,17 @@ Public Sub CreateExecutiveDashboard()
         If niRow = 0 And (InStr(lbl, "net income") > 0 Or InStr(lbl, "net operating") > 0) Then niRow = r
     Next r
     If revRow = 0 Then revRow = 2   ' Fallback
-    
+    Debug.Print "[ExecDash] Row lookup — revRow=" & revRow & " gpRow=" & gpRow & _
+                " opexRow=" & opexRow & " niRow=" & niRow
+
     Dim fyRev As Double: fyRev = modConfig.SafeNum(wsTrend.Cells(revRow, fyCol).Value)
     Dim budRev As Double: budRev = modConfig.SafeNum(wsTrend.Cells(revRow, budCol).Value)
     Dim fyGP As Double: If gpRow > 0 Then fyGP = modConfig.SafeNum(wsTrend.Cells(gpRow, fyCol).Value)
     Dim fyOpex As Double: If opexRow > 0 Then fyOpex = modConfig.SafeNum(wsTrend.Cells(opexRow, fyCol).Value)
     Dim fyNI As Double: If niRow > 0 Then fyNI = modConfig.SafeNum(wsTrend.Cells(niRow, fyCol).Value)
-    
+    Debug.Print "[ExecDash] Values — fyRev=" & fyRev & " budRev=" & budRev & _
+                " fyGP=" & fyGP & " fyOpex=" & fyOpex & " fyNI=" & fyNI
+
     Dim gmPct As Double: If fyRev <> 0 Then gmPct = fyGP / fyRev
     Dim revVar As Double: revVar = fyRev - budRev
     Dim revVarPct As Double: If budRev <> 0 Then revVarPct = revVar / Abs(budRev)
@@ -304,13 +321,30 @@ Public Sub CreateExecutiveDashboard()
     
     modLogger.LogAction "modDashboard", "CreateExecutiveDashboard", _
         "4 KPIs + summary table", elapsed
+    Debug.Print "[ExecDash] SUCCESS — Dashboard created on '" & dashName & "'"
     MsgBox "Executive Dashboard created on '" & dashName & "'.", vbInformation, APP_NAME
     Exit Sub
 
 ErrHandler:
+    Dim errMsg As String
+    errMsg = "Executive dashboard error in modDashboard.CreateExecutiveDashboard" & vbCrLf & vbCrLf & _
+             "Error " & Err.Number & ": " & Err.Description & vbCrLf & _
+             "Source: " & Err.Source & vbCrLf & vbCrLf & _
+             "Diagnostic values at time of error:" & vbCrLf & _
+             "  HDR_ROW_REPORT = " & HDR_ROW_REPORT & vbCrLf & _
+             "  tLastCol = " & tLastCol & vbCrLf & _
+             "  fyCol = " & fyCol & vbCrLf & _
+             "  budCol = " & budCol & vbCrLf & _
+             "  revRow = " & revRow & " | gpRow = " & gpRow & vbCrLf & _
+             "  opexRow = " & opexRow & " | niRow = " & niRow & vbCrLf & _
+             "  fyRev = " & fyRev & vbCrLf & vbCrLf & _
+             "Check the Immediate Window (Ctrl+G) for full Debug.Print trace."
     modPerformance.TurboOff
-    modLogger.LogAction "modDashboard", "ERROR-ExecDash", Err.Description
-    MsgBox "Executive dashboard error: " & Err.Description, vbCritical, APP_NAME
+    modLogger.LogAction "modDashboard", "ERROR-ExecDash", _
+        "Err " & Err.Number & ": " & Err.Description & _
+        " | fyCol=" & fyCol & " budCol=" & budCol & " revRow=" & revRow
+    Debug.Print "[ExecDash] ERROR — " & Err.Number & ": " & Err.Description
+    MsgBox errMsg, vbCritical, APP_NAME
 End Sub
 
 '===============================================================================
@@ -826,33 +860,51 @@ End Function
 
 '===============================================================================
 ' FindFYTotalCol - Locate the FY Total column on P&L Trend
-' Searches row 1 for headers containing "FY" + "Total" or "FY2025" etc.
+' BUG FIX (T5.01): Searches HDR_ROW_REPORT (row 4) for column headers.
+' Previously searched row 1 which contains the company title, not headers.
 ' Falls back to last column.
 '===============================================================================
 Private Function FindFYTotalCol(ByVal ws As Worksheet) As Long
-    Dim lastCol As Long: lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    Dim hdrRow As Long: hdrRow = HDR_ROW_REPORT  ' Row 4 — actual column headers
+    Dim lastCol As Long: lastCol = ws.Cells(hdrRow, ws.Columns.Count).End(xlToLeft).Column
     Dim c As Long
-    
+
+    Debug.Print "[FindFYTotalCol] Scanning row " & hdrRow & " across " & lastCol & " columns"
+
     ' First pass: look for "FY Total" or "FY2025 Total" style headers
     For c = 2 To lastCol
-        Dim hdr As String: hdr = LCase(Trim(CStr(ws.Cells(1, c).Value)))
+        Dim hdr As String: hdr = LCase(Trim(CStr(ws.Cells(hdrRow, c).Value)))
         If InStr(hdr, "fy") > 0 And InStr(hdr, "total") > 0 Then
+            Debug.Print "[FindFYTotalCol] MATCH pass 1 — col " & c & " = """ & ws.Cells(hdrRow, c).Value & """"
             FindFYTotalCol = c: Exit Function
         End If
     Next c
-    
+
     ' Second pass: look for "FY2025" or FISCAL_YEAR_4 pattern
     For c = 2 To lastCol
-        hdr = LCase(Trim(CStr(ws.Cells(1, c).Value)))
+        hdr = LCase(Trim(CStr(ws.Cells(hdrRow, c).Value)))
         If InStr(hdr, "fy" & FISCAL_YEAR_4) > 0 Then
+            Debug.Print "[FindFYTotalCol] MATCH pass 2a — col " & c & " = """ & ws.Cells(hdrRow, c).Value & """"
             FindFYTotalCol = c: Exit Function
         End If
         If InStr(hdr, FISCAL_YEAR_4 & " total") > 0 Then
+            Debug.Print "[FindFYTotalCol] MATCH pass 2b — col " & c & " = """ & ws.Cells(hdrRow, c).Value & """"
             FindFYTotalCol = c: Exit Function
         End If
     Next c
-    
+
+    ' Third pass: look for just "total" as a standalone header
+    For c = 2 To lastCol
+        hdr = LCase(Trim(CStr(ws.Cells(hdrRow, c).Value)))
+        If hdr = "total" Or hdr = "year total" Or hdr = "annual total" Then
+            Debug.Print "[FindFYTotalCol] MATCH pass 3 — col " & c & " = """ & ws.Cells(hdrRow, c).Value & """"
+            FindFYTotalCol = c: Exit Function
+        End If
+    Next c
+
     ' Fallback: last column
+    Debug.Print "[FindFYTotalCol] No header match — falling back to lastCol=" & lastCol & _
+                " (value = """ & ws.Cells(hdrRow, lastCol).Value & """)"
     FindFYTotalCol = lastCol
 End Function
 
