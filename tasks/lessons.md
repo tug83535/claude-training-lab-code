@@ -123,3 +123,4 @@
 - Iterating `ws.Rows(hRow).Cells` loops through all 16,384+ columns — always limit to `ws.Cells(hRow, ws.Columns.Count).End(xlToLeft).Column`
 - Chaining `Replace()` calls for file extensions can double-suffix (e.g., .xlsm → .xlsx → _DIST_DIST.xlsx) — use `If/ElseIf` to handle each extension separately
 - pandas deprecated `infer_datetime_format` in 2.0 — remove it from any `pd.to_datetime()` calls
+- Row-label searches (e.g., "total revenue") must try multiple variants as fallbacks — the P&L Trend sheet may use "Revenue", "Total Revenue", "Net Revenue", etc. Always use `modConfig.FindRowByLabel` with cascading fallbacks instead of hardcoded `InStr` checks in a loop

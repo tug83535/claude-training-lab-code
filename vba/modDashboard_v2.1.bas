@@ -415,21 +415,37 @@ Public Sub WaterfallChart()
     Dim fyCol As Long: fyCol = FindFYTotalCol(wsSrc)
     Dim lastRow As Long: lastRow = wsSrc.Cells(wsSrc.Rows.Count, 1).End(xlUp).Row
     
-    ' Find key P&L rows
+    ' Find key P&L rows — try multiple label variants (same approach as CreateExecutiveDashboard)
     Dim revRow As Long, cogsRow As Long, gpRow As Long, opexRow As Long, niRow As Long
-    Dim r2 As Long
-    For r2 = 2 To lastRow
-        Dim lb2 As String: lb2 = LCase(Trim(CStr(wsSrc.Cells(r2, 1).Value)))
-        If revRow = 0 And InStr(lb2, "total revenue") > 0 Then revRow = r2
-        If cogsRow = 0 And (InStr(lb2, "cost of") > 0 Or InStr(lb2, "cogs") > 0) Then cogsRow = r2
-        If gpRow = 0 And InStr(lb2, "gross profit") > 0 Then gpRow = r2
-        If opexRow = 0 And InStr(lb2, "total operating") > 0 Then opexRow = r2
-        If niRow = 0 And InStr(lb2, "net income") > 0 Then niRow = r2
-    Next r2
-    
+
+    ' Revenue: try most specific first, then broader
+    revRow = modConfig.FindRowByLabel(wsSrc, "total revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = modConfig.FindRowByLabel(wsSrc, "consolidated revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = modConfig.FindRowByLabel(wsSrc, "net revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = modConfig.FindRowByLabel(wsSrc, "revenue", DATA_ROW_REPORT)
+
+    ' COGS
+    cogsRow = modConfig.FindRowByLabel(wsSrc, "cost of", DATA_ROW_REPORT)
+    If cogsRow = 0 Then cogsRow = modConfig.FindRowByLabel(wsSrc, "cogs", DATA_ROW_REPORT)
+
+    ' Gross Profit
+    gpRow = modConfig.FindRowByLabel(wsSrc, "gross profit", DATA_ROW_REPORT)
+    If gpRow = 0 Then gpRow = modConfig.FindRowByLabel(wsSrc, "gross margin", DATA_ROW_REPORT)
+
+    ' Operating Expenses
+    opexRow = modConfig.FindRowByLabel(wsSrc, "total operating", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsSrc, "operating expense", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsSrc, "total opex", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsSrc, "total expenses", DATA_ROW_REPORT)
+
+    ' Net Income
+    niRow = modConfig.FindRowByLabel(wsSrc, "net income", DATA_ROW_REPORT)
+
     If revRow = 0 Then
         modPerformance.TurboOff
-        MsgBox "Could not find Revenue row on P&L Trend.", vbExclamation, APP_NAME
+        MsgBox "Could not find Revenue row on P&L Trend." & vbCrLf & _
+               "Expected labels: Total Revenue, Net Revenue, Revenue, etc.", _
+               vbExclamation, APP_NAME
         Exit Sub
     End If
     
