@@ -143,48 +143,91 @@ Public Sub CreateExecutiveDashboard()
     
     '--- Gather data from P&L Trend ---
     ' BUG FIX (T5.01): Use HDR_ROW_REPORT (row 4) for all header lookups.
-    ' P&L Trend layout: Row 1 = Company title, Row 2 = Subtitle,
-    ' Row 3 = Blank, Row 4 = Column headers (Jan, Feb, ... FY Total, Budget).
-    ' Previously read row 1, which returned the company title row — causing
-    ' tLastCol, fyCol, and budCol to all resolve incorrectly ($0 revenue, no charts).
+    ' BUG FIX (T5.01c): Use modConfig.FindRowByLabel + FindColByHeader with
+    ' multiple search variants. Previous hardcoded searches missed actual labels.
     Dim wsTrend As Worksheet: Set wsTrend = ThisWorkbook.Worksheets(SH_PL_TREND)
-    Dim tLastRow As Long: tLastRow = wsTrend.Cells(wsTrend.Rows.Count, 1).End(xlUp).Row
-    Dim tLastCol As Long: tLastCol = wsTrend.Cells(HDR_ROW_REPORT, wsTrend.Columns.Count).End(xlToLeft).Column
+    Dim tLastRow As Long: tLastRow = modConfig.LastRow(wsTrend, 1)
+    Dim tLastCol As Long: tLastCol = modConfig.LastCol(wsTrend, HDR_ROW_REPORT)
 
     Debug.Print "[ExecDash] Trend sheet: " & SH_PL_TREND & _
                 " | HDR_ROW_REPORT=" & HDR_ROW_REPORT & _
                 " | tLastRow=" & tLastRow & " | tLastCol=" & tLastCol
 
+    ' Dump ALL column headers so we can see exactly what row 4 contains
+    Dim c As Long
+    Dim hdrDump As String: hdrDump = "[ExecDash] Row 4 headers:"
+    For c = 1 To tLastCol
+        hdrDump = hdrDump & " [" & c & "]=""" & wsTrend.Cells(HDR_ROW_REPORT, c).Value & """"
+    Next c
+    Debug.Print hdrDump
+
+    ' --- Find FY Total column using multiple strategies ---
     Dim fyCol As Long: fyCol = FindFYTotalCol(wsTrend)
-    Debug.Print "[ExecDash] FY Total column found: " & fyCol & _
+    ' If FindFYTotalCol fell back to lastCol, try modConfig.FindColByHeader too
+    If fyCol = tLastCol Then
+        Dim tryCol As Long
+        tryCol = modConfig.FindColByHeader(wsTrend, "2025 Total", HDR_ROW_REPORT)
+        If tryCol = 0 Then tryCol = modConfig.FindColByHeader(wsTrend, "YTD", HDR_ROW_REPORT)
+        If tryCol = 0 Then tryCol = modConfig.FindColByHeader(wsTrend, "FY25", HDR_ROW_REPORT)
+        If tryCol = 0 Then tryCol = modConfig.FindColByHeader(wsTrend, "Full Year", HDR_ROW_REPORT)
+        If tryCol > 0 Then fyCol = tryCol
+    End If
+    Debug.Print "[ExecDash] FY Total column: " & fyCol & _
                 " (header = """ & wsTrend.Cells(HDR_ROW_REPORT, fyCol).Value & """)"
 
-    ' Find budget column — search row 4 (HDR_ROW_REPORT), not row 1
-    Dim budCol As Long: budCol = 0
-    Dim c As Long
-    For c = 2 To tLastCol
-        If InStr(LCase(CStr(wsTrend.Cells(HDR_ROW_REPORT, c).Value)), "budget") > 0 Then budCol = c: Exit For
-    Next c
-    If budCol = 0 Then budCol = tLastCol
-    Debug.Print "[ExecDash] Budget column found: " & budCol & _
+    ' --- Find budget column using multiple strategies ---
+    Dim budCol As Long
+    budCol = modConfig.FindColByHeader(wsTrend, "budget", HDR_ROW_REPORT)
+    If budCol = 0 Then budCol = modConfig.FindColByHeader(wsTrend, "plan", HDR_ROW_REPORT)
+    If budCol = 0 Then budCol = modConfig.FindColByHeader(wsTrend, "target", HDR_ROW_REPORT)
+    If budCol = 0 Then budCol = tLastCol   ' Last resort fallback
+    Debug.Print "[ExecDash] Budget column: " & budCol & _
                 " (header = """ & wsTrend.Cells(HDR_ROW_REPORT, budCol).Value & """)"
 
-    ' Find key P&L summary rows
+    ' --- Find key P&L summary rows using modConfig.FindRowByLabel ---
+    ' Search from DATA_ROW_REPORT (row 5) to skip title/header rows.
+    ' Try multiple label variants for each metric — the P&L Trend sheet
+    ' may use "Revenue" or "Total Revenue" or "Consolidated Revenue" etc.
     Dim revRow As Long, gpRow As Long, opexRow As Long, niRow As Long
+
+    ' Revenue: try most specific first, then broader
+    revRow = modConfig.FindRowByLabel(wsTrend, "total revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = modConfig.FindRowByLabel(wsTrend, "consolidated revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = modConfig.FindRowByLabel(wsTrend, "net revenue", DATA_ROW_REPORT)
+
+    ' Gross Profit
+    gpRow = modConfig.FindRowByLabel(wsTrend, "gross profit", DATA_ROW_REPORT)
+    If gpRow = 0 Then gpRow = modConfig.FindRowByLabel(wsTrend, "gross margin", DATA_ROW_REPORT)
+
+    ' Operating Expenses
+    opexRow = modConfig.FindRowByLabel(wsTrend, "total operating expense", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsTrend, "operating expense", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsTrend, "total opex", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsTrend, "total expenses", DATA_ROW_REPORT)
+
+    ' Net Income
+    niRow = modConfig.FindRowByLabel(wsTrend, "net income", DATA_ROW_REPORT)
+    If niRow = 0 Then niRow = modConfig.FindRowByLabel(wsTrend, "net operating income", DATA_ROW_REPORT)
+    If niRow = 0 Then niRow = modConfig.FindRowByLabel(wsTrend, "net operating profit", DATA_ROW_REPORT)
+    If niRow = 0 Then niRow = modConfig.FindRowByLabel(wsTrend, "operating income", DATA_ROW_REPORT)
+
+    ' Dump first 15 row labels so we can diagnose if searches still fail
+    Dim rowDump As String: rowDump = "[ExecDash] Col A labels (rows 5-" & Application.Min(tLastRow, 44) & "):"
     Dim r As Long
-    For r = 2 To tLastRow
-        Dim lbl As String: lbl = LCase(Trim(CStr(wsTrend.Cells(r, 1).Value)))
-        If revRow = 0 And InStr(lbl, "total revenue") > 0 Then revRow = r
-        If gpRow = 0 And InStr(lbl, "gross profit") > 0 Then gpRow = r
-        If opexRow = 0 And InStr(lbl, "total operating") > 0 And InStr(lbl, "expense") > 0 Then opexRow = r
-        If niRow = 0 And (InStr(lbl, "net income") > 0 Or InStr(lbl, "net operating") > 0) Then niRow = r
+    For r = DATA_ROW_REPORT To Application.Min(tLastRow, 44)
+        Dim lbl As String: lbl = Trim(CStr(wsTrend.Cells(r, 1).Value))
+        If Len(lbl) > 0 Then rowDump = rowDump & " [" & r & "]=""" & lbl & """"
     Next r
-    If revRow = 0 Then revRow = 2   ' Fallback
+    Debug.Print rowDump
+
     Debug.Print "[ExecDash] Row lookup — revRow=" & revRow & " gpRow=" & gpRow & _
                 " opexRow=" & opexRow & " niRow=" & niRow
+    If revRow = 0 Then
+        Debug.Print "[ExecDash] WARNING: No revenue row found! Dashboard will show $0."
+    End If
 
-    Dim fyRev As Double: fyRev = modConfig.SafeNum(wsTrend.Cells(revRow, fyCol).Value)
-    Dim budRev As Double: budRev = modConfig.SafeNum(wsTrend.Cells(revRow, budCol).Value)
+    Dim fyRev As Double: If revRow > 0 Then fyRev = modConfig.SafeNum(wsTrend.Cells(revRow, fyCol).Value)
+    Dim budRev As Double: If revRow > 0 Then budRev = modConfig.SafeNum(wsTrend.Cells(revRow, budCol).Value)
     Dim fyGP As Double: If gpRow > 0 Then fyGP = modConfig.SafeNum(wsTrend.Cells(gpRow, fyCol).Value)
     Dim fyOpex As Double: If opexRow > 0 Then fyOpex = modConfig.SafeNum(wsTrend.Cells(opexRow, fyCol).Value)
     Dim fyNI As Double: If niRow > 0 Then fyNI = modConfig.SafeNum(wsTrend.Cells(niRow, fyCol).Value)
@@ -246,11 +289,18 @@ Public Sub CreateExecutiveDashboard()
         wsDash.Cells(kpiRow + 1, kCol).Font.Color = RGB(0, 51, 102)
         
         ' Trend arrow / context
+        ' BUG FIX (T5.01b): Chr() only handles 0-255; 9650/9660 are Unicode
+        ' codepoints that require ChrW(). Chr(9650) threw Error 5.
+        ' Also: VBA IIf evaluates BOTH branches, so avoid IIf with ChrW.
         Dim arrow As String
         If k = 0 Then
-            arrow = IIf(revVar >= 0, Chr(9650) & " +" & Format(revVarPct, "0.0%"), _
-                                     Chr(9660) & " " & Format(revVarPct, "0.0%"))
-            wsDash.Cells(kpiRow + 2, kCol).Font.Color = IIf(revVar >= 0, RGB(0, 128, 0), RGB(192, 0, 0))
+            If revVar >= 0 Then
+                arrow = ChrW(9650) & " +" & Format(revVarPct, "0.0%")
+                wsDash.Cells(kpiRow + 2, kCol).Font.Color = RGB(0, 128, 0)
+            Else
+                arrow = ChrW(9660) & " " & Format(revVarPct, "0.0%")
+                wsDash.Cells(kpiRow + 2, kCol).Font.Color = RGB(192, 0, 0)
+            End If
         Else
             arrow = "vs Budget"
             wsDash.Cells(kpiRow + 2, kCol).Font.Color = RGB(128, 128, 128)
@@ -275,12 +325,9 @@ Public Sub CreateExecutiveDashboard()
     Dim actVals As Variant: actVals = Array(fyRev, fyGP, fyOpex, fyNI)
     
     ' Map metrics to their source rows for budget lookup
+    ' Each row may be 0 if label wasn't found — guarded by CLng check below
     Dim metricRows As Variant
-    If gpRow > 0 And opexRow > 0 And niRow > 0 Then
-        metricRows = Array(revRow, gpRow, opexRow, niRow)
-    Else
-        metricRows = Array(revRow, revRow, revRow, revRow)
-    End If
+    metricRows = Array(revRow, gpRow, opexRow, niRow)
     
     Dim mr As Long
     For mr = 0 To 3
