@@ -114,10 +114,17 @@ Sub CircularReferenceDetector()
     report = "CIRCULAR REFERENCE REPORT" & Chr(10) & String(35, "-") & Chr(10)
 
     For Each ws In ActiveWorkbook.Worksheets
-        For Each circ In ws.CircularReference
-            report = report & "Sheet: " & ws.Name & " | Cell: " & circ.Address & Chr(10)
-            circCount = circCount + 1
-        Next circ
+        Dim circRange As Range
+        On Error Resume Next
+        Set circRange = ws.CircularReference
+        On Error GoTo ErrHandler
+        If Not circRange Is Nothing Then
+            For Each circ In circRange
+                report = report & "Sheet: " & ws.Name & " | Cell: " & circ.Address & Chr(10)
+                circCount = circCount + 1
+            Next circ
+        End If
+        Set circRange = Nothing
     Next ws
 
     If circCount = 0 Then
@@ -384,7 +391,7 @@ Sub NamedRangeAuditor()
     For Each nm In ActiveWorkbook.Names
         reportWS.Cells(row, 1).Value = nm.Name
         reportWS.Cells(row, 2).Value = nm.RefersTo
-        reportWS.Cells(row, 3).Value = IIf(nm.MacroType = 0, "Workbook", "Sheet")
+        reportWS.Cells(row, 3).Value = IIf(InStr(nm.Name, "!") > 0, "Sheet", "Workbook")
 
         Dim status As String
         status = "OK"
@@ -543,9 +550,9 @@ Sub InconsistentFormulasAuditor()
 
     For Each c In rng
         If c.HasFormula Then
-            ' Normalize formula by removing row numbers for comparison
+            ' Normalize formula using R1C1 notation so row numbers don't cause false positives
             Dim normFormula As String
-            normFormula = c.Formula
+            normFormula = c.FormulaR1C1
             Dim key As String
             key = normFormula
             If dict.exists(key) Then
@@ -571,7 +578,7 @@ Sub InconsistentFormulasAuditor()
     Dim flagged As Long
     For Each c In rng
         If c.HasFormula Then
-            If c.Formula <> mostCommon Then
+            If c.FormulaR1C1 <> mostCommon Then
                 c.Interior.Color = RGB(255, 200, 100)
                 flagged = flagged + 1
             End If

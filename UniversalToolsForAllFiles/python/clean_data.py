@@ -93,7 +93,7 @@ def clean_excel_file(file_path: str, sheet_name: str = None, dedupe: bool = True
         date_fixes = 0
         for col in df.select_dtypes(include='object').columns:
             try:
-                converted_dates = pd.to_datetime(df[col], infer_datetime_format=True, errors='coerce')
+                converted_dates = pd.to_datetime(df[col], errors='coerce')
                 valid_mask = converted_dates.notna() & (converted_dates.notna() != df[col].isna())
                 if valid_mask.sum() > len(df) * 0.5:  # Only convert if >50% look like dates
                     df[col] = converted_dates

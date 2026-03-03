@@ -257,6 +257,8 @@ Sub JournalEntryValidator()
         If jeNum <> "" Then
             Dim dr As Double
             Dim cr As Double
+            dr = 0
+            cr = 0
             If IsNumeric(ws.Cells(i, debitCol).Value) Then dr = CDbl(ws.Cells(i, debitCol).Value)
             If IsNumeric(ws.Cells(i, creditCol).Value) Then cr = CDbl(ws.Cells(i, creditCol).Value)
             If Not dict.exists(jeNum) Then
@@ -327,11 +329,14 @@ Sub FluxAnalysis()
     Dim lastRow As Long
     lastRow = ws.Cells(ws.Rows.Count, currCol).End(xlUp).Row
 
-    ' Add variance columns
+    ' Add variance columns — insert so existing data is not overwritten
     Dim varDolCol As Long
     Dim varPctCol As Long
     varDolCol = ws.Cells(1, currCol).Column + 1
     varPctCol = varDolCol + 1
+
+    ws.Columns(varDolCol).Insert
+    ws.Columns(varPctCol).Insert
 
     ws.Cells(1, varDolCol).Value = "$ Variance"
     ws.Cells(1, varPctCol).Value = "% Variance"
@@ -702,7 +707,9 @@ Sub FinancialPeriodRollForward()
     ' Replace header labels
     If oldPeriod <> "" Then
         Dim c As Range
-        For Each c In ws.Rows(hRow).Cells
+        Dim lastUsedCol As Long
+        lastUsedCol = ws.Cells(hRow, ws.Columns.Count).End(xlToLeft).Column
+        For Each c In ws.Range(ws.Cells(hRow, 1), ws.Cells(hRow, lastUsedCol))
             If InStr(1, CStr(c.Value), oldPeriod, vbTextCompare) > 0 Then
                 c.Value = Replace(c.Value, oldPeriod, newPeriod, 1, -1, vbTextCompare)
                 headerReplaced = headerReplaced + 1

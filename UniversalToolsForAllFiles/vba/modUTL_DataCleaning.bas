@@ -32,7 +32,6 @@ Sub UnmergeAndFillDown()
     End If
 
     Dim rng As Range
-    Dim cell As Range
     Set rng = Selection
 
     On Error GoTo ErrHandler

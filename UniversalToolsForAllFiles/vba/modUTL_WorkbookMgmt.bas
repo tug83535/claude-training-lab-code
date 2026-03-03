@@ -554,8 +554,13 @@ Sub BuildDistributionReadyCopy()
     Dim origPath As String
     Dim distPath As String
     origPath = ActiveWorkbook.FullName
-    distPath = Replace(origPath, ".xlsm", "_DIST.xlsx")
-    distPath = Replace(distPath, ".xlsx", "_DIST.xlsx")
+    If Right(LCase(origPath), 5) = ".xlsm" Then
+        distPath = Left(origPath, Len(origPath) - 5) & "_DIST.xlsx"
+    ElseIf Right(LCase(origPath), 5) = ".xlsx" Then
+        distPath = Left(origPath, Len(origPath) - 5) & "_DIST.xlsx"
+    Else
+        distPath = origPath & "_DIST.xlsx"
+    End If
 
     ActiveWorkbook.SaveCopyAs distPath
 
