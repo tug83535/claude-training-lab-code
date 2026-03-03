@@ -77,7 +77,7 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 | T2.01 | modConfig has all constants | ISSUE-001 | `?SH_GL`, `?SH_TECH_DOC`, etc. in Immediate Window | All 13 new constants return values |
 | T2.02 | SafeDeleteSheet works | ISSUE-001 | Call `SafeDeleteSheet("NonExistent")` | No error, no prompt |
 | T2.03 | StyleHeader works | ISSUE-001 | `Call StyleHeader(ActiveSheet, 1, Array("Col A","Col B","Col C"))` — note: requires all 3 arguments (ws, headerRow, headers array) | Navy background, white bold text |
-| T2.04 | UpdateHeaderText safe | ISSUE-002 | Create test sheet with "Margin", "Market", "Mar 25" cells. Run UpdateHeaderText("Mar","Apr") | "Margin" and "Market" unchanged; "Mar 25" → "Apr 25" |
+| T2.04 | UpdateHeaderText safe | ISSUE-002 | In Immediate Window run `Call TestUpdateHeaderText` — MsgBox shows results | A1 = "Margin" (unchanged), A2 = "Market" (unchanged), A3 = "Apr 25" (replaced) |
 | T2.05 | FixTextNumbers requires scan | ISSUE-003 | Call FixTextNumbers without running ScanAll first | Shows "Run Scan Data Quality first" message |
 | T2.06 | Shortcuts use OnKey | ISSUE-004 | Run AssignShortcuts, press Ctrl+H | Excel Find & Replace opens (not overridden) |
 | T2.07 | Timer midnight rollover | ISSUE-005 | Set m_StartTime = 86390 (near midnight), call ElapsedSeconds after Timer < m_StartTime | Returns positive value (not negative) |
@@ -282,7 +282,7 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 | T2.01 | — | Not yet run |
 | T2.02 | — | Not yet run |
 | T2.03 | **FAIL → BUG FOUND → FIXED** | **Initial call:** `Call StyleHeader(ActiveSheet, 1)` gave "Compile error: argument not optional" — user error, StyleHeader requires 3 args (ws, headerRow, headers). **Correct call:** `Call StyleHeader(ActiveSheet, 1, Array("Col A","Col B","Col C"))` — ran without error, but row 1 showed tan/brown background instead of navy. **Root cause:** `CLR_NAVY` constant in modConfig was set to `2050943` which decodes to `RGB(127,75,31)` (tan/brown). The hex `#1F4E79` was converted directly to decimal instead of using VBA's BGR byte order (`R + G×256 + B×65536`). **Fix:** Changed `CLR_NAVY` from `2050943` to `7949855` (correct value for `RGB(31,78,121)`). Also found and fixed same bug in `CLR_ALT_ROW`: was `15651567` → `RGB(239,210,238)` (pink/lavender), changed to `16380653` → `RGB(237,242,249)` (correct light blue). **Re-import modConfig_v2.1.bas and re-test to confirm PASS.** |
-| T2.04 | — | Not yet run |
+| T2.04 | **FAIL → BUG FOUND → FIXED** | `UpdateHeaderText` is `Private Sub` in modMonthlyTabGenerator — cannot be called from Immediate Window. Added `Public Sub TestUpdateHeaderText()` wrapper in same module. Re-import modMonthlyTabGenerator_v2.1.bas and run `Call TestUpdateHeaderText` to confirm PASS. |
 | T2.05 | — | Not yet run |
 | T2.06 | — | Not yet run |
 | T2.07 | — | Not yet run |
@@ -293,3 +293,4 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 |-------|------|--------|-------------|-----|
 | BUG-T2.03a | T2.03 | modConfig_v2.1.bas | `CLR_NAVY = 2050943` decodes to RGB(127,75,31) = tan/brown, not navy. Hex-to-decimal conversion did not account for VBA BGR byte order. | Changed to `7949855` = RGB(31,78,121) = correct navy |
 | BUG-T2.03b | T2.03 | modConfig_v2.1.bas | `CLR_ALT_ROW = 15651567` decodes to RGB(239,210,238) = pink/lavender, not light blue. Same hex conversion error. | Changed to `16380653` = RGB(237,242,249) = correct light blue |
+| BUG-T2.04 | T2.04 | modMonthlyTabGenerator_v2.1.bas | `UpdateHeaderText` declared as `Private Sub` — cannot be called from Immediate Window for testing. | Added `Public Sub TestUpdateHeaderText()` wrapper in same module |

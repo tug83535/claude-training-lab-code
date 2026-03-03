@@ -534,3 +534,37 @@ Private Sub UpdateHeaderText(ByVal ws As Worksheet, _
         End If
     Next cell
 End Sub
+
+'===============================================================================
+' TestUpdateHeaderText - Public wrapper so T2.04 can be run from Immediate Window
+'
+' Usage (Immediate Window):
+'   Call TestUpdateHeaderText
+'
+' What it does:
+'   1. Writes "Margin", "Market", "Mar 25" into cells A1:A3 on the active sheet
+'   2. Calls the Private UpdateHeaderText sub with ("Mar", "Apr")
+'   3. Shows a MsgBox with the results so you can verify:
+'        A1 = "Margin"   (unchanged — PASS)
+'        A2 = "Market"   (unchanged — PASS)
+'        A3 = "Apr 25"   (replaced  — PASS)
+'===============================================================================
+Public Sub TestUpdateHeaderText()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
+
+    ' Set up test data
+    ws.Range("A1").Value = "Margin"
+    ws.Range("A2").Value = "Market"
+    ws.Range("A3").Value = "Mar " & FISCAL_YEAR
+
+    ' Run the private sub
+    UpdateHeaderText ws, "Mar", "Apr"
+
+    ' Show results
+    MsgBox "T2.04 Results:" & vbCrLf & vbCrLf & _
+           "A1 = """ & ws.Range("A1").Value & """  (should be ""Margin"")" & vbCrLf & _
+           "A2 = """ & ws.Range("A2").Value & """  (should be ""Market"")" & vbCrLf & _
+           "A3 = """ & ws.Range("A3").Value & """  (should be ""Apr " & FISCAL_YEAR & """)", _
+           vbInformation, "T2.04 — UpdateHeaderText Safe Replacement"
+End Sub
