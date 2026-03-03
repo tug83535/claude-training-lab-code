@@ -15,7 +15,6 @@ USAGE:
     python pnl_runner.py allocate --presets     # Run preset scenarios
     python pnl_runner.py snapshot list          # List snapshots
     python pnl_runner.py match                  # AP matching
-    python pnl_runner.py email                  # Generate email report
     python pnl_runner.py test                   # Run pytest suite
     python pnl_runner.py config                 # Show configuration
     python pnl_runner.py --help                 # Show all commands
@@ -182,21 +181,6 @@ def cmd_match(args: List[str]) -> int:
     return 0
 
 
-def cmd_email(args: List[str]) -> int:
-    """Generate executive email report."""
-    from pnl_email_report import EmailReportGenerator
-
-    parser = argparse.ArgumentParser(prog="pnl_runner email")
-    parser.add_argument("--file", "-f", default=SOURCE_FILE, help="Source Excel file")
-    parser.add_argument("--month", "-m", type=int, default=None, help="Month (1-12)")
-    parser.add_argument("--output", "-o", default=None, help="Save to file")
-    opts = parser.parse_args(args)
-
-    gen = EmailReportGenerator(file_path=opts.file)
-    gen.generate(month=opts.month, output_path=opts.output)
-    return 0
-
-
 def cmd_test(args: List[str]) -> int:
     """Run the pytest test suite."""
     cmd = [sys.executable, "-m", "pytest", "pnl_tests.py", "-v", "--tb=short"]
@@ -218,7 +202,6 @@ COMMANDS = {
     "allocate":   ("What-if allocation simulator", cmd_allocate),
     "snapshot":   ("Manage P&L snapshots", cmd_snapshot),
     "match":      ("AP fuzzy matching", cmd_match),
-    "email":      ("Generate executive email report", cmd_email),
     "test":       ("Run automated test suite", cmd_test),
     "config":     ("Show current configuration", cmd_config),
 }

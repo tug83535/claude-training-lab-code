@@ -73,7 +73,6 @@ def cmd_status(args):
         "pnl_dashboard": "pnl_dashboard",
         "pnl_allocation_simulator": "pnl_allocation_simulator",
         "pnl_forecast": "pnl_forecast",
-        "pnl_email_report": "pnl_email_report",
         "pnl_ap_matcher": "pnl_ap_matcher",
         "pnl_snapshot": "pnl_snapshot",
         "advanced_analytics": "advanced_analytics",
@@ -182,18 +181,6 @@ def cmd_dashboard(args):
     cmd = ["streamlit", "run", dashboard_path, "--", "--file", args.file]
     print(f"Launching dashboard: {' '.join(cmd)}")
     subprocess.run(cmd)
-
-
-def cmd_email(args):
-    """Send email report."""
-    from pnl_email_report import EmailReporter
-    recipients = args.to.split(",") if args.to else None
-    reporter = EmailReporter(file_path=args.file)
-    reporter.generate_and_send(
-        recipients=recipients,
-        attachments=args.attach,
-        preview=args.preview
-    )
 
 
 def cmd_compare(args):
@@ -322,12 +309,6 @@ Examples:
     # dashboard
     sub.add_parser("dashboard", help="Launch Streamlit dashboard")
 
-    # email
-    p_email = sub.add_parser("email", help="Send email report")
-    p_email.add_argument("--to", "-t", default=None)
-    p_email.add_argument("--attach", "-a", nargs="*")
-    p_email.add_argument("--preview", action="store_true")
-
     # compare
     p_cmp = sub.add_parser("compare", help="Compare two Excel files")
     p_cmp.add_argument("--old", required=True)
@@ -374,7 +355,6 @@ Examples:
         "forecast": cmd_forecast,
         "simulate": cmd_simulate,
         "dashboard": cmd_dashboard,
-        "email": cmd_email,
         "compare": cmd_compare,
         "charts": cmd_charts,
         "monte-carlo": cmd_monte_carlo,

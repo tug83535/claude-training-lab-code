@@ -188,13 +188,12 @@ See the Issue Closure Confirmation Table (ISSUE_CLOSURE.md) for the complete ver
 | pnl_forecast imports | From pnl_config, no errors | PASS |
 | pnl_snapshot imports | From pnl_config, no errors | PASS |
 | pnl_ap_matcher imports | From pnl_config, no errors | PASS |
-| pnl_email_report imports | From pnl_config, no errors | PASS |
 | pnl_cli imports | From pnl_config, no errors | PASS |
 | pnl_runner imports | All COMMANDS registered | PASS |
 | pnl_tests parses | 17 classes, 116 methods | PASS |
 | UTF-8 scan (all .py) | Zero suspect codepoints | PASS |
 
-**15/15 Python checks pass.**
+**14/14 Python checks pass.** (pnl_email_report removed)
 
 ---
 

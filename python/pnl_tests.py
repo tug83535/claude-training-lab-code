@@ -283,7 +283,10 @@ class TestResolveFilePath:
             tmp.flush()
             result = resolve_file_path(tmp.name)
             assert result == tmp.name
-            os.unlink(tmp.name)
+            try:
+                os.unlink(tmp.name)
+            except PermissionError:
+                pass  # Windows file locking — temp dir cleans up later
 
     def test_nonexistent_raises(self):
         with pytest.raises(FileNotFoundError):
@@ -296,7 +299,10 @@ class TestResolveFilePath:
             with patch.dict(os.environ, {"KBT_SOURCE_FILE": tmp.name}):
                 result = resolve_file_path("/also/nonexistent.xlsx")
                 assert result == tmp.name
-            os.unlink(tmp.name)
+            try:
+                os.unlink(tmp.name)
+            except PermissionError:
+                pass  # Windows file locking — temp dir cleans up later
 
 
 # =============================================================================
@@ -582,7 +588,10 @@ class TestMonthEndCloseIntegration:
             closer.run(export=True, output_path=tmp.name)
             assert os.path.exists(tmp.name)
             assert os.path.getsize(tmp.name) > 0
-            os.unlink(tmp.name)
+            try:
+                os.unlink(tmp.name)
+            except PermissionError:
+                pass  # Windows file locking — temp dir cleans up later
 
 
 # =============================================================================
@@ -678,7 +687,10 @@ class TestAllocationSimulatorUnit:
             sim.export(comparison, tmp.name)
             assert os.path.exists(tmp.name)
             assert os.path.getsize(tmp.name) > 0
-            os.unlink(tmp.name)
+            try:
+                os.unlink(tmp.name)
+            except PermissionError:
+                pass  # Windows file locking — temp dir cleans up later
 
 
 @skip_without_source()
@@ -783,10 +795,6 @@ class TestSmokeImports:
         mod = importlib.import_module("pnl_ap_matcher")
         assert hasattr(mod, "APMatcher")
 
-    def test_import_pnl_email_report(self):
-        mod = importlib.import_module("pnl_email_report")
-        assert hasattr(mod, "EmailReportGenerator")
-
     def test_import_pnl_cli(self):
         mod = importlib.import_module("pnl_cli")
         assert hasattr(mod, "main") or hasattr(mod, "cli")
@@ -810,14 +818,6 @@ class TestSmokeAPMatcher:
         from pnl_ap_matcher import APMatcher
         matcher = APMatcher(verbose=False)
         assert matcher is not None
-
-@skip_without_source()
-class TestSmokeEmailReport:
-    def test_email_generator_init(self):
-        from pnl_email_report import EmailReportGenerator
-        gen = EmailReportGenerator(verbose=False)
-        assert gen is not None
-
 
 # =============================================================================
 # 9. RUNNER TESTS

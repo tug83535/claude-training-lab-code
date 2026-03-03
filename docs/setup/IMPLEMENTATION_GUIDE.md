@@ -158,7 +158,6 @@ python pnl_runner.py forecast         # Statistical forecasting
 python pnl_runner.py allocate         # Allocation what-if simulator
 python pnl_runner.py snapshot list    # List saved snapshots
 python pnl_runner.py match            # AP fuzzy matching
-python pnl_runner.py email            # Generate executive email report
 python pnl_runner.py test             # Run automated test suite
 python pnl_runner.py config           # Show current configuration
 ```

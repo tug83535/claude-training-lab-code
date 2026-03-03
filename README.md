@@ -69,7 +69,7 @@ model powered by VBA macros organized into 32 modules:
 
 ---
 
-### Python Toolkit (14 Scripts)
+### Python Toolkit (13 Scripts)
 
 | Script | What It Does |
 |--------|-------------|
@@ -81,7 +81,6 @@ model powered by VBA macros organized into 32 modules:
 | `pnl_monte_carlo.py` | **Monte Carlo risk simulation.** Runs 10,000+ iterations with randomized allocation shares (Dirichlet) and expense amounts (Normal distribution) to produce full probability distributions: P5/P25/P50/P75/P95, Value at Risk, per-product breakdown, 4-panel chart, and Excel export. |
 | `pnl_snapshot.py` | Point-in-time P&L snapshots stored in SQLite. Enables period-over-period comparison of historical close states. |
 | `pnl_dashboard.py` | Interactive Streamlit web dashboard. Filter by product, department, month. Revenue trends, margin charts, heatmaps, top vendors. |
-| `pnl_email_report.py` | Automated HTML email reports via Office365/SMTP. Formatted P&L summaries with KPIs, tables, and variance flags. |
 | `pnl_ap_matcher.py` | AP invoice matching engine. Fuzzy vendor name matching, duplicate detection, unmatched items flagged for review. |
 | `pnl_tests.py` | Full pytest test suite. 100% coverage on config and allocation logic. 80%+ on close and forecasting. |
 | `pnl_cli.py` | Master command-line interface. Single entry point for every script. Run any module with one command. |
@@ -147,7 +146,7 @@ APCLDmerge/
 |-------|--------|
 | VBA Macros | 32 modules, 62 actions — fully operational |
 | SQL Pipeline | 4 scripts — production-quality ETL + analytics |
-| Python Toolkit | 14 scripts including Monte Carlo simulation |
+| Python Toolkit | 13 scripts including Monte Carlo simulation |
 | Documentation | Architecture, runbook, training guides, QA reports |
 | Test Coverage | 100% on config/allocation, 80%+ on close/forecast |
 

@@ -64,7 +64,6 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 | `pnl_ap_matcher.py` | AP invoice matching engine. Fuzzy vendor name matching (handles typos and abbreviations). Duplicate invoice detection. Matches GL transactions to AP records. Flags unmatched items for review. |
 | `pnl_snapshot.py` | Point-in-time P&L snapshots stored in SQLite. Captures full P&L state at a given date. Enables period-over-period comparisons using historical snapshots. |
 | `pnl_dashboard.py` | Interactive Streamlit web dashboard. Filters by product, department, and month. Visualizes revenue, expenses, margin trends. Reads directly from the SQLite database. |
-| `pnl_email_report.py` | Automated HTML email reports via Office365/SMTP. Generates formatted P&L summary emails with tables, charts, and KPIs. Supports both scheduled and on-demand sending. |
 | `pnl_cli.py` | Master command-line interface for running any module from the terminal. All scripts reachable from one entry point including monte-carlo, forecast, simulate, close, dashboard, and run-all. |
 | `pnl_runner.py` | Master orchestrator. Chains all scripts in the correct order (staging → transformations → validations → month-end close → snapshot). Single entry point to run the full pipeline. |
 | `pnl_tests.py` | Full pytest test suite. 100% coverage on config and allocation logic. 80%+ coverage on close and forecasting. Tests edge cases: empty datasets, divide-by-zero, missing products, tolerance handling. |
@@ -94,8 +93,8 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 | Status | PARTIALLY BUILT |
 |--------|----------------|
-| What's there | PDF export is fully built in VBA (`modPDFExport`: ExportReportPackage, ExportSingleSheet). Email reporting is fully built in Python (`pnl_email_report.py`). |
-| What's missing | No single VBA macro that does both in sequence: export PDF → attach to Outlook email → draft/send. The two halves exist in different languages with no bridge. A VBA Outlook integration (late binding via `CreateObject("Outlook.Application")`) does not exist yet. |
+| What's there | PDF export is fully built in VBA (`modPDFExport`: ExportReportPackage, ExportSingleSheet). |
+| What's missing | No VBA macro to attach PDF to Outlook email and draft/send. A VBA Outlook integration (late binding via `CreateObject("Outlook.Application")`) does not exist yet. Email report feature was removed. |
 
 ---
 
@@ -316,10 +315,10 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 **9. Batch Email via Outlook (VBA)**
 > Uses late binding to loop through a table and draft personalized emails.
 
-| Status | PARTIALLY BUILT |
-|--------|----------------|
-| What's there | `pnl_email_report.py` sends HTML emails via Office365/SMTP (Python). Full automated HTML reporting with P&L summary tables, KPIs, and variance flags. |
-| What's missing | No VBA Outlook integration using `CreateObject("Outlook.Application")`. The Python version requires a separate runtime environment. A VBA version would work directly from inside Excel with no additional dependencies. |
+| Status | NOT BUILT |
+|--------|-----------|
+| What's there | Email report feature was removed. |
+| What's missing | No VBA Outlook integration using `CreateObject("Outlook.Application")`. Would need late binding to loop through a table and draft personalized emails directly from Excel. |
 
 ---
 
@@ -497,10 +496,10 @@ ideas documented in NewTesting/ (GPT.md, Gemini.md, Perlex.md)
 
 **17. Email Active Workbook via Outlook**
 
-| Status | PARTIALLY BUILT |
-|--------|----------------|
-| What's there | `pnl_email_report.py` (Python) — automated HTML email reports via Office365/SMTP with formatted P&L summaries, KPIs, and variance flags. |
-| What's missing | No VBA Outlook integration using `CreateObject("Outlook.Application")`. The Python version requires a separate runtime; a VBA version would work natively from inside Excel. |
+| Status | NOT BUILT |
+|--------|-----------|
+| What's there | Email report feature was removed. |
+| What's missing | No VBA Outlook integration using `CreateObject("Outlook.Application")`. Would need to work natively from inside Excel. |
 
 ---
 

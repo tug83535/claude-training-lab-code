@@ -46,11 +46,10 @@ Format follows [Semantic Versioning](https://semver.org/): MAJOR.MINOR.PATCH
 - pnl_allocation_simulator.py — Clean UTF-8, Greek Delta headers, color-coded exports
 - pnl_ap_matcher.py — Clean UTF-8, arrow/triangle symbols fixed
 - pnl_cli.py — Clean UTF-8
-- pnl_email_report.py — Clean UTF-8, triangle status indicators fixed
 - pnl_forecast.py — Clean UTF-8, box drawing section dividers fixed
 - pnl_snapshot.py — Clean UTF-8
 - pnl_enhancements.sql — Renamed from .py (was incorrectly extended), clean UTF-8
-- pnl_runner.py (NEW) — Unified CLI entry point dispatching to 9 commands
+- pnl_runner.py (NEW) — Unified CLI entry point dispatching to 8 commands
 - pnl_tests.py — Expanded from ~30 to 116 test methods across 17 classes
 - requirements.txt — Version pins verified, UTF-8 header cleaned
 
@@ -99,7 +98,7 @@ Format follows [Semantic Versioning](https://semver.org/): MAJOR.MINOR.PATCH
 - **Foundation:** modConfig (constants, helpers), modPerformance (TurboOn/Off, timer), modLogger (audit trail), ThisWorkbook events
 - **Core Features (15 modules):** modNavigation, modMonthlyTabGenerator, modReconciliation, modDataQuality, modVarianceAnalysis, modSensitivity, modDashboard (3 charts), modPDFExport, modAWSRecompute, modMasterMenu (36 items), modValidation, modSnapshot, modConditionalFormat, modEmailSummary, modSearch
 - **Advanced (10 modules):** modAdmin, modAllocation, modForecast, modFormatting, modFormBuilder, modImport, modIntegrationTest, modRefresh, modScenario, modSetup
-- **Python (10 scripts):** pnl_config, pnl_dashboard, pnl_month_end, pnl_allocation_simulator, pnl_ap_matcher, pnl_cli, pnl_email_report, pnl_enhancements, pnl_forecast, pnl_snapshot, pnl_tests
+- **Python (10 scripts):** pnl_config, pnl_dashboard, pnl_month_end, pnl_allocation_simulator, pnl_ap_matcher, pnl_cli, pnl_enhancements, pnl_forecast, pnl_snapshot, pnl_tests
 - **Documentation:** KBT_Training_Program_v2.docx, KBT_Implementation_Walkthrough_v2.docx, KBT_Customization_Guide_v2.docx, KBT_SQLPython_Audit_v1.docx, KBT_SQLPython_Training_Guide.docx
 
 ### Known Issues (at time of release)

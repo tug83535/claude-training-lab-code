@@ -171,13 +171,13 @@
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                             │
 │                    PYTHON ANALYTICS LAYER (Optional, External)                │
-│                              (14 scripts, ~5,200 LOC)                        │
+│                              (13 scripts, ~5,200 LOC)                        │
 │                                                                             │
 │  ┌──────────────────────────────────────────────────────────────────────┐   │
 │  │  pnl_runner.py  ←── Unified CLI entry point                         │   │
 │  │  ┌──────────┬─────────────┬───────────┬───────────┬──────────────┐  │   │
 │  │  │ dashboard│ month-end   │ forecast  │ allocate  │ snapshot     │  │   │
-│  │  │ match    │ email       │ test      │ config    │              │  │   │
+│  │  │ match    │ test        │ config    │           │              │  │   │
 │  │  └──────────┴─────────────┴───────────┴───────────┴──────────────┘  │   │
 │  └──────────────────────────────────────────────────────────────────────┘   │
 │                                                                             │
@@ -189,7 +189,6 @@
 │  │ pnl_forecast.py   Statistical forecasting (SMA, ETS, trend)       │    │
 │  │ pnl_snapshot.py   Snapshot management                              │    │
 │  │ pnl_ap_matcher.py Fuzzy vendor matching (thefuzz)                  │    │
-│  │ pnl_email_report.py  Executive email report generation             │    │
 │  │ pnl_cli.py        Click-based CLI interface                        │    │
 │  │ pnl_tests.py      pytest suite (116 tests, 17 classes)            │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │

@@ -124,7 +124,6 @@ These run OUTSIDE of Excel in a terminal/command prompt. They read the `.xlsx` f
 | `pnl_allocation_simulator.py` | What-if allocation scenarios. "What happens if we shift 10% of iGO's revenue share to DocFast?" Shows before/after comparison with Greek delta (Δ) change indicators. | `python pnl_runner.py allocate` |
 | `pnl_snapshot.py` | Save, load, compare, and restore P&L snapshots. Like version control for your financial data. | `python pnl_runner.py snapshot --save "Q1 Close"` |
 | `pnl_ap_matcher.py` | Fuzzy vendor name matching using Levenshtein distance. Finds "Amzon Web Srvcs" matches "Amazon Web Services" with a confidence score. | `python pnl_runner.py match` |
-| `pnl_email_report.py` | Generates a formatted HTML executive email summary with KPIs, traffic-light status indicators, and trend sparklines. | `python pnl_runner.py email --month 1` |
 | `pnl_cli.py` | Alternative CLI using Click framework (legacy — `pnl_runner.py` is preferred). | Not typically used directly |
 | `pnl_tests.py` | Automated test suite. 116 test methods across 17 classes. Tests config validation, currency formatting, month-end checks, allocation math, and smoke-tests all modules. | `python pnl_runner.py test` or `pytest pnl_tests.py -v` |
 | `requirements.txt` | List of Python packages needed. | `pip install -r requirements.txt` |
@@ -467,7 +466,6 @@ Available commands:
   allocate        What-if allocation simulator
   snapshot        Manage P&L snapshots
   match           AP fuzzy matching
-  email           Generate executive email report
   test            Run automated test suite
   config          Show current configuration
 ```
@@ -723,7 +721,6 @@ python pnl_runner.py forecast      ← Statistical forecasting
 python pnl_runner.py allocate      ← What-if allocation scenarios
 python pnl_runner.py snapshot      ← Save/load/compare snapshots
 python pnl_runner.py match         ← Fuzzy vendor matching
-python pnl_runner.py email         ← Executive email report
 python pnl_runner.py test          ← Run 116 automated tests
 python pnl_runner.py config        ← Show configuration
 ```

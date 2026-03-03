@@ -188,7 +188,6 @@ These run from the command line or from a button in Excel (via modETLBridge). Fi
 | `pnl_dashboard.py` | Streamlit web dashboard — interactive web-based P&L dashboard. No Python knowledge required to use — just open a browser. |
 | `pnl_allocation_simulator.py` | Allocation what-if simulator — change revenue, AWS, or headcount shares and instantly see the P&L impact per product. |
 | `pnl_ap_matcher.py` | AP invoice matching — fuzzy vendor name matching + amount/date proximity to identify likely duplicates and flag unmatched invoices. |
-| `pnl_email_report.py` | Email report distribution — generates monthly P&L report and emails it to a distribution list with metric summary. |
 | `pnl_tests.py` | Automated test suite — unit and integration tests: 100% coverage of pnl_config, 80% coverage of pnl_month_end and pnl_allocation_simulator. |
 | `build_charts.py` | Fortune 100 chart builder — builds the executive dashboard with 8 charts in a two-column grid layout. Applies iPipeline brand standards. |
 | `redesign_pl_model.py` | Model redesign script — fixed all reconciliation failures, applied iPipeline brand guidelines, created the executive dashboard. (Run once — historical.) |
