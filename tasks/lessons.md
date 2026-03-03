@@ -113,3 +113,13 @@
 - Code review can catch signature mismatches, missing constants, and wrong argument counts — but only a live Excel test confirms runtime behavior
 - Always recommend live testing after building or fixing VBA modules
 - Common issues that only appear at runtime: missing sheet references, wrong column indexes, UserForm control names, late-binding object types
+
+## VBA Code Review Patterns (2026-03-03)
+- `For Each` on `ws.CircularReference` crashes if the property returns Nothing — always check `If Not circRange Is Nothing` first
+- `c.Formula` returns A1-style formulas — these differ row-to-row even for identical logic. Use `c.FormulaR1C1` when comparing formulas across rows to normalize references
+- `nm.MacroType` is for XLM macros, NOT for determining named range scope — check `InStr(nm.Name, "!") > 0` to detect sheet-level scope
+- Loop variables like `dr`/`cr` that accumulate via `CDbl()` must be explicitly reset to 0 at the top of each iteration — VBA `Dim` inside a loop is hoisted to procedure scope, not re-initialized
+- When inserting computed columns (e.g., variance), always `ws.Columns(col).Insert` first — writing directly overwrites existing data
+- Iterating `ws.Rows(hRow).Cells` loops through all 16,384+ columns — always limit to `ws.Cells(hRow, ws.Columns.Count).End(xlToLeft).Column`
+- Chaining `Replace()` calls for file extensions can double-suffix (e.g., .xlsm → .xlsx → _DIST_DIST.xlsx) — use `If/ElseIf` to handle each extension separately
+- pandas deprecated `infer_datetime_format` in 2.0 — remove it from any `pd.to_datetime()` calls
