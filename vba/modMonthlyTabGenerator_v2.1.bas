@@ -553,7 +553,8 @@ Public Sub TestUpdateHeaderText()
     Dim ws As Worksheet
     Set ws = ActiveSheet
 
-    ' Set up test data
+    ' Set up test data — format as Text first so Excel doesn't auto-convert "Mar 25" to a date
+    ws.Range("A1:A3").NumberFormat = "@"
     ws.Range("A1").Value = "Margin"
     ws.Range("A2").Value = "Market"
     ws.Range("A3").Value = "Mar " & FISCAL_YEAR

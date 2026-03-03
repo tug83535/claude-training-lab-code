@@ -293,4 +293,5 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 |-------|------|--------|-------------|-----|
 | BUG-T2.03a | T2.03 | modConfig_v2.1.bas | `CLR_NAVY = 2050943` decodes to RGB(127,75,31) = tan/brown, not navy. Hex-to-decimal conversion did not account for VBA BGR byte order. | Changed to `7949855` = RGB(31,78,121) = correct navy |
 | BUG-T2.03b | T2.03 | modConfig_v2.1.bas | `CLR_ALT_ROW = 15651567` decodes to RGB(239,210,238) = pink/lavender, not light blue. Same hex conversion error. | Changed to `16380653` = RGB(237,242,249) = correct light blue |
-| BUG-T2.04 | T2.04 | modMonthlyTabGenerator_v2.1.bas | `UpdateHeaderText` declared as `Private Sub` — cannot be called from Immediate Window for testing. | Added `Public Sub TestUpdateHeaderText()` wrapper in same module |
+| BUG-T2.04a | T2.04 | modMonthlyTabGenerator_v2.1.bas | `UpdateHeaderText` declared as `Private Sub` — cannot be called from Immediate Window for testing. | Added `Public Sub TestUpdateHeaderText()` wrapper in same module |
+| BUG-T2.04b | T2.04 | modMonthlyTabGenerator_v2.1.bas | Test wrapper wrote `"Mar 25"` without setting cell format to Text first — Excel auto-converted it to a date (`3/25/2026`), so `UpdateHeaderText` couldn't find the text to replace. | Added `NumberFormat = "@"` (Text) on A1:A3 before writing values |
