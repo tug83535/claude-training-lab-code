@@ -305,7 +305,7 @@ NextComRow:
     modPerformance.UpdateStatus "Generating commentary...", 0.5
     
     ' Create output sheet
-    Dim comName As String: comName = "Variance Commentary"
+    Dim comName As String: comName = SH_COMMENTARY
     modConfig.SafeDeleteSheet comName
     
     Dim wsCom As Worksheet

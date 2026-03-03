@@ -65,6 +65,17 @@ Public Const SH_DQ_REPORT    As String = "Data Quality Report"
 Public Const SH_SEARCH       As String = "Search Results"
 Public Const SH_VAL_REPORT   As String = "Validation Report"
 
+' T2.01 constants — generated/output sheets used across VBA + Python
+Public Const SH_DASHBOARD    As String = "Executive Dashboard"
+Public Const SH_CHANGELOG    As String = "Change Management Log"
+Public Const SH_RECON        As String = "Checks"
+Public Const SH_COMMENTARY   As String = "Variance Commentary"
+Public Const SH_ALLOCATION   As String = "Allocation Output"
+Public Const SH_FORECAST     As String = "Rolling Forecast"
+Public Const SH_SNAPSHOT     As String = "Version History"
+Public Const SH_MONTE_CARLO  As String = "Monte Carlo Simulation"
+Public Const SH_AP_MATCH     As String = "AP Match Results"
+
 ' --- Products --- CHANGE THIS if product lines added/removed
 Public Const PRODUCTS_CSV    As String = "iGO,Affirm,InsureSight,DocFast"
 

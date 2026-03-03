@@ -179,7 +179,7 @@ Public Sub CreateExecutiveDashboard()
     Dim revVarPct As Double: If budRev <> 0 Then revVarPct = revVar / Abs(budRev)
     
     '--- Create dashboard sheet ---
-    Dim dashName As String: dashName = "Executive Dashboard"
+    Dim dashName As String: dashName = SH_DASHBOARD
     modConfig.SafeDeleteSheet dashName
     
     Dim wsDash As Worksheet

@@ -20,7 +20,7 @@ Option Explicit
 ' VERSION:  2.1.0
 '===============================================================================
 
-Private Const SH_VERSIONS As String = "Version History"
+' Sheet name centralized in modConfig as SH_SNAPSHOT (was Private Const SH_SNAPSHOT)
 
 '===============================================================================
 ' ShowVersionMenu - Display current version control status
@@ -120,7 +120,7 @@ Public Sub CompareVersions()
     End If
 
     ' Show the version history sheet
-    Dim wsVer As Worksheet: Set wsVer = ThisWorkbook.Worksheets(SH_VERSIONS)
+    Dim wsVer As Worksheet: Set wsVer = ThisWorkbook.Worksheets(SH_SNAPSHOT)
     wsVer.Visible = xlSheetVisible
     wsVer.Activate
     wsVer.Columns("A:F").AutoFit
@@ -153,7 +153,7 @@ Public Sub RestoreVersion()
     End If
 
     ' Build version list
-    Dim wsVer As Worksheet: Set wsVer = ThisWorkbook.Worksheets(SH_VERSIONS)
+    Dim wsVer As Worksheet: Set wsVer = ThisWorkbook.Worksheets(SH_SNAPSHOT)
     Dim vList As String: vList = ""
     Dim lr As Long: lr = modConfig.LastRow(wsVer, 1)
     Dim r As Long
@@ -223,14 +223,14 @@ Public Sub ListVersions()
         Exit Sub
     End If
 
-    Dim wsVer As Worksheet: Set wsVer = ThisWorkbook.Worksheets(SH_VERSIONS)
+    Dim wsVer As Worksheet: Set wsVer = ThisWorkbook.Worksheets(SH_SNAPSHOT)
     wsVer.Visible = xlSheetVisible
     wsVer.Activate
     wsVer.Columns("A:F").AutoFit
 
     modLogger.LogAction "modVersionControl", "ListVersions", vCount & " versions listed"
     MsgBox vCount & " versions saved." & vbCrLf & _
-           "Version history is now visible on the '" & SH_VERSIONS & "' sheet.", _
+           "Version history is now visible on the '" & SH_SNAPSHOT & "' sheet.", _
            vbInformation, APP_NAME
     Exit Sub
 
@@ -242,14 +242,14 @@ End Sub
 ' PRIVATE HELPERS
 '===============================================================================
 Private Function EnsureVersionSheet() As Worksheet
-    If modConfig.SheetExists(SH_VERSIONS) Then
-        Set EnsureVersionSheet = ThisWorkbook.Worksheets(SH_VERSIONS)
+    If modConfig.SheetExists(SH_SNAPSHOT) Then
+        Set EnsureVersionSheet = ThisWorkbook.Worksheets(SH_SNAPSHOT)
         Exit Function
     End If
 
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
-    ws.Name = SH_VERSIONS
+    ws.Name = SH_SNAPSHOT
 
     modConfig.StyleHeader ws, 1, _
         Array("Version #", "Date Saved", "Note", "Saved By", "File Path", "Sheets")
@@ -265,11 +265,11 @@ Private Function EnsureVersionSheet() As Worksheet
 End Function
 
 Private Function GetVersionCount() As Long
-    If Not modConfig.SheetExists(SH_VERSIONS) Then
+    If Not modConfig.SheetExists(SH_SNAPSHOT) Then
         GetVersionCount = 0
         Exit Function
     End If
-    Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(SH_VERSIONS)
+    Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(SH_SNAPSHOT)
     Dim lr As Long: lr = modConfig.LastRow(ws, 1)
     If lr < 2 Then
         GetVersionCount = 0
