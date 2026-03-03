@@ -133,9 +133,9 @@ Public Const COL_GL_VENDOR   As Long = 6     ' Column F
 Public Const COL_GL_AMOUNT   As Long = 7     ' Column G
 
 ' --- Formatting Constants ---
-Public Const CLR_NAVY        As Long = 2050943   ' RGB(31,78,121) = #1F4E79
+Public Const CLR_NAVY        As Long = 7949855   ' RGB(31,78,121) = #1F4E79
 Public Const CLR_LIGHT_GRAY  As Long = 15921906  ' RGB(242,242,242) = #F2F2F2
-Public Const CLR_ALT_ROW     As Long = 15651567  ' RGB(237,242,249) = #EDF2F9
+Public Const CLR_ALT_ROW     As Long = 16380653  ' RGB(237,242,249) = #EDF2F9
 Public Const CLR_GREEN_PASS  As Long = 5287936   ' RGB(0,176,80)
 Public Const CLR_RED_FAIL    As Long = 255        ' RGB(255,0,0)
 Public Const CLR_WHITE       As Long = 16777215

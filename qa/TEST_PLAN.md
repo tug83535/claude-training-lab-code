@@ -76,7 +76,7 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 |---------|-----------|-------|-----------|---------------|
 | T2.01 | modConfig has all constants | ISSUE-001 | `?SH_GL`, `?SH_TECH_DOC`, etc. in Immediate Window | All 13 new constants return values |
 | T2.02 | SafeDeleteSheet works | ISSUE-001 | Call `SafeDeleteSheet("NonExistent")` | No error, no prompt |
-| T2.03 | StyleHeader works | ISSUE-001 | Call on test sheet with sample headers | Navy background, white bold text |
+| T2.03 | StyleHeader works | ISSUE-001 | `Call StyleHeader(ActiveSheet, 1, Array("Col A","Col B","Col C"))` — note: requires all 3 arguments (ws, headerRow, headers array) | Navy background, white bold text |
 | T2.04 | UpdateHeaderText safe | ISSUE-002 | Create test sheet with "Margin", "Market", "Mar 25" cells. Run UpdateHeaderText("Mar","Apr") | "Margin" and "Market" unchanged; "Mar 25" → "Apr 25" |
 | T2.05 | FixTextNumbers requires scan | ISSUE-003 | Call FixTextNumbers without running ScanAll first | Shows "Run Scan Data Quality first" message |
 | T2.06 | Shortcuts use OnKey | ISSUE-004 | Run AssignShortcuts, press Ctrl+H | Excel Find & Replace opens (not overridden) |
@@ -255,3 +255,41 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 ### Known Acceptable Failures
 - T6.06 (Reconciliation): The existing workbook has 6 FAIL checks on the Checks sheet. These are pre-existing data discrepancies between Natural P&L and Functional P&L Summary sheets, not toolkit bugs. See VALIDATION_REPORT.md for details.
 - T5.06 (Search cap): Depends on data volume — may need to use a single-character search to trigger the cap.
+
+---
+
+## 6. Test Execution Results
+
+### Run Date: 2026-03-03
+
+#### Category T1 — Compilation & Load
+
+| Test ID | Result | Notes |
+|---------|--------|-------|
+| T1.01 | PASS | Debug > Compile — zero errors |
+| T1.02 | PASS | All 32 modules present in Project Explorer |
+| T1.03 | PASS | Option Explicit found in every module |
+| T1.04 | PASS | `?APP_VERSION` returns "2.1.0" |
+| T1.05 | PASS | pnl_config.py prints config summary, no errors |
+| T1.06 | PASS | All Python scripts import cleanly |
+| T1.07 | PASS | All 14 files valid UTF-8. Non-ASCII bytes are intentional Unicode (em dashes, arrows, check marks, etc.) — no mojibake detected |
+| T1.08 | — | Not yet run |
+
+#### Category T2 — Foundation Issues
+
+| Test ID | Result | Notes |
+|---------|--------|-------|
+| T2.01 | — | Not yet run |
+| T2.02 | — | Not yet run |
+| T2.03 | **FAIL → BUG FOUND → FIXED** | **Initial call:** `Call StyleHeader(ActiveSheet, 1)` gave "Compile error: argument not optional" — user error, StyleHeader requires 3 args (ws, headerRow, headers). **Correct call:** `Call StyleHeader(ActiveSheet, 1, Array("Col A","Col B","Col C"))` — ran without error, but row 1 showed tan/brown background instead of navy. **Root cause:** `CLR_NAVY` constant in modConfig was set to `2050943` which decodes to `RGB(127,75,31)` (tan/brown). The hex `#1F4E79` was converted directly to decimal instead of using VBA's BGR byte order (`R + G×256 + B×65536`). **Fix:** Changed `CLR_NAVY` from `2050943` to `7949855` (correct value for `RGB(31,78,121)`). Also found and fixed same bug in `CLR_ALT_ROW`: was `15651567` → `RGB(239,210,238)` (pink/lavender), changed to `16380653` → `RGB(237,242,249)` (correct light blue). **Re-import modConfig_v2.1.bas and re-test to confirm PASS.** |
+| T2.04 | — | Not yet run |
+| T2.05 | — | Not yet run |
+| T2.06 | — | Not yet run |
+| T2.07 | — | Not yet run |
+
+### Bugs Found During Testing
+
+| Bug # | Test | Module | Description | Fix |
+|-------|------|--------|-------------|-----|
+| BUG-T2.03a | T2.03 | modConfig_v2.1.bas | `CLR_NAVY = 2050943` decodes to RGB(127,75,31) = tan/brown, not navy. Hex-to-decimal conversion did not account for VBA BGR byte order. | Changed to `7949855` = RGB(31,78,121) = correct navy |
+| BUG-T2.03b | T2.03 | modConfig_v2.1.bas | `CLR_ALT_ROW = 15651567` decodes to RGB(239,210,238) = pink/lavender, not light blue. Same hex conversion error. | Changed to `16380653` = RGB(237,242,249) = correct light blue |
