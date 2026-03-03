@@ -1,12 +1,13 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-03-02)
-- **Branch:** `claude/review-code-testing-s4dsQ` (live testing branch)
+## Current Status (2026-03-03)
+- **Branch:** `claude/resume-apclmerge-project-CXWP5` (active working branch)
 - **VBA Modules:** 32 imported into Excel workbook — Debug > Compile passes (greyed out = clean)
-- **Python Scripts:** 14 complete and functional
+- **Python Scripts:** 14 complete and functional (main project)
+- **Universal Tools:** 76 tools built, code-reviewed, bugs fixed, how-to guide written
 - **Excel File:** Workbook open with all 32 modules imported and error-free
-- **Testing Phase:** T1 in progress — T1.01 through T1.07 complete; T1.08 not yet run
-- **Overall:** All T1 tests through T1.07 resolved. T1.07 was a false positive — confirmed all 14 Python files are valid UTF-8. See Testing_Issues/ for full log.
+- **Testing Phase:** T1 in progress — T1.01 through T1.07 complete; T1.08 not yet run (Connor doing tomorrow)
+- **Overall:** Track B complete, Track C complete, Backlog Item 1 complete
 
 ### ⚠ ACCOUNT SWITCH NEEDED — Usage at ~90%
 The current Claude account is near its usage limit. The next Claude account must pick up from here.
@@ -60,36 +61,23 @@ A curated candidate list has been created at:
 
 ---
 
-**TRACK C — Universal Tools Code Review (Bug Verification)**
-Connor does NOT want to test the Universal Tools himself. A Claude account must review ALL code for bugs before it is handed to coworkers.
+**TRACK C — Universal Tools Code Review (Bug Verification) — COMPLETE (2026-03-03)**
+All 76 tools reviewed against the full checklist. 9 bugs found and fixed:
 
-Review checklist for each VBA module:
-- [ ] Logic errors — does each sub do what it claims?
-- [ ] Missing variable declarations (Option Explicit compliance)
-- [ ] Off-by-one errors in loops
-- [ ] Unhandled edge cases (empty sheet, no selection, 0 rows, etc.)
-- [ ] Error handler present and correct in every sub
-- [ ] UTL_TurboOn / UTL_TurboOff properly paired
-- [ ] No references to main project modules (must be 100% standalone)
-- [ ] Function return values used correctly
+VBA bugs fixed (8):
+- [x] modUTL_Audit: CircularReferenceDetector crashed on sheets with no circular refs (For Each on Nothing)
+- [x] modUTL_Audit: InconsistentFormulasAuditor used raw formulas instead of R1C1 — flagged every row as different
+- [x] modUTL_Audit: NamedRangeAuditor used MacroType for scope detection — now checks for "!" in name
+- [x] modUTL_Finance: JournalEntryValidator dr/cr not reset to 0 each loop — stale values corrupted balance
+- [x] modUTL_Finance: FluxAnalysis wrote over existing columns — now inserts columns first
+- [x] modUTL_Finance: FinancialPeriodRollForward iterated all 16K+ cells — now limited to used range
+- [x] modUTL_WorkbookMgmt: BuildDistributionReadyCopy double-Replace created _DIST_DIST.xlsx for .xlsm files
+- [x] modUTL_DataCleaning: Removed unused variable (dead code)
 
-Review checklist for each Python script:
-- [ ] argparse arguments match the code logic
-- [ ] File/sheet not found → clean error message (not crash)
-- [ ] Empty DataFrame edge case handled
-- [ ] Output file path logic is correct
-- [ ] No hardcoded paths or filenames
-- [ ] All imports listed in requirements.txt
+Python bugs fixed (1):
+- [x] clean_data.py: Removed deprecated infer_datetime_format parameter (pandas 2.0+)
 
-Files to review:
-- UniversalToolsForAllFiles/vba/modUTL_DataCleaning.bas
-- UniversalToolsForAllFiles/vba/modUTL_Formatting.bas
-- UniversalToolsForAllFiles/vba/modUTL_WorkbookMgmt.bas
-- UniversalToolsForAllFiles/vba/modUTL_Finance.bas
-- UniversalToolsForAllFiles/vba/modUTL_Audit.bas
-- All 18 scripts in UniversalToolsForAllFiles/python/
-
-After review: fix any bugs found in-place, commit with message "Code review pass — fix bugs in Universal Tools", then push.
+All fixes committed and pushed (commit a22dd76).
 
 ---
 
@@ -131,7 +119,7 @@ After review: fix any bugs found in-place, commit with message "Code review pass
 - [ ] VBA Outlook Email Integration (PDF → Email in one workflow)
 - [ ] Build remaining monthly summary tabs (Apr-Dec) using modMonthlyTabGenerator
 - [ ] **Scenario 2 — Universal Tools Add-In:** Package the 8 universal tools (Data Sanitizer, Find Negatives/Zeros/Round Numbers, Find External Links, Audit Hidden Sheets, Cross-Sheet Search) into `KBT_UniversalTools.xlam` so coworkers can use them on their own files. Source files staged in `UniversalToolsForAllFiles/`. Write coworker install guide when ready.
-- [ ] **Universal Tools — Coworker How-To Guide:** Write a full usage guide for all 76 Universal Tools (VBA + Python). Cover: what each tool does, how to run it, example use case, expected output. Target audience: non-technical Finance & Accounting staff. Store in `UniversalToolsForAllFiles/` or `training/`.
+- [x] **Universal Tools — Coworker How-To Guide:** COMPLETE (2026-03-03) — Full guide at `UniversalToolsForAllFiles/UNIVERSAL_TOOLS_HOW_TO_GUIDE.md`. Covers all 76 tools with installation, step-by-step usage, examples, and quick reference table. Written for non-technical Finance & Accounting staff.
 - [ ] **Universal Tools — Python .exe Conversion:** Convert all 18 Python scripts to standalone `.exe` files using PyInstaller (or similar) so coworkers can just double-click and run — no Python installation required. Package with a simple folder + README.
 
 ---
@@ -143,7 +131,25 @@ After review: fix any bugs found in-place, commit with message "Code review pass
 
 ---
 
-## Completed — This Session (2026-03-02)
+## Completed — This Session (2026-03-03)
+
+### Track C — Universal Tools Code Review (Bug Verification) — COMPLETE
+- [x] Read all 5 VBA modules line by line against the Track C checklist
+- [x] Read all 18 Python scripts line by line against the Track C checklist
+- [x] Found 9 bugs (8 VBA, 1 Python) — 4 critical, 4 moderate, 1 minor
+- [x] Fixed all 9 bugs in-place
+- [x] Committed and pushed (commit a22dd76)
+
+### Backlog Item 1 — Coworker How-To Guide — COMPLETE
+- [x] Wrote full how-to guide for all 76 Universal Tools
+- [x] Saved at UniversalToolsForAllFiles/UNIVERSAL_TOOLS_HOW_TO_GUIDE.md
+- [x] Committed and pushed (commit 199f983)
+
+### Updated tasks/todo.md and tasks/lessons.md
+
+---
+
+## Completed — Previous Session (2026-03-02)
 
 ### Universal Tools — All Code Built (Track B Complete)
 - [x] Reviewed GrokALL.md, PrelexALL.md, GemAll.md — curated 76 tool candidates
