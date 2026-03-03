@@ -52,12 +52,44 @@ A curated candidate list has been created at:
 - UniversalToolsForAllFiles/python/ — 18 scripts + requirements.txt (clean_data, compare_files, aging_report, bank_reconciler, variance_decomposition, fuzzy_lookup, and more)
 
 **Next steps for Universal Tools:**
-1. Write coworker how-to/usage guide for all Universal Tools (VBA + Python) — see Backlog
-2. Convert Python scripts to .exe files so coworkers can just click and run — see Backlog
+1. **BUG REVIEW — Code verify all 5 VBA modules and 18 Python scripts before Connor uses them** — see Track C below
+2. Write coworker how-to/usage guide for all Universal Tools (VBA + Python) — see Backlog
+3. Convert Python scripts to .exe files so coworkers can just click and run — see Backlog
 
 **Security note:** Profiles.md contains personal account emails/credentials and should be removed from the repo. Flag this to Connor.
 
 ---
+
+**TRACK C — Universal Tools Code Review (Bug Verification)**
+Connor does NOT want to test the Universal Tools himself. A Claude account must review ALL code for bugs before it is handed to coworkers.
+
+Review checklist for each VBA module:
+- [ ] Logic errors — does each sub do what it claims?
+- [ ] Missing variable declarations (Option Explicit compliance)
+- [ ] Off-by-one errors in loops
+- [ ] Unhandled edge cases (empty sheet, no selection, 0 rows, etc.)
+- [ ] Error handler present and correct in every sub
+- [ ] UTL_TurboOn / UTL_TurboOff properly paired
+- [ ] No references to main project modules (must be 100% standalone)
+- [ ] Function return values used correctly
+
+Review checklist for each Python script:
+- [ ] argparse arguments match the code logic
+- [ ] File/sheet not found → clean error message (not crash)
+- [ ] Empty DataFrame edge case handled
+- [ ] Output file path logic is correct
+- [ ] No hardcoded paths or filenames
+- [ ] All imports listed in requirements.txt
+
+Files to review:
+- UniversalToolsForAllFiles/vba/modUTL_DataCleaning.bas
+- UniversalToolsForAllFiles/vba/modUTL_Formatting.bas
+- UniversalToolsForAllFiles/vba/modUTL_WorkbookMgmt.bas
+- UniversalToolsForAllFiles/vba/modUTL_Finance.bas
+- UniversalToolsForAllFiles/vba/modUTL_Audit.bas
+- All 18 scripts in UniversalToolsForAllFiles/python/
+
+After review: fix any bugs found in-place, commit with message "Code review pass — fix bugs in Universal Tools", then push.
 
 ---
 
