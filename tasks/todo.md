@@ -104,12 +104,40 @@ All fixes committed and pushed (commit a22dd76).
 - [ ] Create quick-reference card of all 62 actions (1-page printable)
 - [ ] Place completed guides in `training/` folder
 
-### Phase 4: Final Package
-- [ ] **Scenario 1 — Share the demo file:** Save final tested workbook as `.xlsm`, place on SharePoint/shared drive so coworkers can open it and use the Command Center directly
-- [ ] Copy final tested Excel file to `CompletePackageStorage/production/`
-- [ ] Copy training guides to `CompletePackageStorage/production/`
-- [ ] Record demo video
-- [ ] Final PR to merge `claude/ideas-newtesting-wDuOY` → `main`
+### Phase 4: Lock Down the Demo File
+- [ ] Save the final tested workbook as `.xlsm` (macros-enabled)
+- [ ] Open it fresh on a different machine or clean Excel session — confirm it works out of the box
+- [ ] Check that no personal file paths, test data, or debug code is left in the macros
+- [ ] Copy final `.xlsm` to `CompletePackageStorage/production/`
+- [ ] Copy a dated backup to `CompletePackageStorage/backups/` (e.g., `PL_Model_FINAL_2026-03-10.xlsm`)
+
+### Phase 5: Convert Guides to PDF
+- [ ] Convert coworker training guide to PDF (no .md files for coworkers)
+- [ ] Convert quick-reference card to PDF
+- [ ] Save PDFs in `training/` folder AND `CompletePackageStorage/production/`
+
+### Phase 6: Record the Demo Video
+- [ ] Do a dry run to practice timing and flow
+- [ ] Record the screen + narration
+- [ ] Save the video file in `CompletePackageStorage/production/`
+
+### Phase 7: Upload to SharePoint
+- [ ] Create `iPipeline P&L Demo/` folder on SharePoint
+- [ ] Create 4 subfolders: `Demo File/`, `Training/`, `Universal Tools (Optional)/`, `Video/`
+- [ ] Upload the `.xlsm` to `Demo File/`
+- [ ] Upload the 2 training PDFs to `Training/`
+- [ ] Upload the video to `Video/`
+- [ ] Pin the folder or add to team Quick Links
+- [ ] Set permissions — one group for the whole folder
+
+### Phase 8: Universal Tools Upload (Later — Scenario 2)
+- [ ] Convert the 18 Python scripts to `.exe` files (PyInstaller)
+- [ ] Convert the Universal Tools how-to guide to PDF
+- [ ] Upload `.bas` files, `.exe` files, and PDF to `Universal Tools (Optional)/` on SharePoint
+- [ ] (Eventually) Package the 8 VBA tools into `KBT_UniversalTools.xlam` add-in
+
+### Final Step
+- [ ] Final PR to merge `claude/resume-apclmerge-project-CXWP5` → `main`
 
 ---
 
