@@ -1,0 +1,24 @@
+# KBT Universal Tools — Python Dependencies
+# Install all at once: pip install -r requirements.txt
+# ============================================================
+
+# Core — required by all scripts
+pandas>=2.0.0
+openpyxl>=3.1.0
+xlrd>=2.0.1
+
+# Fuzzy matching — required by fuzzy_lookup.py, bank_reconciler.py
+thefuzz>=0.20.0
+python-Levenshtein>=0.21.0
+
+# PDF extraction — required by pdf_extractor.py
+pdfplumber>=0.10.0
+
+# Word document generation — required by word_report.py
+python-docx>=1.0.0
+
+# Date utilities — required by forecast_rollforward.py
+python-dateutil>=2.8.0
+
+# Charts and visualization (optional — for richer chart output)
+matplotlib>=3.7.0

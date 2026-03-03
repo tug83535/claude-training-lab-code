@@ -35,18 +35,25 @@ Connor uploaded idea files to UniversalToolsForAllFiles/:
 A curated candidate list has been created at:
 `UniversalToolsForAllFiles/UniversalBuild/UNIVERSAL_BUILD_CANDIDATES.md`
 
-**Status:** Candidate list CREATED and committed (2026-03-02) — waiting for Connor's approval before building any code.
-- 24 Tier 1 VBA tools selected
-- 5 Tier 1 Python scripts selected
-- 34 Tier 2 VBA + 13 Tier 2 Python in backlog section
-- 76 total candidates across all tiers
+**Status:** ALL CODE BUILT AND COMMITTED (2026-03-02)
+- 24 Tier 1 VBA tools selected + 34 Tier 2 VBA = 58 VBA tools total
+- 5 Tier 1 Python scripts + 13 Tier 2 Python = 18 Python scripts total
+- 76 total candidates — ALL BUILT as actual code
 - GemAll.md reviewed and folded in (2026-03-02) — 16 tools added
+- review/PROJECT_OVERVIEW.md created — comprehensive overview for external Claude review
+- review/DemoWrapUp/ folder created — ready for Connor's external review document
 
-Next steps once Connor approves:
-1. Build Tier 1 VBA tools as a Personal.xlsb Add-In (stored in UniversalToolsForAllFiles/vba/)
-2. Build Tier 1 Python tools as standalone scripts (stored in UniversalToolsForAllFiles/python/)
-3. Write a coworker install guide for the Add-In
-4. Write a coworker usage guide for the Python scripts
+**What was built (2026-03-02):**
+- UniversalToolsForAllFiles/vba/modUTL_DataCleaning.bas — 12 tools (unmerge, fill blanks, text-to-numbers, remove dupes, etc.)
+- UniversalToolsForAllFiles/vba/modUTL_Formatting.bas — 9 tools (autofit, freeze rows, number/currency/date formats, etc.)
+- UniversalToolsForAllFiles/vba/modUTL_WorkbookMgmt.bas — 15 tools (unhide all, PDF export, search, rename sheets, etc.)
+- UniversalToolsForAllFiles/vba/modUTL_Finance.bas — 14 tools (duplicate invoice, GL validator, aging reports, variance, etc.)
+- UniversalToolsForAllFiles/vba/modUTL_Audit.bas — 8 tools (external links, circular refs, error scanner, data quality, etc.)
+- UniversalToolsForAllFiles/python/ — 18 scripts + requirements.txt (clean_data, compare_files, aging_report, bank_reconciler, variance_decomposition, fuzzy_lookup, and more)
+
+**Next steps for Universal Tools:**
+1. Write coworker how-to/usage guide for all Universal Tools (VBA + Python) — see Backlog
+2. Convert Python scripts to .exe files so coworkers can just click and run — see Backlog
 
 **Security note:** Profiles.md contains personal account emails/credentials and should be removed from the repo. Flag this to Connor.
 
@@ -92,6 +99,8 @@ Next steps once Connor approves:
 - [ ] VBA Outlook Email Integration (PDF → Email in one workflow)
 - [ ] Build remaining monthly summary tabs (Apr-Dec) using modMonthlyTabGenerator
 - [ ] **Scenario 2 — Universal Tools Add-In:** Package the 8 universal tools (Data Sanitizer, Find Negatives/Zeros/Round Numbers, Find External Links, Audit Hidden Sheets, Cross-Sheet Search) into `KBT_UniversalTools.xlam` so coworkers can use them on their own files. Source files staged in `UniversalToolsForAllFiles/`. Write coworker install guide when ready.
+- [ ] **Universal Tools — Coworker How-To Guide:** Write a full usage guide for all 76 Universal Tools (VBA + Python). Cover: what each tool does, how to run it, example use case, expected output. Target audience: non-technical Finance & Accounting staff. Store in `UniversalToolsForAllFiles/` or `training/`.
+- [ ] **Universal Tools — Python .exe Conversion:** Convert all 18 Python scripts to standalone `.exe` files using PyInstaller (or similar) so coworkers can just double-click and run — no Python installation required. Package with a simple folder + README.
 
 ---
 
@@ -103,6 +112,21 @@ Next steps once Connor approves:
 ---
 
 ## Completed — This Session (2026-03-02)
+
+### Universal Tools — All Code Built (Track B Complete)
+- [x] Reviewed GrokALL.md, PrelexALL.md, GemAll.md — curated 76 tool candidates
+- [x] Created UniversalToolsForAllFiles/UniversalBuild/UNIVERSAL_BUILD_CANDIDATES.md
+- [x] Built modUTL_DataCleaning.bas — 12 VBA tools
+- [x] Built modUTL_Formatting.bas — 9 VBA tools
+- [x] Built modUTL_WorkbookMgmt.bas — 15 VBA tools
+- [x] Built modUTL_Finance.bas — 14 VBA tools
+- [x] Built modUTL_Audit.bas — 8 VBA tools
+- [x] Built 18 Python scripts covering all Tier 1 + Tier 2 Python candidates
+- [x] Created requirements.txt for all Python dependencies
+- [x] Created review/PROJECT_OVERVIEW.md — full project overview for external Claude review
+- [x] Created review/DemoWrapUp/ folder — ready for Connor's review document
+
+---
 
 ### T1 Testing — T1.01 through T1.07
 - [x] T1.01 — PASS — VBA project compiled with zero errors
