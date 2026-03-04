@@ -89,6 +89,9 @@ Public Sub AutoPopulateReconciliationChecks()
         Exit Sub
     End If
 
+    ' Ensure revenue share named ranges exist before recalculating
+    modConfig.AddNamedRanges
+
     Application.CalculateFull
 
     Dim wsChk As Worksheet: Set wsChk = ThisWorkbook.Worksheets(SH_CHECKS)
@@ -115,8 +118,10 @@ Public Sub AutoPopulateReconciliationChecks()
 
     If Len(missingNames) > 0 Then
         MsgBox "Checks tab refreshed." & vbCrLf & vbCrLf & _
-               "WARNING: These named ranges are missing — run AddNamedRanges first:" & _
-               missingNames, vbExclamation, APP_NAME
+               "WARNING: These named ranges could not be created:" & _
+               missingNames & vbCrLf & vbCrLf & _
+               "Label rows on Assumptions with product name + 'Rev Share' in column A.", _
+               vbExclamation, APP_NAME
     Else
         MsgBox "Checks tab refreshed. All named ranges verified.", vbInformation, APP_NAME
     End If

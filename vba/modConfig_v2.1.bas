@@ -339,3 +339,82 @@ Public Function SafeStr(ByVal v As Variant) As String
     If Err.Number <> 0 Then SafeStr = ""
     On Error GoTo 0
 End Function
+
+'===============================================================================
+' AddNamedRanges - Create revenue-share named ranges on the Assumptions sheet
+' Creates: drv_iGO_RevShare, drv_Affirm_RevShare, drv_InsureSight_RevShare,
+'          drv_DocFast_RevShare — each pointing to the Value cell (column B)
+'          of the matching "rev share" row for that product.
+'
+' Safe to call repeatedly — overwrites existing names without error.
+' Called automatically by AutoPopulateReconciliationChecks.
+'===============================================================================
+Public Sub AddNamedRanges()
+    On Error GoTo ErrHandler
+
+    If Not SheetExists(SH_ASSUMPTIONS) Then
+        MsgBox "Assumptions sheet '" & SH_ASSUMPTIONS & "' not found.", vbCritical, APP_NAME
+        Exit Sub
+    End If
+
+    Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(SH_ASSUMPTIONS)
+    Dim lastRow As Long: lastRow = LastRow(ws, 1)
+    Dim products As Variant: products = GetProducts()
+
+    Dim created As Long: created = 0
+    Dim p As Long
+    For p = 0 To UBound(products)
+        Dim prodName As String: prodName = CStr(products(p))
+        Dim rangeName As String: rangeName = "drv_" & prodName & "_RevShare"
+
+        ' Search column A for a row containing both the product name and "rev share"
+        Dim r As Long
+        Dim foundRow As Long: foundRow = 0
+        For r = DATA_ROW_ASSUME To lastRow
+            Dim cellText As String: cellText = LCase(SafeStr(ws.Cells(r, 1).Value))
+            If InStr(cellText, LCase(prodName)) > 0 And _
+               (InStr(cellText, "rev share") > 0 Or InStr(cellText, "revenue share") > 0) Then
+                foundRow = r
+                Exit For
+            End If
+        Next r
+
+        ' Fallback: search for just the product name in rev share area (rows 6-19)
+        If foundRow = 0 Then
+            For r = DATA_ROW_ASSUME To Application.Min(lastRow, 19)
+                cellText = LCase(SafeStr(ws.Cells(r, 1).Value))
+                If InStr(cellText, LCase(prodName)) > 0 Then
+                    foundRow = r
+                    Exit For
+                End If
+            Next r
+        End If
+
+        If foundRow > 0 Then
+            ' Create or overwrite the named range pointing to column B (Value)
+            On Error Resume Next
+            ThisWorkbook.Names(rangeName).Delete
+            On Error GoTo ErrHandler
+            ThisWorkbook.Names.Add Name:=rangeName, _
+                RefersTo:="=" & SH_ASSUMPTIONS & "!$B$" & foundRow
+            created = created + 1
+        End If
+    Next p
+
+    modLogger.LogAction "modConfig", "AddNamedRanges", _
+        created & " of " & (UBound(products) + 1) & " rev share named ranges created"
+
+    If created = UBound(products) + 1 Then
+        MsgBox created & " revenue share named ranges created successfully." & vbCrLf & _
+               "drv_iGO_RevShare, drv_Affirm_RevShare, etc.", vbInformation, APP_NAME
+    Else
+        MsgBox created & " of " & (UBound(products) + 1) & " named ranges created." & vbCrLf & _
+               "Some product rev share rows were not found on Assumptions." & vbCrLf & _
+               "Label rows with the product name + 'Rev Share' in column A.", _
+               vbExclamation, APP_NAME
+    End If
+    Exit Sub
+
+ErrHandler:
+    MsgBox "AddNamedRanges error: " & Err.Description, vbCritical, APP_NAME
+End Sub
