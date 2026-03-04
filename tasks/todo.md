@@ -1,10 +1,10 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
 ## Current Status (2026-03-04)
-- **Branch:** `claude/resume-apclmerge-project-V8WSj` (active working branch)
+- **Branch:** `claude/resume-ipipeline-demo-qKRHn` (active working branch)
 - **VBA Modules:** 32 imported into Excel workbook — Debug > Compile passes (greyed out = clean)
 - **Python Scripts:** 14 complete and functional (main project) — pytest: 99 passed, 0 failures
-- **Universal Tools:** 76 tools built, code-reviewed, bugs fixed, how-to guide written
+- **Universal Tools:** ~85 tools built (8 modules), code-reviewed, bugs fixed, how-to guide written
 - **Excel File:** Workbook open with all 32 modules imported and error-free
 - **Testing Phase:** T1 COMPLETE, T2 partially done (T2.01–T2.04 PASS, T2.05–T2.07 not yet run), T5.01+T5.02 PASS
 - **Self-Review:** Full self-review of all remaining untested code completed — 12 bugs found and fixed preemptively
@@ -29,7 +29,7 @@ Before continuing testing, re-import these 7 `.bas` files into the Excel workboo
 6. Any new issues found → add to Testing_Issues/TESTING_ISSUES_LOG.md
 
 ### Universal Tools — COMPLETE (Track B + Track C + Backlog Item 1)
-All 76 tools built, code-reviewed, 9 bugs fixed, how-to guide written. No further action needed until after demo.
+~85 tools built (8 modules), code-reviewed, 9 bugs fixed, how-to guide written. 3 new modules added 2026-03-04 (Branding, SheetTools, DataSanitizer). No further action needed until after demo.
 
 **Security note:** Profiles.md contains personal account emails/credentials and should be removed from the repo. Flag this to Connor.
 
@@ -74,6 +74,21 @@ All fixes committed and pushed (commit a22dd76).
 - [ ] Write speaker notes / narration script
 
 ### Phase 3: Training Materials
+- [ ] **Guide Planning Session** — Build out guide plan in `FinalRoughGuides/GuidePlanOut/`
+  - Create `GuidePlanOut/` folder and `GUIDE_IDEAS.md` to capture all planning
+  - Planned guide categories (draft — refine with Connor before building):
+    1. **"How to Use the Command Center"** — Main guide for all employees. Open the file, click the button, what every action does
+    2. **"Getting Started / First Time Setup"** — Enable macros, trust settings, where to save, what to expect
+    3. **"What This File Does" (Overview for Leadership)** — Non-technical explainer for CFO/CEO. What it is, why it matters, what it solves
+    4. **"Universal Toolkit Guide"** — Install and use the 85 universal tools on your own files (Scenario 2 / post-demo)
+    5. **"Video Demo Script / Storyboard"** — Script and flow for the walkthrough video
+    6. **"Quick Reference Card"** — 1-page cheat sheet of top 10-15 most useful actions
+  - Open questions to resolve before building:
+    - Who gets which guide? All 2,000 employees or just Finance & Accounting?
+    - Does CFO/CEO get a separate shorter version?
+    - Video script — plan here or separate effort?
+    - Any additional guides Connor has in mind?
+  - All rough drafts go in `FinalRoughGuides/`, finals go in `training/`
 - [ ] Build coworker training guide — step-by-step: how to open file, use Command Center, run reports
 - [ ] Create quick-reference card of all 62 actions (1-page printable)
 - [ ] Place completed guides in `training/` folder
