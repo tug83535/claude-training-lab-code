@@ -84,7 +84,7 @@ Public Sub CreateRolling12MonthView()
     wsOut.Name = SH_ROLLING_12
 
     ' Title
-    wsOut.Range("A1").Value = "Keystone BenefitTech — Rolling 12-Month P&L"
+    wsOut.Range("A1").Value = "Keystone BenefitTech " & ChrW(8212) & " Rolling 12-Month P&L"
     wsOut.Range("A1").Font.Size = 14: wsOut.Range("A1").Font.Bold = True
     wsOut.Range("A1").Font.Color = CLR_NAVY
     wsOut.Range("A2").Value = "Generated: " & Format(Now, "mmmm d, yyyy")
@@ -120,24 +120,45 @@ Public Sub CreateRolling12MonthView()
             Dim srcCol As Long: srcCol = startCol + dc
             Dim cellVal As Double: cellVal = modConfig.SafeNum(wsSrc.Cells(r, srcCol).Value)
             wsOut.Cells(outR, dc + 2).Value = cellVal
-            If cellVal <> 0 Then wsOut.Cells(outR, dc + 2).NumberFormat = "$#,##0"
+            If cellVal <> 0 Then
+                ' Detect percentage rows (e.g., "Contribution Margin %", "GM%") — use % format
+                If InStr(1, rowLbl, "%", vbTextCompare) > 0 Then
+                    wsOut.Cells(outR, dc + 2).NumberFormat = "0.0%"
+                Else
+                    wsOut.Cells(outR, dc + 2).NumberFormat = "$#,##0"
+                End If
+            End If
         Next dc
         outR = outR + 1
     Next r
 
-    ' Revenue trend chart for the rolling window
+    ' Revenue trend chart for the rolling window — placed below all data rows
     modPerformance.UpdateStatus "Adding trend chart...", 0.75
+    Dim chartTop As Long: chartTop = wsOut.Cells(outR + 1, 1).Top
     Dim co As ChartObject
-    Set co = wsOut.ChartObjects.Add(Left:=400, Top:=80, Width:=500, Height:=280)
+    Set co = wsOut.ChartObjects.Add(Left:=20, Top:=chartTop, Width:=500, Height:=280)
     co.Name = "Rolling12Chart"
+
+    ' Find Total Revenue row on the OUTPUT sheet (revRow is from wsSrc, not wsOut)
+    Dim outRevRow As Long: outRevRow = 0
+    Dim sr As Long
+    For sr = DATA_ROW_REPORT To outR - 1
+        Dim srLbl As String: srLbl = LCase(modConfig.SafeStr(wsOut.Cells(sr, 1).Value))
+        If srLbl = "total revenue" Or srLbl = "revenue" Or srLbl = "net revenue" Then
+            outRevRow = sr
+            Exit For
+        End If
+    Next sr
+    If outRevRow = 0 Then outRevRow = DATA_ROW_REPORT  ' Fallback to first data row
+
     With co.Chart
         .ChartType = xlLine
         .HasTitle = True
-        .ChartTitle.Text = "Revenue — Rolling " & windowSize & " Months"
+        .ChartTitle.Text = "Revenue " & ChrW(8212) & " Rolling " & windowSize & " Months"
         Dim ser As Series
         Set ser = .SeriesCollection.NewSeries
         ser.Name = "Total Revenue"
-        ser.Values = wsOut.Range(wsOut.Cells(revRow, 2), wsOut.Cells(revRow, windowSize + 1))
+        ser.Values = wsOut.Range(wsOut.Cells(outRevRow, 2), wsOut.Cells(outRevRow, windowSize + 1))
         ser.XValues = windowLabels
         .Axes(xlValue).TickLabels.NumberFormat = "$#,##0"
         .HasLegend = False
