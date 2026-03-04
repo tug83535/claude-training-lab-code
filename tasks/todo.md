@@ -20,6 +20,25 @@ Before continuing testing, re-import these 7 `.bas` files into the Excel workboo
 6. modTrendReports_v2.1.bas (LogAction fix)
 7. modMonthlyTabGenerator_v2.1.bas (LogAction fixes + TestUpdateHeaderText wrapper)
 
+### Project Refresh — Code Audit / Idea Review (NEW)
+A separate Claude session (fresh, no context) independently built VBA and Python code for this same project. The goal is to review that code for ideas and improvements we may have missed — **NOT** to replace or change any of our existing code.
+
+**Rules:**
+- Do NOT modify any existing code based on this review
+- Review only — look for new ideas, missed features, or better approaches
+- Any ideas worth pursuing get added to the backlog as new items
+- All uploaded code goes in `ProjectRefresh/` folder
+
+**Steps:**
+1. [x] Create `ProjectRefresh/` folder on the branch
+2. [ ] Connor uploads the other Claude's code into `ProjectRefresh/`
+3. [ ] Full code audit — review every file in `ProjectRefresh/` line by line
+4. [ ] Cross-reference against our existing 215+ tools (33 demo VBA + 85 universal tools + 14 Python + extras)
+5. [ ] Produce a findings report: new ideas, overlaps, and recommendations
+6. [ ] Add any approved new ideas to the backlog
+
+---
+
 ### ONE ACTIVE TRACK — Testing (T2.05 next)
 1. Read this file, tasks/lessons.md, CLAUDE.md, and qa/TEST_PLAN.md first
 2. Re-import the 7 fixed .bas files listed above
