@@ -50,12 +50,13 @@ Public Sub TriggerETLLocally()
 
     ' Check that the script exists in the same folder
     If Dir(scriptPath) = "" Then
-        Dim altPath As String
-        altPath = Application.GetOpenFilename( _
+        Dim altResult As Variant
+        altResult = Application.GetOpenFilename( _
             "Python Scripts (*.py),*.py", , _
             "Locate " & ETL_SCRIPT_NAME)
-        If altPath = "False" Or Len(altPath) = 0 Then Exit Sub
-        scriptPath = altPath
+        If VarType(altResult) = vbBoolean Then Exit Sub
+        If Len(CStr(altResult)) = 0 Then Exit Sub
+        scriptPath = CStr(altResult)
     End If
 
     ' Confirm before running
@@ -107,10 +108,13 @@ Public Sub ImportETLOutput()
     End If
 
     If Len(outputPath) = 0 Or Dir(outputPath) = "" Then
-        outputPath = Application.GetOpenFilename( _
+        Dim fileResult As Variant
+        fileResult = Application.GetOpenFilename( _
             "Excel Files (*.xlsx),*.xlsx", , _
             "Locate " & ETL_OUTPUT_NAME)
-        If outputPath = "False" Or Len(outputPath) = 0 Then Exit Sub
+        If VarType(fileResult) = vbBoolean Then Exit Sub
+        If Len(CStr(fileResult)) = 0 Then Exit Sub
+        outputPath = CStr(fileResult)
     End If
 
     ' Confirm before overwriting GL data
