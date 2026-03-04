@@ -97,8 +97,7 @@ Public Sub BuildDashboard()
     wsReport.Activate
     
     modLogger.LogAction "modDashboard", "BuildDashboard", _
-                        "3 charts created (" & monthCount & " months of data)", _
-                        modPerformance.ElapsedSeconds()
+                        "3 charts created (" & monthCount & " months of data) (" & Format(modPerformance.ElapsedSeconds(), "0.0") & "s)"
     
     MsgBox "Dashboard built with 3 charts on '" & SH_REPORT & "' sheet." & vbCrLf & _
            "Showing " & monthCount & " months of actual data.", _
@@ -367,7 +366,7 @@ Public Sub CreateExecutiveDashboard()
     modPerformance.TurboOff
     
     modLogger.LogAction "modDashboard", "CreateExecutiveDashboard", _
-        "4 KPIs + summary table", elapsed
+        "4 KPIs + summary table (" & Format(elapsed, "0.0") & "s)"
     Debug.Print "[ExecDash] SUCCESS — Dashboard created on '" & dashName & "'"
     MsgBox "Executive Dashboard created on '" & dashName & "'.", vbInformation, APP_NAME
     Exit Sub
@@ -531,7 +530,7 @@ Public Sub WaterfallChart()
     Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
     modPerformance.TurboOff
     
-    modLogger.LogAction "modDashboard", "WaterfallChart", "5 P&L stages", elapsed
+    modLogger.LogAction "modDashboard", "WaterfallChart", "5 P&L stages (" & Format(elapsed, "0.0") & "s)"
     MsgBox "Waterfall chart created on '" & wfName & "'.", vbInformation, APP_NAME
     Exit Sub
 
@@ -667,7 +666,7 @@ Public Sub ProductComparison()
     modPerformance.TurboOff
     
     modLogger.LogAction "modDashboard", "ProductComparison", _
-        (UBound(products) + 1) & " products compared", elapsed
+        (UBound(products) + 1) & " products compared (" & Format(elapsed, "0.0") & "s)"
     MsgBox "Product Comparison created on '" & pcName & "'.", vbInformation, APP_NAME
     Exit Sub
 
@@ -1224,7 +1223,7 @@ NextProduct:
     Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
     modPerformance.TurboOff
     modLogger.LogAction "modDashboard", "CreateSmallMultiplesGrid", _
-        UBound(products) + 1 & " product charts | " & monthCount & " months", elapsed
+        UBound(products) + 1 & " product charts | " & monthCount & " months (" & Format(elapsed, "0.0") & "s)"
     MsgBox "Small multiples grid created on '" & smName & "'." & vbCrLf & _
            "4 product revenue charts at the same scale for easy comparison.", _
            vbInformation, APP_NAME

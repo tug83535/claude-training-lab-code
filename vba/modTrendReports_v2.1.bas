@@ -151,7 +151,7 @@ Public Sub CreateRolling12MonthView()
     Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
     modPerformance.TurboOff
     modLogger.LogAction "modTrendReports", "CreateRolling12MonthView", _
-        windowSize & "-month window (cols " & startCol & " to " & lastDataCol & ")", elapsed
+        windowSize & "-month window (cols " & startCol & " to " & lastDataCol & ") (" & Format(elapsed, "0.0") & "s)"
     MsgBox "Rolling " & windowSize & "-month P&L view created on '" & SH_ROLLING_12 & "'.", _
            vbInformation, APP_NAME
     Exit Sub

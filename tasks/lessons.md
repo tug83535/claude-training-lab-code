@@ -124,3 +124,11 @@
 - Chaining `Replace()` calls for file extensions can double-suffix (e.g., .xlsm → .xlsx → _DIST_DIST.xlsx) — use `If/ElseIf` to handle each extension separately
 - pandas deprecated `infer_datetime_format` in 2.0 — remove it from any `pd.to_datetime()` calls
 - Row-label searches (e.g., "total revenue") must try multiple variants as fallbacks — the P&L Trend sheet may use "Revenue", "Total Revenue", "Net Revenue", etc. Always use `modConfig.FindRowByLabel` with cascading fallbacks instead of hardcoded `InStr` checks in a loop
+
+## Pre-Delivery Self-Review Requirement (2026-03-03)
+Before delivering any future code updates, I need to self-review against the test plan first. Specifically:
+1. Run through each test's pass criteria mentally before sending
+2. For VBA, check that all constants are defined and all referenced row/column variables resolve to non-zero values
+3. For Python, run the pytest suite yourself and confirm 0 failures
+4. Don't send me code that you haven't verified meets the test criteria
+This will save us both time — I shouldn't be discovering basic bugs during testing.

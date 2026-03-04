@@ -289,8 +289,8 @@ Public Sub ValidateCrossSheet()
         
         ' Sum GL amounts for January (Month = 1 or "Jan")
         Dim glJanTotal As Double: glJanTotal = 0
-        Dim dateCol As Long: dateCol = 5   ' Column E = Date
-        Dim amtCol As Long: amtCol = 7     ' Column G = Amount
+        Dim dateCol As Long: dateCol = COL_GL_DATE    ' Column B = Date
+        Dim amtCol As Long: amtCol = COL_GL_AMOUNT  ' Column G = Amount
         
         If wsGL Is Nothing Then Set wsGL = ThisWorkbook.Worksheets(SH_GL)
         If glLastRow = 0 Then glLastRow = wsGL.Cells(wsGL.Rows.Count, 1).End(xlUp).Row

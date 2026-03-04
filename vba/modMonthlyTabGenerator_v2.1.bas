@@ -108,7 +108,7 @@ NextMonth:
     modPerformance.TurboOff
     
     modLogger.LogAction "modMonthlyTabGenerator", "GenerateMonthlyTabs", _
-                        created & " tabs created", modPerformance.ElapsedSeconds()
+                        created & " tabs created (" & Format(modPerformance.ElapsedSeconds(), "0.0") & "s)"
     
     MsgBox created & " monthly tabs generated successfully in " & _
            modPerformance.ElapsedSeconds() & " seconds.", vbInformation, APP_NAME
@@ -228,7 +228,7 @@ Public Sub GenerateNextMonthOnly()
     newWs.Activate
     
     modLogger.LogAction "modMonthlyTabGenerator", "GenerateNextMonthOnly", _
-        newName & " from " & latestName, elapsed
+        newName & " from " & latestName & " (" & Format(elapsed, "0.0") & "s)"
     
     MsgBox "Next Month Tab Created!" & vbCrLf & vbCrLf & _
            "  New tab: " & newName & vbCrLf & _
@@ -360,7 +360,7 @@ Public Sub AddNextMonthToModel()
     modPerformance.TurboOff
 
     modLogger.LogAction "modMonthlyTabGenerator", "AddNextMonthToModel", _
-        nextMonthName & " " & FISCAL_YEAR & " | " & stepsDone & " step(s) done", elapsed
+        nextMonthName & " " & FISCAL_YEAR & " | " & stepsDone & " step(s) done (" & Format(elapsed, "0.0") & "s)"
 
     Dim msg As String
     msg = nextMonthName & " " & FISCAL_YEAR & " is ready!" & vbCrLf & vbCrLf & _

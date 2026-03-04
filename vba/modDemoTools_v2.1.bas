@@ -265,7 +265,7 @@ Public Sub CreatePrintableExecSummary()
     Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
     modPerformance.TurboOff
     modLogger.LogAction "modDemoTools", "CreatePrintableExecSummary", _
-        "Print sheet created: " & shName, elapsed
+        "Print sheet created: " & shName & " (" & Format(elapsed, "0.0") & "s)"
     MsgBox "'" & shName & "' is ready." & vbCrLf & _
            "Use File > Print or Ctrl+P to print or save as PDF.", _
            vbInformation, APP_NAME

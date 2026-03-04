@@ -218,13 +218,13 @@ Public Sub GenerateCommentary()
     
     Dim wsTrend As Worksheet: Set wsTrend = ThisWorkbook.Worksheets(SH_PL_TREND)
     Dim tLastRow As Long: tLastRow = wsTrend.Cells(wsTrend.Rows.Count, 1).End(xlUp).Row
-    Dim tLastCol As Long: tLastCol = wsTrend.Cells(1, wsTrend.Columns.Count).End(xlToLeft).Column
-    
-    ' Find FY Total column
+    Dim tLastCol As Long: tLastCol = wsTrend.Cells(HDR_ROW_REPORT, wsTrend.Columns.Count).End(xlToLeft).Column
+
+    ' Find FY Total column (headers are in row 4 = HDR_ROW_REPORT)
     Dim fyCol As Long: fyCol = 0
     Dim c As Long
     For c = 2 To tLastCol
-        Dim hdr As String: hdr = LCase(Trim(CStr(wsTrend.Cells(1, c).Value)))
+        Dim hdr As String: hdr = LCase(Trim(CStr(wsTrend.Cells(HDR_ROW_REPORT, c).Value)))
         If (InStr(hdr, "fy") > 0 And InStr(hdr, "total") > 0) Or _
            InStr(hdr, "fy" & FISCAL_YEAR_4) > 0 Or _
            InStr(hdr, FISCAL_YEAR_4 & " total") > 0 Then
@@ -232,11 +232,11 @@ Public Sub GenerateCommentary()
         End If
     Next c
     If fyCol = 0 Then fyCol = tLastCol
-    
+
     ' Find Budget column
     Dim budCol As Long: budCol = 0
     For c = 2 To tLastCol
-        hdr = LCase(Trim(CStr(wsTrend.Cells(1, c).Value)))
+        hdr = LCase(Trim(CStr(wsTrend.Cells(HDR_ROW_REPORT, c).Value)))
         If InStr(hdr, "budget") > 0 Then budCol = c: Exit For
     Next c
     If budCol = 0 Then budCol = tLastCol
