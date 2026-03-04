@@ -27,7 +27,8 @@ employee at the best company in the world.
 - `docs/day-to-day/` — day-to-day reference docs
 - `docs/overview/` — project overview docs
 - `docs/setup/` — setup guides
-- `training/` — final reviewed guides ready for coworkers
+- `FinalRoughGuides/` — draft/rough versions of training guides (edit and revise here first)
+- `training/` — final polished guides ready for coworkers (move here only after rough guide is fully reviewed and approved)
 - `qa/` — QA tracking, test plans, checklists, and bug logs
 - `tasks/` — session management files, todo.md and lessons.md
 - `excel/` — contains the main demo P&L Excel file, uploaded each session
