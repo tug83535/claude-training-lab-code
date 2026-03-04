@@ -178,8 +178,8 @@ NextRow:
     modPerformance.TurboOff
     
     modLogger.LogAction "modVarianceAnalysis", "RunVarianceAnalysis", _
-                        (row - 6) & " line items, " & flagCount & " flagged", _
-                        modPerformance.ElapsedSeconds()
+                        (row - 6) & " line items, " & flagCount & " flagged (" & _
+                        Format(modPerformance.ElapsedSeconds(), "0.00") & "s)"
     
     MsgBox "Variance analysis complete!" & vbCrLf & _
            (row - 6) & " line items compared" & vbCrLf & _
@@ -280,13 +280,6 @@ Public Sub GenerateCommentary()
 NextComRow:
     Next r
     
-    If viCount = 0 Then
-        modPerformance.TurboOff
-        MsgBox "No material variances found between FY Actual and Budget.", _
-               vbInformation, APP_NAME
-        Exit Sub
-    End If
-    
     ' Sort by absolute $ variance (descending) — bubble sort
     Dim i As Long, j As Long
     For i = 1 To viCount - 1
@@ -301,18 +294,18 @@ NextComRow:
             End If
         Next j
     Next i
-    
+
     modPerformance.UpdateStatus "Generating commentary...", 0.5
-    
-    ' Create output sheet
+
+    ' Create output sheet (always — even if no variances found)
     Dim comName As String: comName = SH_COMMENTARY
     modConfig.SafeDeleteSheet comName
-    
+
     Dim wsCom As Worksheet
     Set wsCom = ThisWorkbook.Worksheets.Add( _
         After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     wsCom.Name = comName
-    
+
     wsCom.Range("A1").Value = "VARIANCE COMMENTARY - FY" & FISCAL_YEAR_4 & " Budget vs Actual"
     wsCom.Range("A1").Font.Bold = True
     wsCom.Range("A1").Font.Size = 14
@@ -320,11 +313,27 @@ NextComRow:
 
     modConfig.StyleHeader wsCom, 4, _
         Array("#", "Line Item", "FY Actual", "Budget", "Variance ($)", "Variance (%)", "Commentary")
-    
+
+    ' Handle no variances — still create the sheet with a message
+    If viCount = 0 Then
+        wsCom.Range("A3").Value = "No material variances found between FY Actual and Budget."
+        wsCom.Range("A3").Font.Bold = True
+        wsCom.Range("A3").Font.Italic = True
+        wsCom.Tab.Color = RGB(0, 112, 192)
+        wsCom.Activate
+        modPerformance.TurboOff
+        modLogger.LogAction "modVarianceAnalysis", "GenerateCommentary", _
+            "No material variances found"
+        MsgBox "Variance Commentary sheet created." & vbCrLf & vbCrLf & _
+               "No material variances found between FY Actual and Budget.", _
+               vbInformation, APP_NAME
+        Exit Sub
+    End If
+
     Dim topN As Long: topN = Application.Min(5, viCount)
     wsCom.Range("A3").Value = "Top " & topN & " variances by absolute dollar impact"
     wsCom.Range("A3").Font.Bold = True
-    
+
     Dim outRow As Long: outRow = 5
     For i = 1 To topN
         wsCom.Cells(outRow, 1).Value = i
@@ -384,7 +393,7 @@ NextComRow:
     modPerformance.TurboOff
     
     modLogger.LogAction "modVarianceAnalysis", "GenerateCommentary", _
-        topN & " of " & viCount & " variances detailed", elapsed
+        topN & " of " & viCount & " variances detailed (" & Format(elapsed, "0.00") & "s)"
     
     MsgBox "Variance Commentary Generated!" & vbCrLf & vbCrLf & _
            "  Variances analyzed: " & viCount & vbCrLf & _
