@@ -260,7 +260,7 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 
 ## 6. Test Execution Results
 
-### Run Date: 2026-03-03
+### Run Date: 2026-03-03 (initial) / 2026-03-04 (updated)
 
 #### Category T1 — Compilation & Load
 
@@ -273,25 +273,71 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 | T1.05 | PASS | pnl_config.py prints config summary, no errors |
 | T1.06 | PASS | All Python scripts import cleanly |
 | T1.07 | PASS | All 14 files valid UTF-8. Non-ASCII bytes are intentional Unicode (em dashes, arrows, check marks, etc.) — no mojibake detected |
-| T1.08 | — | Not yet run |
+| T1.08 | PASS | `pip install -r requirements.txt` — all packages installed successfully |
 
 #### Category T2 — Foundation Issues
 
 | Test ID | Result | Notes |
 |---------|--------|-------|
-| T2.01 | — | Not yet run |
-| T2.02 | — | Not yet run |
-| T2.03 | **FAIL → BUG FOUND → FIXED** | **Initial call:** `Call StyleHeader(ActiveSheet, 1)` gave "Compile error: argument not optional" — user error, StyleHeader requires 3 args (ws, headerRow, headers). **Correct call:** `Call StyleHeader(ActiveSheet, 1, Array("Col A","Col B","Col C"))` — ran without error, but row 1 showed tan/brown background instead of navy. **Root cause:** `CLR_NAVY` constant in modConfig was set to `2050943` which decodes to `RGB(127,75,31)` (tan/brown). The hex `#1F4E79` was converted directly to decimal instead of using VBA's BGR byte order (`R + G×256 + B×65536`). **Fix:** Changed `CLR_NAVY` from `2050943` to `7949855` (correct value for `RGB(31,78,121)`). Also found and fixed same bug in `CLR_ALT_ROW`: was `15651567` → `RGB(239,210,238)` (pink/lavender), changed to `16380653` → `RGB(237,242,249)` (correct light blue). **Re-import modConfig_v2.1.bas and re-test to confirm PASS.** |
-| T2.04 | **FAIL → BUG FOUND → FIXED** | `UpdateHeaderText` is `Private Sub` in modMonthlyTabGenerator — cannot be called from Immediate Window. Added `Public Sub TestUpdateHeaderText()` wrapper in same module. Re-import modMonthlyTabGenerator_v2.1.bas and run `Call TestUpdateHeaderText` to confirm PASS. |
+| T2.01 | **PASS (after fix)** | 9 missing sheet-name constants added to modConfig (commit af44453). Re-tested — all 13 constants return values. |
+| T2.02 | PASS | SafeDeleteSheet("NonExistent") — no error, no prompt |
+| T2.03 | **PASS (after fix)** | CLR_NAVY and CLR_ALT_ROW had wrong hex-to-decimal conversion (VBA BGR byte order). Fixed in commit 19320db. Re-tested — navy background, white bold text confirmed. |
+| T2.04 | **PASS (after fix)** | Added TestUpdateHeaderText wrapper (commit 6f40f91) + NumberFormat text fix (commit ed3276f). Re-tested — A1="Margin" unchanged, A2="Market" unchanged, A3="Apr 25" replaced. |
 | T2.05 | — | Not yet run |
 | T2.06 | — | Not yet run |
 | T2.07 | — | Not yet run |
 
+#### Category T4 — Python Ecosystem (partial)
+
+| Test ID | Result | Notes |
+|---------|--------|-------|
+| T4.01 | — | Not yet run |
+| T4.02 | — | Not yet run |
+| T4.03 | — | Not yet run |
+| T4.04 | **PASS (after fix)** | Windows PermissionError on temp file cleanup fixed + email report feature removed (commit 3024c44). pytest: 99 passed, 15 skipped, 0 failures. |
+
+#### Category T5 — Advanced VBA Features (partial)
+
+| Test ID | Result | Notes |
+|---------|--------|-------|
+| T5.01 | **PASS (after fix)** | CreateExecutiveDashboard read row 1 instead of row 4 for headers + Error 5 crash + row/column detection failures. Fixed in commits 6c17bd5, 847a982. Re-tested — Dashboard sheet created with charts. |
+| T5.02 | **PASS (after fix)** | WaterfallChart row label fallbacks — searches for multiple label variants. Fixed in commit 304743b. Re-tested — chart created on Dashboard sheet. |
+| T5.03 | — | Not yet run |
+| T5.04 | — | Not yet run |
+| T5.05 | — | Not yet run |
+| T5.06 | — | Not yet run |
+
+#### Categories T3, T6, T7, T8 — Not yet started
+
 ### Bugs Found During Testing
 
-| Bug # | Test | Module | Description | Fix |
-|-------|------|--------|-------------|-----|
-| BUG-T2.03a | T2.03 | modConfig_v2.1.bas | `CLR_NAVY = 2050943` decodes to RGB(127,75,31) = tan/brown, not navy. Hex-to-decimal conversion did not account for VBA BGR byte order. | Changed to `7949855` = RGB(31,78,121) = correct navy |
-| BUG-T2.03b | T2.03 | modConfig_v2.1.bas | `CLR_ALT_ROW = 15651567` decodes to RGB(239,210,238) = pink/lavender, not light blue. Same hex conversion error. | Changed to `16380653` = RGB(237,242,249) = correct light blue |
-| BUG-T2.04a | T2.04 | modMonthlyTabGenerator_v2.1.bas | `UpdateHeaderText` declared as `Private Sub` — cannot be called from Immediate Window for testing. | Added `Public Sub TestUpdateHeaderText()` wrapper in same module |
-| BUG-T2.04b | T2.04 | modMonthlyTabGenerator_v2.1.bas | Test wrapper wrote `"Mar 25"` without setting cell format to Text first — Excel auto-converted it to a date (`3/25/2026`), so `UpdateHeaderText` couldn't find the text to replace. | Added `NumberFormat = "@"` (Text) on A1:A3 before writing values |
+| Bug # | Test | Module | Description | Fix | Commit |
+|-------|------|--------|-------------|-----|--------|
+| BUG-T2.01 | T2.01 | modConfig_v2.1.bas | 9 sheet-name constants missing (SH_GL, SH_TECH_DOC, etc.) | Added all 9 constants | af44453 |
+| BUG-T2.03a | T2.03 | modConfig_v2.1.bas | `CLR_NAVY = 2050943` decodes to RGB(127,75,31) = tan/brown, not navy. Hex-to-decimal did not use VBA BGR byte order. | Changed to `7949855` = RGB(31,78,121) | 19320db |
+| BUG-T2.03b | T2.03 | modConfig_v2.1.bas | `CLR_ALT_ROW = 15651567` decodes to RGB(239,210,238) = pink/lavender, not light blue. Same hex conversion error. | Changed to `16380653` = RGB(237,242,249) | 19320db |
+| BUG-T2.04a | T2.04 | modMonthlyTabGenerator_v2.1.bas | `UpdateHeaderText` declared as `Private Sub` — cannot be called from Immediate Window for testing. | Added `Public Sub TestUpdateHeaderText()` wrapper | 6f40f91 |
+| BUG-T2.04b | T2.04 | modMonthlyTabGenerator_v2.1.bas | Test wrapper wrote `"Mar 25"` without Text format — Excel auto-converted to date. | Added `NumberFormat = "@"` before writing values | ed3276f |
+| BUG-T4.04a | T4.04 | pnl_tests.py | Windows PermissionError on temp file cleanup during pytest | Fixed temp file handling | 3024c44 |
+| BUG-T5.01a | T5.01 | modDashboard_v2.1.bas | CreateExecutiveDashboard read row 1 (company title) instead of row 4 (HDR_ROW_REPORT) for column headers | Changed to HDR_ROW_REPORT | 6c17bd5 |
+| BUG-T5.01b | T5.01 | modDashboard_v2.1.bas | Error 5 (Invalid procedure call) crash in CreateExecutiveDashboard | Fixed row/column detection | 847a982 |
+| BUG-T5.02 | T5.02 | modDashboard_v2.1.bas | WaterfallChart hardcoded "Total Revenue" label — P&L Trend sheet may use "Revenue" or "Net Revenue" | Added multi-variant fallback search | 304743b |
+
+### Bugs Found During Self-Review (2026-03-04, commit 22ba831)
+
+These bugs were found by self-reviewing all remaining untested code against the test plan pass criteria BEFORE the user tested them.
+
+| Bug # | Severity | Module | Line | Description | Fix |
+|-------|----------|--------|------|-------------|-----|
+| SR-01 | CRITICAL | modReconciliation_v2.1.bas | 292 | `dateCol = 5` (Category column E) instead of `COL_GL_DATE = 2` (Date column B). Check 2 would never find January GL rows. | Changed to `COL_GL_DATE` |
+| SR-02 | INFO | modReconciliation_v2.1.bas | 293 | `amtCol = 7` hardcoded instead of using `COL_GL_AMOUNT` constant | Changed to `COL_GL_AMOUNT` |
+| SR-03 | CRITICAL | modVarianceAnalysis_v2.1.bas | 221 | GenerateCommentary read row 1 (company title) for `tLastCol` + column header search. Row 1 has only col A, so `tLastCol=1`, FY/Budget loops never execute, all variances = 0. | Changed to `HDR_ROW_REPORT` (row 4) |
+| SR-04 | MODERATE | modDashboard_v2.1.bas | 99 | LogAction: `elapsed` (Double) passed as 4th arg (status field expects String "OK"). Audit log Status column corrupted with "0.547". | Moved elapsed into message string |
+| SR-05 | MODERATE | modDashboard_v2.1.bas | 369 | Same LogAction issue — CreateExecutiveDashboard | Moved elapsed into message string |
+| SR-06 | MODERATE | modDashboard_v2.1.bas | 534 | Same LogAction issue — WaterfallChart | Moved elapsed into message string |
+| SR-07 | MODERATE | modDashboard_v2.1.bas | 669 | Same LogAction issue — ProductComparison | Moved elapsed into message string |
+| SR-08 | MODERATE | modDashboard_v2.1.bas | 1226 | Same LogAction issue — CreateSmallMultiplesGrid | Moved elapsed into message string |
+| SR-09 | MODERATE | modDemoTools_v2.1.bas | — | Same LogAction issue — CreatePrintableExecSummary | Moved elapsed into message string |
+| SR-10 | MODERATE | modTrendReports_v2.1.bas | 153 | Same LogAction issue — CreateRolling12MonthView | Moved elapsed into message string |
+| SR-11 | MODERATE | modMonthlyTabGenerator_v2.1.bas | 110 | Same LogAction issue — GenerateMonthlyTabs | Moved elapsed into message string |
+| SR-12 | MODERATE | modMonthlyTabGenerator_v2.1.bas | 230 | Same LogAction issue — GenerateNextMonthOnly | Moved elapsed into message string |
