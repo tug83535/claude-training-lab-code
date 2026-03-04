@@ -34,7 +34,7 @@
 | Excel | Microsoft 365 (latest channel) |
 | VBA | 7.1 |
 | Python | 3.11+ |
-| Workbook | KeystoneBenefitTech_PL_Model.xlsm |
+| Workbook | ExcelDemoFile_adv.xlsm |
 
 ### Secondary: Excel 2019 (Windows)
 
@@ -219,7 +219,7 @@ Tests for the 8 modules added in the 2026-03-01 session, plus verification of 4 
 ## 4. Test Execution Procedure
 
 ### Pre-Test Setup
-1. Start with a fresh copy of `KeystoneBenefitTech_PL_Model.xlsx`
+1. Start with a fresh copy of `ExcelDemoFile_adv.xlsm`
 2. Enable macros and Trust Access per IMPLEMENTATION_GUIDE.md
 3. Import all 32 VBA modules from the `vba/` folder
 4. Build the frmCommandCenter (Mode A or B)

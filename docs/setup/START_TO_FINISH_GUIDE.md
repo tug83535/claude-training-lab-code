@@ -60,7 +60,7 @@ Excel-PnL-Automation-Package/
     └── ISSUE_CLOSURE.md
 ```
 
-You also need the **source workbook**: `KeystoneBenefitTech_PL_Model.xlsx`. This is the Excel file all the code operates on. The code does NOT work without this workbook.
+You also need the **source workbook**: `ExcelDemoFile_adv.xlsm`. This is the Excel file all the code operates on. The code does NOT work without this workbook.
 
 **The 3 layers of this system:**
 
@@ -202,14 +202,14 @@ That's it. The core VBA system has zero external dependencies.
 
 ### 1B — Copy the Workbook
 
-1. Put `KeystoneBenefitTech_PL_Model.xlsx` into `C:\KBT_PnL_Toolkit\` (or wherever you extracted)
+1. Put `ExcelDemoFile_adv.xlsm` into `C:\KBT_PnL_Toolkit\` (or wherever you extracted)
 2. Make a backup copy somewhere safe — you'll always want an untouched original
 
 ### 1C — Convert to Macro-Enabled Format
 
 The workbook ships as `.xlsx` (no macros allowed). You need to save it as `.xlsm`:
 
-1. Open `KeystoneBenefitTech_PL_Model.xlsx` in Excel
+1. Open `ExcelDemoFile_adv.xlsm` in Excel
 2. Click **File** → **Save As**
 3. In the "Save as type" dropdown, select **Excel Macro-Enabled Workbook (*.xlsm)**
 4. Click **Save**
@@ -265,7 +265,7 @@ This is where you put the automation code into the workbook.
 
 ### 2B — Import the 12 .bas Files
 
-1. In the VBA Editor, click on your project name (e.g., "VBAProject (KeystoneBenefitTech_PL_Model.xlsm)")
+1. In the VBA Editor, click on your project name (e.g., "VBAProject (ExcelDemoFile_adv.xlsm)")
 2. Go to **File** → **Import File...** (or right-click the project → **Import File...**)
 3. Navigate to `C:\KBT_PnL_Toolkit\Excel-PnL-Automation-Package\03_Code\VBA\`
 4. Select **modConfig_v2.1.bas** and click **Open**
@@ -441,12 +441,12 @@ The Python scripts need to know where your Excel workbook is. Two options:
 
 **Option A — Environment variable (set once):**
 ```
-set KBT_SOURCE_FILE=C:\KBT_PnL_Toolkit\KeystoneBenefitTech_PL_Model.xlsm
+set KBT_SOURCE_FILE=C:\KBT_PnL_Toolkit\ExcelDemoFile_adv.xlsm
 ```
 
 **Option B — Pass it each time:**
 ```
-python pnl_runner.py config --file "C:\KBT_PnL_Toolkit\KeystoneBenefitTech_PL_Model.xlsm"
+python pnl_runner.py config --file "C:\KBT_PnL_Toolkit\ExcelDemoFile_adv.xlsm"
 ```
 
 ### 5E — Test Python

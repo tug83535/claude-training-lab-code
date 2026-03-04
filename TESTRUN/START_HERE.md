@@ -48,7 +48,7 @@ After extracting, navigate into the folder. You will see:
 ```
 KBT_TestRun\
   excel\
-    KeystoneBenefitTech_PL_Model.xlsx   ← YOUR TEST FILE
+    ExcelDemoFile_adv.xlsm              ← YOUR TEST FILE
   vba\
     modAdmin_v2.1.bas
     modAllocation_v2.1.bas
@@ -90,11 +90,10 @@ KBT_TestRun\
 
 ## Step 3 — Prepare the Excel File
 
-1. Copy `KeystoneBenefitTech_PL_Model.xlsx` somewhere safe
+1. Copy `ExcelDemoFile_adv.xlsm` somewhere safe
    (example: `C:\Users\YourName\Desktop\KBT_TestRun\`)
 
-2. Rename the copy to `KeystoneBenefitTech_PL_Model_TEST.xlsm`
-   - Important: change the extension from `.xlsx` to `.xlsm`
+2. Make a backup copy named `ExcelDemoFile_adv_TEST.xlsm`
    - The `.xlsm` extension is required for Excel to save VBA macros inside the file
 
 3. Open the renamed file in Excel
@@ -185,7 +184,7 @@ Work through it in order:
 
 | File | Purpose |
 |------|---------|
-| `KeystoneBenefitTech_PL_Model_TEST.xlsm` | The workbook you run all tests in |
+| `ExcelDemoFile_adv_TEST.xlsm` | The workbook you run all tests in |
 | `vba/*.bas` (all 31 files) | Already imported — no need to touch these again |
 | `qa/TEST_PLAN.md` | Your test checklist |
 | `qa/INTEGRATION_TEST_GUIDE.md` | Detailed walkthrough for the integration tests (T7) |

@@ -1,6 +1,6 @@
 # Workbook Setup Notes
 
-> **File:** `KeystoneBenefitTech_PL_Model.xlsm`
+> **File:** `ExcelDemoFile_adv.xlsm`
 > **Format:** Excel Macro-Enabled Workbook
 
 ---
@@ -11,7 +11,7 @@
 
 The source workbook is distributed as `.xlsx` (no macros). To use VBA automation:
 
-1. Open `KeystoneBenefitTech_PL_Model.xlsx` in Excel.
+1. Open `ExcelDemoFile_adv.xlsm` in Excel.
 2. Go to **File → Save As**.
 3. Change **Save as type** to **"Excel Macro-Enabled Workbook (*.xlsm)"**.
 4. Save to your working directory.

@@ -21,8 +21,8 @@ from copy import copy
 # ============================================================
 # 1. LOAD WORKBOOK
 # ============================================================
-INPUT_FILE = 'excel/KeystoneBenefitTech_PL_Model.xlsx'
-OUTPUT_FILE = 'excel/KeystoneBenefitTech_PL_Model.xlsx'
+INPUT_FILE = 'excel/ExcelDemoFile_adv.xlsm'
+OUTPUT_FILE = 'excel/ExcelDemoFile_adv.xlsm'
 
 wb = openpyxl.load_workbook(INPUT_FILE)
 

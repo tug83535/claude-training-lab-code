@@ -35,7 +35,7 @@ except ImportError:
     APP_NAME = "KBT P&L Toolkit"
     APP_VERSION = "2.1.0"
     FY_LABEL = "FY2025"
-    SOURCE_FILE = "KeystoneBenefitTech_PL_Model.xlsm"
+    SOURCE_FILE = "../excel/ExcelDemoFile_adv.xlsm"
 
 
 BANNER = f"""

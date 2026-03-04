@@ -7,7 +7,7 @@
 ## What This Folder Is For
 
 Most VBA modules in this project are built specifically for the
-`KeystoneBenefitTech_PL_Model.xlsm` file. They look for exact sheet names,
+`ExcelDemoFile_adv.xlsm` file. They look for exact sheet names,
 row positions, and named ranges that only exist in that workbook.
 
 However, a small set of tools are truly universal — they work on any

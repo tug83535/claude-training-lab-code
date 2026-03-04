@@ -41,7 +41,7 @@ All 32 `.bas` module files are in the `vba/` folder of this repository.
 
 ### Import Procedure
 
-1. Open `KeystoneBenefitTech_PL_Model.xlsm`.
+1. Open `ExcelDemoFile_adv.xlsm`.
 2. Press **Alt+F11** to open the VBA Editor.
 3. In the **Project Explorer** (left panel), find your workbook under "VBAProject".
 4. Right-click on **Modules** → **Import File...**
@@ -140,7 +140,7 @@ python pnl_config.py
 
 # You should see:
 #   KBT P&L Toolkit v2.1.0 — Configuration Module
-#   Source File:      KeystoneBenefitTech_PL_Model.xlsx
+#   Source File:      ExcelDemoFile_adv.xlsm
 #   Fiscal Year:      FY2025
 #   Products:         iGO, Affirm, InsureSight, DocFast
 #   Revenue shares sum:   1.00 ✓
@@ -164,7 +164,7 @@ python pnl_runner.py config           # Show current configuration
 
 ### File Path Configuration
 
-By default, Python scripts look for `KeystoneBenefitTech_PL_Model.xlsx` in the current directory. To use a different path:
+By default, Python scripts look for `ExcelDemoFile_adv.xlsm` in the `excel/` folder (one level up from the `python/` directory). To use a different path:
 
 ```bash
 # Option 1: CLI argument
@@ -259,7 +259,7 @@ FY_LABEL = "FY2026"         # was "FY2025"
 │  modLogger (audit trail)        │ ThisWorkbook (events)       │
 ├──────────────────────────────────────────────────────────────┤
 │                    DATA LAYER                                │
-│  KeystoneBenefitTech_PL_Model.xlsx                           │
+│  ExcelDemoFile_adv.xlsm                                      │
 │  13 sheets: GL, Assumptions, P&L Trend, Product Summary,     │
 │  Functional Trend, Functional Jan/Feb/Mar, AWS, Checks, etc. │
 ├──────────────────────────────────────────────────────────────┤

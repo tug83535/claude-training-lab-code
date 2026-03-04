@@ -56,7 +56,7 @@ This document is written for a separate Claude account to review. There are two 
 ## SECTION 1 — What This Project Is
 
 **Project Name:** APCLDmerge — iPipeline P&L Demo
-**File:** KeystoneBenefitTech_PL_Model.xlsm (Excel macro-enabled workbook)
+**File:** ExcelDemoFile_adv.xlsm (Excel macro-enabled workbook)
 
 **What it is:**
 A fully automated Profit & Loss financial model built in Excel. The workbook has a **Command Center** — a professional UserForm with buttons for 62 actions. Finance staff open the file, click a button, and the macro runs instantly. No coding knowledge required.

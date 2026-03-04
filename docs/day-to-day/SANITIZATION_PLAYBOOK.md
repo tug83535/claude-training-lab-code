@@ -82,13 +82,13 @@ End Sub
 ```python
 import openpyxl
 factor = 1.47
-wb = openpyxl.load_workbook("KeystoneBenefitTech_PL_Model.xlsx")
+wb = openpyxl.load_workbook("ExcelDemoFile_adv.xlsm")
 ws = wb["CrossfireHiddenWorksheet"]
 for row in ws.iter_rows(min_row=2, min_col=7, max_col=7):
     for cell in row:
         if isinstance(cell.value, (int, float)):
             cell.value = round(cell.value * factor, 2)
-wb.save("KeystoneBenefitTech_PL_Model_SANITIZED.xlsx")
+wb.save("ExcelDemoFile_adv_SANITIZED.xlsm")
 ```
 
 **Important:** Record the scaling factor securely. You need it for reversal.

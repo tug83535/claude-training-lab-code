@@ -8,7 +8,7 @@
 ## Prerequisites
 
 - Windows PC with Excel Desktop (O365 or Excel 2019+)
-- The workbook: `KeystoneBenefitTech_PL_Model.xlsm`
+- The workbook: `ExcelDemoFile_adv.xlsm`
 - The 32 VBA `.bas` module files (provided in the `03_Code/VBA/` folder)
 
 ---
@@ -27,7 +27,7 @@
 
 ## Step 2 — Import VBA Modules (5 min)
 
-1. Open `KeystoneBenefitTech_PL_Model.xlsm`. If prompted, click **Enable Content**.
+1. Open `ExcelDemoFile_adv.xlsm`. If prompted, click **Enable Content**.
 2. Press **Alt+F11** to open the VBA Editor.
 3. In the left panel, right-click on **VBAProject** → **Import File...**
 4. Navigate to the `03_Code/VBA/` folder.

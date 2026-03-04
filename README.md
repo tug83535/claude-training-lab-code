@@ -19,7 +19,7 @@ coworkers understand and use all the tools included in this project.
 ## What's Inside
 
 ### Excel + VBA (The Centerpiece)
-The main file is `excel/KeystoneBenefitTech_PL_Model.xlsx` — a 13-sheet P&L
+The main file is `excel/ExcelDemoFile_adv.xlsm` — a 13-sheet P&L
 model powered by VBA macros organized into 32 modules:
 
 | Module | What It Does |

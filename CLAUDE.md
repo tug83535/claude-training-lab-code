@@ -320,7 +320,7 @@ VBA modules, and fixed all known bugs. The codebase is now complete.
 - modAllocation, modConsolidation, modVersionControl, modAdmin, modIntegrationTest
 
 ### Excel File
-- KeystoneBenefitTech_PL_Model.xlsx — iPipeline Fortune 100 redesigned version
+- ExcelDemoFile_adv.xlsm — iPipeline Fortune 100 redesigned version
 - 13 sheets + Charts & Visuals (from Track A merge)
 - Binary file — cannot be read directly by Claude
 - The .bas files exist in the repo but have NOT been imported into the Excel workbook yet

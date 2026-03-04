@@ -74,7 +74,7 @@ Running `python pnl_config.py` printed the full config summary successfully
 (all shares summed to 1.00, version 2.1.0 confirmed), but also printed a warning:
 
 ```
-⚠ Source file not found: KeystoneBenefitTech_PL_Model.xlsx
+⚠ Source file not found: ExcelDemoFile_adv.xlsm
 ```
 
 ### Root Cause
