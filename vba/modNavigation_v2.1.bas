@@ -64,7 +64,7 @@ Public Sub RefreshTableOfContents()
             wsReport.Hyperlinks.Add _
                 Anchor:=wsReport.Cells(row, 2), _
                 Address:="", _
-                SubAddress:="'" & ws.Name & "'!A1", _
+                SubAddress:="'[" & ThisWorkbook.Name & "]" & ws.Name & "'!A1", _
                 TextToDisplay:=ws.Name
             
             wsReport.Cells(row, 2).Font.Color = RGB(31, 78, 121)
