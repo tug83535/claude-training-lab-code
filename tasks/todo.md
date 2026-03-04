@@ -158,6 +158,15 @@ All fixes committed and pushed (commit a22dd76).
 - [x] **Universal Tools — Coworker How-To Guide:** COMPLETE (2026-03-03) — Full guide at `UniversalToolsForAllFiles/UNIVERSAL_TOOLS_HOW_TO_GUIDE.md`. Covers all 76 tools with installation, step-by-step usage, examples, and quick reference table. Written for non-technical Finance & Accounting staff.
 - [ ] **Universal Tools — Python .exe Conversion:** Convert all 18 Python scripts to standalone `.exe` files using PyInstaller (or similar) so coworkers can just double-click and run — no Python installation required. Package with a simple folder + README.
 
+### Enhancement Ideas — Top 3 (Approved, Build After Code Review Complete)
+These came from the Project Refresh code audit ideas list. Ranked by impact-to-effort ratio for the demo:
+
+1. **Data Quality Letter Grade (A-F)** — Add a single letter grade summary at the top of the data quality report. Low effort (scoring function at end of existing scan in modDataQuality). Highest demo impact — CFO reads one letter, not 47 lines.
+2. **Forecast Accuracy Scoring (MAPE/bias)** — Add Mean Absolute Percentage Error calculation to pnl_forecast.py. Low effort, high impact — transforms "here's our forecast" into "here's our forecast, and historically it's 96.2% accurate."
+3. **YoY Variance Analysis (not just MoM)** — Add year-over-year comparison to modVarianceAnalysis alongside existing month-over-month. Medium effort, high impact — MoM is operational, but YoY is how CFOs evaluate performance and how board decks are built.
+
+**Status:** Noted only — waiting for the other Claude account's recommendations before building.
+
 ---
 
 ## Dropped by User (Do Not Build)
