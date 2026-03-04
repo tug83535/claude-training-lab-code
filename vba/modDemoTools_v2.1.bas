@@ -39,20 +39,36 @@ Public Sub AddControlSheetButtons()
         If Left(btn.Name, 7) = "DemoBtn" Then btn.Delete
     Next btn
 
-    ' Define: Caption, MacroToCall, Top, Left, Width, Height
+    ' Place buttons below all existing content with a 2-row gap
+    Dim lastUsedRow As Long
+    lastUsedRow = ws.Cells.Find(What:="*", SearchOrder:=xlByRows, _
+                                SearchDirection:=xlPrevious).row
+    If lastUsedRow < 1 Then lastUsedRow = 1
+    Dim startRow As Long: startRow = lastUsedRow + 2
+    Dim topPos As Long: topPos = ws.Cells(startRow, 1).Top
+
+    ' Section label above buttons
+    ws.Cells(startRow, 1).Value = "Quick Actions"
+    ws.Cells(startRow, 1).Font.Bold = True
+    ws.Cells(startRow, 1).Font.Size = 11
+    ws.Cells(startRow, 1).Font.Color = CLR_NAVY
+    topPos = ws.Cells(startRow + 1, 1).Top
+
+    ' Define: Caption, MacroToCall, Width, Height
     Dim btnDefs As Variant
     btnDefs = Array( _
-        Array("Run Reconciliation",  "modReconciliation.RunAllChecks",    10,  20, 170, 28), _
-        Array("Build Dashboard",     "modDashboard.BuildDashboard",        44,  20, 170, 28), _
-        Array("Data Quality Check",  "modDataQuality.ScanAll",             78,  20, 170, 28), _
-        Array("Export PDF",          "modPDFExport.ExportReportPackage", 112,  20, 170, 28), _
-        Array("Validate Assumptions","modDataGuards.ValidateAssumptionsPresence", 146, 20, 170, 28))
+        Array("Run Reconciliation",  "modReconciliation.RunAllChecks",   170, 28), _
+        Array("Build Dashboard",     "modDashboard.BuildDashboard",      170, 28), _
+        Array("Data Quality Check",  "modDataQuality.ScanAll",           170, 28), _
+        Array("Export PDF",          "modPDFExport.ExportReportPackage",  170, 28), _
+        Array("Validate Assumptions","modDataGuards.ValidateAssumptionsPresence", 170, 28))
 
+    Dim btnSpacing As Long: btnSpacing = 34  ' vertical gap between buttons
     Dim i As Long
     For i = 0 To 4
         Dim def As Variant: def = btnDefs(i)
         Dim newBtn As Object
-        Set newBtn = ws.Buttons.Add(CLng(def(3)), CLng(def(2)), CLng(def(4)), CLng(def(5)))
+        Set newBtn = ws.Buttons.Add(20, topPos + (i * btnSpacing), CLng(def(2)), CLng(def(3)))
         newBtn.Caption  = CStr(def(0))
         newBtn.OnAction = CStr(def(1))
         newBtn.Name     = "DemoBtn" & i
