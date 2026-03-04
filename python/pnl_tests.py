@@ -205,7 +205,7 @@ class TestConfigConstants:
         assert "." in APP_VERSION
 
     def test_paths_defined(self):
-        assert SOURCE_FILE.endswith(".xlsx")
+        assert SOURCE_FILE.endswith(".xlsm")
         assert DB_PATH.endswith(".db")
         assert OUTPUT_DIR != ""
         assert CHART_DIR != ""

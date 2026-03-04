@@ -18,7 +18,7 @@ USAGE:
     python pnl_month_end.py --file my_model.xlsx     # Custom source file
 
     from pnl_month_end import MonthEndClose
-    closer = MonthEndClose("KeystoneBenefitTech_PL_Model.xlsx", month=3)
+    closer = MonthEndClose(SOURCE_FILE, month=3)
     closer.run()
 """
 

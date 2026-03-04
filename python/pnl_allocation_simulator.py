@@ -13,7 +13,7 @@ USAGE:
     python pnl_allocation_simulator.py --export scenario_output.xlsx
 
     from pnl_allocation_simulator import AllocationSimulator
-    sim = AllocationSimulator("KeystoneBenefitTech_PL_Model.xlsx")
+    sim = AllocationSimulator(SOURCE_FILE)
     result = sim.simulate(revenue_shares={"InsureSight": 0.20, "DocFast": 0.10})
 """
 

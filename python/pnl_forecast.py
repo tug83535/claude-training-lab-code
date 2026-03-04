@@ -15,7 +15,7 @@ USAGE:
     python pnl_forecast.py --product iGO --export forecast.xlsx
 
     from pnl_forecast import PnLForecaster
-    fc = PnLForecaster("KeystoneBenefitTech_PL_Model.xlsx")
+    fc = PnLForecaster(SOURCE_FILE)
     result = fc.forecast(periods=6)
 """
 

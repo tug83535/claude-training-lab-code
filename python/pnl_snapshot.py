@@ -14,7 +14,7 @@ USAGE:
     python pnl_snapshot.py export --id 3                     # Export snapshot to Excel
 
     from pnl_snapshot import SnapshotManager
-    mgr = SnapshotManager("KeystoneBenefitTech_PL_Model.xlsx")
+    mgr = SnapshotManager(SOURCE_FILE)
     mgr.save_snapshot(label="February Pre-Close")
 """
 

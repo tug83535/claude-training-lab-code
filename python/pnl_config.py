@@ -30,7 +30,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 # FILE PATHS
 # =============================================================================
 
-SOURCE_FILE = "KeystoneBenefitTech_PL_Model.xlsx"
+SOURCE_FILE = "KeystoneBenefitTech_PL_Model.xlsm"
 DB_PATH = "keystone_pnl.db"
 OUTPUT_DIR = "./output"
 CHART_DIR = "./charts"

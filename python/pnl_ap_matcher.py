@@ -13,7 +13,7 @@ USAGE:
     python pnl_ap_matcher.py --vendor "Amazon" --month 3
 
     from pnl_ap_matcher import APMatcher
-    matcher = APMatcher("KeystoneBenefitTech_PL_Model.xlsx")
+    matcher = APMatcher(SOURCE_FILE)
     result = matcher.match_all()
 """
 
