@@ -104,48 +104,98 @@ Before delivering ANYTHING ask yourself:
 - All Python scripts complete — 14 scripts, all functional (2026-02-28)
 - 7 new VBA modules added from NewTesting ideas (2026-03-01)
 - 32 VBA modules total — imported into workbook, Debug > Compile passes clean
-- T1 testing complete (T1.01–T1.07 all PASS) — T1.08 not yet run (pip install -r requirements.txt)
+- T1 complete (T1.01–T1.08 all PASS), T2 partially tested (T2.01–T2.04 done, T2.05–T2.07 not yet run)
+- T5.01 and T5.02 tested and fixed this session (ExecDashboard + WaterfallChart)
+- Self-review of all remaining tests completed — 12 additional bugs found and fixed preemptively
+- Python pytest: 99 passed, 15 skipped, 0 failures (T4.04 criteria met)
 - Universal Tools: 76 tools built, code-reviewed, all 9 bugs fixed, how-to guide written (2026-03-03)
 - Track B COMPLETE, Track C COMPLETE, Backlog Item 1 (how-to guide) COMPLETE
-- Branch: `claude/resume-apclmerge-project-CXWP5` (active branch)
-- Next phase: Track A testing (T1.08+), then demo readiness — see tasks/todo.md
+- Branch: `claude/resume-apclmerge-project-V8WSj` (active branch as of 2026-03-04)
+- Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
-## Session Summary — 2026-03-03 (Latest — Code Review + How-To Guide)
+## Session Summary — 2026-03-04 (Latest — Testing Bug Fixes + Self-Review)
 
 ### What Was Done This Session
-- **Track C COMPLETE:** Reviewed all 76 Universal Tools (5 VBA modules + 18 Python scripts) line by line
-- Found and fixed 9 bugs: 4 critical, 4 moderate, 1 minor (commit a22dd76)
-- **Backlog Item 1 COMPLETE:** Wrote comprehensive 1305-line coworker how-to guide (commit 199f983)
-- Updated tasks/todo.md with all completions (commit 0d2afc7)
-- All changes pushed to `claude/resume-apclmerge-project-CXWP5`
+This session focused on fixing bugs discovered during testing and then doing a full self-review of ALL remaining untested code against the test plan pass criteria — catching bugs before the user has to find them.
 
-### 9 Bugs Found and Fixed (Track C)
-**VBA — 8 bugs:**
-1. modUTL_Audit: CircularReferenceDetector — crashed on sheets with no circular refs (For Each on Nothing)
-2. modUTL_Audit: InconsistentFormulasAuditor — used raw Formula instead of FormulaR1C1, flagged every row as different
-3. modUTL_Audit: NamedRangeAuditor — used MacroType for scope detection (wrong property), now checks for "!" in name
-4. modUTL_Finance: JournalEntryValidator — dr/cr not reset to 0 each loop, stale values corrupted balance check
-5. modUTL_Finance: FluxAnalysis — wrote over existing columns, now inserts columns first
-6. modUTL_Finance: FinancialPeriodRollForward — iterated all 16K+ cells in row, now limited to used range
-7. modUTL_WorkbookMgmt: BuildDistributionReadyCopy — double Replace() created _DIST_DIST.xlsx for .xlsm files
-8. modUTL_DataCleaning: Removed unused variable (dead code)
+**Branch:** `claude/resume-apclmerge-project-V8WSj` (new branch, forked from CXWP5 — all CXWP5 work is included)
 
-**Python — 1 bug:**
-9. clean_data.py: Removed deprecated infer_datetime_format parameter (pandas 2.0+)
+### Testing Bug Fixes (found by user during testing)
+1. **T2.01 — PASS after fix:** Added 9 missing sheet-name constants to modConfig (commit af44453)
+2. **T2.03 — PASS after fix:** CLR_NAVY and CLR_ALT_ROW color constants had wrong hex-to-decimal conversion (VBA BGR byte order) (commit 19320db)
+3. **T2.04 — PASS after fix:** Added TestUpdateHeaderText wrapper (BUG-T2.04) + set NumberFormat to Text before writing "Mar 25" (BUG-T2.04b) (commits 6f40f91, ed3276f)
+4. **T4.04 — PASS after fix:** Windows PermissionError on temp file cleanup + removed email report feature (commit 3024c44)
+5. **T5.01 — PASS after fix:** CreateExecutiveDashboard read row 1 instead of row 4 for headers + Error 5 crash + row/column detection failures (commits 6c17bd5, 847a982)
+6. **T5.02 — PASS after fix:** WaterfallChart row label fallbacks — searches for multiple label variants ("Total Revenue"/"Revenue"/"Net Revenue", etc.) (commit 304743b)
 
-### How-To Guide Created
-- `UniversalToolsForAllFiles/UNIVERSAL_TOOLS_HOW_TO_GUIDE.md` — 1305 lines
-- Covers all 76 tools: installation, step-by-step usage, examples, quick reference table
-- Written for non-technical Finance & Accounting staff
+### Self-Review: 12 Bugs Found and Fixed Preemptively (commit 22ba831)
+After the user asked "what can we do to limit bugs?", I ran a full self-review of all VBA modules against every remaining test's pass criteria. Found and fixed:
+
+**2 Critical Logic Bugs:**
+1. **modReconciliation line 292:** `dateCol = 5` was reading the Category column (E) instead of the Date column (B = COL_GL_DATE = 2). ValidateCrossSheet Check 2 would never find any January GL rows.
+2. **modVarianceAnalysis line 221:** GenerateCommentary read row 1 (company title) instead of HDR_ROW_REPORT (row 4) for column headers. This made tLastCol = 1, so FY/Budget column search loops never ran — all variances would be zero.
+
+**9 LogAction Signature Bugs** (across modDashboard, modDemoTools, modTrendReports, modMonthlyTabGenerator):
+- 9 call sites passed `elapsed` (a Double) as 4th arg — the `status` field expects a String like "OK". This corrupted audit log Status column with numeric values like "0.547". Fixed by moving elapsed into the message string.
+
+**1 Constant Consistency Fix:**
+- modReconciliation `amtCol = 7` hardcoded → replaced with `COL_GL_AMOUNT` constant.
+
+### What Passed Self-Review (No Bugs Found)
+- T2.05 (FixTextNumbers guard) — correct
+- T2.06 (Shortcuts use OnKey, Ctrl+H not overridden) — correct
+- T2.07 (Timer midnight rollover) — correct
+- T5.06 (Search 200-result cap) — correct
+- T8.14/T8.30 (Button OnAction macro names) — correct
+- T8.31 (ClearShortcuts) — correct
+- All constant references across all T8 modules — verified against modConfig
+- All StyleHeader calls — all pass exactly 3 arguments
+- Python pytest: 99 passed, 15 skipped, 0 failures
+
+### Pre-Delivery Self-Review Requirement Added
+Added to tasks/lessons.md — all future code updates must be self-reviewed against the test plan before delivery.
+
+### Files Modified This Session (6 VBA + 1 doc)
+- `vba/modReconciliation_v2.1.bas` — dateCol/amtCol constants fix
+- `vba/modVarianceAnalysis_v2.1.bas` — row 1 → HDR_ROW_REPORT fix
+- `vba/modDashboard_v2.1.bas` — 4 LogAction fixes + WaterfallChart row label fallbacks + ExecDashboard fixes
+- `vba/modDemoTools_v2.1.bas` — 1 LogAction fix
+- `vba/modTrendReports_v2.1.bas` — 1 LogAction fix
+- `vba/modMonthlyTabGenerator_v2.1.bas` — 3 LogAction fixes + TestUpdateHeaderText wrapper
+- `tasks/lessons.md` — added Pre-Delivery Self-Review Requirement
+
+### Re-Import Required
+The user must re-import these 6 `.bas` files into the Excel workbook before continuing testing:
+1. modConfig_v2.1.bas (from earlier commit — color constants)
+2. modReconciliation_v2.1.bas
+3. modVarianceAnalysis_v2.1.bas
+4. modDashboard_v2.1.bas
+5. modDemoTools_v2.1.bas
+6. modTrendReports_v2.1.bas
+7. modMonthlyTabGenerator_v2.1.bas
+
+### Test Status Summary (as of end of session)
+| Category | Tests | Passed | Failed→Fixed | Not Yet Run |
+|----------|-------|--------|-------------|-------------|
+| T1 Compilation | 8 | 8 | 0 | 0 |
+| T2 Foundation | 7 | 4 | 0 | 3 (T2.05–T2.07) |
+| T3 Menu/Command Center | 5 | 0 | 0 | 5 |
+| T4 Python | 4 | 1 (T4.04) | 0 | 3 |
+| T5 Advanced VBA | 6 | 2 (T5.01, T5.02) | 0 | 4 |
+| T6 Data Integrity | 6 | 0 | 0 | 6 |
+| T7 Integration | 4 | 0 | 0 | 4 |
+| T8 New v2.1 Modules | 29 | 0 | 0 | 29 |
+| **Total** | **69** | **15** | **0** | **54** |
 
 ### What's Left (Next Session)
-- **Track A Testing:** Resume at T1.08 (pip install -r requirements.txt), then T2, T3, T4
-- **Demo Readiness:** Live test all 62 Command Center actions, script demo video, build training guide
-- **Backlog:** Python .exe conversion, Universal Tools Add-In packaging
+1. **Re-import 7 fixed .bas files** into Excel workbook
+2. **Continue testing:** T2.05–T2.07, then T3, T4, T5.03–T5.06, T6, T7, T8
+3. **Demo Readiness:** After all tests pass → live test all 62 Command Center actions → script demo video → build training guide
+4. **Backlog:** Python .exe conversion, Universal Tools Add-In packaging
 
 ### Branch
-- Active branch: `claude/resume-apclmerge-project-CXWP5`
-- Latest commits: a22dd76 (bug fixes), 199f983 (how-to guide), 0d2afc7 (todo update)
+- Active branch: `claude/resume-apclmerge-project-V8WSj`
+- Key commits this session: af44453, 19320db, 6f40f91, ed3276f, 3024c44, 6c17bd5, 847a982, 304743b, 22ba831
 
 ---
 

@@ -1,61 +1,35 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-03-03)
-- **Branch:** `claude/resume-apclmerge-project-CXWP5` (active working branch)
+## Current Status (2026-03-04)
+- **Branch:** `claude/resume-apclmerge-project-V8WSj` (active working branch)
 - **VBA Modules:** 32 imported into Excel workbook — Debug > Compile passes (greyed out = clean)
-- **Python Scripts:** 14 complete and functional (main project)
+- **Python Scripts:** 14 complete and functional (main project) — pytest: 99 passed, 0 failures
 - **Universal Tools:** 76 tools built, code-reviewed, bugs fixed, how-to guide written
 - **Excel File:** Workbook open with all 32 modules imported and error-free
-- **Testing Phase:** T1 in progress — T1.01 through T1.07 complete; T1.08 not yet run (Connor doing tomorrow)
-- **Overall:** Track B complete, Track C complete, Backlog Item 1 complete
+- **Testing Phase:** T1 COMPLETE, T2 partially done (T2.01–T2.04 PASS, T2.05–T2.07 not yet run), T5.01+T5.02 PASS
+- **Self-Review:** Full self-review of all remaining untested code completed — 12 bugs found and fixed preemptively
+- **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE
 
-### ⚠ ACCOUNT SWITCH NEEDED — Usage at ~90%
-The current Claude account is near its usage limit. The next Claude account must pick up from here.
+### ⚠ IMPORTANT — RE-IMPORT NEEDED
+Before continuing testing, re-import these 7 `.bas` files into the Excel workbook (VBA Editor → File → Import):
+1. modConfig_v2.1.bas (color constant fixes)
+2. modReconciliation_v2.1.bas (dateCol/amtCol constant fixes)
+3. modVarianceAnalysis_v2.1.bas (GenerateCommentary row 1 → row 4 fix)
+4. modDashboard_v2.1.bas (WaterfallChart fallbacks + ExecDashboard fixes + LogAction fixes)
+5. modDemoTools_v2.1.bas (LogAction fix)
+6. modTrendReports_v2.1.bas (LogAction fix)
+7. modMonthlyTabGenerator_v2.1.bas (LogAction fixes + TestUpdateHeaderText wrapper)
 
-**There are TWO active tracks. Pick up whichever the user directs:**
-
----
-
-**TRACK A — Testing (T1.08 next)**
-1. Read this file, tasks/lessons.md, CLAUDE.md, and Testing_Issues/TESTING_ISSUES_LOG.md first
-2. Read qa/TEST_PLAN.md for the full test procedure
-3. Resume at **T1.08**: run `pip install -r requirements.txt` → verify all packages install cleanly
-4. Then proceed through T2, T3, T4 in order
-5. Log all results in qa/TEST_RESULTS.md (create it if it doesn't exist yet)
+### ONE ACTIVE TRACK — Testing (T2.05 next)
+1. Read this file, tasks/lessons.md, CLAUDE.md, and qa/TEST_PLAN.md first
+2. Re-import the 7 fixed .bas files listed above
+3. Resume testing at **T2.05** (FixTextNumbers requires scan), then T2.06, T2.07
+4. Then proceed through T3, T4, T5.03–T5.06, T6, T7, T8 in order
+5. Log all results in qa/TEST_PLAN.md Section 6 (Test Execution Results)
 6. Any new issues found → add to Testing_Issues/TESTING_ISSUES_LOG.md
 
----
-
-**TRACK B — Universal Tools (UniversalBuild)**
-Connor uploaded idea files to UniversalToolsForAllFiles/:
-- GrokALL.md — Grok-generated list (~70 VBA + ~40 Python universal tools)
-- PrelexALL.md — comprehensive catalog of 293 tools across 17 categories
-- GemAll.md — Gemini-generated list (~35 VBA + ~30 Python, Finance/audit focus)
-- Profiles.md — personal account reference (deleted from repo — was a security risk)
-
-A curated candidate list has been created at:
-`UniversalToolsForAllFiles/UniversalBuild/UNIVERSAL_BUILD_CANDIDATES.md`
-
-**Status:** ALL CODE BUILT AND COMMITTED (2026-03-02)
-- 24 Tier 1 VBA tools selected + 34 Tier 2 VBA = 58 VBA tools total
-- 5 Tier 1 Python scripts + 13 Tier 2 Python = 18 Python scripts total
-- 76 total candidates — ALL BUILT as actual code
-- GemAll.md reviewed and folded in (2026-03-02) — 16 tools added
-- review/PROJECT_OVERVIEW.md created — comprehensive overview for external Claude review
-- review/DemoWrapUp/ folder created — ready for Connor's external review document
-
-**What was built (2026-03-02):**
-- UniversalToolsForAllFiles/vba/modUTL_DataCleaning.bas — 12 tools (unmerge, fill blanks, text-to-numbers, remove dupes, etc.)
-- UniversalToolsForAllFiles/vba/modUTL_Formatting.bas — 9 tools (autofit, freeze rows, number/currency/date formats, etc.)
-- UniversalToolsForAllFiles/vba/modUTL_WorkbookMgmt.bas — 15 tools (unhide all, PDF export, search, rename sheets, etc.)
-- UniversalToolsForAllFiles/vba/modUTL_Finance.bas — 14 tools (duplicate invoice, GL validator, aging reports, variance, etc.)
-- UniversalToolsForAllFiles/vba/modUTL_Audit.bas — 8 tools (external links, circular refs, error scanner, data quality, etc.)
-- UniversalToolsForAllFiles/python/ — 18 scripts + requirements.txt (clean_data, compare_files, aging_report, bank_reconciler, variance_decomposition, fuzzy_lookup, and more)
-
-**Next steps for Universal Tools:**
-1. **BUG REVIEW — Code verify all 5 VBA modules and 18 Python scripts before Connor uses them** — see Track C below
-2. Write coworker how-to/usage guide for all Universal Tools (VBA + Python) — see Backlog
-3. Convert Python scripts to .exe files so coworkers can just click and run — see Backlog
+### Universal Tools — COMPLETE (Track B + Track C + Backlog Item 1)
+All 76 tools built, code-reviewed, 9 bugs fixed, how-to guide written. No further action needed until after demo.
 
 **Security note:** Profiles.md contains personal account emails/credentials and should be removed from the repo. Flag this to Connor.
 
@@ -137,7 +111,7 @@ All fixes committed and pushed (commit a22dd76).
 - [ ] (Eventually) Package the 8 VBA tools into `KBT_UniversalTools.xlam` add-in
 
 ### Final Step
-- [ ] Final PR to merge `claude/resume-apclmerge-project-CXWP5` → `main`
+- [ ] Final PR to merge `claude/resume-apclmerge-project-V8WSj` → `main`
 
 ---
 
@@ -159,7 +133,26 @@ All fixes committed and pushed (commit a22dd76).
 
 ---
 
-## Completed — This Session (2026-03-03)
+## Completed — This Session (2026-03-04)
+
+### Testing Bug Fixes + Self-Review — Branch V8WSj
+- [x] Fixed T2.01: Added 9 missing sheet-name constants to modConfig
+- [x] Fixed T2.03: CLR_NAVY and CLR_ALT_ROW color constants (VBA BGR byte order)
+- [x] Fixed T2.04: Added TestUpdateHeaderText wrapper + NumberFormat text fix
+- [x] Fixed T4.04: Windows PermissionError on temp file cleanup
+- [x] Fixed T5.01: CreateExecutiveDashboard row 1 → row 4 + Error 5 crash + row/column detection
+- [x] Fixed T5.02: WaterfallChart multi-variant row label fallbacks
+- [x] Self-review of ALL remaining untested VBA against test plan pass criteria
+- [x] Found and fixed 12 additional bugs preemptively (commit 22ba831):
+  - modReconciliation: dateCol=5 → COL_GL_DATE, amtCol=7 → COL_GL_AMOUNT
+  - modVarianceAnalysis: GenerateCommentary row 1 → HDR_ROW_REPORT
+  - 9 LogAction calls: elapsed Double passed as status String → moved into message
+- [x] Python pytest: 99 passed, 15 skipped, 0 failures
+- [x] Added Pre-Delivery Self-Review Requirement to lessons.md
+
+---
+
+## Completed — Previous Session (2026-03-03)
 
 ### Track C — Universal Tools Code Review (Bug Verification) — COMPLETE
 - [x] Read all 5 VBA modules line by line against the Track C checklist
@@ -194,16 +187,34 @@ All fixes committed and pushed (commit a22dd76).
 
 ---
 
-### T1 Testing — T1.01 through T1.07
+### T1 Testing — ALL PASS (T1.01 through T1.08)
 - [x] T1.01 — PASS — VBA project compiled with zero errors
 - [x] T1.02 — PASS — All 32 modules visible in Project Explorer
 - [x] T1.03 — PASS — Option Explicit found in all modules
 - [x] T1.04 — PASS — ?APP_VERSION returned "2.1.0"
-- [x] T1.05 — PASS — pnl_config.py printed full config summary, all shares sum to 1.00. Source file warning is cosmetic (file was renamed), not a bug.
+- [x] T1.05 — PASS — pnl_config.py printed full config summary, all shares sum to 1.00
 - [x] T1.06 — PASS — All 14 Python scripts imported successfully, printed "All imports OK"
-- [x] T1.07 — INVESTIGATED AND RESOLVED — Original scan flagged all 14 files for non-ASCII bytes. Investigation confirmed: all 14 files are valid UTF-8. Characters are intentional Unicode (em dashes, arrows, check marks, box-drawing, Greek letters, emoji) — NOT mojibake. TEST_PLAN.md updated with full explanation. This test is PASS.
-- [x] TEST_PLAN.md updated — T1.07 and T4.01 pass criteria clarified
-- [x] Testing_Issues/TESTING_ISSUES_LOG.md created — full log of all T1 issues found
+- [x] T1.07 — PASS — All 14 files valid UTF-8 (non-ASCII is intentional Unicode, not mojibake)
+- [x] T1.08 — PASS — pip install -r requirements.txt completed successfully (all packages installed)
+
+### T2 Testing — T2.01 through T2.04 PASS (T2.05–T2.07 not yet run)
+- [x] T2.01 — PASS (after fix: 9 missing constants added to modConfig)
+- [x] T2.02 — PASS (SafeDeleteSheet works)
+- [x] T2.03 — PASS (after fix: CLR_NAVY/CLR_ALT_ROW color constants corrected)
+- [x] T2.04 — PASS (after fix: TestUpdateHeaderText wrapper + NumberFormat text)
+- [ ] T2.05 — Not yet run
+- [ ] T2.06 — Not yet run
+- [ ] T2.07 — Not yet run
+
+### T4 Testing — T4.04 PASS
+- [x] T4.04 — PASS (after fix: PermissionError on temp file + email feature removed) — 99 passed, 15 skipped, 0 failures
+
+### T5 Testing — T5.01 and T5.02 PASS
+- [x] T5.01 — PASS (after fix: ExecDashboard row detection + Error 5 crash)
+- [x] T5.02 — PASS (after fix: WaterfallChart multi-variant row label fallbacks)
+- [ ] T5.03–T5.06 — Not yet run
+
+### T3, T6, T7, T8 — Not yet started
 
 ---
 
