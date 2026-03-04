@@ -173,15 +173,58 @@ Public Sub CreatePrintableExecSummary()
     modPerformance.UpdateStatus "Building printable executive summary...", 0.1
 
     Dim wsSrc As Worksheet: Set wsSrc = ThisWorkbook.Worksheets(SH_PL_TREND)
-    Dim fyCol As Long: fyCol = modConfig.FindColByHeader(wsSrc, "total", HDR_ROW_REPORT)
-    If fyCol = 0 Then fyCol = modConfig.LastCol(wsSrc, HDR_ROW_REPORT)
 
-    ' Pull key metrics
-    Dim revRow  As Long: revRow  = modConfig.FindRowByLabel(wsSrc, "total revenue",     DATA_ROW_REPORT)
-    Dim gpRow   As Long: gpRow   = modConfig.FindRowByLabel(wsSrc, "gross profit",      DATA_ROW_REPORT)
-    Dim opexRow As Long: opexRow = modConfig.FindRowByLabel(wsSrc, "total operating",   DATA_ROW_REPORT)
-    Dim niRow   As Long: niRow   = modConfig.FindRowByLabel(wsSrc, "net income",        DATA_ROW_REPORT)
-    If revRow = 0 Then revRow = DATA_ROW_REPORT
+    ' Find FY Total column using multiple strategies (same as CreateExecutiveDashboard)
+    Dim tLastCol As Long: tLastCol = modConfig.LastCol(wsSrc, HDR_ROW_REPORT)
+    Dim fyCol As Long: fyCol = 0
+    Dim fc As Long
+    ' Pass 1: "FY Total" or "FY2025 Total"
+    For fc = 2 To tLastCol
+        Dim hdr As String: hdr = LCase(Trim(CStr(wsSrc.Cells(HDR_ROW_REPORT, fc).Value)))
+        If InStr(hdr, "fy") > 0 And InStr(hdr, "total") > 0 Then fyCol = fc: Exit For
+    Next fc
+    ' Pass 2: "FY2025" or FISCAL_YEAR_4 pattern
+    If fyCol = 0 Then
+        For fc = 2 To tLastCol
+            hdr = LCase(Trim(CStr(wsSrc.Cells(HDR_ROW_REPORT, fc).Value)))
+            If InStr(hdr, "fy" & FISCAL_YEAR_4) > 0 Then fyCol = fc: Exit For
+            If InStr(hdr, FISCAL_YEAR_4 & " total") > 0 Then fyCol = fc: Exit For
+        Next fc
+    End If
+    ' Pass 3: standalone "total" / "year total" (skip column A to avoid label matches)
+    If fyCol = 0 Then
+        For fc = 2 To tLastCol
+            hdr = LCase(Trim(CStr(wsSrc.Cells(HDR_ROW_REPORT, fc).Value)))
+            If hdr = "total" Or hdr = "year total" Or hdr = "annual total" Then fyCol = fc: Exit For
+        Next fc
+    End If
+    ' Pass 4: try modConfig.FindColByHeader with specific keywords
+    If fyCol = 0 Then fyCol = modConfig.FindColByHeader(wsSrc, "2025 Total", HDR_ROW_REPORT)
+    If fyCol = 0 Then fyCol = modConfig.FindColByHeader(wsSrc, "YTD", HDR_ROW_REPORT)
+    If fyCol = 0 Then fyCol = modConfig.FindColByHeader(wsSrc, "Full Year", HDR_ROW_REPORT)
+    ' Last resort: rightmost column
+    If fyCol = 0 Then fyCol = tLastCol
+
+    ' Pull key metrics — try multiple label variants (same as CreateExecutiveDashboard)
+    Dim revRow  As Long
+    revRow = modConfig.FindRowByLabel(wsSrc, "total revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = modConfig.FindRowByLabel(wsSrc, "consolidated revenue", DATA_ROW_REPORT)
+    If revRow = 0 Then revRow = modConfig.FindRowByLabel(wsSrc, "net revenue", DATA_ROW_REPORT)
+
+    Dim gpRow As Long
+    gpRow = modConfig.FindRowByLabel(wsSrc, "gross profit", DATA_ROW_REPORT)
+    If gpRow = 0 Then gpRow = modConfig.FindRowByLabel(wsSrc, "gross margin", DATA_ROW_REPORT)
+
+    Dim opexRow As Long
+    opexRow = modConfig.FindRowByLabel(wsSrc, "total operating expense", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsSrc, "operating expense", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsSrc, "total opex", DATA_ROW_REPORT)
+    If opexRow = 0 Then opexRow = modConfig.FindRowByLabel(wsSrc, "total expenses", DATA_ROW_REPORT)
+
+    Dim niRow As Long
+    niRow = modConfig.FindRowByLabel(wsSrc, "net income", DATA_ROW_REPORT)
+    If niRow = 0 Then niRow = modConfig.FindRowByLabel(wsSrc, "net operating income", DATA_ROW_REPORT)
+    If niRow = 0 Then niRow = modConfig.FindRowByLabel(wsSrc, "operating income", DATA_ROW_REPORT)
 
     Dim fyRev  As Double: fyRev  = modConfig.SafeNum(wsSrc.Cells(revRow,  fyCol).Value)
     Dim fyGP   As Double: If gpRow   > 0 Then fyGP   = modConfig.SafeNum(wsSrc.Cells(gpRow,   fyCol).Value)
@@ -255,9 +298,15 @@ Public Sub CreatePrintableExecSummary()
         wsP.Cells(tblRow + 1 + pr, 1).Font.Bold = True
         wsP.Cells(tblRow + 1 + pr, 2).Value = pRev
         wsP.Cells(tblRow + 1 + pr, 2).NumberFormat = "$#,##0"
-        wsP.Cells(tblRow + 1 + pr, 3).Value = IIf(fyRev <> 0, gmPct, 0)
+        ' Avoid IIf — VBA evaluates both branches, causing Overflow when fyRev=0
+        If fyRev <> 0 Then
+            wsP.Cells(tblRow + 1 + pr, 3).Value = gmPct
+            wsP.Cells(tblRow + 1 + pr, 4).Value = fyNI * (pRev / fyRev)
+        Else
+            wsP.Cells(tblRow + 1 + pr, 3).Value = 0
+            wsP.Cells(tblRow + 1 + pr, 4).Value = 0
+        End If
         wsP.Cells(tblRow + 1 + pr, 3).NumberFormat = "0.0%"
-        wsP.Cells(tblRow + 1 + pr, 4).Value = IIf(fyRev <> 0, fyNI * (pRev / fyRev), 0)
         wsP.Cells(tblRow + 1 + pr, 4).NumberFormat = "$#,##0"
     Next pr
 
