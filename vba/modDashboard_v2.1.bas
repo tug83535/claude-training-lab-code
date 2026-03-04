@@ -14,6 +14,7 @@ Option Explicit
 '   CreateExecutiveDashboard    - KPI cards + summary table on dedicated sheet
 '   WaterfallChart              - Revenue-to-Net-Income waterfall bridge
 '   ProductComparison           - Side-by-side product metrics + ranking
+'   ReformatChartsAndVisuals    - Reflow Charts & Visuals sheet into clean grid
 '
 ' VERSION:  2.1.0
 ' CHANGES:  v2.0 -> v2.1:
@@ -81,17 +82,29 @@ Public Sub BuildDashboard()
         monthLabels(m) = CStr(mths(m))
     Next m
     
+    ' Place charts below all existing content on Report--> to avoid overlap
+    Dim chartAnchorRow As Long
+    Dim anchorCell As Range
+    Set anchorCell = wsReport.Cells.Find(What:="*", SearchOrder:=xlByRows, _
+                                          SearchDirection:=xlPrevious)
+    If anchorCell Is Nothing Then
+        chartAnchorRow = 1
+    Else
+        chartAnchorRow = anchorCell.row
+    End If
+    Dim chartTopStart As Long: chartTopStart = wsReport.Cells(chartAnchorRow + 2, 1).Top
+
     ' Chart 1: Revenue Trend by Product (Line Chart)
     modPerformance.UpdateStatus "Creating revenue trend chart...", 0.3
-    CreateRevenueTrendChart wsReport, wsTrend, products, monthLabels, lastDataMonthCol
-    
+    CreateRevenueTrendChart wsReport, wsTrend, products, monthLabels, lastDataMonthCol, chartTopStart
+
     ' Chart 2: Contribution Margin Trend (Line Chart)
     modPerformance.UpdateStatus "Creating margin trend chart...", 0.6
-    CreateMarginTrendChart wsReport, wsTrend, products, monthLabels, lastDataMonthCol
-    
+    CreateMarginTrendChart wsReport, wsTrend, products, monthLabels, lastDataMonthCol, chartTopStart
+
     ' Chart 3: Product Revenue Mix (Pie Chart) - using Year Total
     modPerformance.UpdateStatus "Creating product mix chart...", 0.9
-    CreateProductMixChart wsReport, wsTrend, products
+    CreateProductMixChart wsReport, wsTrend, products, chartTopStart
     
     modPerformance.TurboOff
     wsReport.Activate
@@ -502,9 +515,10 @@ Public Sub WaterfallChart()
         wsWF.Cells(4 + wi, 4).Value = wfDec(wi)
     Next wi
     
-    ' Create stacked bar chart
+    ' Create stacked bar chart below data table (row 9 = last data row + 1 gap)
+    Dim chartTop As Long: chartTop = wsWF.Cells(10, 1).Top
     Dim co As ChartObject
-    Set co = wsWF.ChartObjects.Add(20, 120, 500, 320)
+    Set co = wsWF.ChartObjects.Add(20, chartTop, 500, 320)
     co.Name = "WaterfallChart"
     
     With co.Chart
@@ -637,8 +651,9 @@ Public Sub ProductComparison()
     ' Create comparison bar chart
     modPerformance.UpdateStatus "Creating comparison chart...", 0.7
     
+    Dim chartTop As Long: chartTop = wsPC.Cells(outRow + 2, 1).Top
     Dim co As ChartObject
-    Set co = wsPC.ChartObjects.Add(20, (outRow + 2) * 15, 500, 280)
+    Set co = wsPC.ChartObjects.Add(20, chartTop, 500, 280)
     co.Name = "ProductCompChart"
     
     On Error Resume Next
@@ -714,9 +729,11 @@ Private Sub CreateRevenueTrendChart(ByVal wsTarget As Worksheet, _
                                      ByVal wsSrc As Worksheet, _
                                      ByVal products As Variant, _
                                      ByRef monthLabels() As String, _
-                                     ByVal lastMonthCol As Long)
+                                     ByVal lastMonthCol As Long, _
+                                     ByVal baseTop As Long)
+    ' Row 1: Revenue chart (left) — 520x300
     Dim cht As ChartObject
-    Set cht = wsTarget.ChartObjects.Add(Left:=400, Top:=20, Width:=520, Height:=300)
+    Set cht = wsTarget.ChartObjects.Add(Left:=20, Top:=baseTop, Width:=520, Height:=300)
     
     With cht.Chart
         .ChartType = xlLine
@@ -761,9 +778,11 @@ Private Sub CreateMarginTrendChart(ByVal wsTarget As Worksheet, _
                                     ByVal wsSrc As Worksheet, _
                                     ByVal products As Variant, _
                                     ByRef monthLabels() As String, _
-                                    ByVal lastMonthCol As Long)
+                                    ByVal lastMonthCol As Long, _
+                                    ByVal baseTop As Long)
+    ' Row 1: Margin chart (right of Revenue) — 520x300
     Dim cht As ChartObject
-    Set cht = wsTarget.ChartObjects.Add(Left:=400, Top:=340, Width:=520, Height:=300)
+    Set cht = wsTarget.ChartObjects.Add(Left:=560, Top:=baseTop, Width:=520, Height:=300)
     
     With cht.Chart
         .ChartType = xlLine
@@ -805,9 +824,11 @@ End Sub
 '===============================================================================
 Private Sub CreateProductMixChart(ByVal wsTarget As Worksheet, _
                                    ByVal wsSrc As Worksheet, _
-                                   ByVal products As Variant)
+                                   ByVal products As Variant, _
+                                   ByVal baseTop As Long)
+    ' Row 2: Pie chart centered below the two line charts — 400x300
     Dim cht As ChartObject
-    Set cht = wsTarget.ChartObjects.Add(Left:=940, Top:=20, Width:=350, Height:=300)
+    Set cht = wsTarget.ChartObjects.Add(Left:=280, Top:=baseTop + 320, Width:=400, Height:=300)
     
     With cht.Chart
         .ChartType = xlPie
@@ -1232,4 +1253,146 @@ NextProduct:
 ErrHandler:
     modPerformance.TurboOff
     MsgBox "CreateSmallMultiplesGrid error: " & Err.Description, vbCritical, APP_NAME
+End Sub
+
+
+'===============================================================================
+'
+' ===  CHARTS & VISUALS REFORMATTER  ==========================================
+'
+'===============================================================================
+
+'===============================================================================
+' ReformatChartsAndVisuals - Reflow all charts on "Charts & Visuals" into a
+' clean, non-overlapping 2-column grid with consistent sizing, proper spacing,
+' and visible chart titles/labels. Also cleans up any overlapping text boxes.
+'
+' Grid layout:
+'   Row 1: [Chart 1]  [Chart 2]      (top = row 4)
+'   Row 2: [Chart 3]  [Chart 4]      (top = row 4 + chartH + gap)
+'   ...etc
+'
+' Each chart: 480w x 300h, 20px margin between columns, 30px between rows.
+' Title row preserved at top with sheet heading and generated timestamp.
+'===============================================================================
+Public Sub ReformatChartsAndVisuals()
+    On Error GoTo ErrHandler
+
+    ' Find the Charts & Visuals sheet (try common name variants)
+    Dim wsCV As Worksheet
+    Dim shName As String: shName = ""
+    Dim ws As Worksheet
+    For Each ws In ThisWorkbook.Worksheets
+        If InStr(1, ws.Name, "Charts", vbTextCompare) > 0 And _
+           InStr(1, ws.Name, "Visual", vbTextCompare) > 0 Then
+            shName = ws.Name
+            Exit For
+        End If
+    Next ws
+
+    If Len(shName) = 0 Then
+        MsgBox "No 'Charts & Visuals' sheet found in this workbook.", _
+               vbExclamation, APP_NAME
+        Exit Sub
+    End If
+    Set wsCV = ThisWorkbook.Worksheets(shName)
+
+    Dim chartCount As Long: chartCount = wsCV.ChartObjects.Count
+    If chartCount = 0 Then
+        MsgBox "'" & shName & "' has no charts to reformat.", vbExclamation, APP_NAME
+        Exit Sub
+    End If
+
+    modPerformance.TurboOn
+    modPerformance.UpdateStatus "Reformatting Charts & Visuals...", 0.1
+
+    ' --- Grid constants ---
+    Dim chartW As Long: chartW = 480       ' chart width
+    Dim chartH As Long: chartH = 300       ' chart height
+    Dim colGap As Long: colGap = 20        ' horizontal gap between charts
+    Dim rowGap As Long: rowGap = 30        ' vertical gap between chart rows
+    Dim gridCols As Long: gridCols = 2     ' 2 charts per row
+    Dim leftMargin As Long: leftMargin = 10
+    Dim topStart As Long: topStart = wsCV.Cells(4, 1).Top  ' below title rows
+
+    ' --- Clean up title area ---
+    wsCV.Range("A1").Value = "Charts & Visuals - FY" & FISCAL_YEAR_4
+    wsCV.Range("A1").Font.Size = 16
+    wsCV.Range("A1").Font.Bold = True
+    wsCV.Range("A1").Font.Color = CLR_NAVY
+    wsCV.Range("A2").Value = "Reformatted: " & Format(Now, "mmmm d, yyyy h:mm AM/PM")
+    wsCV.Range("A2").Font.Italic = True
+    wsCV.Range("A2").Font.Color = RGB(128, 128, 128)
+    wsCV.Range("A2").Font.Size = 10
+
+    ' --- Remove overlapping text boxes (Shapes that are not charts) ---
+    Dim shp As Shape
+    Dim shpIdx As Long
+    For shpIdx = wsCV.Shapes.Count To 1 Step -1
+        Set shp = wsCV.Shapes(shpIdx)
+        If shp.Type = msoTextBox Or shp.Type = msoAutoShape Then
+            ' Check if it overlaps any chart area — if so, delete it
+            Dim co2 As ChartObject
+            For Each co2 In wsCV.ChartObjects
+                If shp.Top < (co2.Top + co2.Height) And _
+                   (shp.Top + shp.Height) > co2.Top And _
+                   shp.Left < (co2.Left + co2.Width) And _
+                   (shp.Left + shp.Width) > co2.Left Then
+                    shp.Delete
+                    Exit For
+                End If
+            Next co2
+        End If
+    Next shpIdx
+
+    ' --- Reflow charts into 2-column grid ---
+    modPerformance.UpdateStatus "Repositioning " & chartCount & " charts...", 0.4
+    Dim co As ChartObject
+    Dim i As Long: i = 0
+    For Each co In wsCV.ChartObjects
+        Dim gridRow As Long: gridRow = i \ gridCols
+        Dim gridCol As Long: gridCol = i Mod gridCols
+
+        co.Left = leftMargin + gridCol * (chartW + colGap)
+        co.Top = topStart + gridRow * (chartH + rowGap)
+        co.Width = chartW
+        co.Height = chartH
+
+        ' Ensure chart title is visible and properly formatted
+        On Error Resume Next
+        If co.Chart.HasTitle Then
+            co.Chart.ChartTitle.Font.Size = 11
+            co.Chart.ChartTitle.Font.Name = "Calibri"
+            co.Chart.ChartTitle.Font.Bold = True
+        End If
+        ' Ensure legend doesn't overlap plot area
+        If co.Chart.HasLegend Then
+            co.Chart.Legend.Position = xlLegendPositionBottom
+            co.Chart.Legend.Font.Size = 9
+        End If
+        ' Clean up plot area
+        co.Chart.PlotArea.Interior.Color = CLR_WHITE
+        On Error GoTo ErrHandler
+
+        i = i + 1
+    Next co
+
+    wsCV.Columns("A:L").AutoFit
+    wsCV.Activate
+    wsCV.Range("A1").Select
+
+    Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
+    modPerformance.TurboOff
+
+    modLogger.LogAction "modDashboard", "ReformatChartsAndVisuals", _
+        chartCount & " charts reflowed into 2-col grid (" & Format(elapsed, "0.0") & "s)"
+    MsgBox chartCount & " charts on '" & shName & "' reformatted." & vbCrLf & vbCrLf & _
+           "Layout: 2-column grid, " & chartW & "x" & chartH & "px each." & vbCrLf & _
+           "All overlapping text removed. Titles and legends cleaned up.", _
+           vbInformation, APP_NAME
+    Exit Sub
+
+ErrHandler:
+    modPerformance.TurboOff
+    MsgBox "ReformatChartsAndVisuals error: " & Err.Description, vbCritical, APP_NAME
 End Sub
