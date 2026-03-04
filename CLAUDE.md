@@ -119,11 +119,70 @@ Before delivering ANYTHING ask yourself:
 - Self-review of all remaining tests completed — 12 additional bugs found and fixed preemptively
 - Python pytest: 99 passed, 15 skipped, 0 failures (T4.04 criteria met)
 - Universal Tools: 76 tools built, code-reviewed, all 9 bugs fixed, how-to guide written (2026-03-03)
+- Universal Tools expanded: 3 new modules added (modUTL_Branding, modUTL_SheetTools, modUTL_DataSanitizer) — 2026-03-04
+- Demo file: new modSheetIndex_v2.1.bas added (CreateHomeSheet + ListAllSheetsWithLinks) — 2026-03-04
+- 33 VBA modules total (32 + modSheetIndex)
+- iPipeline brand styling guide added at `docs/ipipeline-brand-styling.md`
+- FinalRoughGuides/ folder created for draft training guides (final versions go to training/)
 - Track B COMPLETE, Track C COMPLETE, Backlog Item 1 (how-to guide) COMPLETE
-- Branch: `claude/resume-apclmerge-project-V8WSj` (active branch as of 2026-03-04)
+- Branch: `claude/resume-ipipeline-demo-qKRHn` (active branch as of 2026-03-04)
 - Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
-## Session Summary — 2026-03-04 (Latest — Testing Bug Fixes + Self-Review)
+## Session Summary — 2026-03-04 (Latest — New VBA Tools + Universal Toolkit Expansion)
+
+### What Was Done This Session
+Expanded both the demo file and Universal Toolkit with new VBA modules, created the first training guide draft, and set up project infrastructure.
+
+**Branch:** `claude/resume-ipipeline-demo-qKRHn`
+
+### New Demo File Module
+- `vba/modSheetIndex_v2.1.bas` — 2 subs:
+  - `CreateHomeSheet` — Creates a "Home" sheet at position 1 with a styled button that opens the Command Center (calls LaunchCommandCenter) + a "View Sheet Index" button
+  - `ListAllSheetsWithLinks` — Lists all sheets in column A with clickable hyperlinks in column B. Safe to re-run (only adds sheets not already listed). Shows visibility status (Visible/Hidden/Very Hidden)
+
+### New Universal Toolkit Modules (3 new .bas files)
+- `UniversalToolsForAllFiles/vba/modUTL_Branding.bas` — 2 tools:
+  - `ApplyiPipelineBranding` — Detects headers/totals on active sheet, applies iPipeline brand colors (iPipeline Blue headers, Navy totals, alternating rows, Arial font)
+  - `SetiPipelineThemeColors` — Sets workbook theme colors to iPipeline brand palette so they appear in the Excel color picker. Falls back to legacy palette on older Excel versions
+- `UniversalToolsForAllFiles/vba/modUTL_SheetTools.bas` — 3 tools:
+  - `ListAllSheetsWithLinks` — Universal version: creates UTL_SheetIndex sheet with hyperlinks
+  - `TemplateCloner` — Pick any sheet, type how many copies, get instant clones (1-50). Handles name conflicts and 31-char limit
+  - `GenerateUniqueCustomerIDs` — Scans existing IDs, finds max, fills blank cells with sequential IDs (CUST-00001 format). Never duplicates. Custom prefix supported
+- `UniversalToolsForAllFiles/vba/modUTL_DataSanitizer.bas` — 4 tools (ported from demo):
+  - `RunFullSanitize` — All 3 fixes in one click (text-numbers, floating-point tails, integer formats)
+  - `PreviewSanitizeChanges` — Dry-run report showing what WOULD change (no edits)
+  - `FixFloatingPointTails` — Fix FP noise on all sheets
+  - `ConvertTextStoredNumbers` — Convert text-numbers to real numbers
+  - Smart detection: skips dates, names, IDs, labels, formulas via header keyword scanning
+
+### Training Guide Draft
+- `FinalRoughGuides/Dynamic-Chart-Filter-Setup-Guide.md` — Step-by-step guide for coworkers on how to add dropdown chart filters to their own Excel files. Covers Data Validation dropdowns, helper tables, PivotTables, Slicers, and troubleshooting
+
+### Infrastructure
+- Created `FinalRoughGuides/` folder for draft guides
+- Added iPipeline brand styling reference to CLAUDE.md
+- Updated tasks/lessons.md with brand styling lesson
+
+### Bug Audit (2 passes)
+All new code was audited twice for bugs. Bugs found and fixed:
+1. **CRITICAL:** `rng` variable not reset to `Nothing` between loop iterations in modUTL_DataSanitizer worker functions — would cause double-processing of previous sheet's cells. Fixed by moving `Dim rng` outside loop + adding `Set rng = Nothing`
+2. **MEDIUM:** Sheet names with apostrophes broke hyperlink SubAddress in modSheetIndex. Fixed with `Replace(name, "'", "''")`
+3. **MEDIUM:** `Chr(8212)` only handles 0-255 in VBA — changed to plain dash
+4. **MEDIUM:** Wrong RGB color `RGB(31,73,125)` in new universal modules — changed to brand-correct `RGB(11,71,121)`
+5. **LOW:** `usedRng` not reset in PreviewSanitizeChanges loop — added `Set usedRng = Nothing`
+
+### Module Counts
+- Demo file VBA modules: 33 total (32 + modSheetIndex)
+- Universal Toolkit VBA modules: 8 total (5 existing + 3 new)
+- Universal Toolkit tools: ~85 total
+
+### Already Existed (Not Rebuilt)
+- Fix sheet links → `modAuditTools.FixExternalLinks` (demo) + `modUTL_Audit.ExternalLinkSeveranceProtocol` (universal)
+- Show broken links → `modAuditTools.FindExternalLinks` (demo) + `modUTL_Audit.ExternalLinkFinder` (universal)
+
+---
+
+## Session Summary — 2026-03-04 (Earlier — Testing Bug Fixes + Self-Review)
 
 ### What Was Done This Session
 This session focused on fixing bugs discovered during testing and then doing a full self-review of ALL remaining untested code against the test plan pass criteria — catching bugs before the user has to find them.
