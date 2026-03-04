@@ -125,6 +125,14 @@
 - pandas deprecated `infer_datetime_format` in 2.0 — remove it from any `pd.to_datetime()` calls
 - Row-label searches (e.g., "total revenue") must try multiple variants as fallbacks — the P&L Trend sheet may use "Revenue", "Total Revenue", "Net Revenue", etc. Always use `modConfig.FindRowByLabel` with cascading fallbacks instead of hardcoded `InStr` checks in a loop
 
+## iPipeline Brand Styling (2026-03-04)
+- Official brand guide added: `docs/ipipeline-brand-styling.md`
+- ALL future training guides, documents, presentations, and visual outputs must follow iPipeline brand colors and fonts
+- Always review the brand guide before creating any styled output
+- Brand palette: iPipeline Blue (#0B4779), Navy (#112E51), Innovation Blue (#4B9BCB), Lime Green (#BFF18C), Aqua (#2BCCD3), Arctic White (#F9F9F9), Charcoal (#161616)
+- Fonts: Arial family only — Arial Bold (headings), Arial Narrow (subheadings), Arial Regular (body)
+- VBA modConfig CLR_ constants use older colors (#1F4E79 navy) — don't change working code, but new work uses official brand colors
+
 ## Pre-Delivery Self-Review Requirement (2026-03-03)
 Before delivering any future code updates, I need to self-review against the test plan first. Specifically:
 1. Run through each test's pass criteria mentally before sending

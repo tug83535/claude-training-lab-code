@@ -11,6 +11,15 @@ creating a video walkthrough for coworkers. Everything produced must be perfect,
 polished, and professional — treat every output as if it represents the best
 employee at the best company in the world.
 
+## iPipeline Brand Styling
+- **Official brand guide:** `docs/ipipeline-brand-styling.md`
+- All future training guides, documents, presentations, and any visual output MUST use the iPipeline brand colors, fonts, and styling rules defined in that file
+- Primary color: iPipeline Blue `#0B4779` | Secondary: Navy `#112E51`, Innovation Blue `#4B9BCB`
+- Accents: Lime Green `#BFF18C`, Aqua `#2BCCD3` | Neutrals: Arctic White `#F9F9F9`, Charcoal `#161616`
+- Fonts: Arial family only (Arial Bold for headings, Arial Narrow for subheadings, Arial Regular for body)
+- Before creating ANY guide, document, or styled output, review `docs/ipipeline-brand-styling.md` first
+- Note: VBA modConfig color constants (CLR_NAVY etc.) predate this guide and use slightly different values — do NOT change working VBA code, but any NEW styling work should use the official brand colors
+
 ## Repo Structure
 - `vba/` — VBA modules (.bas files)
 - `sql/` — SQL scripts
@@ -340,3 +349,4 @@ VBA modules, and fixed all known bugs. The codebase is now complete.
 - Excel file is always binary — Claude cannot read it; use ARCHITECTURE_DIAGRAM.md and modConfig constants as reference
 - User is new to GitHub; explain PR/merge process in plain English
 - .bas files in repo are source code only — must be manually imported into Excel to work
+- iPipeline brand styling guide lives at `docs/ipipeline-brand-styling.md` — use it for ALL future visual/styled outputs
