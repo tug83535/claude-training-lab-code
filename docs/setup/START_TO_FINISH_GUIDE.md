@@ -248,7 +248,7 @@ Before importing any code, confirm the workbook is intact:
 
 2. Click on the **CrossfireHiddenWorksheet** tab — you should see 510 rows of GL data with columns: ID, Date, Department, Product, Expense Category, Vendor, Amount
 
-3. Click on the **Checks** tab — you should see 9 reconciliation checks (3 PASS, 6 FAIL — the FAILs are pre-existing data discrepancies, not bugs)
+3. Click on the **Checks** tab — you should see 9 reconciliation checks, all showing PASS
 
 If anything is missing, your source workbook may be damaged. Go back to the original.
 
@@ -382,7 +382,7 @@ Run these 5 commands in order. Each one exercises different parts of the system.
 ### Test 2: Reconciliation (Command #3)
 
 1. Ctrl+Shift+M → Monthly Operations → **#3 Run Reconciliation Checks**
-2. **Expected result:** The Checks sheet updates. You should see 3 PASS and 6 FAIL (the FAILs are pre-existing data discrepancies — the system is working correctly by flagging them)
+2. **Expected result:** The Checks sheet updates. You should see 9 PASS and 0 FAIL — all reconciliation checks pass
 
 ### Test 3: Variance Analysis (Command #6)
 

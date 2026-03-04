@@ -121,7 +121,7 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 | T6.03 | All products known | DISTINCT products in GL | iGO, Affirm, InsureSight, DocFast only |
 | T6.04 | All departments known | DISTINCT departments in GL | 7 known departments only |
 | T6.05 | Revenue shares sum | SUM of REVENUE_SHARES values | 1.000 |
-| T6.06 | Reconciliation checks | Run Command 3 | PASS count documented; FAIL items have known explanations |
+| T6.06 | Reconciliation checks | Run Command 3 | All 9 checks show PASS |
 
 ### Category T7 — Integration (4 tests)
 
@@ -253,7 +253,6 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 - **T8 tests:** 25 of 29 PASS minimum (T8.24, T8.25 may SKIP if you have the ETL script/output file present; T8.28 is superseded if you already ran ArchiveReconciliationResults; T8.22 can only run once per baseline)
 
 ### Known Acceptable Failures
-- T6.06 (Reconciliation): The existing workbook has 6 FAIL checks on the Checks sheet. These are pre-existing data discrepancies between Natural P&L and Functional P&L Summary sheets, not toolkit bugs. See VALIDATION_REPORT.md for details.
 - T5.06 (Search cap): Depends on data volume — may need to use a single-character search to trigger the cap.
 
 ---

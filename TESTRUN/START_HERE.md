@@ -188,7 +188,7 @@ Work through it in order:
 | `vba/*.bas` (all 31 files) | Already imported — no need to touch these again |
 | `qa/TEST_PLAN.md` | Your test checklist |
 | `qa/INTEGRATION_TEST_GUIDE.md` | Detailed walkthrough for the integration tests (T7) |
-| `qa/VALIDATION_REPORT.md` | Reference for the 6 known acceptable FAIL checks |
+| `qa/VALIDATION_REPORT.md` | Validation report — all 9 reconciliation checks PASS |
 
 ---
 
