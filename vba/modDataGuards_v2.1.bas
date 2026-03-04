@@ -42,6 +42,8 @@ Public Function ValidateAssumptionsPresence() As Boolean
     Dim missingList As String
     Dim r As Long
     For r = DATA_ROW_ASSUME To lastRow
+        ' Skip section headers and label-only rows (they have no Type in column C)
+        If Len(modConfig.SafeStr(ws.Cells(r, 3).Value)) = 0 Then GoTo NextAssRow
         Dim driverName As String: driverName = modConfig.SafeStr(ws.Cells(r, 1).Value)
         If Len(driverName) > 0 Then
             If IsEmpty(ws.Cells(r, 2).Value) Or ws.Cells(r, 2).Value = "" Then
@@ -49,6 +51,7 @@ Public Function ValidateAssumptionsPresence() As Boolean
                 missingList = missingList & vbCrLf & "  Row " & r & ": " & driverName
             End If
         End If
+NextAssRow:
     Next r
 
     If missing > 0 Then
