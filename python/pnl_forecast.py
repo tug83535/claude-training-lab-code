@@ -291,6 +291,129 @@ class PnLForecaster(PnLBase):
 
         return results
 
+    # ─────────────────────────────────────────────────────────
+    # FORECAST ACCURACY REPORT (MAPE + Bias + Hit Rate)
+    # ─────────────────────────────────────────────────────────
+
+    def accuracy_report(self, method: str = "ets",
+                        product: str = None, department: str = None) -> Dict[str, Any]:
+        """
+        Backtest forecast accuracy using leave-one-out: for each month,
+        forecast it using only prior months, then compare to actual.
+
+        Returns dict with MAPE, bias, hit_rate, and per-period details.
+        """
+        if self.gl is None:
+            self.load()
+
+        # Get the time series
+        if product:
+            data = self.monthly["by_product"]
+            series_data = data[data["Product"] == product].sort_values("Month")
+            series = series_data["Abs_Spend"]
+            label = product
+        elif department:
+            data = self.monthly["by_department"]
+            series_data = data[data["Department"] == department].sort_values("Month")
+            series = series_data["Abs_Spend"]
+            label = department
+        else:
+            series_data = self.monthly["total"].sort_values("Month")
+            series = series_data["Abs_Spend"]
+            label = "Total"
+
+        values = series.values.astype(float)
+        n = len(values)
+
+        if n < 4:
+            self._print(f"\n  Not enough data for accuracy report ({n} months, need 4+)")
+            return {"error": "insufficient_data", "months": n}
+
+        method_map = {
+            "sma": self.forecast_sma,
+            "ets": self.forecast_ets,
+            "trend": self.forecast_trend,
+            "scenario": self.forecast_scenario,
+        }
+        fc_func = method_map.get(method, self.forecast_ets)
+
+        self._section(f"ACCURACY REPORT — {method.upper()} | {label}")
+
+        # Leave-one-out backtest: use months 1..k to forecast month k+1
+        errors = []
+        details = []
+        min_train = 3  # Need at least 3 months to train
+
+        for k in range(min_train, n):
+            train = pd.Series(values[:k])
+            actual = values[k]
+            fc_df = fc_func(train, periods=1)
+            predicted = fc_df["Forecast"].iloc[0]
+
+            error = actual - predicted
+            abs_pct_error = abs(error) / abs(actual) * 100 if actual != 0 else 0
+            pct_error = error / abs(actual) * 100 if actual != 0 else 0
+
+            month_idx = k + 1
+            month_name = MONTH_ABBREVS[month_idx - 1] if 1 <= month_idx <= 12 else f"M{month_idx}"
+
+            errors.append({
+                "month": month_name,
+                "actual": actual,
+                "predicted": predicted,
+                "error": error,
+                "abs_pct_error": abs_pct_error,
+                "pct_error": pct_error,
+            })
+
+            details.append(f"    {month_name}:  Actual {format_currency(actual)}  |  "
+                          f"Predicted {format_currency(predicted)}  |  "
+                          f"Error {error:+,.0f}  ({pct_error:+.1f}%)")
+
+        # Aggregate metrics
+        mape = np.mean([e["abs_pct_error"] for e in errors])
+        bias = np.mean([e["pct_error"] for e in errors])
+        within_10 = sum(1 for e in errors if e["abs_pct_error"] <= 10)
+        within_15 = sum(1 for e in errors if e["abs_pct_error"] <= 15)
+        hit_rate_10 = within_10 / len(errors) * 100
+        hit_rate_15 = within_15 / len(errors) * 100
+
+        # Print results
+        self._print(f"\n  {label} — {method.upper()} Backtest ({len(errors)} periods):")
+        for d in details:
+            self._print(d)
+
+        self._print(f"\n  SUMMARY:")
+        self._print(f"    MAPE (Mean Absolute % Error):  {mape:.1f}%")
+        self._print(f"    Bias (avg directional error):   {bias:+.1f}%")
+        self._print(f"    Hit Rate (within 10%):          {within_10}/{len(errors)} ({hit_rate_10:.0f}%)")
+        self._print(f"    Hit Rate (within 15%):          {within_15}/{len(errors)} ({hit_rate_15:.0f}%)")
+
+        # Grade
+        if mape <= 5:
+            grade = "A"
+        elif mape <= 10:
+            grade = "B"
+        elif mape <= 15:
+            grade = "C"
+        elif mape <= 25:
+            grade = "D"
+        else:
+            grade = "F"
+        self._print(f"    Forecast Grade:                 {grade}")
+
+        return {
+            "label": label,
+            "method": method,
+            "mape": mape,
+            "bias": bias,
+            "hit_rate_10": hit_rate_10,
+            "hit_rate_15": hit_rate_15,
+            "grade": grade,
+            "periods_tested": len(errors),
+            "details": errors,
+        }
+
     def _print_forecast(self, label: str, actuals: pd.Series, forecast: pd.DataFrame):
         """Print formatted forecast results."""
         self._print(f"\n  {label}:")
@@ -365,12 +488,22 @@ def main():
     parser.add_argument("--department", "-d", default=None, help="Specific department")
     parser.add_argument("--export", "-e", default=None, help="Export to Excel")
     parser.add_argument("--all-methods", action="store_true", help="Run all forecast methods")
+    parser.add_argument("--accuracy", action="store_true",
+                        help="Run backtest accuracy report (MAPE, bias, hit rate)")
     args = parser.parse_args()
 
     fc = PnLForecaster(file_path=args.file)
     fc.load()
 
-    if args.all_methods:
+    if args.accuracy:
+        if args.all_methods:
+            for method in PnLForecaster.METHODS:
+                fc.accuracy_report(method=method,
+                                   product=args.product, department=args.department)
+        else:
+            fc.accuracy_report(method=args.method,
+                               product=args.product, department=args.department)
+    elif args.all_methods:
         for method in PnLForecaster.METHODS:
             fc.forecast(periods=args.months, method=method,
                        product=args.product, department=args.department)
