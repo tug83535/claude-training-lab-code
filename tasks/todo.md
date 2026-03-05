@@ -149,6 +149,7 @@ All fixes committed and pushed (commit a22dd76).
 - [ ] **Scenario 2 — Universal Tools Add-In:** Package the 8 universal tools (Data Sanitizer, Find Negatives/Zeros/Round Numbers, Find External Links, Audit Hidden Sheets, Cross-Sheet Search) into `KBT_UniversalTools.xlam` so coworkers can use them on their own files. Source files staged in `UniversalToolsForAllFiles/`. Write coworker install guide when ready.
 - [x] **Universal Tools — Coworker How-To Guide:** COMPLETE (2026-03-03) — Full guide at `UniversalToolsForAllFiles/UNIVERSAL_TOOLS_HOW_TO_GUIDE.md`. Covers all 76 tools with installation, step-by-step usage, examples, and quick reference table. Written for non-technical Finance & Accounting staff.
 - [ ] **Universal Tools — Python .exe Conversion:** Convert all 18 Python scripts to standalone `.exe` files using PyInstaller (or similar) so coworkers can just double-click and run — no Python installation required. Package with a simple folder + README.
+- [ ] **Print-Ready Formatting:** Add page setup, print areas, and page breaks to all major report sheets (P&L Trend, Functional P&L, Reconciliation Checks, Variance Analysis, YoY Variance). So any sheet can be printed or PDF'd in one click with professional headers/footers. Do this AFTER Connor reviews the training guides.
 
 ### Enhancement Ideas — Top 3 — ALL BUILT (2026-03-05)
 1. **[x] Data Quality Letter Grade (A-F)** — BUILT. Added CalculateLetterGrade to modDataQuality. Grade badge (28pt, color-coded) at top of report. Grading: A (0 issues) through F (4+ critical).
