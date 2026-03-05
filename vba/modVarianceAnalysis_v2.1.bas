@@ -9,8 +9,9 @@ Option Explicit
 '           and auto-generate English narratives for top variances.
 '
 ' PUBLIC SUBS:
-'   RunVarianceAnalysis   - MoM comparison of two functional P&L sheets
-'   GenerateCommentary    - Auto-narrative top 5 FY-vs-Budget variances
+'   RunVarianceAnalysis    - MoM comparison of two functional P&L sheets
+'   RunYoYVarianceAnalysis - YoY comparison on P&L Trend (FY Total vs Prior Year/Budget)
+'   GenerateCommentary     - Auto-narrative top 5 FY-vs-Budget variances
 '
 ' VERSION:  2.1.0
 ' CHANGES:  v2.0 -> v2.1:
@@ -190,6 +191,192 @@ NextRow:
 ErrHandler:
     modPerformance.TurboOff
     MsgBox "Variance analysis error: " & Err.Description, vbCritical, APP_NAME
+End Sub
+
+
+'===============================================================================
+' RunYoYVarianceAnalysis - Year-over-Year Variance (v2.1 — 2026-03-05)
+'
+' Compares FY Total column vs Budget column on P&L Monthly Trend as a
+' proxy for YoY analysis (Budget = prior year plan). If a "Prior Year"
+' or "PY" column exists, uses that instead. Produces a dedicated
+' "YoY Variance Analysis" sheet with $ and % variances, flags, and
+' color-coded favorable/unfavorable status.
+'===============================================================================
+Public Sub RunYoYVarianceAnalysis()
+    On Error GoTo ErrHandler
+
+    If Not modConfig.SheetExists(SH_PL_TREND) Then
+        MsgBox "'" & SH_PL_TREND & "' not found.", vbCritical, APP_NAME
+        Exit Sub
+    End If
+
+    modPerformance.TurboOn
+    modPerformance.UpdateStatus "Running YoY variance analysis...", 0
+
+    Dim wsTrend As Worksheet: Set wsTrend = ThisWorkbook.Worksheets(SH_PL_TREND)
+    Dim tLastRow As Long: tLastRow = modConfig.LastRow(wsTrend, 1)
+    Dim tLastCol As Long: tLastCol = modConfig.LastCol(wsTrend, HDR_ROW_REPORT)
+
+    ' Find FY Total column (current year actual)
+    Dim fyCol As Long: fyCol = 0
+    Dim c As Long
+    For c = 2 To tLastCol
+        Dim hdr As String: hdr = LCase(Trim(CStr(wsTrend.Cells(HDR_ROW_REPORT, c).Value)))
+        If (InStr(hdr, "fy") > 0 And InStr(hdr, "total") > 0) Or _
+           InStr(hdr, "fy" & FISCAL_YEAR_4) > 0 Or _
+           InStr(hdr, FISCAL_YEAR_4 & " total") > 0 Then
+            fyCol = c: Exit For
+        End If
+    Next c
+    If fyCol = 0 Then fyCol = tLastCol
+
+    ' Find Prior Year / Budget column (baseline for YoY comparison)
+    Dim pyCol As Long: pyCol = 0
+    For c = 2 To tLastCol
+        hdr = LCase(Trim(CStr(wsTrend.Cells(HDR_ROW_REPORT, c).Value)))
+        If InStr(hdr, "prior year") > 0 Or InStr(hdr, "py total") > 0 Or _
+           InStr(hdr, "prior yr") > 0 Then
+            pyCol = c: Exit For
+        End If
+    Next c
+    ' Fall back to Budget column if no explicit Prior Year column
+    If pyCol = 0 Then
+        For c = 2 To tLastCol
+            hdr = LCase(Trim(CStr(wsTrend.Cells(HDR_ROW_REPORT, c).Value)))
+            If InStr(hdr, "budget") > 0 Then pyCol = c: Exit For
+        Next c
+    End If
+    If pyCol = 0 Then pyCol = tLastCol
+
+    Dim pyLabel As String
+    pyLabel = Trim(CStr(wsTrend.Cells(HDR_ROW_REPORT, pyCol).Value))
+    Dim fyLabel As String
+    fyLabel = Trim(CStr(wsTrend.Cells(HDR_ROW_REPORT, fyCol).Value))
+
+    ' Create output sheet
+    Dim yoySheet As String: yoySheet = "YoY Variance Analysis"
+    modConfig.SafeDeleteSheet yoySheet
+    Dim wsYoY As Worksheet
+    Set wsYoY = ThisWorkbook.Worksheets.Add( _
+        After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+    wsYoY.Name = yoySheet
+    wsYoY.Tab.Color = RGB(0, 80, 150)
+
+    ' Title area
+    wsYoY.Range("A1").Value = "Year-over-Year Variance Analysis"
+    wsYoY.Range("A1").Font.Size = 14: wsYoY.Range("A1").Font.Bold = True
+    wsYoY.Range("A1").Font.Color = CLR_NAVY
+    wsYoY.Range("A2").Value = "Comparing: " & pyLabel & " vs " & fyLabel
+    wsYoY.Range("A2").Font.Italic = True
+    wsYoY.Range("A3").Value = "Threshold: " & Format(VARIANCE_PCT, "0%") & _
+        " | Generated: " & Format(Now, "yyyy-mm-dd hh:mm")
+
+    ' Headers
+    modConfig.StyleHeader wsYoY, 5, _
+        Array("Line Item", pyLabel & " ($)", fyLabel & " ($)", _
+              "YoY Change ($)", "YoY Change (%)", "Status", "Flag")
+
+    ' Process rows
+    Dim outRow As Long: outRow = 6
+    Dim flagCount As Long: flagCount = 0
+    Dim totalRows As Long: totalRows = 0
+    Dim r As Long
+
+    For r = DATA_ROW_REPORT To tLastRow
+        Dim label As String: label = Trim(CStr(wsTrend.Cells(r, 1).Value))
+        If label = "" Then GoTo NextYoYRow
+
+        Dim pyVal As Double: pyVal = modConfig.SafeNum(wsTrend.Cells(r, pyCol).Value)
+        Dim fyVal As Double: fyVal = modConfig.SafeNum(wsTrend.Cells(r, fyCol).Value)
+        If pyVal = 0 And fyVal = 0 Then GoTo NextYoYRow
+
+        Dim yoyDelta As Double: yoyDelta = fyVal - pyVal
+        Dim yoyPct As Double
+        If pyVal <> 0 Then
+            yoyPct = yoyDelta / Abs(pyVal)
+        Else
+            yoyPct = 0
+        End If
+
+        ' Determine direction
+        Dim status As String, flagged As Boolean
+        flagged = Abs(yoyPct) >= VARIANCE_PCT And pyVal <> 0
+
+        If yoyDelta > 0 Then
+            status = "Favorable"
+        ElseIf yoyDelta < 0 Then
+            status = "Unfavorable"
+        Else
+            status = "Flat"
+        End If
+
+        ' Cost-line reversal
+        Dim lineLC As String: lineLC = LCase(label)
+        If InStr(lineLC, "cost") > 0 Or InStr(lineLC, "expense") > 0 Or _
+           InStr(lineLC, "cogs") > 0 Or InStr(lineLC, "depreciation") > 0 Or _
+           InStr(lineLC, "amortization") > 0 Or InStr(lineLC, "salary") > 0 Or _
+           InStr(lineLC, "wages") > 0 Or InStr(lineLC, "rent") > 0 Or _
+           InStr(lineLC, "aws") > 0 Then
+            If yoyDelta > 0 Then status = "Unfavorable"
+            If yoyDelta < 0 Then status = "Favorable"
+        End If
+
+        ' Write row
+        wsYoY.Cells(outRow, 1).Value = label
+        wsYoY.Cells(outRow, 2).Value = pyVal
+        wsYoY.Cells(outRow, 3).Value = fyVal
+        wsYoY.Cells(outRow, 4).Value = yoyDelta
+        wsYoY.Cells(outRow, 5).Value = yoyPct
+        wsYoY.Cells(outRow, 6).Value = status
+        wsYoY.Cells(outRow, 7).Value = IIf(flagged, "FLAG", "")
+
+        ' Format
+        wsYoY.Range(wsYoY.Cells(outRow, 2), wsYoY.Cells(outRow, 4)).NumberFormat = "$#,##0"
+        wsYoY.Cells(outRow, 5).NumberFormat = "0.0%"
+
+        ' Color-code
+        If flagged Then
+            wsYoY.Range(wsYoY.Cells(outRow, 1), wsYoY.Cells(outRow, 7)).Interior.Color = RGB(255, 235, 156)
+            wsYoY.Cells(outRow, 7).Font.Color = RGB(200, 0, 0)
+            wsYoY.Cells(outRow, 7).Font.Bold = True
+            flagCount = flagCount + 1
+        ElseIf outRow Mod 2 = 0 Then
+            wsYoY.Range(wsYoY.Cells(outRow, 1), wsYoY.Cells(outRow, 7)).Interior.Color = CLR_ALT_ROW
+        End If
+
+        If status = "Favorable" Then
+            wsYoY.Cells(outRow, 6).Font.Color = RGB(0, 128, 0)
+        ElseIf status = "Unfavorable" Then
+            wsYoY.Cells(outRow, 6).Font.Color = RGB(200, 0, 0)
+        End If
+
+        totalRows = totalRows + 1
+        outRow = outRow + 1
+NextYoYRow:
+    Next r
+
+    wsYoY.Columns("A:G").AutoFit
+    wsYoY.Activate
+
+    Dim elapsed As Double: elapsed = modPerformance.ElapsedSeconds()
+    modPerformance.TurboOff
+
+    modLogger.LogAction "modVarianceAnalysis", "RunYoYVarianceAnalysis", _
+        totalRows & " items, " & flagCount & " flagged (" & Format(elapsed, "0.00") & "s)"
+
+    MsgBox "Year-over-Year Variance Analysis Complete!" & vbCrLf & vbCrLf & _
+           totalRows & " line items compared" & vbCrLf & _
+           flagCount & " items flagged (>" & Format(VARIANCE_PCT, "0%") & " YoY change)" & vbCrLf & vbCrLf & _
+           "Baseline: " & pyLabel & vbCrLf & _
+           "Current:  " & fyLabel, _
+           vbInformation, APP_NAME
+    Exit Sub
+
+ErrHandler:
+    modPerformance.TurboOff
+    modLogger.LogAction "modVarianceAnalysis", "ERROR-YoY", Err.Description
+    MsgBox "YoY Variance error: " & Err.Description, vbCritical, APP_NAME
 End Sub
 
 
