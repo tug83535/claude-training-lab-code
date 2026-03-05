@@ -12,6 +12,7 @@ Option Explicit
 '   AddControlSheetButtons       - Add clickable macro buttons to Report--> (#17)
 '   SetParameterizedPrintArea    - Set print area by selected month/product (#63)
 '   CreatePrintableExecSummary   - Build one-page print layout for CFO (#64)
+'   CreateDisclaimerSheet        - Creates a "Disclaimer" sheet stating all data is fictional
 '
 ' VERSION:  2.1.0 (New module — 2026-03-01)
 ' SOURCE:   Ideas from NewTesting/VBA Examples (200) — items #17, #63, #64
@@ -339,4 +340,149 @@ Public Sub CreatePrintableExecSummary()
 ErrHandler:
     modPerformance.TurboOff
     MsgBox "CreatePrintableExecSummary error: " & Err.Description, vbCritical, APP_NAME
+End Sub
+
+
+'===============================================================================
+' CreateDisclaimerSheet - Creates a professional "Disclaimer" sheet
+' Clearly states that ALL financial data in this workbook is completely
+' fictional and for demonstration purposes only. Positioned as the last
+' visible sheet. Safe to re-run (deletes and recreates).
+'===============================================================================
+Public Sub CreateDisclaimerSheet()
+    On Error GoTo ErrHandler
+
+    Dim shName As String: shName = "Disclaimer"
+    modConfig.SafeDeleteSheet shName
+
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets.Add( _
+        After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+    ws.Name = shName
+    ws.Tab.Color = RGB(192, 0, 0)
+    ws.Cells.Interior.Color = RGB(255, 255, 255)
+
+    ' ── Column widths ──
+    ws.Columns("A").ColumnWidth = 3
+    ws.Columns("B").ColumnWidth = 90
+
+    Dim r As Long: r = 2
+
+    ' ── Header bar ──
+    ws.Range(ws.Cells(r, 1), ws.Cells(r, 2)).Interior.Color = CLR_NAVY
+    ws.Cells(r, 2).Value = "DISCLAIMER"
+    ws.Cells(r, 2).Font.Size = 20
+    ws.Cells(r, 2).Font.Bold = True
+    ws.Cells(r, 2).Font.Color = CLR_WHITE
+    ws.Rows(r).RowHeight = 40
+    ws.Cells(r, 2).VerticalAlignment = xlCenter
+    r = r + 2
+
+    ' ── Main disclaimer ──
+    ws.Cells(r, 2).Value = "IMPORTANT: ALL DATA IN THIS WORKBOOK IS COMPLETELY FICTIONAL"
+    ws.Cells(r, 2).Font.Size = 14
+    ws.Cells(r, 2).Font.Bold = True
+    ws.Cells(r, 2).Font.Color = RGB(192, 0, 0)
+    r = r + 2
+
+    ws.Cells(r, 2).Value = "This workbook is a demonstration model only. It was built to showcase" & _
+        " VBA automation, reporting, and data analysis capabilities for iPipeline's Finance &" & _
+        " Accounting teams."
+    ws.Cells(r, 2).WrapText = True
+    ws.Rows(r).RowHeight = 40
+    r = r + 2
+
+    ' ── What is fictional ──
+    ws.Range(ws.Cells(r, 1), ws.Cells(r, 2)).Interior.Color = RGB(240, 240, 240)
+    ws.Cells(r, 2).Value = "What Is Fictional"
+    ws.Cells(r, 2).Font.Size = 12
+    ws.Cells(r, 2).Font.Bold = True
+    ws.Cells(r, 2).Font.Color = CLR_NAVY
+    r = r + 1
+
+    Dim disclaimers As Variant
+    disclaimers = Array( _
+        "All revenue, expense, and cost figures are fabricated demo numbers", _
+        "All product names (iGO, Affirm, InsureSight, DocFast) are used for illustration only", _
+        "All vendor names, GL account numbers, and transaction details are fictional", _
+        "Department allocations, cost splits, and AWS charges are simulated", _
+        "Monthly trends, forecasts, and variance percentages are generated for demo purposes", _
+        "No data in this file represents actual iPipeline financial results")
+
+    Dim d As Long
+    For d = 0 To UBound(disclaimers)
+        ws.Cells(r, 2).Value = CStr(disclaimers(d))
+        ws.Cells(r, 2).Font.Size = 10
+        ws.Cells(r, 2).IndentLevel = 1
+        ' Add bullet character
+        ws.Cells(r, 2).Value = Chr(149) & "  " & CStr(disclaimers(d))
+        r = r + 1
+    Next d
+    r = r + 1
+
+    ' ── What is real ──
+    ws.Range(ws.Cells(r, 1), ws.Cells(r, 2)).Interior.Color = RGB(240, 240, 240)
+    ws.Cells(r, 2).Value = "What Is Real"
+    ws.Cells(r, 2).Font.Size = 12
+    ws.Cells(r, 2).Font.Bold = True
+    ws.Cells(r, 2).Font.Color = CLR_NAVY
+    r = r + 1
+
+    Dim realItems As Variant
+    realItems = Array( _
+        "The VBA macros, automation tools, and Command Center are fully functional", _
+        "The reporting templates, chart layouts, and formatting are production-ready", _
+        "The data quality checks, reconciliation logic, and audit trail work on real data", _
+        "These tools can be applied to actual iPipeline financial data after demo approval")
+
+    For d = 0 To UBound(realItems)
+        ws.Cells(r, 2).Value = Chr(149) & "  " & CStr(realItems(d))
+        ws.Cells(r, 2).Font.Size = 10
+        r = r + 1
+    Next d
+    r = r + 1
+
+    ' ── Contact / attribution ──
+    ws.Range(ws.Cells(r, 1), ws.Cells(r, 2)).Interior.Color = RGB(240, 240, 240)
+    ws.Cells(r, 2).Value = "Contact"
+    ws.Cells(r, 2).Font.Size = 12
+    ws.Cells(r, 2).Font.Bold = True
+    ws.Cells(r, 2).Font.Color = CLR_NAVY
+    r = r + 1
+    ws.Cells(r, 2).Value = "For questions about this demo file, contact the Finance & Accounting team."
+    ws.Cells(r, 2).Font.Size = 10
+    r = r + 2
+
+    ' ── Footer bar ──
+    ws.Range(ws.Cells(r, 1), ws.Cells(r, 2)).Interior.Color = CLR_NAVY
+    ws.Rows(r).RowHeight = 4
+    r = r + 1
+    ws.Cells(r, 2).Value = "Generated: " & Format(Now, "mmmm d, yyyy h:mm AM/PM")
+    ws.Cells(r, 2).Font.Size = 8
+    ws.Cells(r, 2).Font.Italic = True
+    ws.Cells(r, 2).Font.Color = RGB(150, 150, 150)
+
+    ' ── Print setup ──
+    With ws.PageSetup
+        .Orientation = xlPortrait
+        .FitToPagesWide = 1
+        .FitToPagesTall = 1
+        .Zoom = False
+        .PrintArea = ws.UsedRange.Address
+        .CenterHorizontally = True
+    End With
+
+    ws.Activate
+    ws.Range("B2").Select
+
+    modLogger.LogAction "modDemoTools", "CreateDisclaimerSheet", _
+        "Disclaimer sheet created"
+    MsgBox "'" & shName & "' sheet created." & vbCrLf & vbCrLf & _
+           "This sheet clearly states all financial data is fictional" & vbCrLf & _
+           "and for demonstration purposes only.", _
+           vbInformation, APP_NAME
+    Exit Sub
+
+ErrHandler:
+    MsgBox "CreateDisclaimerSheet error: " & Err.Description, vbCritical, APP_NAME
 End Sub
