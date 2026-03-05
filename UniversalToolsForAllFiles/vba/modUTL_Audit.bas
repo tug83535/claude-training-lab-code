@@ -62,8 +62,12 @@ Sub ExternalLinkFinder()
 
     For Each ws In ActiveWorkbook.Worksheets
         If ws.Name <> wsName Then
-            For Each c In ws.UsedRange
-                If c.HasFormula Then
+            Dim fRng As Range: Set fRng = Nothing
+            On Error Resume Next
+            Set fRng = ws.UsedRange.SpecialCells(xlCellTypeFormulas)
+            On Error GoTo ErrHandler
+            If Not fRng Is Nothing Then
+                For Each c In fRng
                     If InStr(c.Formula, "[") > 0 Then
                         reportWS.Cells(rowNum, 1).Value = ws.Name
                         reportWS.Cells(rowNum, 2).Value = c.Address
@@ -71,8 +75,8 @@ Sub ExternalLinkFinder()
                         rowNum = rowNum + 1
                         found = found + 1
                     End If
-                End If
-            Next c
+                Next c
+            End If
         End If
     Next ws
 
@@ -183,8 +187,12 @@ Sub WorkbookErrorScanner()
 
     For Each ws In ActiveWorkbook.Worksheets
         If ws.Name <> wsName Then
-            For Each c In ws.UsedRange
-                If IsError(c.Value) Then
+            Dim errRng As Range: Set errRng = Nothing
+            On Error Resume Next
+            Set errRng = ws.UsedRange.SpecialCells(xlCellTypeFormulas, xlErrors)
+            On Error GoTo ErrHandler
+            If Not errRng Is Nothing Then
+                For Each c In errRng
                     reportWS.Cells(rowNum, 1).Value = ws.Name
                     reportWS.Cells(rowNum, 2).Value = c.Address
                     Select Case CStr(c.Value)
@@ -200,8 +208,8 @@ Sub WorkbookErrorScanner()
                     If c.HasFormula Then reportWS.Cells(rowNum, 4).Value = c.Formula
                     rowNum = rowNum + 1
                     totalErrors = totalErrors + 1
-                End If
-            Next c
+                Next c
+            End If
         End If
     Next ws
 
@@ -622,8 +630,12 @@ Sub ExternalLinkSeveranceProtocol()
     Dim c As Range
 
     For Each ws In ActiveWorkbook.Worksheets
-        For Each c In ws.UsedRange
-            If c.HasFormula Then
+        Dim sevRng As Range: Set sevRng = Nothing
+        On Error Resume Next
+        Set sevRng = ws.UsedRange.SpecialCells(xlCellTypeFormulas)
+        On Error GoTo ErrHandler
+        If Not sevRng Is Nothing Then
+            For Each c In sevRng
                 If InStr(c.Formula, "[") > 0 Then
                     Dim originalFormula As String
                     originalFormula = c.Formula
@@ -642,8 +654,8 @@ Sub ExternalLinkSeveranceProtocol()
                     c.Interior.Color = RGB(255, 235, 59)
                     severed = severed + 1
                 End If
-            End If
-        Next c
+            Next c
+        End If
     Next ws
 
     UTL_TurboOff

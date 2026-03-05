@@ -97,8 +97,12 @@ Sub NumberFormatStandardizer()
     Dim c As Range
 
     For Each ws In ActiveWorkbook.Worksheets
-        For Each c In ws.UsedRange
-            If Not c.HasFormula And IsNumeric(c.Value) And Not IsEmpty(c) Then
+        Dim numRng As Range: Set numRng = Nothing
+        On Error Resume Next
+        Set numRng = ws.UsedRange.SpecialCells(xlCellTypeConstants, xlNumbers)
+        On Error GoTo ErrHandler
+        If Not numRng Is Nothing Then
+            For Each c In numRng
                 If Not IsDate(c.Value) Then
                     If InStr(c.NumberFormat, "$") = 0 And _
                        InStr(c.NumberFormat, "d/") = 0 And _
@@ -107,8 +111,8 @@ Sub NumberFormatStandardizer()
                         count = count + 1
                     End If
                 End If
-            End If
-        Next c
+            Next c
+        End If
     Next ws
 
     UTL_TurboOff
@@ -167,12 +171,18 @@ Sub DateFormatStandardizer()
     Dim c As Range
 
     For Each ws In ActiveWorkbook.Worksheets
-        For Each c In ws.UsedRange
-            If IsDate(c.Value) And Not IsEmpty(c) Then
-                c.NumberFormat = "MM/DD/YYYY"
-                count = count + 1
-            End If
-        Next c
+        Dim dateRng As Range: Set dateRng = Nothing
+        On Error Resume Next
+        Set dateRng = ws.UsedRange.SpecialCells(xlCellTypeConstants, xlNumbers)
+        On Error GoTo ErrHandler
+        If Not dateRng Is Nothing Then
+            For Each c In dateRng
+                If IsDate(c.Value) And Not IsEmpty(c) Then
+                    c.NumberFormat = "MM/DD/YYYY"
+                    count = count + 1
+                End If
+            Next c
+        End If
     Next ws
 
     UTL_TurboOff

@@ -428,13 +428,17 @@ Sub LockAllFormulaCells()
 
     ws.Cells.Locked = False
     Dim count As Long
-    Dim c As Range
-    For Each c In ws.UsedRange
-        If c.HasFormula Then
+    Dim fRng As Range: Set fRng = Nothing
+    On Error Resume Next
+    Set fRng = ws.UsedRange.SpecialCells(xlCellTypeFormulas)
+    On Error GoTo ErrHandler
+    If Not fRng Is Nothing Then
+        Dim c As Range
+        For Each c In fRng
             c.Locked = True
             count = count + 1
-        End If
-    Next c
+        Next c
+    End If
 
     UTL_TurboOff
     MsgBox "Done! " & count & " formula cells locked." & Chr(10) & _
@@ -604,13 +608,29 @@ Sub WorkbookHealthCheck()
 
     For Each ws In ActiveWorkbook.Worksheets
         totalSheets = totalSheets + 1
-        Dim c As Range
-        For Each c In ws.UsedRange
-            totalCells = totalCells + 1
-            If c.HasFormula Then totalFormulas = totalFormulas + 1
-            If IsError(c.Value) Then totalErrors = totalErrors + 1
-            If IsEmpty(c) Then totalBlanks = totalBlanks + 1
-        Next c
+        totalCells = totalCells + ws.UsedRange.Cells.Count
+
+        ' Count formulas via SpecialCells
+        Dim fRng2 As Range: Set fRng2 = Nothing
+        On Error Resume Next
+        Set fRng2 = ws.UsedRange.SpecialCells(xlCellTypeFormulas)
+        On Error GoTo ErrHandler
+        If Not fRng2 Is Nothing Then totalFormulas = totalFormulas + fRng2.Cells.Count
+
+        ' Count errors via SpecialCells
+        Dim eRng As Range: Set eRng = Nothing
+        On Error Resume Next
+        Set eRng = ws.UsedRange.SpecialCells(xlCellTypeFormulas, xlErrors)
+        On Error GoTo ErrHandler
+        If Not eRng Is Nothing Then totalErrors = totalErrors + eRng.Cells.Count
+
+        ' Count blanks via SpecialCells
+        Dim bRng As Range: Set bRng = Nothing
+        On Error Resume Next
+        Set bRng = ws.UsedRange.SpecialCells(xlCellTypeBlanks)
+        On Error GoTo ErrHandler
+        If Not bRng Is Nothing Then totalBlanks = totalBlanks + bRng.Cells.Count
+
         totalLinks = totalLinks + ws.Hyperlinks.Count
     Next ws
 
