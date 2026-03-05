@@ -1,11 +1,11 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-03-04)
+## Current Status (2026-03-05)
 - **Branch:** `claude/resume-ipipeline-demo-qKRHn` (active working branch)
-- **VBA Modules:** 32 imported into Excel workbook — Debug > Compile passes (greyed out = clean)
-- **Python Scripts:** 14 complete and functional (main project) — pytest: 99 passed, 0 failures
-- **Universal Tools:** ~85 tools built (8 modules), code-reviewed, bugs fixed, how-to guide written
-- **Excel File:** Workbook open with all 32 modules imported and error-free
+- **VBA Modules:** 34 total (32 demo + modSheetIndex + modDashboardAdvanced) — need re-import
+- **Python Scripts:** 14 complete and functional (main project) + pnl_forecast.py enhanced with MAPE accuracy
+- **Universal Tools:** ~99 tools built (12 VBA modules + 22 Python scripts), code-reviewed, bugs fixed
+- **Demo Enhancements (2026-03-05):** Data Quality Letter Grade, Forecast Accuracy (MAPE), YoY Variance Analysis, modDashboard split into 2 modules
 - **Testing Phase:** T1 COMPLETE, T2 partially done (T2.01–T2.04 PASS, T2.05–T2.07 not yet run), T5.01+T5.02 PASS
 - **Self-Review:** Full self-review of all remaining untested code completed — 12 bugs found and fixed preemptively
 - **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE
@@ -158,14 +158,10 @@ All fixes committed and pushed (commit a22dd76).
 - [x] **Universal Tools — Coworker How-To Guide:** COMPLETE (2026-03-03) — Full guide at `UniversalToolsForAllFiles/UNIVERSAL_TOOLS_HOW_TO_GUIDE.md`. Covers all 76 tools with installation, step-by-step usage, examples, and quick reference table. Written for non-technical Finance & Accounting staff.
 - [ ] **Universal Tools — Python .exe Conversion:** Convert all 18 Python scripts to standalone `.exe` files using PyInstaller (or similar) so coworkers can just double-click and run — no Python installation required. Package with a simple folder + README.
 
-### Enhancement Ideas — Top 3 (Approved, Build After Code Review Complete)
-These came from the Project Refresh code audit ideas list. Ranked by impact-to-effort ratio for the demo:
-
-1. **Data Quality Letter Grade (A-F)** — Add a single letter grade summary at the top of the data quality report. Low effort (scoring function at end of existing scan in modDataQuality). Highest demo impact — CFO reads one letter, not 47 lines.
-2. **Forecast Accuracy Scoring (MAPE/bias)** — Add Mean Absolute Percentage Error calculation to pnl_forecast.py. Low effort, high impact — transforms "here's our forecast" into "here's our forecast, and historically it's 96.2% accurate."
-3. **YoY Variance Analysis (not just MoM)** — Add year-over-year comparison to modVarianceAnalysis alongside existing month-over-month. Medium effort, high impact — MoM is operational, but YoY is how CFOs evaluate performance and how board decks are built.
-
-**Status:** Noted only — waiting for the other Claude account's recommendations before building.
+### Enhancement Ideas — Top 3 — ALL BUILT (2026-03-05)
+1. **[x] Data Quality Letter Grade (A-F)** — BUILT. Added CalculateLetterGrade to modDataQuality. Grade badge (28pt, color-coded) at top of report. Grading: A (0 issues) through F (4+ critical).
+2. **[x] Forecast Accuracy Scoring (MAPE/bias)** — BUILT. Added accuracy_report() to pnl_forecast.py. Leave-one-out backtest, MAPE/bias/hit rate metrics, letter grade. CLI flag: --accuracy.
+3. **[x] YoY Variance Analysis** — BUILT. Added RunYoYVarianceAnalysis to modVarianceAnalysis. Smart column detection (Prior Year/PY/Budget fallback). Cost-line reversal logic. Creates styled report sheet.
 
 ---
 
@@ -176,7 +172,24 @@ These came from the Project Refresh code audit ideas list. Ranked by impact-to-e
 
 ---
 
-## Completed — This Session (2026-03-04)
+## Completed — This Session (2026-03-05)
+
+### Demo Enhancements + Universal Tools Expansion
+- [x] Fixed 3 demo bugs: duplicate constants in modConfig, GL sheet visibility leak, missing TurboOn/Off in scanning loops
+- [x] Built Data Quality Letter Grade (A-F) in modDataQuality
+- [x] Built Forecast Accuracy Scoring (MAPE) in pnl_forecast.py
+- [x] Built YoY Variance Analysis in modVarianceAnalysis
+- [x] Split modDashboard (1,398 lines) into modDashboard (533) + modDashboardAdvanced (650) — 34th VBA module
+- [x] Built 14 new universal tools in NewTools/ folder:
+  - VBA: modUTL_DataCleaningPlus (3 tools), modUTL_AuditPlus (4 tools), modUTL_DuplicateDetection (1 tool), modUTL_NumberFormat (2 tools)
+  - Python: date_format_unifier.py, sql_query_tool.py, multi_file_consolidator.py, two_file_reconciler.py
+- [x] SpecialCells performance fix for 8 slow universal tools across 3 modules
+- [x] Created modUTL_Core.bas shared utilities module (9 public functions)
+- [x] Added backup-before-destructive to 6 high-risk universal tools
+
+---
+
+## Completed — Previous Session (2026-03-04)
 
 ### Testing Bug Fixes + Self-Review — Branch V8WSj
 - [x] Fixed T2.01: Added 9 missing sheet-name constants to modConfig

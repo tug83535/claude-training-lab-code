@@ -140,3 +140,27 @@ Before delivering any future code updates, I need to self-review against the tes
 3. For Python, run the pytest suite yourself and confirm 0 failures
 4. Don't send me code that you haven't verified meets the test criteria
 This will save us both time — I shouldn't be discovering basic bugs during testing.
+
+## SpecialCells Performance Pattern (2026-03-05)
+- When iterating all cells on a sheet, ALWAYS use `SpecialCells` to pre-filter first
+- `ws.UsedRange.SpecialCells(xlCellTypeFormulas)` — only formula cells
+- `ws.UsedRange.SpecialCells(xlCellTypeConstants, xlNumbers)` — only numeric constants
+- `ws.UsedRange.SpecialCells(xlCellTypeFormulas, xlErrors)` — only error formulas
+- `ws.UsedRange.SpecialCells(xlCellTypeBlanks)` — only blank cells
+- ALWAYS wrap in `On Error Resume Next` because SpecialCells throws an error if no cells match
+- This can reduce iteration from 100,000+ cells to just the relevant ones
+- Exception: DataValidation checking cannot use SpecialCells (no xlCellTypeValidation exists)
+
+## Backup-Before-Destructive Pattern (2026-03-05)
+- Any universal tool that deletes rows, replaces formulas with values, or modifies cell data across sheets should create a backup first
+- Use `modUTL_Core.UTL_BackupSheet ws` — creates a hidden copy with _BK_yymmdd_hhnnss suffix
+- For all-sheets operations (Find/Replace, Sanitize, Link Severance), backup every sheet in a loop
+- Always update the MsgBox confirmation to tell the user a backup will be created
+- The backup is hidden (xlSheetHidden) so it doesn't clutter the user's view
+
+## Module Splitting Pattern (2026-03-05)
+- When a VBA module exceeds ~800 lines, split it into base + advanced modules
+- Keep the most-used public subs in the base module (referenced by ExecuteAction routing table)
+- Move advanced/secondary subs to the new module
+- Private helpers needed by both modules must be duplicated (VBA has no cross-module Private access)
+- Verify the ExecuteAction routing table — only update it if Case statements reference moved subs
