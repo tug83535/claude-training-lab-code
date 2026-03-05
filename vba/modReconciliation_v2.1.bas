@@ -124,8 +124,8 @@ Public Sub RunAllChecks()
     ' Log to audit trail
     modLogger.LogAction "modReconciliation", "RunAllChecks", _
                         passCount & "/" & totalChecks & " passed. " & _
-                        IIf(failCount > 0, failCount & " failures.", "All clear."), _
-                        modPerformance.ElapsedSeconds()
+                        IIf(failCount > 0, failCount & " failures.", "All clear.") & _
+                        " (" & Format(modPerformance.ElapsedSeconds(), "0.00") & "s)"
     
     ' Navigate to Checks sheet and show results
     ws.Activate

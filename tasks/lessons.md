@@ -164,3 +164,17 @@ This will save us both time — I shouldn't be discovering basic bugs during tes
 - Move advanced/secondary subs to the new module
 - Private helpers needed by both modules must be duplicated (VBA has no cross-module Private access)
 - Verify the ExecuteAction routing table — only update it if Case statements reference moved subs
+
+## LogAction Signature — Recurring Bug (2026-03-05, confirmed AGAIN)
+- The LogAction signature is: `LogAction(module, action, message, [status])` — the 4th arg is a **String** (status like "OK")
+- `modPerformance.ElapsedSeconds()` returns a **Double** — NEVER pass it as the 4th argument
+- This bug was found and fixed 9 times on 2026-03-04, then found AGAIN in 3 more modules on 2026-03-05 (modDataQuality, modReconciliation, modPDFExport)
+- The correct pattern is to Format the elapsed time into the **message string**: `"description (" & Format(elapsed, "0.00") & "s)"`
+- BEFORE delivering any new VBA code, grep for `LogAction.*ElapsedSeconds` to catch this pattern
+- This is now the #1 most common bug in this codebase — it has been found 12 times total
+
+## Python Function Signature Mismatches (2026-03-05)
+- When adding parameters to a function call, always check the function definition accepts that parameter
+- Found: `detect_date_columns(df, day_first=args.day_first)` called but `detect_date_columns()` didn't accept `day_first`
+- Would crash with `TypeError: unexpected keyword argument` at runtime
+- Always search for the function definition before adding keyword arguments to calls

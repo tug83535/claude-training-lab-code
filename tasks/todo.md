@@ -1,42 +1,42 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-03-05)
+## Current Status (2026-03-05, updated)
 - **Branch:** `claude/resume-ipipeline-demo-qKRHn` (active working branch)
 - **VBA Modules:** 34 total (32 demo + modSheetIndex + modDashboardAdvanced) — need re-import
 - **Python Scripts:** 14 complete and functional (main project) + pnl_forecast.py enhanced with MAPE accuracy
-- **Universal Tools:** ~99 tools built (12 VBA modules + 22 Python scripts), code-reviewed, bugs fixed
-- **Demo Enhancements (2026-03-05):** Data Quality Letter Grade, Forecast Accuracy (MAPE), YoY Variance Analysis, modDashboard split into 2 modules
+- **Universal Tools:** ~99 tools built (12 VBA modules + 4 new Python scripts + 4 new VBA NewTools), code-reviewed, bugs fixed
+- **ProjectRefresh:** Complete — CODE_AUDIT_FINDINGS.md + Code_Audit_Final_Report.md produced, all recommendations implemented
+- **Demo Enhancements (2026-03-05):** Data Quality Letter Grade, Forecast Accuracy (MAPE), YoY Variance Analysis, modDashboard split, modUTL_Core shared utils, backup-before-destructive, SpecialCells performance fixes
 - **Training Guides:** 6 complete guides built in FinalRoughGuides/ (2026-03-05) — ready for Connor's review
 - **Testing Phase:** T1 COMPLETE, T2 partially done (T2.01–T2.04 PASS, T2.05–T2.07 not yet run), T5.01+T5.02 PASS
-- **Self-Review:** Full self-review of all remaining untested code completed — 12 bugs found and fixed preemptively
-- **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, Training Guides COMPLETE (draft)
+- **Bug Review (2026-03-05):** Full 3-pass review of all new code — 4 bugs found and fixed (3 LogAction signature bugs, 1 Python crash)
+- **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, Training Guides COMPLETE (draft), ProjectRefresh COMPLETE
 
 ### ⚠ IMPORTANT — RE-IMPORT NEEDED
-Before continuing testing, re-import these 7 `.bas` files into the Excel workbook (VBA Editor → File → Import):
+Before continuing testing, re-import these 10 `.bas` files into the Excel workbook (VBA Editor → File → Import):
 1. modConfig_v2.1.bas (color constant fixes)
-2. modReconciliation_v2.1.bas (dateCol/amtCol constant fixes)
-3. modVarianceAnalysis_v2.1.bas (GenerateCommentary row 1 → row 4 fix)
-4. modDashboard_v2.1.bas (WaterfallChart fallbacks + ExecDashboard fixes + LogAction fixes)
-5. modDemoTools_v2.1.bas (LogAction fix)
-6. modTrendReports_v2.1.bas (LogAction fix)
-7. modMonthlyTabGenerator_v2.1.bas (LogAction fixes + TestUpdateHeaderText wrapper)
+2. modReconciliation_v2.1.bas (dateCol/amtCol constant fixes + LogAction fix)
+3. modVarianceAnalysis_v2.1.bas (GenerateCommentary row 1 → row 4 fix + YoY Variance)
+4. modDashboard_v2.1.bas (split — base module only, charts moved to Advanced)
+5. modDashboardAdvanced_v2.1.bas (NEW — ExecDashboard, Waterfall, ProductComp, SmallMultiples)
+6. modDemoTools_v2.1.bas (LogAction fix)
+7. modTrendReports_v2.1.bas (LogAction fix)
+8. modMonthlyTabGenerator_v2.1.bas (LogAction fixes + TestUpdateHeaderText wrapper)
+9. modDataQuality_v2.1.bas (Letter Grade + LogAction fix)
+10. modPDFExport_v2.1.bas (LogAction fix)
 
-### Project Refresh — Code Audit / Idea Review (NEW)
-A separate Claude session (fresh, no context) independently built VBA and Python code for this same project. The goal is to review that code for ideas and improvements we may have missed — **NOT** to replace or change any of our existing code.
+### Project Refresh — Code Audit / Idea Review — COMPLETE
+A separate Claude session independently built VBA and Python code for this same project. We reviewed that code for ideas and improvements.
 
-**Rules:**
-- Do NOT modify any existing code based on this review
-- Review only — look for new ideas, missed features, or better approaches
-- Any ideas worth pursuing get added to the backlog as new items
-- All uploaded code goes in `ProjectRefresh/` folder
+**Status:** COMPLETE — All steps done. All recommendations implemented as code.
 
 **Steps:**
 1. [x] Create `ProjectRefresh/` folder on the branch
-2. [ ] Connor uploads the other Claude's code into `ProjectRefresh/`
-3. [ ] Full code audit — review every file in `ProjectRefresh/` line by line
-4. [ ] Cross-reference against our existing 215+ tools (33 demo VBA + 85 universal tools + 14 Python + extras)
-5. [ ] Produce a findings report: new ideas, overlaps, and recommendations
-6. [ ] Add any approved new ideas to the backlog
+2. [x] CODE_AUDIT_FINDINGS.md — 120 tools cross-referenced (34 exact, 30 overlap, 56 new ideas)
+3. [x] Tool_Reference_All_120.md — full catalog
+4. [x] Code_Audit_Final_Report.md — Demo A-, Universal B+, 20 prioritized actions
+5. [x] All Tier 1 recommendations implemented: 3 critical bug fixes, modDashboard split, modUTL_Core, SpecialCells perf, backup-before-destructive, 14 new tools, Data Quality Letter Grade, Forecast Accuracy MAPE, YoY Variance
+6. [ ] Connor uploads the other Claude's actual code files into `ProjectRefresh/` (optional — audit is done from docs)
 
 ---
 
@@ -137,7 +137,7 @@ All fixes committed and pushed (commit a22dd76).
 - [ ] (Eventually) Package the 8 VBA tools into `KBT_UniversalTools.xlam` add-in
 
 ### Final Step
-- [ ] Final PR to merge `claude/resume-apclmerge-project-V8WSj` → `main`
+- [ ] Final PR to merge `claude/resume-ipipeline-demo-qKRHn` → `main`
 
 ---
 

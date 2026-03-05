@@ -113,22 +113,83 @@ Before delivering ANYTHING ask yourself:
 - Original VBA system complete — 24 modules, all 62 Command Center actions covered (2026-02-28)
 - All Python scripts complete — 14 scripts, all functional (2026-02-28)
 - 7 new VBA modules added from NewTesting ideas (2026-03-01)
-- 32 VBA modules total — imported into workbook, Debug > Compile passes clean
+- 34 VBA modules total (32 + modSheetIndex + modDashboardAdvanced) — need re-import
 - T1 complete (T1.01–T1.08 all PASS), T2 partially tested (T2.01–T2.04 done, T2.05–T2.07 not yet run)
-- T5.01 and T5.02 tested and fixed this session (ExecDashboard + WaterfallChart)
+- T5.01 and T5.02 tested and fixed (ExecDashboard + WaterfallChart)
 - Self-review of all remaining tests completed — 12 additional bugs found and fixed preemptively
 - Python pytest: 99 passed, 15 skipped, 0 failures (T4.04 criteria met)
-- Universal Tools: 76 tools built, code-reviewed, all 9 bugs fixed, how-to guide written (2026-03-03)
-- Universal Tools expanded: 3 new modules added (modUTL_Branding, modUTL_SheetTools, modUTL_DataSanitizer) — 2026-03-04
-- Demo file: new modSheetIndex_v2.1.bas added (CreateHomeSheet + ListAllSheetsWithLinks) — 2026-03-04
-- 33 VBA modules total (32 + modSheetIndex)
-- iPipeline brand styling guide added at `docs/ipipeline-brand-styling.md`
-- FinalRoughGuides/ folder created for draft training guides (final versions go to training/)
-- Track B COMPLETE, Track C COMPLETE, Backlog Item 1 (how-to guide) COMPLETE
-- Branch: `claude/resume-ipipeline-demo-qKRHn` (active branch as of 2026-03-04)
+- Universal Tools: ~99 tools built (12 VBA + 4 new VBA NewTools + 4 new Python), code-reviewed, bugs fixed
+- ProjectRefresh COMPLETE — audit done, all recommendations implemented as working code
+- Demo enhancements: Data Quality Letter Grade, Forecast Accuracy MAPE, YoY Variance, modDashboard split, modUTL_Core, backup-before-destructive, SpecialCells perf fixes
+- 6 training guides complete in FinalRoughGuides/ — ready for Connor review
+- Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, ProjectRefresh COMPLETE, Training Guides COMPLETE (draft)
+- Branch: `claude/resume-ipipeline-demo-qKRHn` (active branch)
+- Bug review (2026-03-05): 3-pass review of all new code — 4 bugs found and fixed (3 VBA LogAction, 1 Python crash)
 - Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
-## Session Summary — 2026-03-04 (Latest — New VBA Tools + Universal Toolkit Expansion)
+## Session Summary — 2026-03-05 (Latest — Code Review + Bug Fixes + Doc Updates)
+
+### What Was Done This Session
+Full 3-pass code review of ALL new code built in the previous session, using known bug patterns from lessons.md. Found and fixed 4 bugs. Updated all docs to reflect current state.
+
+**Branch:** `claude/resume-ipipeline-demo-qKRHn`
+
+### Bug Review (3 Passes)
+**Pass 1 — Known Bug Patterns from lessons.md:**
+- Checked all LogAction signatures across all VBA modules
+- Found 3 more instances of the recurring LogAction bug (Double passed as status String)
+
+**Pass 2 — VBA Code Quality:**
+- Checked SpecialCells Nothing guards, UsedRange iteration, loop variable resets, Chr vs ChrW, RGB colors
+- All clean — no issues found
+
+**Pass 3 — Python Code:**
+- Found `detect_date_columns()` missing `day_first` parameter that was being passed by the caller
+- Would crash with `TypeError` at runtime
+
+### Bugs Found and Fixed (4 total)
+1. **modDataQuality_v2.1.bas:150** — LogAction 4th arg = `ElapsedSeconds()` (Double → moved into message string)
+2. **modReconciliation_v2.1.bas:128** — LogAction 4th arg = `ElapsedSeconds()` (Double → moved into message string)
+3. **modPDFExport_v2.1.bas:102** — LogAction 4th arg = `ElapsedSeconds()` (Double → moved into message string)
+4. **date_format_unifier.py:97+182** — `detect_date_columns()` missing `day_first` parameter (added to signature + passed through to `parse_date`)
+
+### Docs Updated
+- `tasks/todo.md` — Updated current status, ProjectRefresh marked COMPLETE, re-import list expanded to 10 files, PR branch corrected
+- `tasks/lessons.md` — Added LogAction recurring bug pattern (now found 12 total times), added Python signature mismatch pattern
+- `CLAUDE.md` — Updated current status and session summary
+
+### Re-Import Required (Updated — 10 files)
+1. modConfig_v2.1.bas
+2. modReconciliation_v2.1.bas (LogAction fix)
+3. modVarianceAnalysis_v2.1.bas (YoY + GenerateCommentary fix)
+4. modDashboard_v2.1.bas (split — base only)
+5. modDashboardAdvanced_v2.1.bas (NEW)
+6. modDemoTools_v2.1.bas
+7. modTrendReports_v2.1.bas
+8. modMonthlyTabGenerator_v2.1.bas
+9. modDataQuality_v2.1.bas (Letter Grade + LogAction fix)
+10. modPDFExport_v2.1.bas (LogAction fix)
+
+---
+
+## Session Summary — 2026-03-05 (Earlier — ProjectRefresh Audit + Demo Enhancements + Training Guides)
+
+### What Was Done
+Full ProjectRefresh code audit completed. 120 tools cross-referenced. All Tier 1 recommendations implemented as working code:
+- 3 critical demo bugs fixed (duplicate constants, GL visibility, TurboOn/Off)
+- modDashboard split into base + advanced (was 1,398 lines)
+- modUTL_Core shared utilities module created
+- SpecialCells performance fix for 8 slow universal tools
+- Backup-before-destructive added to 6 high-risk tools
+- Data Quality Letter Grade (A-F) added to modDataQuality
+- Forecast Accuracy Scoring (MAPE) added to pnl_forecast.py
+- YoY Variance Analysis added to modVarianceAnalysis
+- 14 new universal tools (7 VBA + 4 Python)
+- 6 training guides built in FinalRoughGuides/
+
+---
+
+## Session Summary — 2026-03-04 (Earlier — New VBA Tools + Universal Toolkit Expansion)
 
 ### What Was Done This Session
 Expanded both the demo file and Universal Toolkit with new VBA modules, created the first training guide draft, and set up project infrastructure.

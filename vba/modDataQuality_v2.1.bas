@@ -146,8 +146,8 @@ Public Sub ScanAll()
 
     modLogger.LogAction "modDataQuality", "ScanAll", _
                         "Grade " & CStr(gradeArr(0)) & " | " & m_IssueCount & " issues (" & critCount & " critical, " & _
-                        warnCount & " warning, " & infoCount & " info)", _
-                        modPerformance.ElapsedSeconds()
+                        warnCount & " warning, " & infoCount & " info) (" & _
+                        Format(modPerformance.ElapsedSeconds(), "0.00") & "s)"
 
     MsgBox "Data Quality Scan Complete" & vbCrLf & vbCrLf & _
            "GRADE:  " & CStr(gradeArr(0)) & "  -  " & CStr(gradeArr(1)) & vbCrLf & vbCrLf & _

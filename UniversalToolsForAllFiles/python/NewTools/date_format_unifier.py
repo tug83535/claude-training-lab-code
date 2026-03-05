@@ -95,7 +95,8 @@ def parse_date(value, day_first: bool = False) -> datetime | None:
 
 
 def detect_date_columns(df: pd.DataFrame, sample_size: int = 20,
-                        threshold: float = 0.6) -> list[str]:
+                        threshold: float = 0.6,
+                        day_first: bool = False) -> list[str]:
     """Detect which columns likely contain dates by sampling values."""
     date_cols = []
     for col in df.columns:
@@ -104,7 +105,7 @@ def detect_date_columns(df: pd.DataFrame, sample_size: int = 20,
             continue
 
         sample = non_null.head(sample_size)
-        date_count = sum(1 for v in sample if parse_date(v) is not None)
+        date_count = sum(1 for v in sample if parse_date(v, day_first=day_first) is not None)
         ratio = date_count / len(sample)
 
         if ratio >= threshold:

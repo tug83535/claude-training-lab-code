@@ -98,8 +98,8 @@ Public Sub ExportReportPackage()
     
     modPerformance.TurboOff
     modLogger.LogAction "modPDFExport", "ExportReportPackage", _
-                        count & " sheets exported to: " & exportPath, _
-                        modPerformance.ElapsedSeconds()
+                        count & " sheets exported to: " & exportPath & _
+                        " (" & Format(modPerformance.ElapsedSeconds(), "0.00") & "s)"
     
     MsgBox "Report package exported (" & count & " sheets):" & vbCrLf & exportPath, _
            vbInformation, APP_NAME
