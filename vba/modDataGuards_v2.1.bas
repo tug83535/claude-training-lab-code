@@ -155,8 +155,9 @@ Public Sub FindNegativeAmounts()
         Exit Sub
     End If
 
+    modPerformance.TurboOn
+    modConfig.ShowGLSheet
     Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(SH_HIDDEN)
-    ws.Visible = xlSheetVisible
     Dim lastRow As Long: lastRow = modConfig.LastRow(ws, COL_GL_ID)
 
     ' Clear prior highlight on Amount column only
@@ -172,6 +173,8 @@ Public Sub FindNegativeAmounts()
         End If
     Next r
 
+    modConfig.HideGLSheet
+    modPerformance.TurboOff
     modLogger.LogAction "modDataGuards", "FindNegativeAmounts", _
         negCount & " negative amount(s) in " & SH_HIDDEN
     If negCount > 0 Then
@@ -184,6 +187,8 @@ Public Sub FindNegativeAmounts()
     Exit Sub
 
 ErrHandler:
+    modConfig.HideGLSheet
+    modPerformance.TurboOff
     MsgBox "FindNegativeAmounts error: " & Err.Description, vbCritical, APP_NAME
 End Sub
 
@@ -200,8 +205,9 @@ Public Sub FindZeroAmounts()
         Exit Sub
     End If
 
+    modPerformance.TurboOn
+    modConfig.ShowGLSheet
     Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(SH_HIDDEN)
-    ws.Visible = xlSheetVisible
     Dim lastRow As Long: lastRow = modConfig.LastRow(ws, COL_GL_ID)
 
     ws.Range(ws.Cells(DATA_ROW_GL, COL_GL_AMOUNT), _
@@ -219,6 +225,8 @@ Public Sub FindZeroAmounts()
         End If
     Next r
 
+    modConfig.HideGLSheet
+    modPerformance.TurboOff
     modLogger.LogAction "modDataGuards", "FindZeroAmounts", _
         zeroCount & " zero-amount row(s) in " & SH_HIDDEN
     If zeroCount > 0 Then
@@ -231,6 +239,8 @@ Public Sub FindZeroAmounts()
     Exit Sub
 
 ErrHandler:
+    modConfig.HideGLSheet
+    modPerformance.TurboOff
     MsgBox "FindZeroAmounts error: " & Err.Description, vbCritical, APP_NAME
 End Sub
 
@@ -248,8 +258,9 @@ Public Sub FindSuspiciousRoundNumbers()
         Exit Sub
     End If
 
+    modPerformance.TurboOn
+    modConfig.ShowGLSheet
     Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(SH_HIDDEN)
-    ws.Visible = xlSheetVisible
     Dim lastRow As Long: lastRow = modConfig.LastRow(ws, COL_GL_ID)
 
     ws.Range(ws.Cells(DATA_ROW_GL, COL_GL_AMOUNT), _
@@ -267,6 +278,8 @@ Public Sub FindSuspiciousRoundNumbers()
         End If
     Next r
 
+    modConfig.HideGLSheet
+    modPerformance.TurboOff
     modLogger.LogAction "modDataGuards", "FindSuspiciousRoundNumbers", _
         roundCount & " suspicious round amount(s) in " & SH_HIDDEN
     If roundCount > 0 Then
@@ -279,5 +292,7 @@ Public Sub FindSuspiciousRoundNumbers()
     Exit Sub
 
 ErrHandler:
+    modConfig.HideGLSheet
+    modPerformance.TurboOff
     MsgBox "FindSuspiciousRoundNumbers error: " & Err.Description, vbCritical, APP_NAME
 End Sub

@@ -66,11 +66,10 @@ Public Const SH_SEARCH       As String = "Search Results"
 Public Const SH_VAL_REPORT   As String = "Validation Report"
 
 ' T2.01 constants — generated/output sheets used across VBA + Python
+' NOTE: SH_CHANGELOG, SH_RECON, SH_ALLOCATION removed 2026-03-05 (duplicates of
+'       SH_CHANGE_LOG, SH_CHECKS, SH_ALLOC_OUT defined above)
 Public Const SH_DASHBOARD    As String = "Executive Dashboard"
-Public Const SH_CHANGELOG    As String = "Change Management Log"
-Public Const SH_RECON        As String = "Checks"
 Public Const SH_COMMENTARY   As String = "Variance Commentary"
-Public Const SH_ALLOCATION   As String = "Allocation Output"
 Public Const SH_FORECAST     As String = "Rolling Forecast"
 Public Const SH_SNAPSHOT     As String = "Version History"
 Public Const SH_MONTE_CARLO  As String = "Monte Carlo Simulation"
@@ -153,6 +152,25 @@ Public Const RECON_TOLERANCE As Double = 1     ' $1 tolerance for cross-sheet va
 Public Const APP_NAME        As String = "Keystone BenefitTech Automation Toolkit"
 Public Const APP_VERSION     As String = "2.1.0"
 Public Const APP_BUILD_DATE  As String = "2026-02-18"
+
+'===============================================================================
+' GL SHEET VISIBILITY HELPERS (v2.1 — 2026-03-05)
+' Call ShowGLSheet before reading GL data, HideGLSheet when done.
+' Always call HideGLSheet in BOTH the normal exit AND ErrHandler paths.
+'===============================================================================
+Public Sub ShowGLSheet()
+    If SheetExists(SH_HIDDEN) Then
+        ThisWorkbook.Worksheets(SH_HIDDEN).Visible = xlSheetVisible
+    End If
+End Sub
+
+Public Sub HideGLSheet()
+    On Error Resume Next
+    If SheetExists(SH_HIDDEN) Then
+        ThisWorkbook.Worksheets(SH_HIDDEN).Visible = xlSheetVeryHidden
+    End If
+    On Error GoTo 0
+End Sub
 
 '===============================================================================
 ' CSV SPLITTERS

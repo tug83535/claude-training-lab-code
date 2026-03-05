@@ -36,7 +36,7 @@ Public Sub AddReconciliationDrillLinks()
     End If
 
     ' GL must be visible for internal hyperlinks to function
-    ThisWorkbook.Worksheets(SH_HIDDEN).Visible = xlSheetVisible
+    modConfig.ShowGLSheet
 
     Dim wsChk As Worksheet: Set wsChk = ThisWorkbook.Worksheets(SH_CHECKS)
     Dim lastRow As Long: lastRow = modConfig.LastRow(wsChk, 1)
@@ -65,6 +65,7 @@ Public Sub AddReconciliationDrillLinks()
         End If
     Next r
 
+    modConfig.HideGLSheet
     modLogger.LogAction "modDrillDown", "AddReconciliationDrillLinks", _
         linkCount & " drill links added to " & SH_CHECKS
     MsgBox linkCount & " 'View Data' hyperlinks added to the Checks tab (column F)." & vbCrLf & _
@@ -73,6 +74,7 @@ Public Sub AddReconciliationDrillLinks()
     Exit Sub
 
 ErrHandler:
+    modConfig.HideGLSheet
     MsgBox "AddReconciliationDrillLinks error: " & Err.Description, vbCritical, APP_NAME
 End Sub
 
