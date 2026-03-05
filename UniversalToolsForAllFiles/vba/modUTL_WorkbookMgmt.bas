@@ -107,11 +107,18 @@ Sub FindReplaceAcrossAllSheets()
     replaceVal = InputBox("Replace with:", "UTL — Find & Replace All Sheets")
 
     If MsgBox("Replace '" & findVal & "' with '" & replaceVal & "' on ALL sheets?" & Chr(10) & _
+              "A backup of each sheet will be created first." & Chr(10) & _
               "This cannot be undone after saving.", _
               vbExclamation + vbYesNo, "UTL Workbook Mgmt") = vbNo Then Exit Sub
 
     On Error GoTo ErrHandler
     UTL_TurboOn
+
+    ' Create backup of all sheets before replacement
+    Dim bkWs As Worksheet
+    For Each bkWs In ActiveWorkbook.Worksheets
+        modUTL_Core.UTL_BackupSheet bkWs
+    Next bkWs
 
     Dim count As Long
     Dim ws As Worksheet

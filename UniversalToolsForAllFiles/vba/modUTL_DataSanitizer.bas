@@ -53,10 +53,17 @@ Sub RunFullSanitize()
               "  2. Floating-point tails (9412.300000001)" & Chr(10) & _
               "  3. Integer formats (3628 without .00)" & Chr(10) & Chr(10) & _
               "Dates, names, labels, IDs, and formulas are NOT touched." & Chr(10) & _
+              "A backup of each sheet will be created first." & Chr(10) & _
               "Tip: Run Preview first to see what will change.", _
               vbYesNo + vbQuestion, "UTL Data Sanitizer") = vbNo Then Exit Sub
 
     UTL_TurboOn
+
+    ' Create backup of all sheets before sanitization
+    Dim bkWs As Worksheet
+    For Each bkWs In ActiveWorkbook.Worksheets
+        modUTL_Core.UTL_BackupSheet bkWs
+    Next bkWs
 
     Dim t1 As Long
     Dim t2 As Long

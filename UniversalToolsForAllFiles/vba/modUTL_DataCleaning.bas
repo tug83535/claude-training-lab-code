@@ -181,11 +181,15 @@ Sub DeleteBlankRows()
     Dim ws As Worksheet
     Set ws = ActiveSheet
 
-    If MsgBox("Delete all blank rows on sheet '" & ws.Name & "'?", _
+    If MsgBox("Delete all blank rows on sheet '" & ws.Name & "'?" & Chr(10) & _
+              "A backup copy will be created first.", _
               vbQuestion + vbYesNo, "UTL Data Cleaning") = vbNo Then Exit Sub
 
     On Error GoTo ErrHandler
     UTL_TurboOn
+
+    ' Create backup before destructive operation
+    modUTL_Core.UTL_BackupSheet ws
 
     Dim lastRow As Long
     lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
@@ -307,6 +311,7 @@ Sub RemoveDuplicateRows()
     End If
 
     If MsgBox("This will PERMANENTLY DELETE duplicate rows." & Chr(10) & _
+              "A backup copy will be created first." & Chr(10) & _
               "Tip: Run 'Highlight Duplicate Rows' first to review." & Chr(10) & Chr(10) & _
               "Continue?", vbExclamation + vbYesNo, "UTL Data Cleaning") = vbNo Then Exit Sub
 
@@ -315,6 +320,9 @@ Sub RemoveDuplicateRows()
 
     On Error GoTo ErrHandler
     UTL_TurboOn
+
+    ' Create backup before destructive operation
+    modUTL_Core.UTL_BackupSheet ActiveSheet
 
     Dim dict As Object
     Set dict = CreateObject("Scripting.Dictionary")
@@ -423,11 +431,15 @@ Sub FormulaToValueHardcoder()
     End If
 
     If MsgBox("Convert all FORMULAS in selection to static VALUES?" & Chr(10) & _
+              "A backup copy will be created first." & Chr(10) & _
               "This cannot be undone after saving.", _
               vbExclamation + vbYesNo, "UTL Data Cleaning") = vbNo Then Exit Sub
 
     On Error GoTo ErrHandler
     UTL_TurboOn
+
+    ' Create backup before destructive operation
+    modUTL_Core.UTL_BackupSheet ActiveSheet
 
     Dim count As Long
     Dim c As Range

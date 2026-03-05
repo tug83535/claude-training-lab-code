@@ -619,11 +619,18 @@ End Sub
 ' ============================================================
 Sub ExternalLinkSeveranceProtocol()
     If MsgBox("This will replace all external link formulas with their CURRENT VALUES." & Chr(10) & _
+              "A backup of each sheet will be created first." & Chr(10) & _
               "The original formula will be saved as a comment on each cell." & Chr(10) & Chr(10) & _
               "Continue?", vbExclamation + vbYesNo, "UTL Audit") = vbNo Then Exit Sub
 
     On Error GoTo ErrHandler
     UTL_TurboOn
+
+    ' Create backup of all sheets before severance
+    Dim bkWs As Worksheet
+    For Each bkWs In ActiveWorkbook.Worksheets
+        modUTL_Core.UTL_BackupSheet bkWs
+    Next bkWs
 
     Dim severed As Long
     Dim ws As Worksheet
