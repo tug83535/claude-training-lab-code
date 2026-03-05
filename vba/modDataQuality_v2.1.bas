@@ -38,6 +38,44 @@ Private m_IssueCount As Long
 Private m_TextNumberCells As Collection
 
 '===============================================================================
+' CalculateLetterGrade - Data quality grade based on issue severity counts
+'
+' Grading Scale:
+'   A  = 0 issues (spotless)
+'   A- = Info issues only (cosmetic)
+'   B  = 1-3 Warnings, 0 Critical
+'   B- = 4+ Warnings, 0 Critical
+'   C  = 1 Critical issue
+'   D  = 2-3 Critical issues
+'   F  = 4+ Critical issues
+'
+' Returns: grade letter + description as a 2-element array
+'===============================================================================
+Private Function CalculateLetterGrade(ByVal critCount As Long, _
+                                       ByVal warnCount As Long, _
+                                       ByVal infoCount As Long) As Variant
+    Dim grade As String, desc As String
+
+    If critCount = 0 And warnCount = 0 And infoCount = 0 Then
+        grade = "A":  desc = "Spotless - No issues detected"
+    ElseIf critCount = 0 And warnCount = 0 Then
+        grade = "A-": desc = "Excellent - Only cosmetic findings"
+    ElseIf critCount = 0 And warnCount <= 3 Then
+        grade = "B":  desc = "Good - Minor warnings to review"
+    ElseIf critCount = 0 Then
+        grade = "B-": desc = "Fair - Multiple warnings need attention"
+    ElseIf critCount = 1 Then
+        grade = "C":  desc = "Needs Work - 1 critical issue found"
+    ElseIf critCount <= 3 Then
+        grade = "D":  desc = "Poor - Multiple critical issues"
+    Else
+        grade = "F":  desc = "Failing - Significant data quality problems"
+    End If
+
+    CalculateLetterGrade = Array(grade, desc)
+End Function
+
+'===============================================================================
 ' ScanAll - Full workbook data quality scan
 '===============================================================================
 Public Sub ScanAll()
@@ -101,13 +139,18 @@ Public Sub ScanAll()
             Case "Info": infoCount = infoCount + 1
         End Select
     Next i
-    
+
+    ' Letter grade for the popup
+    Dim gradeArr As Variant
+    gradeArr = CalculateLetterGrade(critCount, warnCount, infoCount)
+
     modLogger.LogAction "modDataQuality", "ScanAll", _
-                        m_IssueCount & " issues (" & critCount & " critical, " & _
+                        "Grade " & CStr(gradeArr(0)) & " | " & m_IssueCount & " issues (" & critCount & " critical, " & _
                         warnCount & " warning, " & infoCount & " info)", _
                         modPerformance.ElapsedSeconds()
-    
+
     MsgBox "Data Quality Scan Complete" & vbCrLf & vbCrLf & _
+           "GRADE:  " & CStr(gradeArr(0)) & "  -  " & CStr(gradeArr(1)) & vbCrLf & vbCrLf & _
            "Issues Found: " & m_IssueCount & vbCrLf & _
            "  Critical: " & critCount & vbCrLf & _
            "  Warning:  " & warnCount & vbCrLf & _
@@ -298,23 +341,70 @@ End Sub
 '===============================================================================
 Private Sub WriteDataQualityReport()
     modConfig.SafeDeleteSheet SH_DQ_REPORT
-    
+
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     ws.Name = SH_DQ_REPORT
     ws.Tab.Color = RGB(255, 165, 0)
-    
-    ws.Range("A1").Value = "Data Quality Report - Keystone BenefitTech"
-    ws.Range("A1").Font.Size = 14: ws.Range("A1").Font.Bold = True
-    ws.Range("A2").Value = "Scan Date: " & Format(Now, "mmmm d, yyyy h:mm AM/PM") & _
-                           " | Issues Found: " & m_IssueCount
-    ws.Range("A2").Font.Italic = True
-    
+
+    ' Count severities for letter grade
+    Dim critCount As Long, warnCount As Long, infoCount As Long
+    Dim idx As Long
+    For idx = 0 To m_IssueCount - 1
+        Select Case m_Issues(idx).Severity
+            Case "Critical": critCount = critCount + 1
+            Case "Warning":  warnCount = warnCount + 1
+            Case "Info":     infoCount = infoCount + 1
+        End Select
+    Next idx
+
+    ' Calculate and display letter grade
+    Dim gradeResult As Variant
+    gradeResult = CalculateLetterGrade(critCount, warnCount, infoCount)
+    Dim grade As String:   grade = CStr(gradeResult(0))
+    Dim gradeDesc As String: gradeDesc = CStr(gradeResult(1))
+
+    ' Big grade badge in cell A1
+    ws.Range("A1").Value = "Data Quality Grade"
+    ws.Range("A1").Font.Size = 12: ws.Range("A1").Font.Bold = True
+    ws.Range("B1").Value = grade
+    ws.Range("B1").Font.Size = 28: ws.Range("B1").Font.Bold = True
+    ws.Range("B1").HorizontalAlignment = xlCenter
+
+    ' Color the grade cell based on letter
+    Select Case Left(grade, 1)
+        Case "A"
+            ws.Range("B1").Interior.Color = RGB(200, 255, 200)   ' Green
+            ws.Range("B1").Font.Color = RGB(0, 100, 0)
+        Case "B"
+            ws.Range("B1").Interior.Color = RGB(200, 230, 255)   ' Blue
+            ws.Range("B1").Font.Color = RGB(0, 70, 150)
+        Case "C"
+            ws.Range("B1").Interior.Color = RGB(255, 255, 180)   ' Yellow
+            ws.Range("B1").Font.Color = RGB(150, 120, 0)
+        Case "D"
+            ws.Range("B1").Interior.Color = RGB(255, 220, 180)   ' Orange
+            ws.Range("B1").Font.Color = RGB(180, 80, 0)
+        Case "F"
+            ws.Range("B1").Interior.Color = RGB(255, 180, 180)   ' Red
+            ws.Range("B1").Font.Color = RGB(180, 0, 0)
+    End Select
+
+    ws.Range("C1").Value = gradeDesc
+    ws.Range("C1").Font.Size = 11: ws.Range("C1").Font.Italic = True
+
+    ws.Range("A2").Value = "Data Quality Report - Keystone BenefitTech"
+    ws.Range("A2").Font.Size = 14: ws.Range("A2").Font.Bold = True
+    ws.Range("A3").Value = "Scan Date: " & Format(Now, "mmmm d, yyyy h:mm AM/PM") & _
+                           " | Issues Found: " & m_IssueCount & _
+                           " (" & critCount & " Critical, " & warnCount & " Warning, " & infoCount & " Info)"
+    ws.Range("A3").Font.Italic = True
+
     Dim headers As Variant
     headers = Array("Sheet", "Cell", "Issue Type", "Current Value", "Severity", "Fix Available")
-    modConfig.StyleHeader ws, 4, headers
+    modConfig.StyleHeader ws, 5, headers
     
-    Dim r As Long: r = 5
+    Dim r As Long: r = 6
     Dim i As Long
     For i = 0 To m_IssueCount - 1
         ws.Cells(r, 1).Value = m_Issues(i).Sheet
