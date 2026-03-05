@@ -4,7 +4,7 @@
 - **Branch:** `claude/resume-ipipeline-demo-qKRHn` (active working branch)
 - **VBA Modules:** 34 total (32 demo + modSheetIndex + modDashboardAdvanced) — need re-import
 - **Python Scripts:** 14 complete and functional (main project) + pnl_forecast.py enhanced with MAPE accuracy
-- **Universal Tools:** ~99 tools built (12 VBA modules + 4 new Python scripts + 4 new VBA NewTools), code-reviewed, bugs fixed
+- **Universal Tools:** ~100 tools built (12 VBA modules + 4 new Python scripts + 4 new VBA NewTools + CreateFoldersFromSelection), code-reviewed, bugs fixed
 - **ProjectRefresh:** Complete — CODE_AUDIT_FINDINGS.md + Code_Audit_Final_Report.md produced, all recommendations implemented
 - **Demo Enhancements (2026-03-05):** Data Quality Letter Grade, Forecast Accuracy (MAPE), YoY Variance Analysis, modDashboard split, modUTL_Core shared utils, backup-before-destructive, SpecialCells performance fixes
 - **Training Guides:** 6 complete guides built in FinalRoughGuides/ (2026-03-05) — ready for Connor's review
@@ -49,7 +49,7 @@ A separate Claude session independently built VBA and Python code for this same 
 6. Any new issues found → add to Testing_Issues/TESTING_ISSUES_LOG.md
 
 ### Universal Tools — COMPLETE (Track B + Track C + Backlog Item 1)
-~85 tools built (8 modules), code-reviewed, 9 bugs fixed, how-to guide written. 3 new modules added 2026-03-04 (Branding, SheetTools, DataSanitizer). No further action needed until after demo.
+~100 tools built (8 modules), code-reviewed, 9 bugs fixed, how-to guide written. 3 new modules added 2026-03-04 (Branding, SheetTools, DataSanitizer). CreateFoldersFromSelection added 2026-03-05 to modUTL_SheetTools (Tool 4). No further action needed until after demo.
 
 **Security note:** Profiles.md contains personal account emails/credentials and should be removed from the repo. Flag this to Connor.
 

@@ -118,7 +118,7 @@ Before delivering ANYTHING ask yourself:
 - T5.01 and T5.02 tested and fixed (ExecDashboard + WaterfallChart)
 - Self-review of all remaining tests completed — 12 additional bugs found and fixed preemptively
 - Python pytest: 99 passed, 15 skipped, 0 failures (T4.04 criteria met)
-- Universal Tools: ~99 tools built (12 VBA + 4 new VBA NewTools + 4 new Python), code-reviewed, bugs fixed
+- Universal Tools: ~100 tools built (12 VBA + 4 new VBA NewTools + 4 new Python + CreateFoldersFromSelection), code-reviewed, bugs fixed
 - ProjectRefresh COMPLETE — audit done, all recommendations implemented as working code
 - Demo enhancements: Data Quality Letter Grade, Forecast Accuracy MAPE, YoY Variance, modDashboard split, modUTL_Core, backup-before-destructive, SpecialCells perf fixes
 - 6 training guides complete in FinalRoughGuides/ — ready for Connor review

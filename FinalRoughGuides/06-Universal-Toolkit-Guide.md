@@ -123,7 +123,7 @@ You do not need to import all 13 modules. Import only what you need:
 | Manage workbook structure | `modUTL_Core.bas` + `modUTL_WorkbookMgmt.bas` | 15 management tools |
 | Fix number/text issues | `modUTL_Core.bas` + `modUTL_DataSanitizer.bas` | 4 sanitizer tools |
 | Apply iPipeline branding | `modUTL_Core.bas` + `modUTL_Branding.bas` | 2 branding tools |
-| Clone sheets / manage tabs | `modUTL_Core.bas` + `modUTL_SheetTools.bas` | 3 sheet tools |
+| Clone sheets / manage tabs / create folders | `modUTL_Core.bas` + `modUTL_SheetTools.bas` | 4 sheet tools |
 | Everything | Import all 13 modules | All 79+ tools |
 
 > **Important:** Always import `modUTL_Core.bas` first — it contains shared utility functions that the other modules depend on.
@@ -569,7 +569,7 @@ Below is every VBA tool organized by module. For each tool:
 
 ---
 
-### Module: modUTL_SheetTools (3 Tools)
+### Module: modUTL_SheetTools (4 Tools)
 
 #### ListAllSheetsWithLinks
 
@@ -585,6 +585,12 @@ Below is every VBA tool organized by module. For each tool:
 
 - **What it does:** Scans existing IDs in a column, finds the maximum, and fills blank cells with sequential IDs in CUST-00001 format. Custom prefix supported.
 - **When to use it:** When you need to assign unique IDs to new records without duplicating existing ones.
+
+#### CreateFoldersFromSelection
+
+- **What it does:** Highlight a column of cell values (names, projects, clients, months, etc.) and this tool creates a Windows folder for each value. It shows you a preview first, then asks where to create the folders using a folder picker dialog.
+- **Safety features:** Skips blanks, skips duplicates, cleans illegal folder characters (\ / : * ? " < > |), won't overwrite existing folders, preview before creating.
+- **When to use it:** When you need to create folders from a list — client folders, project folders, monthly folders, vendor folders, department folders, etc.
 
 ---
 

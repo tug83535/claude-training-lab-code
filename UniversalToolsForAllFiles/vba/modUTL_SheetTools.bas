@@ -5,7 +5,7 @@ Option Explicit
 ' KBT Universal Tools — Sheet Tools Module
 ' Works on ANY Excel file — no project-specific setup required
 ' Install in Personal.xlsb to use across all Excel sessions
-' Tools: 3 | Tier 1: 3
+' Tools: 4 | Tier 1: 4
 ' ============================================================
 
 Private Sub UTL_TurboOn()
@@ -366,4 +366,174 @@ Sub GenerateUniqueCustomerIDs()
 ErrHandler:
     UTL_TurboOff
     MsgBox "Error: " & Err.Description, vbCritical, "UTL Sheet Tools"
+End Sub
+
+' ============================================================
+' TOOL 4 — Create Folders from Selection              [TIER 1]
+' Highlight a column of cell values (names, projects, etc.)
+' and this tool creates a Windows folder for each value.
+' Asks you where to create the folders first.
+' Skips blanks, duplicates, and illegal filename characters.
+' ============================================================
+Sub CreateFoldersFromSelection()
+    ' Validate selection
+    If TypeName(Selection) <> "Range" Then
+        MsgBox "Please select a range of cells first." & Chr(10) & Chr(10) & _
+               "How to use:" & Chr(10) & _
+               "1. Highlight a column of names/values" & Chr(10) & _
+               "2. Run this tool" & Chr(10) & _
+               "3. Pick where to create the folders", _
+               vbExclamation, "UTL — Create Folders"
+        Exit Sub
+    End If
+
+    Dim sel As Range
+    Set sel = Selection
+
+    ' Collect unique, non-blank folder names from selection
+    Dim dict As Object
+    Set dict = CreateObject("Scripting.Dictionary")
+    Dim cell As Range
+    Dim rawName As String
+    Dim cleanName As String
+    Dim skippedBlanks As Long
+    Dim skippedDupes As Long
+    Dim skippedBadChars As Long
+
+    For Each cell In sel.Cells
+        rawName = Trim(CStr(cell.Value))
+
+        ' Skip blanks
+        If Len(rawName) = 0 Then
+            skippedBlanks = skippedBlanks + 1
+            GoTo NextCell
+        End If
+
+        ' Clean illegal Windows folder characters: \ / : * ? " < > |
+        cleanName = rawName
+        cleanName = Replace(cleanName, "\", "-")
+        cleanName = Replace(cleanName, "/", "-")
+        cleanName = Replace(cleanName, ":", "-")
+        cleanName = Replace(cleanName, "*", "-")
+        cleanName = Replace(cleanName, "?", "")
+        cleanName = Replace(cleanName, """", "")
+        cleanName = Replace(cleanName, "<", "")
+        cleanName = Replace(cleanName, ">", "")
+        cleanName = Replace(cleanName, "|", "-")
+
+        ' Trim trailing dots and spaces (Windows doesn't allow them at end of folder names)
+        Do While Len(cleanName) > 0 And (Right(cleanName, 1) = "." Or Right(cleanName, 1) = " ")
+            cleanName = Left(cleanName, Len(cleanName) - 1)
+        Loop
+
+        ' Skip if cleaning emptied the name
+        If Len(cleanName) = 0 Then
+            skippedBadChars = skippedBadChars + 1
+            GoTo NextCell
+        End If
+
+        ' Truncate to 255 chars (Windows folder name limit)
+        If Len(cleanName) > 255 Then cleanName = Left(cleanName, 255)
+
+        ' Skip duplicates
+        If dict.exists(cleanName) Then
+            skippedDupes = skippedDupes + 1
+            GoTo NextCell
+        End If
+
+        dict(cleanName) = rawName  ' Store clean -> original mapping
+NextCell:
+    Next cell
+
+    If dict.Count = 0 Then
+        MsgBox "No valid folder names found in the selected cells." & Chr(10) & Chr(10) & _
+               "Blanks skipped: " & skippedBlanks & Chr(10) & _
+               "Duplicates skipped: " & skippedDupes & Chr(10) & _
+               "Invalid names skipped: " & skippedBadChars, _
+               vbInformation, "UTL — Create Folders"
+        Exit Sub
+    End If
+
+    ' Build preview list (show first 20, then "...and X more")
+    Dim previewList As String
+    Dim previewCount As Long
+    Dim folderName As Variant
+    previewCount = 0
+    For Each folderName In dict.Keys
+        previewCount = previewCount + 1
+        If previewCount <= 20 Then
+            previewList = previewList & "  " & folderName & Chr(10)
+        End If
+    Next folderName
+    If dict.Count > 20 Then
+        previewList = previewList & "  ...and " & (dict.Count - 20) & " more" & Chr(10)
+    End If
+
+    ' Show preview and ask for confirmation
+    Dim confirmMsg As String
+    confirmMsg = "Ready to create " & dict.Count & " folder(s):" & Chr(10) & Chr(10) & _
+                 previewList & Chr(10)
+    If skippedBlanks > 0 Then confirmMsg = confirmMsg & "Blanks skipped: " & skippedBlanks & Chr(10)
+    If skippedDupes > 0 Then confirmMsg = confirmMsg & "Duplicates skipped: " & skippedDupes & Chr(10)
+    If skippedBadChars > 0 Then confirmMsg = confirmMsg & "Invalid names cleaned: " & skippedBadChars & Chr(10)
+    confirmMsg = confirmMsg & Chr(10) & "Continue? (You will pick the location next)"
+
+    If MsgBox(confirmMsg, vbOKCancel + vbQuestion, "UTL — Create Folders — Preview") = vbCancel Then
+        Exit Sub
+    End If
+
+    ' Ask where to create the folders using folder picker
+    Dim parentFolder As String
+    With Application.FileDialog(msoFileDialogFolderPicker)
+        .Title = "Select the parent folder — new folders will be created inside this location"
+        .ButtonName = "Select This Folder"
+        If .Show = 0 Then Exit Sub  ' User cancelled
+        parentFolder = .SelectedItems(1)
+    End With
+
+    ' Make sure path ends with backslash
+    If Right(parentFolder, 1) <> "\" Then parentFolder = parentFolder & "\"
+
+    ' Create the folders
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+
+    Dim createdCount As Long
+    Dim skippedExist As Long
+    Dim failedCount As Long
+    Dim failedNames As String
+
+    For Each folderName In dict.Keys
+        Dim fullPath As String
+        fullPath = parentFolder & CStr(folderName)
+
+        If fso.FolderExists(fullPath) Then
+            skippedExist = skippedExist + 1
+        Else
+            On Error Resume Next
+            fso.CreateFolder fullPath
+            If Err.Number <> 0 Then
+                failedCount = failedCount + 1
+                If failedCount <= 5 Then
+                    failedNames = failedNames & "  " & CStr(folderName) & " (" & Err.Description & ")" & Chr(10)
+                End If
+                Err.Clear
+            Else
+                createdCount = createdCount + 1
+            End If
+            On Error GoTo 0
+        End If
+    Next folderName
+
+    ' Summary message
+    Dim summary As String
+    summary = "Folder creation complete!" & Chr(10) & Chr(10) & _
+              "Location: " & parentFolder & Chr(10) & Chr(10) & _
+              "Created: " & createdCount & " new folder(s)" & Chr(10)
+    If skippedExist > 0 Then summary = summary & "Already existed (skipped): " & skippedExist & Chr(10)
+    If failedCount > 0 Then
+        summary = summary & "Failed: " & failedCount & Chr(10) & failedNames
+    End If
+
+    MsgBox summary, vbInformation, "UTL — Create Folders"
 End Sub
