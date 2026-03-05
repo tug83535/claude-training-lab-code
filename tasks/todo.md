@@ -6,9 +6,10 @@
 - **Python Scripts:** 14 complete and functional (main project) + pnl_forecast.py enhanced with MAPE accuracy
 - **Universal Tools:** ~99 tools built (12 VBA modules + 22 Python scripts), code-reviewed, bugs fixed
 - **Demo Enhancements (2026-03-05):** Data Quality Letter Grade, Forecast Accuracy (MAPE), YoY Variance Analysis, modDashboard split into 2 modules
+- **Training Guides:** 6 complete guides built in FinalRoughGuides/ (2026-03-05) — ready for Connor's review
 - **Testing Phase:** T1 COMPLETE, T2 partially done (T2.01–T2.04 PASS, T2.05–T2.07 not yet run), T5.01+T5.02 PASS
 - **Self-Review:** Full self-review of all remaining untested code completed — 12 bugs found and fixed preemptively
-- **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE
+- **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, Training Guides COMPLETE (draft)
 
 ### ⚠ IMPORTANT — RE-IMPORT NEEDED
 Before continuing testing, re-import these 7 `.bas` files into the Excel workbook (VBA Editor → File → Import):
@@ -86,31 +87,22 @@ All fixes committed and pushed (commit a22dd76).
 - [ ] Fix any runtime issues discovered during testing
 - [ ] Verify all hidden sheets are created properly (VBA_AuditLog, Scenarios, Version History, etc.)
 
-### Phase 2: Script the Demo Video
-- [ ] Write demo video storyboard — which features to show, in what order, talking points
-- [ ] Identify the 10-15 most impressive actions to highlight (not all 62)
-- [ ] Plan screen recording flow (open file → Command Center → run features → show results)
-- [ ] Write speaker notes / narration script
+### Phase 2: Script the Demo Video — COMPLETE (draft in FinalRoughGuides)
+- [x] Write demo video storyboard — which features to show, in what order, talking points
+- [x] Identify the 14 most impressive actions to highlight (not all 62)
+- [x] Plan screen recording flow (open file → Command Center → run features → show results)
+- [x] Write speaker notes / narration script (word-for-word in guide)
 
-### Phase 3: Training Materials
-- [ ] **Guide Planning Session** — Build out guide plan in `FinalRoughGuides/GuidePlanOut/`
-  - Create `GuidePlanOut/` folder and `GUIDE_IDEAS.md` to capture all planning
-  - Planned guide categories (draft — refine with Connor before building):
-    1. **"How to Use the Command Center"** — Main guide for all employees. Open the file, click the button, what every action does
-    2. **"Getting Started / First Time Setup"** — Enable macros, trust settings, where to save, what to expect
-    3. **"What This File Does" (Overview for Leadership)** — Non-technical explainer for CFO/CEO. What it is, why it matters, what it solves
-    4. **"Universal Toolkit Guide"** — Install and use the 85 universal tools on your own files (Scenario 2 / post-demo)
-    5. **"Video Demo Script / Storyboard"** — Script and flow for the walkthrough video
-    6. **"Quick Reference Card"** — 1-page cheat sheet of top 10-15 most useful actions
-  - Open questions to resolve before building:
-    - Who gets which guide? All 2,000 employees or just Finance & Accounting?
-    - Does CFO/CEO get a separate shorter version?
-    - Video script — plan here or separate effort?
-    - Any additional guides Connor has in mind?
-  - All rough drafts go in `FinalRoughGuides/`, finals go in `training/`
-- [ ] Build coworker training guide — step-by-step: how to open file, use Command Center, run reports
-- [ ] Create quick-reference card of all 62 actions (1-page printable)
-- [ ] Place completed guides in `training/` folder
+### Phase 3: Training Materials — COMPLETE (6 guides built, drafts in FinalRoughGuides)
+- [x] **Guide 1:** `01-How-to-Use-the-Command-Center.md` — All 62 actions documented, monthly close workflow, troubleshooting, FAQ
+- [x] **Guide 2:** `02-Getting-Started-First-Time-Setup.md` — Download, open, enable macros, trust center, verification, first 5 actions
+- [x] **Guide 3:** `03-What-This-File-Does-Leadership-Overview.md` — CFO/CEO briefing: business impact, cost analysis, before/after, rollout plan
+- [x] **Guide 4:** `04-Quick-Reference-Card.md` — 1-page cheat sheet: all 62 actions, shortcuts, monthly close workflow, troubleshooting
+- [x] **Guide 5:** `05-Video-Demo-Script-and-Storyboard.md` — 18-22 min script, 3-part shot lists, word-for-word narration, checklists
+- [x] **Guide 6:** `06-Universal-Toolkit-Guide.md` — All 100+ tools (79 VBA + 22 Python), setup, playbooks, top 20
+- [ ] Connor reviews all 6 guides → approves or requests changes
+- [ ] Move approved guides from `FinalRoughGuides/` to `training/`
+- [ ] Convert approved guides to PDF for distribution
 
 ### Phase 4: Lock Down the Demo File
 - [ ] Save the final tested workbook as `.xlsm` (macros-enabled)
@@ -186,6 +178,15 @@ All fixes committed and pushed (commit a22dd76).
 - [x] SpecialCells performance fix for 8 slow universal tools across 3 modules
 - [x] Created modUTL_Core.bas shared utilities module (9 public functions)
 - [x] Added backup-before-destructive to 6 high-risk universal tools
+
+### Training Guides — 6 Guides Built (2026-03-05, later session)
+- [x] Built `01-How-to-Use-the-Command-Center.md` — ~750 lines, all 62 actions, monthly close workflow, tips, troubleshooting, FAQ
+- [x] Built `02-Getting-Started-First-Time-Setup.md` — ~450 lines, download/open/enable macros/trust center/verification/first 5 actions/troubleshooting
+- [x] Built `03-What-This-File-Does-Leadership-Overview.md` — ~400 lines, CFO/CEO briefing with business impact, before/after, cost analysis, rollout plan, future roadmap, FAQ
+- [x] Built `04-Quick-Reference-Card.md` — ~300 lines, all 62 actions at-a-glance, keyboard shortcuts, monthly close sequence, top 10 actions, troubleshooting
+- [x] Built `05-Video-Demo-Script-and-Storyboard.md` — ~500 lines, 3-part 18-22min demo script, shot lists, word-for-word narration, pre/post checklists, B-roll ideas
+- [x] Built `06-Universal-Toolkit-Guide.md` — ~650 lines, all 100+ tools (79 VBA + 22 Python), setup instructions, complete reference, use case playbooks, top 20 list
+- [x] Committed and pushed to branch (commit c0db49e)
 
 ---
 
