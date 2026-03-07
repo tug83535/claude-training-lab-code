@@ -113,7 +113,7 @@ Before delivering ANYTHING ask yourself:
 - Original VBA system complete — 24 modules, all 62 Command Center actions covered (2026-02-28)
 - All Python scripts complete — 14 scripts, all functional (2026-02-28)
 - 7 new VBA modules added from NewTesting ideas (2026-03-01)
-- 34 VBA modules total (32 + modSheetIndex + modDashboardAdvanced) — need re-import
+- 34 VBA modules total (32 + modSheetIndex + modDashboardAdvanced) — need re-import (13 files updated)
 - T1 complete (T1.01–T1.08 all PASS), T2 partially tested (T2.01–T2.04 done, T2.05–T2.07 not yet run)
 - T5.01 and T5.02 tested and fixed (ExecDashboard + WaterfallChart)
 - Self-review of all remaining tests completed — 12 additional bugs found and fixed preemptively
@@ -122,12 +122,52 @@ Before delivering ANYTHING ask yourself:
 - ProjectRefresh COMPLETE — audit done, all recommendations implemented as working code
 - Demo enhancements: Data Quality Letter Grade, Forecast Accuracy MAPE, YoY Variance, modDashboard split, modUTL_Core, backup-before-destructive, SpecialCells perf fixes
 - 6 training guides complete in FinalRoughGuides/ — ready for Connor review
+- CoPilot Prompt Guide v2.0 complete in CoPilotPromptGuide/ (2026-03-07)
+- Video package draft (COMPILED_VIDEO_PACKAGE.md) + sample file in videodraft/ (2026-03-07)
 - Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, ProjectRefresh COMPLETE, Training Guides COMPLETE (draft)
 - Branch: `claude/resume-ipipeline-demo-qKRHn` (active branch)
-- Bug review (2026-03-05): 3-pass review of all new code — 4 bugs found and fixed (3 VBA LogAction, 1 Python crash)
+- Bug review (2026-03-07): Pre-delivery code review — 7 bugs found and fixed (6 VBA in commit 6818b01 + T8.19 drill links in b132885)
+- Total LogAction signature bugs found to date: 13
 - Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
-## Session Summary — 2026-03-05 (Latest — Code Review + Bug Fixes + Doc Updates)
+## Session Summary — 2026-03-07 (Latest — Code Review + Bug Fixes + Video Package + CoPilot Guide)
+
+### What Was Done This Session
+Pre-delivery code review of all 46 live-Excel test pass criteria. Found and fixed 7 bugs across 5 VBA modules. Improved CoPilot Prompt Guide, built video package draft, created sample Excel file for demo.
+
+**Branch:** `claude/resume-ipipeline-demo-qKRHn`
+
+### File Uploads (2026-03-06)
+- Connor uploaded CoPilot Prompt Guide files (AP_Copilot_PromptGuideHelpV2.docx + .md) to CoPilotPromptGuide/
+
+### CoPilot Guide + Video Package (commit 74dc77e)
+- CoPilot Prompt Guide v2.0: Fixed all broken quick reference links, added working anchor links, improved formatting
+- COMPILED_VIDEO_PACKAGE.md: Fixed tool counts (13 VBA/78 tools + 22 Python = ~100), added demo file stats, updated build checklist
+- Sample_Quarterly_Report.xlsx: Built for Video 3 universal tools demo (via build_sample_file.py)
+
+### Pre-Delivery Code Review — 7 Bugs Found and Fixed
+**Commit 6818b01 — 6 bugs:**
+1. modReconciliation: LogAction 4th arg elapsed (Double) — instance #13
+2. modReconciliation: ValidateCrossSheet trendLastCol used row 1 instead of HDR_ROW_REPORT
+3. modReconciliation: FindFYCol scanned row 1 instead of HDR_ROW_REPORT
+4. modPDFExport: GetReportSheetList hardcoded to 7 sheets — now dynamically discovers all monthly tabs
+5. modDataSanitizer: rng not reset before SpecialCells in 2 worker functions
+6. modAuditTools: rng not reset before SpecialCells in FindExternalLinks
+
+**Commit b132885 — 1 bug:**
+7. modDrillDown: HideGLSheet used xlSheetVeryHidden (blocks hyperlinks) — changed to xlSheetHidden
+
+### Re-Import Required (Updated — 13 files)
+See tasks/todo.md for the full list. Added 3 new files since last session: modDataSanitizer, modAuditTools, modDrillDown.
+
+### Docs Updated
+- tasks/todo.md — Updated current status, added 2026-03-06/07 completed work, expanded re-import list to 13 files
+- tasks/lessons.md — Added 4 new patterns: SpecialCells rng reset, HDR_ROW_REPORT consistency, dynamic sheet discovery, xlSheetVeryHidden blocks hyperlinks
+- CLAUDE.md — Updated current status and session summary
+
+---
+
+## Session Summary — 2026-03-05 (Earlier — Code Review + Bug Fixes + Doc Updates)
 
 ### What Was Done This Session
 Full 3-pass code review of ALL new code built in the previous session, using known bug patterns from lessons.md. Found and fixed 4 bugs. Updated all docs to reflect current state.

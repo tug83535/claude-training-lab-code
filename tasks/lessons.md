@@ -171,10 +171,35 @@ This will save us both time — I shouldn't be discovering basic bugs during tes
 - This bug was found and fixed 9 times on 2026-03-04, then found AGAIN in 3 more modules on 2026-03-05 (modDataQuality, modReconciliation, modPDFExport)
 - The correct pattern is to Format the elapsed time into the **message string**: `"description (" & Format(elapsed, "0.00") & "s)"`
 - BEFORE delivering any new VBA code, grep for `LogAction.*ElapsedSeconds` to catch this pattern
-- This is now the #1 most common bug in this codebase — it has been found 12 times total
+- This is now the #1 most common bug in this codebase — it has been found 13 times total (latest: modReconciliation 2026-03-07)
 
 ## Python Function Signature Mismatches (2026-03-05)
 - When adding parameters to a function call, always check the function definition accepts that parameter
 - Found: `detect_date_columns(df, day_first=args.day_first)` called but `detect_date_columns()` didn't accept `day_first`
 - Would crash with `TypeError: unexpected keyword argument` at runtime
 - Always search for the function definition before adding keyword arguments to calls
+
+## SpecialCells rng Variable Reset (2026-03-07)
+- When using `SpecialCells` inside a loop over multiple sheets, the `rng` variable MUST be reset to `Nothing` at the top of each iteration
+- If not reset, `rng` retains the previous sheet's cell range, causing the next sheet to re-process stale cells
+- Found in modDataSanitizer (2 worker functions) and modAuditTools (FindExternalLinks) — 3 instances total
+- Pattern: `Set rng = Nothing` before every `Set rng = ws.UsedRange.SpecialCells(...)` call
+
+## HDR_ROW_REPORT Consistency (2026-03-07)
+- Report sheets in this workbook have headers on row 4 (HDR_ROW_REPORT), NOT row 1
+- Row 1 contains the company title, not column headers
+- Any code that scans for column headers (FY, Budget, month names) must use `HDR_ROW_REPORT` not row 1
+- Found in modReconciliation: ValidateCrossSheet trendLastCol + FindFYCol both scanned row 1 — FY column search always failed
+- Always search for `row 1` or `Rows(1)` in any header-scanning code and verify it should be HDR_ROW_REPORT instead
+
+## Dynamic Sheet Discovery vs Hardcoded Lists (2026-03-07)
+- modPDFExport had GetReportSheetList hardcoded to 7 sheets (only Jan-Mar monthly tabs)
+- If the user builds Apr-Dec tabs later, PDF export would silently skip them
+- When listing sheets for batch operations, always discover dynamically (loop through all sheets matching a pattern) rather than hardcoding names
+- Exception: sheets with truly fixed names (like "P&L Summary", "Assumptions") can be hardcoded
+
+## xlSheetVeryHidden Blocks Hyperlinks (2026-03-07)
+- `xlSheetVeryHidden` hides a sheet from both the tab bar AND the Unhide dialog — but it also blocks VBA `Hyperlinks.Add` navigation
+- If you need a sheet hidden but still navigable via hyperlinks or drill-down links, use `xlSheetHidden` instead
+- `xlSheetHidden` = hidden from tab bar, visible in Unhide dialog, hyperlinks work
+- Found in modDrillDown: HideGLSheet used xlSheetVeryHidden which broke T8.19 drill link navigation

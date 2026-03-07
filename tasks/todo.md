@@ -1,6 +1,6 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-03-05, updated)
+## Current Status (2026-03-07, updated)
 - **Branch:** `claude/resume-ipipeline-demo-qKRHn` (active working branch)
 - **VBA Modules:** 34 total (32 demo + modSheetIndex + modDashboardAdvanced) — need re-import
 - **Python Scripts:** 14 complete and functional (main project) + pnl_forecast.py enhanced with MAPE accuracy
@@ -8,14 +8,16 @@
 - **ProjectRefresh:** Complete — CODE_AUDIT_FINDINGS.md + Code_Audit_Final_Report.md produced, all recommendations implemented
 - **Demo Enhancements (2026-03-05):** Data Quality Letter Grade, Forecast Accuracy (MAPE), YoY Variance Analysis, modDashboard split, modUTL_Core shared utils, backup-before-destructive, SpecialCells performance fixes
 - **Training Guides:** 6 complete guides built in FinalRoughGuides/ (2026-03-05) — ready for Connor's review
+- **CoPilot Prompt Guide:** v2.0 complete in CoPilotPromptGuide/ (2026-03-07) — fixed all broken links, improved formatting
+- **Video Package:** COMPILED_VIDEO_PACKAGE.md drafted in videodraft/ (2026-03-07) — tool counts corrected, sample file built
 - **Testing Phase:** T1 COMPLETE, T2 partially done (T2.01–T2.04 PASS, T2.05–T2.07 not yet run), T5.01+T5.02 PASS
-- **Bug Review (2026-03-05):** Full 3-pass review of all new code — 4 bugs found and fixed (3 LogAction signature bugs, 1 Python crash)
+- **Bug Review (2026-03-07):** Pre-delivery code review of all 46 live-Excel tests — 7 bugs found and fixed (6 in commit 6818b01 + 1 T8.19 fix in b132885)
 - **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, Training Guides COMPLETE (draft), ProjectRefresh COMPLETE
 
 ### ⚠ IMPORTANT — RE-IMPORT NEEDED
-Before continuing testing, re-import these 10 `.bas` files into the Excel workbook (VBA Editor → File → Import):
+Before continuing testing, re-import these 13 `.bas` files into the Excel workbook (VBA Editor → File → Import):
 1. modConfig_v2.1.bas (color constant fixes)
-2. modReconciliation_v2.1.bas (dateCol/amtCol constant fixes + LogAction fix)
+2. modReconciliation_v2.1.bas (dateCol/amtCol constant fixes + LogAction fix + trendLastCol row fix + FindFYCol row fix)
 3. modVarianceAnalysis_v2.1.bas (GenerateCommentary row 1 → row 4 fix + YoY Variance)
 4. modDashboard_v2.1.bas (split — base module only, charts moved to Advanced)
 5. modDashboardAdvanced_v2.1.bas (NEW — ExecDashboard, Waterfall, ProductComp, SmallMultiples)
@@ -23,7 +25,10 @@ Before continuing testing, re-import these 10 `.bas` files into the Excel workbo
 7. modTrendReports_v2.1.bas (LogAction fix)
 8. modMonthlyTabGenerator_v2.1.bas (LogAction fixes + TestUpdateHeaderText wrapper)
 9. modDataQuality_v2.1.bas (Letter Grade + LogAction fix)
-10. modPDFExport_v2.1.bas (LogAction fix)
+10. modPDFExport_v2.1.bas (LogAction fix + dynamic monthly tab discovery)
+11. modDataSanitizer_v2.1.bas (rng reset fix in 2 worker functions)
+12. modAuditTools_v2.1.bas (rng reset fix in FindExternalLinks)
+13. modDrillDown_v2.1.bas (T8.19 fix — GL sheet xlSheetHidden instead of xlSheetVeryHidden)
 
 ### Project Refresh — Code Audit / Idea Review — COMPLETE
 A separate Claude session independently built VBA and Python code for this same project. We reviewed that code for ideas and improvements.
@@ -165,7 +170,32 @@ All fixes committed and pushed (commit a22dd76).
 
 ---
 
-## Completed — This Session (2026-03-05)
+## Completed — This Session (2026-03-07)
+
+### File Uploads (2026-03-06)
+- [x] Connor uploaded CoPilot Prompt Guide files (AP_Copilot_PromptGuideHelpV2.docx + .md)
+- [x] Removed .gitkeep from CoPilotPromptGuide/
+
+### CoPilot Guide Improvements + Video Package + Sample File (2026-03-07, commit 74dc77e)
+- [x] CoPilot Prompt Guide v2.0: Fixed all broken quick reference links (were empty), added working anchor links to every prompt, improved formatting with markdown tables, consistent headings, bold bracket fields
+- [x] COMPILED_VIDEO_PACKAGE.md: Fixed tool counts (13 VBA modules/78 tools + 22 Python scripts = ~100 total), added demo file stats (34 VBA modules, 14 Python scripts), updated build checklist, fixed START HERE status, expanded Not Demoed tools list
+- [x] Built Sample_Quarterly_Report.xlsx for Video 3 universal tools demo (via build_sample_file.py)
+
+### Pre-Delivery Code Review — 6 Bugs Fixed (2026-03-07, commit 6818b01)
+Full code review of all 46 live-Excel test pass criteria against the VBA source code. Found and fixed 6 bugs:
+- [x] modReconciliation: LogAction 4th arg elapsed (Double) — instance #13 of this recurring bug
+- [x] modReconciliation: ValidateCrossSheet trendLastCol used row 1 instead of HDR_ROW_REPORT — FY column search failed on report sheets
+- [x] modReconciliation: FindFYCol scanned row 1 instead of HDR_ROW_REPORT for header matching
+- [x] modPDFExport: GetReportSheetList was hardcoded to 7 sheets (Jan-Mar only) — now dynamically discovers all monthly tabs
+- [x] modDataSanitizer: rng not reset before SpecialCells in 2 worker functions — could re-process previous sheet's cells
+- [x] modAuditTools: rng not reset before SpecialCells in FindExternalLinks — could report duplicate links from wrong sheet
+
+### T8.19 Drill Links Bug Fix (2026-03-07, commit b132885)
+- [x] modDrillDown: HideGLSheet set xlSheetVeryHidden which blocked hyperlink navigation — changed to xlSheetHidden so drill links can navigate to GL sheet while keeping it hidden from tab bar
+
+---
+
+## Completed — Previous Session (2026-03-05)
 
 ### Demo Enhancements + Universal Tools Expansion
 - [x] Fixed 3 demo bugs: duplicate constants in modConfig, GL sheet visibility leak, missing TurboOn/Off in scanning loops
