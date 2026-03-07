@@ -260,7 +260,7 @@ Public Sub ValidateCrossSheet()
         ' Find Total Revenue on P&L Trend
         Dim wsTrend As Worksheet: Set wsTrend = ThisWorkbook.Worksheets(SH_PL_TREND)
         Dim trendLastRow As Long: trendLastRow = wsTrend.Cells(wsTrend.Rows.Count, 1).End(xlUp).Row
-        Dim trendLastCol As Long: trendLastCol = wsTrend.Cells(1, wsTrend.Columns.Count).End(xlToLeft).Column
+        Dim trendLastCol As Long: trendLastCol = wsTrend.Cells(HDR_ROW_REPORT, wsTrend.Columns.Count).End(xlToLeft).Column
         Dim fyCol As Long: fyCol = FindFYCol(wsTrend, trendLastCol)
         
         Dim trendRevRow As Long: trendRevRow = 0
@@ -444,7 +444,7 @@ Public Sub ValidateCrossSheet()
     modPerformance.TurboOff
     
     modLogger.LogAction "modReconciliation", "ValidateCrossSheet", _
-        checkNum & " checks: " & passCount & " pass, " & failCount & " fail", elapsed
+        checkNum & " checks: " & passCount & " pass, " & failCount & " fail (" & Format(elapsed, "0.00") & "s)"
     
     MsgBox "Cross-Sheet Validation Complete!" & vbCrLf & vbCrLf & _
            "  Total Checks: " & checkNum & vbCrLf & _
@@ -501,13 +501,13 @@ End Sub
 
 '===============================================================================
 ' FindFYCol - Locate the FY Total column on a sheet
-' Searches row 1 for "FY Total", "FY2025", or FISCAL_YEAR_4 pattern.
+' Searches HDR_ROW_REPORT for "FY Total", "FY2025", or FISCAL_YEAR_4 pattern.
 ' Falls back to lastCol - 1.
 '===============================================================================
 Private Function FindFYCol(ByVal ws As Worksheet, ByVal lastCol As Long) As Long
     Dim c As Long
     For c = 2 To lastCol
-        Dim hdr As String: hdr = LCase(Trim(CStr(ws.Cells(1, c).Value)))
+        Dim hdr As String: hdr = LCase(Trim(CStr(ws.Cells(HDR_ROW_REPORT, c).Value)))
         If InStr(hdr, "fy") > 0 And InStr(hdr, "total") > 0 Then
             FindFYCol = c: Exit Function
         End If

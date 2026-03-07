@@ -92,6 +92,7 @@ Public Sub FindExternalLinks()
 
         ' Check formula cells for external references (contain "[")
         Dim rng As Range
+        Set rng = Nothing
         On Error Resume Next
         Set rng = ws.UsedRange.SpecialCells(xlCellTypeFormulas)
         On Error GoTo ErrHandler

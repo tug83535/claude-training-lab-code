@@ -27,15 +27,34 @@ Option Explicit
 ' v2.1 builds from modConfig constants so fiscal year rollover works.
 '===============================================================================
 Private Function GetReportSheetList() As Variant
-    Dim sheets(0 To 6) As String
-    sheets(0) = SH_PL_TREND
-    sheets(1) = SH_PROD_SUMMARY
-    sheets(2) = SH_FUNC_TREND
-    sheets(3) = SH_FUNC_JAN
-    sheets(4) = SH_FUNC_FEB
-    sheets(5) = SH_FUNC_MAR
-    sheets(6) = SH_CHECKS
-    GetReportSheetList = sheets
+    Dim result() As String
+    Dim cnt As Long: cnt = 0
+    Dim ws As Worksheet
+
+    ' Core report sheets first
+    Dim coreSheets As Variant
+    coreSheets = Array(SH_PL_TREND, SH_PROD_SUMMARY, SH_FUNC_TREND)
+    Dim i As Long
+    For i = LBound(coreSheets) To UBound(coreSheets)
+        ReDim Preserve result(cnt)
+        result(cnt) = CStr(coreSheets(i))
+        cnt = cnt + 1
+    Next i
+
+    ' Dynamically find ALL monthly summary tabs (Jan through Dec)
+    For Each ws In ThisWorkbook.Worksheets
+        If InStr(1, ws.Name, "Functional P&L Summary", vbTextCompare) > 0 Then
+            ReDim Preserve result(cnt)
+            result(cnt) = ws.Name
+            cnt = cnt + 1
+        End If
+    Next ws
+
+    ' Checks sheet last
+    ReDim Preserve result(cnt)
+    result(cnt) = SH_CHECKS
+
+    GetReportSheetList = result
 End Function
 
 '===============================================================================

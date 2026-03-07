@@ -316,6 +316,7 @@ Private Function InternalConvertTextNumbers(ByVal previewOnly As Boolean) As Lon
         If ws.Visible = xlSheetVeryHidden Then GoTo NextWS2
 
         Dim rng As Range
+        Set rng = Nothing
         On Error Resume Next
         Set rng = ws.UsedRange.SpecialCells(xlCellTypeConstants, xlTextValues)
         On Error GoTo 0
@@ -369,6 +370,7 @@ Private Function InternalFixFloatingPoint(ByVal previewOnly As Boolean) As Long
         If ws.Visible = xlSheetVeryHidden Then GoTo NextWS3
 
         Dim rng As Range
+        Set rng = Nothing
         On Error Resume Next
         Set rng = ws.UsedRange.SpecialCells(xlCellTypeConstants, xlNumbers)
         On Error GoTo 0
