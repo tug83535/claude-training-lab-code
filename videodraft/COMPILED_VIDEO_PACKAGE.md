@@ -11,7 +11,7 @@
 5. START HERE Document — content spec for the SharePoint landing PDF
 6. Sample File Spec — requirements for the Video 3 demo file
 
-**Important context:** The universal code library contains 12 VBA modules (~78 tools) and 22 Python scripts. Every script in this document was written after a full review of every code file.
+**Important context:** The universal code library contains 13 VBA modules (~78 tools + 9 shared utility functions in modUTL_Core) and 22 Python scripts (~100 universal tools total). The demo file has 34 VBA modules (62 Command Center actions) and 14 Python scripts. Every script in this document was written after a full review of every code file.
 
 ---
 ---
@@ -57,9 +57,10 @@ This is a practical enablement project, not just a showcase.
 ## Context & Background
 
 - **Who built it:** Connor (Finance & Accounting team member, not a developer) with AI assistance (Claude)
-- **What was built:** A single .xlsm file with 62 automated VBA macros organized into a Command Center, plus 14 Python scripts, ~99 universal tools, and 6 training guides
+- **What was built:** A single .xlsm file with 62 automated VBA macros organized into a Command Center (34 VBA modules), plus 14 Python scripts for the demo file, a separate universal code library (~100 tools: 78 VBA tools across 13 modules + 22 Python scripts), and 6 training guides
 - **CFO involvement:** The CFO tasked Connor with this project but has not yet seen the output
 - **Testing:** All code is done, demo file built and tested. No external users have tested it yet — the video will be the first exposure
+- **Copilot Prompts:** Complete — `CoPilotPromptGuide/AP_Copilot_PromptGuideHelpV2.md` is ready for PDF conversion
 - **Timeline:** ASAP — everything is built, just needs packaging and recording
 
 ---
@@ -194,11 +195,13 @@ iPipeline Finance Automation/
 | Step | Item | Status |
 |------|------|--------|
 | 1 | Master Plan Document (this file) | ✅ Complete |
-| 2 | Video 1 outline + full script | ⬜ Not started |
-| 3 | Video 2 outline + full script | ⬜ Not started |
-| 4 | Video 3 outline + full script | ⬜ Not started |
-| 5 | START HERE document | ⬜ Not started |
-| 6 | Sample Excel file for Video 3 | ⬜ Not started |
+| 2 | Video 1 outline + full script | ✅ Complete (Section 2 below) |
+| 3 | Video 2 outline + full script | ✅ Complete (Section 3 below) |
+| 4 | Video 3 outline + full script | ✅ Complete (Section 4 below) |
+| 5 | START HERE document content spec | ✅ Complete (Section 5 below) — PDF needs to be built |
+| 6 | Sample Excel file spec | ✅ Complete (Section 6 below) — File needs to be built |
+| 7 | Sample Excel file (actual .xlsx) | ⬜ In progress |
+| 8 | Copilot Prompts document | ✅ Complete (CoPilotPromptGuide/ folder) |
 
 ---
 
@@ -1481,7 +1484,7 @@ Universal Tools — For Any Excel File
 
 ### Script:
 
-> "The P&L demo file showed what automation can do for a specific workflow. But the code library behind it includes over 75 VBA tools and 22 Python scripts that work on any Excel file — not just that one.
+> "The P&L demo file showed what automation can do for a specific workflow. But the code library behind it includes nearly 80 VBA tools and 22 Python scripts that work on any Excel file — not just that one.
 >
 > In this video, I'm going to show you a handful of those tools running on a regular spreadsheet. Nothing special about this file — it's just a typical data export with some common problems. Messy formatting, text stored as numbers, blank rows, inconsistent dates — the kind of thing you deal with every day.
 >
@@ -1493,7 +1496,7 @@ Universal Tools — For Any Excel File
 - No clicking yet — just visual context
 
 ### Production Notes:
-- "Over 75 VBA tools and 22 Python scripts" — say this clearly. The scale is impressive.
+- "Nearly 80 VBA tools and 22 Python scripts" — say this clearly. The scale is impressive.
 - The scroll should make the viewer feel the familiar pain of a messy spreadsheet. Don't rush it.
 - Keep this under 45 seconds. You're setting context, not explaining.
 
@@ -1908,7 +1911,7 @@ Command-line tools for bigger jobs
 ```
 SharePoint: [folder path]
 
-VBA Tools (75+) | Python Scripts (22) | SQL Tools
+VBA Tools (78) | Python Scripts (22) | SQL Tools
 Step-by-Step Guides | Copilot Prompts
 
 Questions? Contact Connor [last name / email]
@@ -1994,15 +1997,17 @@ Buffer for natural pauses and command execution time: expect **9:30–10:30** in
 
 ### Not Demoed (but mentioned or available):
 The following are available on SharePoint but not shown in the video:
-- 14 Finance-specific VBA tools (Duplicate Invoice Detector, GL Validator, Trial Balance Checker, Ratio Dashboard, etc.)
-- Fuzzy Match / Fuzzy Lookup
-- Bank Reconciler
-- PDF Table Extractor
-- Budget vs. Actual Consolidator
-- Forecast Roll-Forward
-- Variance Decomposition
-- Word Report Generator
-- 40+ additional VBA tools across all modules
+- 14 Finance-specific VBA tools in modUTL_Finance (Journal Entry Validator, Flux Analysis, Trial Balance Checker, Financial Period Roll-Forward, Ratio Dashboard, etc.)
+- 15 Workbook Management VBA tools in modUTL_WorkbookMgmt (Backup, Distribution Copy, Sheet Protection, etc.)
+- 10 additional Data Cleaning/Audit VBA tools across modUTL_DataCleaningPlus, modUTL_AuditPlus, modUTL_DuplicateDetection, modUTL_NumberFormat
+- Fuzzy Match / Fuzzy Lookup (Python)
+- Bank Reconciler (Python)
+- PDF Table Extractor (Python)
+- Budget vs. Actual Consolidator (Python)
+- Forecast Roll-Forward (Python)
+- Variance Decomposition (Python)
+- Word Report Generator (Python)
+- Multi-File Consolidator, Two-File Reconciler, Date Format Unifier (Python)
 
 ---
 
@@ -2051,7 +2056,7 @@ The sample file (Sample_Quarterly_Report.xlsx) needs the following "problems" ba
 ---
 
 *Script created: 2026-03-06 | Part of Video Demo Master Plan*
-*Based on full review of: 12 VBA modules (~78 tools) + 22 Python scripts*
+*Based on full review of: 13 VBA modules (78 tools + 9 Core utilities) + 22 Python scripts = ~100 universal tools total*
 
 
 ================================================================================
@@ -2065,7 +2070,7 @@ The sample file (Sample_Quarterly_Report.xlsx) needs the following "problems" ba
 **Format:** Branded PDF (iPipeline Blue #0B4779 header, Arial/Helvetica fonts)
 **Pages:** 2
 **Location in SharePoint:** Top level of the iPipeline Finance Automation folder
-**Status:** PDF already built and ready to use
+**Status:** Content spec ready — PDF needs to be built
 
 ## Content Structure
 
@@ -2076,7 +2081,7 @@ The sample file (Sample_Quarterly_Report.xlsx) needs the following "problems" ba
 
 ### Section: What Is This?
 - One paragraph explaining the toolkit: complete automation for Finance workflows plus universal code library for any Excel file
-- Stats line: "75+ VBA tools | 22 Python scripts | Step-by-step guides | Pre-built Copilot prompts"
+- Stats line: "78 VBA tools | 22 Python scripts | ~100 tools total | Step-by-step guides | Pre-built Copilot prompts"
 
 ### Section: Where to Start (Three Audience Paths)
 Three cards side by side:
