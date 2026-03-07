@@ -65,7 +65,10 @@ Public Sub AddReconciliationDrillLinks()
         End If
     Next r
 
-    modConfig.HideGLSheet
+    ' Set GL to regular hidden (not very-hidden) so drill hyperlinks can navigate to it
+    If modConfig.SheetExists(SH_HIDDEN) Then
+        ThisWorkbook.Worksheets(SH_HIDDEN).Visible = xlSheetHidden
+    End If
     modLogger.LogAction "modDrillDown", "AddReconciliationDrillLinks", _
         linkCount & " drill links added to " & SH_CHECKS
     MsgBox linkCount & " 'View Data' hyperlinks added to the Checks tab (column F)." & vbCrLf & _
