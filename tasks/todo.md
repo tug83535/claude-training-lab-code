@@ -88,9 +88,9 @@ All fixes committed and pushed (commit a22dd76).
 - [x] Fix all compile errors — Debug > Compile now passes clean
 - [x] **BUG FIXED:** modFormBuilder "Too many line continuations" — replaced single 62-item Array() with individual AddAction calls. No line continuations in generated code at all.
 - [x] Re-import fixed modFormBuilder into Excel, re-ran LaunchCommandCenter → form built successfully
-- [ ] Live test every Command Center action (1-62) in Excel — log pass/fail for each
-- [ ] Fix any runtime issues discovered during testing
-- [ ] Verify all hidden sheets are created properly (VBA_AuditLog, Scenarios, Version History, etc.)
+- [x] Live test every Command Center action (1-62) in Excel — log pass/fail for each
+- [x] Fix any runtime issues discovered during testing
+- [x] Verify all hidden sheets are created properly (VBA_AuditLog, Scenarios, Version History, etc.)
 
 ### Phase 2: Script the Demo Video — COMPLETE (draft in FinalRoughGuides)
 - [x] Write demo video storyboard — which features to show, in what order, talking points
