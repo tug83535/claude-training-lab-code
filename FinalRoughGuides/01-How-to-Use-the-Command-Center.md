@@ -2,11 +2,6 @@
 
 ## iPipeline P&L Automation Toolkit — Complete User Guide
 
-**Document Version:** 1.0
-**Last Updated:** March 5, 2026
-**Audience:** All iPipeline Finance & Accounting Employees
-**Prepared by:** Finance Automation Team, iPipeline
-
 ---
 
 ## Table of Contents

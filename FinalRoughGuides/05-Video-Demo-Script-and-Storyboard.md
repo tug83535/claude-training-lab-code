@@ -2,11 +2,7 @@
 
 ## iPipeline P&L Automation Toolkit — Walkthrough Video Guide
 
-**Document Version:** 1.0
-**Last Updated:** March 5, 2026
-**Audience:** Presenter (Connor) — This is your script and shot list for recording the demo video
 **Total Demo Length:** 18–22 minutes (or split into 3 parts of 6–7 minutes each)
-**Target Audience for the Video:** All iPipeline Finance & Accounting employees (2,000+), CFO, CEO
 
 ---
 

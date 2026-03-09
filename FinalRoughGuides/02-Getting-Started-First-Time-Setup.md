@@ -2,11 +2,7 @@
 
 ## iPipeline P&L Automation Toolkit — Setup from Scratch
 
-**Document Version:** 1.0
-**Last Updated:** March 5, 2026
-**Audience:** All iPipeline Employees Setting Up the P&L File for the First Time
-**Prepared by:** Finance Automation Team, iPipeline
-**Estimated Time:** 10–15 minutes for basic setup
+**Estimated Time:** 10–15 minutes
 
 ---
 

@@ -2,10 +2,6 @@
 
 ## iPipeline Universal Excel & Python Toolkit — Complete User Guide
 
-**Document Version:** 1.0
-**Last Updated:** March 5, 2026
-**Audience:** All iPipeline Employees Who Work with Excel Files
-**Prepared by:** Finance Automation Team, iPipeline
 **Total Tools:** 100+ (79 VBA tools + 22 Python scripts)
 
 ---

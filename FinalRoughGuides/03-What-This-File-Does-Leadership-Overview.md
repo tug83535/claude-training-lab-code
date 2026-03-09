@@ -2,10 +2,6 @@
 
 ## iPipeline P&L Automation Toolkit — Executive Briefing
 
-**Document Version:** 1.0
-**Last Updated:** March 5, 2026
-**Audience:** CFO, CEO, FP&A Leadership, Department Heads
-**Prepared by:** Finance Automation Team, iPipeline
 **Reading Time:** 8–10 minutes
 
 ---

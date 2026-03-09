@@ -1,11 +1,7 @@
 # How to Add a Dropdown Filter to Your Excel Charts
 ### Step-by-Step Guide for Finance & Accounting Staff
 
-**Purpose:** This guide shows you how to add a dropdown button (like the Product filter in the iPipeline demo file) to your own Excel files so you can change what your charts show with one click.
-
-**Audience:** Non-technical Finance & Accounting coworkers at iPipeline
-
-**What You'll Build:** A dropdown that filters your charts by Product, Time Period, Region, or any category you choose.
+**What You'll Build:** A dropdown that filters your charts by Product, Time Period, Region, or any category you choose — just like the Product filter in the iPipeline demo file.
 
 ---
 
