@@ -1,7 +1,7 @@
-# iPipeline Finance Automation — Complete Video & Delivery Package
+# Finance Automation — Complete Video & Delivery Package
 
 **Compiled:** 2026-03-06
-**Purpose:** This document contains EVERYTHING needed to produce and deliver the iPipeline Finance Automation demo videos and SharePoint package. It is designed to be handed to another AI (Claude Code or similar) for review, execution, and production support.
+**Purpose:** This document contains EVERYTHING needed to produce and deliver the Finance Automation demo videos and SharePoint package. It is designed to be handed to another AI (Claude Code or similar) for review, execution, and production support.
 
 **What's in this document:**
 1. Master Plan — all decisions, strategy, folder structure
@@ -24,7 +24,7 @@
 ================================================================================
 ================================================================================
 
-# iPipeline Finance Automation — Video & Delivery Master Plan
+# Finance Automation — Video & Delivery Master Plan
 
 **Created:** 2026-03-06
 **Status:** Final Plan — Ready for Production
@@ -33,7 +33,7 @@
 
 ## Executive Summary
 
-This document captures every decision made during the planning review for the iPipeline Finance Automation demo videos and SharePoint delivery package. It serves as the single source of truth for producing and delivering the final product.
+This document captures every decision made during the planning review for the Finance Automation demo videos and SharePoint delivery package. It serves as the single source of truth for producing and delivering the final product.
 
 **What we're delivering:**
 - 3 videos (overview, full demo, universal tools)
@@ -48,7 +48,7 @@ This document captures every decision made during the planning review for the iP
 
 ## The Goal
 
-Show iPipeline employees — primarily Finance & Accounting (65%) and the broader company (35%) — what can be done with VBA, Python, and SQL to improve daily workflows and cut down on manual work. The demo file demonstrates what's possible. The universal code library gives people tools they can grab and apply to their own files immediately.
+Show employees — primarily Finance & Accounting (65%) and the broader company (35%) — what can be done with VBA, Python, and SQL to improve daily workflows and cut down on manual work. The demo file demonstrates what's possible. The universal code library gives people tools they can grab and apply to their own files immediately.
 
 This is a practical enablement project, not just a showcase.
 
@@ -78,7 +78,7 @@ One video can't serve all three well. Three focused videos let each audience wat
 
 ### Video 1: "What's Possible" — Overview (4–5 minutes)
 
-**Audience:** Everyone at iPipeline (2,000+ employees)
+**Audience:** Everyone at the company (2,000+ employees)
 **Purpose:** Build awareness. Show a few high-impact features. Point people to the right next step.
 **Tone:** Helpful colleague sharing something useful. Lead with the positive — "here's what's now possible" — not the pain of the old process.
 
@@ -110,7 +110,7 @@ One video can't serve all three well. Three focused videos let each audience wat
 
 ### Video 3: "Universal Tools" (8–10 minutes, chaptered)
 
-**Audience:** Anyone at iPipeline who uses Excel and wants to automate their own work
+**Audience:** Anyone at the company who uses Excel and wants to automate their own work
 **Purpose:** Show examples of the universal tools running on a plain sample file, then point people to SharePoint to get the code and guides
 **Key Decision:** Uses a separate, simple sample Excel file (not the demo file) to make it clear these tools work on ANY file
 
@@ -143,7 +143,7 @@ One video can't serve all three well. Three focused videos let each audience wat
 ## SharePoint Folder Structure
 
 ```
-iPipeline Finance Automation/
+Finance Automation/
 │
 ├── START HERE.pdf
 │
@@ -153,7 +153,7 @@ iPipeline Finance Automation/
 │   └── 3 - Universal Tools.mp4
 │
 ├── Demo File/
-│   ├── iPipeline_PnL_Demo.xlsm
+│   ├── PnL_Demo.xlsm
 │   └── Sample_File_For_Universal_Tools.xlsx
 │
 ├── Universal Code Library/
@@ -218,7 +218,7 @@ iPipeline Finance Automation/
 
 **Runtime Target:** 4:00–5:00
 **Format:** Screen recording, no webcam, voice-over narration
-**Audience:** All iPipeline employees (2,000+)
+**Audience:** All employees (2,000+)
 **Purpose:** Build awareness, show high-impact features, point to next steps
 **Music:** Subtle corporate/tech track during title card and closing card only
 
@@ -245,16 +245,16 @@ Before hitting record, make sure:
 
 ## Title Card (5 seconds)
 
-**On screen:** Branded title card (iPipeline colors)
+**On screen:** Branded title card (brand colors)
 
 ```
-iPipeline Finance Automation
+Finance Automation
 What's Possible
 ```
 
 **Audio:** Brief music sting (2-3 seconds), then fade to silence
 
-**Production note:** Create this as a simple image or slide. iPipeline Blue (#0B4779) background, white text, Arial font. Can add the iPipeline logo if permitted.
+**Production note:** Create this as a simple image or slide. brand blue (#0B4779) background, white text, Arial font. Can add the company logo if permitted.
 
 ---
 
@@ -485,7 +485,7 @@ Videos | Demo File | Code Library | Training Guides
 **On screen:** Branded closing card (same style as opening)
 
 ```
-iPipeline Finance Automation
+Finance Automation
 
 Videos | Demo File | Code Library | Guides
 [SharePoint location]
@@ -589,12 +589,12 @@ Before hitting record, make sure:
 **On screen:**
 
 ```
-iPipeline Finance Automation
+Finance Automation
 Full Demo Walkthrough
 ```
 
 **Audio:** Brief music sting (2–3 seconds), fade to silence
-**Style:** iPipeline Blue (#0B4779) background, white text, Arial font
+**Style:** brand blue (#0B4779) background, white text, Arial font
 
 ---
 
@@ -605,7 +605,7 @@ Full Demo Walkthrough
 
 ### Script:
 
-> "Welcome to the full walkthrough of the iPipeline Finance Automation file.
+> "Welcome to the full walkthrough of the Finance Automation file.
 >
 > This is a single Excel workbook that automates the monthly P&L close process — from importing data, to running quality checks, to generating analysis, building dashboards, and producing final deliverables. Sixty-two actions, all accessible from one control panel.
 >
@@ -996,7 +996,7 @@ Turning analysis into deliverables
 >
 > [Charts & Visuals sheet appears with 8 charts]
 >
-> One click builds eight branded charts in a grid layout — revenue trends, expense breakdowns, margin analysis, product mix, and more. All formatted in iPipeline colors, all properly labeled.
+> One click builds eight branded charts in a grid layout — revenue trends, expense breakdowns, margin analysis, product mix, and more. All formatted in brand colors, all properly labeled.
 >
 > [slowly scroll through the chart grid]
 >
@@ -1011,7 +1011,7 @@ Turning analysis into deliverables
 ### Production Notes:
 - The chart grid is visually impressive at a glance. Give the viewer a full-screen moment when it first appears.
 - Don't describe every chart in detail. "Revenue trends, expense breakdowns, margin analysis, product mix, and more" covers it. The visual does the work.
-- Mention "iPipeline colors" to signal this is branded and presentation-ready, not generic Excel charts.
+- Mention "brand colors" to signal this is branded and presentation-ready, not generic Excel charts.
 
 ---
 
@@ -1347,7 +1347,7 @@ Where to go from here
 **On screen:**
 
 ```
-iPipeline Finance Automation
+Finance Automation
 
 Demo File & Training Guides
 Available on SharePoint
@@ -1428,7 +1428,7 @@ Buffer for natural pauses, macro run times, and breathing room: expect **16:30�
 
 **Runtime Target:** 8:00–10:00
 **Format:** Screen recording, no webcam, voice-over narration, chaptered
-**Audience:** Anyone at iPipeline who uses Excel and wants to automate their own work
+**Audience:** Anyone at the company who uses Excel and wants to automate their own work
 **Purpose:** Show examples of the universal tools running on a plain sample file, then point people to SharePoint
 **Key principle:** Uses a separate, simple sample Excel file — NOT the demo file
 **Music:** Subtle corporate/tech track during title card, chapter cards, and closing card only
@@ -1459,7 +1459,7 @@ Before hitting record, make sure:
 - [ ] Audio test done
 - [ ] Screen recording running, 1920×1080, 30fps
 
-**IMPORTANT:** The sample file should look generic and relatable — something any iPipeline employee might have on their desktop. Name it something like "Sample_Quarterly_Report.xlsx" or "Team_Data_Export.xlsx". Use realistic-looking but fictional data (employee names, departments, amounts, dates).
+**IMPORTANT:** The sample file should look generic and relatable — something any employee might have on their desktop. Name it something like "Sample_Quarterly_Report.xlsx" or "Team_Data_Export.xlsx". Use realistic-looking but fictional data (employee names, departments, amounts, dates).
 
 ---
 
@@ -1468,12 +1468,12 @@ Before hitting record, make sure:
 **On screen:**
 
 ```
-iPipeline Finance Automation
+Finance Automation
 Universal Tools — For Any Excel File
 ```
 
 **Audio:** Brief music sting (2–3 seconds), fade to silence
-**Style:** iPipeline Blue (#0B4779) background, white text, Arial font
+**Style:** brand blue (#0B4779) background, white text, Arial font
 
 ---
 
@@ -1656,7 +1656,7 @@ Making every file look professional
 
 ---
 
-### Demo 2B: Apply iPipeline Branding
+### Demo 2B: Apply Company Branding
 
 **Duration:** 0:40
 
@@ -1664,9 +1664,9 @@ Making every file look professional
 
 > "This one is my favorite for making files look professional fast.
 >
-> [run Apply iPipeline Branding]
+> [run Apply Company Branding]
 >
-> It automatically detects your header row, applies the official iPipeline Blue background with white text, sets alternating row colors for readability, and styles any total or summary rows in Navy Blue. All in official brand fonts and colors.
+> It automatically detects your header row, applies the official brand blue background with white text, sets alternating row colors for readability, and styles any total or summary rows in Navy Blue. All in official brand fonts and colors.
 >
 > [scroll through the formatted sheet]
 >
@@ -1929,7 +1929,7 @@ Questions? Contact Connor [last name / email]
 **On screen:**
 
 ```
-iPipeline Finance Automation
+Finance Automation
 
 Universal Tools — For Any Excel File
 Available on SharePoint
@@ -1978,7 +1978,7 @@ Buffer for natural pauses and command execution time: expect **9:30–10:30** in
 | Tool | Source Module | Why This One |
 |------|-------------|--------------|
 | AutoFit All | modUTL_Formatting | Quick win, visible improvement |
-| iPipeline Branding | modUTL_Branding | VISUAL WOW MOMENT — plain sheet → branded professional |
+| Company Branding | modUTL_Branding | VISUAL WOW MOMENT — plain sheet → branded professional |
 | Date Standardizer | modUTL_Formatting | Common problem, clean fix |
 | Highlight Negatives | modUTL_Formatting | Finance standard, instant visual value |
 
@@ -2022,7 +2022,7 @@ The sample file (Sample_Quarterly_Report.xlsx) needs the following "problems" ba
 | Numbers stored as text (green triangles) | Column D or E (amounts) | Text to Numbers |
 | Merged cells | Column A (department names) | Unmerge & Fill Down |
 | Narrow/wide columns | Various | AutoFit All |
-| No header formatting (plain default look) | Row 1 | iPipeline Branding |
+| No header formatting (plain default look) | Row 1 | Company Branding |
 | Mixed date formats | Column C | Date Standardizer |
 | Negative numbers (plain, not red) | Column D or E | Highlight Negatives |
 | At least 1 external link formula | Any cell | External Link Finder |
@@ -2047,7 +2047,7 @@ The sample file (Sample_Quarterly_Report.xlsx) needs the following "problems" ba
 
 3. **Practice the Python demos.** Open the terminal, run the commands, make sure the output looks clean and the scripts execute without errors. Have the exact commands ready to paste.
 
-4. **The iPipeline Branding demo is your key visual moment.** If any single demo needs to be perfect, it's this one. Practice it twice.
+4. **The Company Branding demo is your key visual moment.** If any single demo needs to be perfect, it's this one. Practice it twice.
 
 5. **For the Python chapter, consider pre-recording the terminal output** and splicing it in during editing. Terminal text can be hard to read in a screen recording — you may want to zoom in or increase font size in the terminal.
 
@@ -2067,17 +2067,17 @@ The sample file (Sample_Quarterly_Report.xlsx) needs the following "problems" ba
 
 # START HERE — Content Specification
 
-**Format:** Branded PDF (iPipeline Blue #0B4779 header, Arial/Helvetica fonts)
+**Format:** Branded PDF (brand blue #0B4779 header, Arial/Helvetica fonts)
 **Pages:** 2
-**Location in SharePoint:** Top level of the iPipeline Finance Automation folder
+**Location in SharePoint:** Top level of the Finance Automation folder
 **Status:** Content spec ready — PDF needs to be built
 
 ## Content Structure
 
 ### Banner Header
-- Title: "iPipeline Finance Automation"
+- Title: "Finance Automation"
 - Subtitle: "Your guide to everything in this folder"
-- iPipeline Blue background, white text
+- brand blue background, white text
 
 ### Section: What Is This?
 - One paragraph explaining the toolkit: complete automation for Finance workflows plus universal code library for any Excel file
@@ -2104,7 +2104,7 @@ Table listing each folder/file and what it contains:
 - Copilot Prompts.pdf — Pre-built prompts for help using any tool
 
 ### Section: Important Notes
-Yellow callout box: "All financial data in the demo file is fictional. Product names are real iPipeline products, but every number, vendor, GL account, and transaction is fabricated for demonstration purposes. The tools and automation logic are production-ready and can be applied to real data."
+Yellow callout box: "All financial data in the demo file is fictional. Product names are real company products, but every number, vendor, GL account, and transaction is fabricated for demonstration purposes. The tools and automation logic are production-ready and can be applied to real data."
 
 ### Section: Quick Start — 5 Minutes to Your First Automation
 1. Watch Video 1: What's Possible (5 minutes)
@@ -2115,7 +2115,7 @@ Yellow callout box: "All financial data in the demo file is fictional. Product n
 
 ### Footer
 - "Questions or feedback? Contact Connor | Built with AI assistance (Claude) | Zero cost, zero IT involvement"
-- "iPipeline Finance Automation • 2026"
+- "Finance Automation • 2026"
 
 
 
@@ -2127,7 +2127,7 @@ Yellow callout box: "All financial data in the demo file is fictional. Product n
 
 # Sample File Requirements — Sample_Quarterly_Report.xlsx
 
-**Purpose:** This file is used in Video 3 to demonstrate the universal tools. It should look like a typical, slightly messy data export that any iPipeline employee might have on their desktop.
+**Purpose:** This file is used in Video 3 to demonstrate the universal tools. It should look like a typical, slightly messy data export that any employee might have on their desktop.
 
 **Important:** Connor will have Claude Code build this file to match the quality standard of the P&L demo file. This spec defines what problems must be baked in for each demo to work.
 
@@ -2154,7 +2154,7 @@ Yellow callout box: "All financial data in the demo file is fictional. Product n
 | Blank rows scattered in data | Rows ~16, 33, 51, 68, 84, 102 | Delete Blank Rows | 6 completely empty rows inserted at irregular intervals |
 | Mixed date formats | Column C (dates) | Date Standardizer | 5 different formats: MM/DD/YYYY, DD-MMM-YYYY, YYYY-MM-DD, MM-DD-YYYY, Month DD, YYYY — all stored as text |
 | Negative values not formatted | Column F (variance) | Highlight Negatives | Negative numbers appear plain, not red |
-| No header formatting | Row 1 | iPipeline Branding + AutoFit | Plain default Excel look, no colors, no bold |
+| No header formatting | Row 1 | Company Branding + AutoFit | Plain default Excel look, no colors, no bold |
 | Poor column widths | All columns | AutoFit All | Some too narrow (truncated), some too wide |
 | Error formulas | Below data area | Workbook Health Check | At least 1 #DIV/0! and 1 #N/A error |
 | External link formula | Below data area | External Link Finder | 1 formula referencing [OtherWorkbook.xlsx] |

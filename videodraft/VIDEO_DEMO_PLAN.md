@@ -1,8 +1,8 @@
 # Video Demo Plan — Ideas, Strategy & Brainstorming
 
-**Project:** iPipeline P&L Automation Toolkit Demo Video
+**Project:** P&L Automation Toolkit Demo Video
 **Presenter:** Connor (Finance & Accounting team)
-**Audience:** 2,000+ iPipeline employees, CFO, CEO
+**Audience:** 2,000+ employees, CFO, CEO
 **Date:** March 2026
 
 ---
@@ -12,7 +12,7 @@
 This is not a training video. This is a **sales pitch to your own company**. You are showing 2,000+ people — including the CEO and CFO — that one Finance team member built something that saves the department hundreds of hours per year, at zero cost, using only Excel and free tools.
 
 The video needs to accomplish three things:
-1. **Make leadership proud** — "This is the kind of innovation we want at iPipeline"
+1. **Make leadership proud** — "This is the kind of innovation we want at the company"
 2. **Make coworkers excited** — "I want to use this. How do I get it?"
 3. **Make it look easy** — "I don't need to be technical to use this"
 
@@ -71,7 +71,7 @@ The video needs to accomplish three things:
 | Data Quality Letter Grade (A-F) | Visually striking, unique, instantly understandable | 90 seconds |
 | Reconciliation Checks (PASS/FAIL) | "2 hours → 10 seconds" — the money stat | 60 seconds |
 | Variance Commentary (auto-generated) | People will audibly go "whoa" when they see this | 90 seconds |
-| Dashboard Charts (branded) | Visual impact — iPipeline blue charts, one click | 60 seconds |
+| Dashboard Charts (branded) | Visual impact — brand blue charts, one click | 60 seconds |
 | PDF Export | "Here's your deliverable" — tangible output | 45 seconds |
 
 ### Tier 2: Should Show (Adds credibility and depth)
@@ -140,7 +140,7 @@ Very soft, corporate background music during the opening and closing only. No mu
 
 ### Style 2: Formal Presentation
 - Structured, professional narration
-- "Today I will demonstrate the iPipeline P&L Automation Toolkit..."
+- "Today I will demonstrate the P&L Automation Toolkit..."
 - Best for: CFO/CEO meetings, formal rollouts
 
 ### Style 3: Problem-Solution Demo

@@ -1,6 +1,6 @@
 # KBT Universal Tools — Complete How-To Guide
 
-**For:** Finance & Accounting Staff at iPipeline
+**For:** Finance & Accounting Staff
 **Written for:** Non-technical users — every step is spelled out
 **Last Updated:** 2026-03-03
 

@@ -9,7 +9,7 @@
 ## Project Summary
 
 ### What Was Built
-A single Excel file (`.xlsm`) containing 62 automated VBA macros, organized into a "Command Center" — a searchable, categorized control panel. The file automates the entire monthly P&L (Profit & Loss) close process for iPipeline's Finance & Accounting team.
+A single Excel file (`.xlsm`) containing 62 automated VBA macros, organized into a "Command Center" — a searchable, categorized control panel. The file automates the entire monthly P&L (Profit & Loss) close process for the company's Finance & Accounting team.
 
 ### Key Stats
 - **62 automated actions** accessible from one Command Center
@@ -24,7 +24,7 @@ A single Excel file (`.xlsm`) containing 62 automated VBA macros, organized into
 One Finance & Accounting team member (Connor) built this with AI assistance (Claude). Connor is not a developer — he works on guides, training docs, VBA, SQL, and Python demos.
 
 ### The Audience
-- **Primary:** 2,000+ iPipeline employees (insurance technology company)
+- **Primary:** 2,000+ employees
 - **Key stakeholders:** CFO and CEO
 - **Target users:** Finance & Accounting staff (non-technical)
 
@@ -72,13 +72,13 @@ One Finance & Accounting team member (Connor) built this with AI assistance (Cla
 
 ---
 
-## The Company — iPipeline
+## The Company
 
 - Insurance technology (insurtech) company
 - Products: iGO, Affirm, InsureSight, DocFast (life insurance quoting, e-applications, underwriting, document management)
 - Large enough to have 2,000+ employees
 - Professional, corporate culture
-- Brand colors: iPipeline Blue (#0B4779), Navy (#112E51), Lime Green (#BFF18C), Aqua (#2BCCD3)
+- Brand colors: Brand Blue (#0B4779), Navy (#112E51), Lime Green (#BFF18C), Aqua (#2BCCD3)
 - Fonts: Arial family only
 
 ---
@@ -97,10 +97,10 @@ One Finance & Accounting team member (Connor) built this with AI assistance (Cla
 9. Additional sheets created by macros: Variance Analysis, Sensitivity Analysis, Executive Dashboard, Variance Commentary, Data Quality Report, YoY Variance Analysis, Exec Summary - Print, Disclaimer
 
 ### What's Fictional
-ALL financial data is completely made up. Product names are real iPipeline products but all numbers, vendors, GL accounts, and transactions are fabricated for demo purposes.
+ALL financial data is completely made up. Product names are real company products but all numbers, vendors, GL accounts, and transactions are fabricated for demo purposes.
 
 ### What's Real
-The macros, automation logic, reporting templates, and formatting are all production-ready and can be applied to actual iPipeline financial data.
+The macros, automation logic, reporting templates, and formatting are all production-ready and can be applied to actual financial data.
 
 ---
 
@@ -234,7 +234,7 @@ We have a world-class Excel automation toolkit ready for demo. The code is solid
 
 **The question is: How do we make this video as impactful and professional as possible, given that we are one person with no video production experience or budget?**
 
-Give us your best thinking. Challenge our plan. Tell us what we're missing. Help us make this the best internal demo video iPipeline has ever seen.
+Give us your best thinking. Challenge our plan. Tell us what we're missing. Help us make this the best internal demo video the company has ever seen.
 
 ---
 

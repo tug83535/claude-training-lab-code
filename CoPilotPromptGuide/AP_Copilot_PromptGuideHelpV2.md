@@ -552,4 +552,4 @@ If you are still blocked after using these prompts, share the Copilot conversati
 
 ---
 
-*iPipeline Finance Automation — Copilot Prompt Library v2.0*
+*Finance Automation — Copilot Prompt Library v2.0*
