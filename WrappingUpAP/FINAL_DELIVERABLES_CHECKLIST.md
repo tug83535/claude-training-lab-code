@@ -47,7 +47,7 @@ This document lists exactly what files and actions are needed to get to a finish
 | Guide: Getting Started / First Time Setup | `FinalRoughGuides/02-Getting-Started-First-Time-Setup.md` | Draft — needs review | Review → approve → convert to PDF |
 | Guide: What This File Does (Leadership) | `FinalRoughGuides/03-What-This-File-Does-Leadership-Overview.md` | Draft — needs review | Review → approve → convert to PDF |
 | Guide: Quick Reference Card | `FinalRoughGuides/04-Quick-Reference-Card.md` | Draft — needs review | Review → approve → convert to PDF |
-| CoPilot Prompt Guide | `CoPilotPromptGuide/AP_Copilot_PromptGuideHelpV2.md` (+ .docx) | Ready | Convert to PDF if not already |
+| CoPilot Prompt Guide | `FinalRoughGuides/CoPilotPromptGuide/AP_Copilot_PromptGuideHelpV2.md` (+ .docx) | Ready | Convert to PDF if not already |
 
 ### What You Still Need to Do
 
@@ -58,12 +58,12 @@ This document lists exactly what files and actions are needed to get to a finish
   - [ ] Open it fresh on a different machine or clean Excel session — confirm it works out of the box
   - [ ] Check that no personal file paths, test data, or debug code is left in the macros
   - [ ] Save final copy as `.xlsm`
-- [ ] **Copy final files to `CompletePackageStorage/production/`:**
+- [ ] **Save final files to a dedicated output folder on your computer:**
   - [ ] The `.xlsm` file
   - [ ] All approved PDF guides
-  - [ ] A dated backup copy to `CompletePackageStorage/backups/`
+  - [ ] A dated backup copy in a separate backups folder
 - [ ] **Upload to SharePoint:**
-  - [ ] Create `iPipeline P&L Demo/` folder
+  - [ ] Create `Finance Automation/` folder
   - [ ] Create subfolders: `Demo File/`, `Training/`, `Video/`
   - [ ] Upload the `.xlsm` to `Demo File/`
   - [ ] Upload the training PDFs to `Training/`
@@ -120,15 +120,8 @@ These folders are project internals — useful during development but not part o
 | `CLAUDE.md` | Instructions for Claude AI sessions — internal only |
 | `tasks/` | Session management (todo.md, lessons.md) — internal only |
 | `qa/` | Test plans and QA tracking — internal only |
-| `NewTesting/` | Research ideas — already extracted and built |
-| `ProjectRefresh/` | Code audit from other Claude session — internal only |
-| `review/` | External review materials — internal only |
+| `_internal/` | All dev-only folders (NewTesting, ProjectRefresh, review, Testing_Issues, TESTRUN, DemofileChartBuild) — internal only |
 | `docs/` | Developer docs and setup guides — internal only (coworkers get the training PDFs instead) |
-| `DemofileChartBuild/` | Chart work in progress — internal only |
-| `Testing_Issues/` | Testing issue log — internal only |
-| `TESTRUN/` | Test run doc — internal only |
-| `python/__pycache__/` | Python cache files — should be in .gitignore, not delivered |
-| `python/.pytest_cache/` | Pytest cache — should be in .gitignore, not delivered |
 
 ---
 

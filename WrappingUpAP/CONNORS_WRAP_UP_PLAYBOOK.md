@@ -155,9 +155,9 @@ Go through these one at a time. For each one, ask yourself: "Would a non-technic
 ### Step 12 — Save the Final Copy
 
 - [ ] 1. **File → Save As**
-- [ ] 2. Save to your `CompletePackageStorage/production/` folder
-- [ ] 3. Name it something clean: `iPipeline_PnL_Demo_FINAL.xlsm`
-- [ ] 4. Make a second copy to `CompletePackageStorage/backups/` with a date: `iPipeline_PnL_Demo_BACKUP_2026-03-XX.xlsm`
+- [ ] 2. Save to a dedicated folder on your computer (e.g., `Desktop\PnL_Toolkit_Final\`)
+- [ ] 3. Name it something clean: `PnL_Demo_FINAL.xlsm`
+- [ ] 4. Make a second backup copy with a date: `PnL_Demo_BACKUP_2026-03-XX.xlsm`
 
 ---
 
@@ -196,7 +196,7 @@ There are a few ways to do this. Pick whichever is easiest for you:
 
 ### Step 14 — Save PDFs to Production Folder
 
-- [ ] 1. Copy all finished PDFs to `CompletePackageStorage/production/`
+- [ ] 1. Copy all finished PDFs to `your final output folder`
 - [ ] 2. Also keep copies in the `training/` folder in your repo
 
 ---
@@ -212,7 +212,7 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
 - [ ] 1. **Recording software:** What will you use? Options:
    - **OBS Studio** — Free, powerful, most popular. Download from obsproject.com
    - **PowerPoint** — Built-in screen recording (Insert → Screen Recording). Simple but limited
-   - **Camtasia** — Paid, easiest editing. Check if iPipeline has a license
+   - **Camtasia** — Paid, easiest editing. Check if your company has a license
    - **Xbox Game Bar** — Built into Windows 10/11. Press Win+G. Very basic but works
 - [ ] 2. **Webcam or no webcam?** Recommendation: No webcam — screen only. Simpler to record and edit
 - [ ] 3. **Background music?** Recommendation: Soft music on intro/outro title cards only. Silent during live demo. Free music at YouTube Audio Library
@@ -239,7 +239,7 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
 
 ### Step 17 — Prepare the Demo File for Recording
 
-- [ ] 1. Open the final `.xlsm` file from `CompletePackageStorage/production/`
+- [ ] 1. Open the final `.xlsm` file from `your final output folder`
 - [ ] 2. Make sure you're on the **Report-->** landing page (or whatever your starting sheet is)
 - [ ] 3. Close the Command Center if it's open (you'll open it on camera)
 - [ ] 4. Delete any leftover output sheets from previous runs (Variance Analysis results, dashboard outputs, etc.) — start clean
@@ -301,8 +301,8 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
    - `1 - Whats Possible (Overview).mp4`
    - `2 - Full Demo Walkthrough.mp4`
    - `3 - Universal Tools.mp4`
-- [ ] 3. Save to `CompletePackageStorage/production/`
-- [ ] 4. Also save a backup copy to `CompletePackageStorage/backups/`
+- [ ] 3. Save to `your final output folder`
+- [ ] 4. Also save a backup copy to `your backup folder`
 
 ---
 
@@ -314,7 +314,7 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
 
 - [ ] 1. Open Word (or ask Claude to generate this for you)
 - [ ] 2. Create a one-page document that includes:
-   - **Title:** "iPipeline Finance Automation — Start Here"
+   - **Title:** "Finance Automation — Start Here"
    - **What is this?** One paragraph explaining the project
    - **What's in this folder?** Bullet list of each subfolder and what's inside
    - **Which video should I watch?**
@@ -323,9 +323,9 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
      - Want tools for your own files → Video 3 (10 min)
    - **How do I get started?** Download the `.xlsm`, enable macros, open Command Center
    - **Questions?** Contact Connor
-- [ ] 3. Apply iPipeline branding (blue headers, Arial font — reference `docs/ipipeline-brand-styling.md`)
+- [ ] 3. Apply company branding (blue headers, Arial font — reference `docs/ipipeline-brand-styling.md`)
 - [ ] 4. Save as `START HERE.pdf`
-- [ ] 5. Copy to `CompletePackageStorage/production/`
+- [ ] 5. Copy to `your final output folder`
 
 ---
 
@@ -337,7 +337,7 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
 
 - [ ] 1. Go to your SharePoint site
 - [ ] 2. Navigate to the document library where you want to host this
-- [ ] 3. Create a new folder called: `iPipeline Finance Automation`
+- [ ] 3. Create a new folder called: `Finance Automation`
 - [ ] 4. Inside that folder, create these subfolders:
    - `Videos`
    - `Demo File`
@@ -346,13 +346,13 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
 
 ### Step 24 — Upload the Files
 
-- [ ] 1. Upload `START HERE.pdf` to the **root** of `iPipeline Finance Automation/` (not inside a subfolder)
+- [ ] 1. Upload `START HERE.pdf` to the **root** of `Finance Automation/` (not inside a subfolder)
 - [ ] 2. Upload video files to `Videos/`:
    - `1 - Whats Possible (Overview).mp4`
    - `2 - Full Demo Walkthrough.mp4`
    - `3 - Universal Tools.mp4`
 - [ ] 3. Upload the demo file to `Demo File/`:
-   - `iPipeline_PnL_Demo_FINAL.xlsm`
+   - `PnL_Demo_FINAL.xlsm`
 - [ ] 4. Upload the training PDFs to `Training Guides/`:
    - `01 - How to Use the Command Center.pdf`
    - `02 - Getting Started First Time Setup.pdf`
@@ -368,7 +368,7 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
 
 ### Step 25 — Set Permissions
 
-- [ ] 1. Right-click the `iPipeline Finance Automation` folder → **Manage Access**
+- [ ] 1. Right-click the `Finance Automation` folder → **Manage Access**
 - [ ] 2. Add the appropriate group (your team, your department, or "Everyone" depending on CFO guidance)
 - [ ] 3. Set permission level to **Read** (viewers) or **Edit** (if you want people to download)
 - [ ] 4. Confirm the permissions look correct
@@ -389,11 +389,11 @@ Before recording, decide these things (from `videodraft/VIDEO_DEMO_PLAN.md`):
 
 - [ ] 1. Draft a Teams message or email to your audience. Something like:
 
-> **Subject: iPipeline Finance Automation — Now Live on SharePoint**
+> **Subject: Finance Automation Toolkit — Now Live on SharePoint**
 >
 > Hi everyone,
 >
-> I'm excited to share the iPipeline Finance Automation toolkit — a set of 62 automated actions built in Excel that handle month-end close tasks like reconciliation, variance analysis, data quality checks, and report generation.
+> I'm excited to share the Finance Automation toolkit — a set of 62 automated actions built in Excel that handle month-end close tasks like reconciliation, variance analysis, data quality checks, and report generation.
 >
 > Everything is on SharePoint: [paste link]
 >
@@ -432,17 +432,17 @@ When you've checked off everything above:
 | What | Where |
 |------|-------|
 | VBA source code | `vba/` folder in your repo |
-| Python scripts | `python/` folder in your repo |
-| Training guides (markdown) | `FinalRoughGuides/` folder in your repo |
-| Training guides (PDF) | `training/` + `CompletePackageStorage/production/` |
+| Demo Python scripts | `DemoVidCode/python/` |
+| Demo SQL scripts | `DemoVidCode/sql/` |
+| Demo Excel file | `DemoVidCode/excel/` |
+| Training guides (markdown) | `FinalRoughGuides/` |
+| Training guides (PDF) | `training/` |
 | Video scripts | `videodraft/COMPILED_VIDEO_PACKAGE.md` |
 | Video plan & tips | `videodraft/VIDEO_DEMO_PLAN.md` |
 | Universal tools (VBA) | `UniversalToolsForAllFiles/vba/` |
 | Universal tools (Python) | `UniversalToolsForAllFiles/python/` |
-| CoPilot prompt guide | `CoPilotPromptGuide/` |
-| iPipeline brand colors | `docs/ipipeline-brand-styling.md` |
-| Final production files | `CompletePackageStorage/production/` |
-| Backups | `CompletePackageStorage/backups/` |
+| CoPilot prompt guide | `FinalRoughGuides/CoPilotPromptGuide/` |
+| Brand colors | `docs/ipipeline-brand-styling.md` |
 | This playbook | `WrappingUpAP/CONNORS_WRAP_UP_PLAYBOOK.md` |
 
 ---

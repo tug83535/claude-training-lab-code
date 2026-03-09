@@ -31,13 +31,9 @@ employee at the best company in the world.
 - `training/` — final polished guides ready for coworkers (move here only after rough guide is fully reviewed and approved)
 - `qa/` — QA tracking, test plans, checklists, and bug logs
 - `tasks/` — session management files, todo.md and lessons.md
-- `excel/` — contains the main demo P&L Excel file, uploaded each session
-- `DemofileChartBuild/` — chart sheet files for the demo P&L, work in progress
-- `NewTesting/` — experimental code, research, and ideas not ready for main project yet
+- `DemoVidCode/` — demo file source code (excel/, python/, sql/ grouped together)
 - `UniversalToolsForAllFiles/` — future Excel Add-In package for tools that work on any file (backlog, not needed for demo)
-- `CompletePackageStorage/` — final production-ready files and backups
-  - `CompletePackageStorage/production/` — live, ready-to-go final files
-  - `CompletePackageStorage/backups/` — versioned backups
+- `_internal/` — dev-only folders not needed for delivery (ProjectRefresh, review, Testing_Issues, TESTRUN, NewTesting, DemofileChartBuild)
 
 ## Sharing Plan
 - **Scenario 1 (Primary — Demo + coworkers):** Share the finished `.xlsm` file directly. All 32 macros are already inside it. Coworkers open the file and use the Command Center. This is the plan for the CFO/CEO demo and general coworker access.

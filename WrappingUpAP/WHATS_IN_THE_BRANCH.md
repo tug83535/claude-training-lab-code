@@ -54,7 +54,17 @@ These are the VBA source code files that get imported into the Excel demo file. 
 
 ---
 
-### `python/` — Demo File Python Scripts (14 files)
+### `DemoVidCode/` — Demo File Source Code
+
+All the non-VBA source code that supports the demo P&L file, grouped in one place.
+
+**`DemoVidCode/excel/` — The Demo Excel File**
+
+| File | What It Does |
+|------|-------------|
+| `KeystoneBenefitTech_PL_Model.xlsx` | The main P&L demo file. All 34 VBA modules get imported into this. This is what you open and demo |
+
+**`DemoVidCode/python/` — Demo Python Scripts (14 files)**
 
 Python scripts that support the demo P&L file. All 14 are complete and functional. 99 tests pass.
 
@@ -75,9 +85,7 @@ Python scripts that support the demo P&L file. All 14 are complete and functiona
 | `redesign_pl_model.py` | P&L model redesign script (used during initial build) |
 | `requirements.txt` | Python dependencies |
 
----
-
-### `sql/` — SQL Scripts (4 files)
+**`DemoVidCode/sql/` — SQL Scripts (4 files)**
 
 | File | What It Does |
 |------|-------------|
@@ -88,36 +96,22 @@ Python scripts that support the demo P&L file. All 14 are complete and functiona
 
 ---
 
-### `excel/` — The Demo Excel File
+### `FinalRoughGuides/` — Training Guides (7 guides + CoPilot prompt guide)
+
+All written for non-technical Finance & Accounting coworkers. Currently in draft — move to `training/` after review and approval.
 
 | File | What It Does |
 |------|-------------|
-| `KeystoneBenefitTech_PL_Model.xlsx` | The main P&L demo file. All 34 VBA modules get imported into this. This is what you open and demo |
-
----
-
-### `FinalRoughGuides/` — Training Guides (7 files, draft status)
-
-These are the 6 main training guides + 1 extra guide. All written for non-technical Finance & Accounting coworkers. Currently in draft — move to `training/` after review and approval.
-
-| File | What It Does |
-|------|-------------|
+| `00-Start-Here-Welcome.md` | SharePoint landing page — role-based "where to start" guide for the full package |
 | `01-How-to-Use-the-Command-Center.md` | Full walkthrough of all 62 actions, monthly close workflow, tips, troubleshooting, FAQ |
 | `02-Getting-Started-First-Time-Setup.md` | Download, open, enable macros, trust center, verify it works, first 5 actions to try |
-| `03-What-This-File-Does-Leadership-Overview.md` | CFO/CEO briefing — business impact, before/after, cost savings, rollout plan |
+| `03-What-This-File-Does-Leadership-Overview.md` | CFO/CEO briefing — business impact, capabilities, cost savings, rollout plan |
 | `04-Quick-Reference-Card.md` | 1-page cheat sheet — all 62 actions, keyboard shortcuts, monthly close sequence |
 | `05-Video-Demo-Script-and-Storyboard.md` | 18-22 min demo video script — 3 parts, shot lists, word-for-word narration |
 | `06-Universal-Toolkit-Guide.md` | All ~100 universal tools (79 VBA + 22 Python), setup, playbooks, top 20 |
 | `Dynamic-Chart-Filter-Setup-Guide.md` | How to add dropdown chart filters to any Excel file (bonus guide) |
-
----
-
-### `CoPilotPromptGuide/` — CoPilot Prompt Guide (2 files)
-
-| File | What It Does |
-|------|-------------|
-| `AP_Copilot_PromptGuideHelpV2.md` | Prompt library teaching coworkers how to use Microsoft CoPilot with VBA/Python code |
-| `AP_Copilot_PromptGuideHelpV2.docx` | Same guide in Word format (original upload) |
+| `CoPilotPromptGuide/AP_Copilot_PromptGuideHelpV2.md` | Prompt library teaching coworkers how to use Microsoft CoPilot with VBA/Python code |
+| `CoPilotPromptGuide/AP_Copilot_PromptGuideHelpV2.docx` | Same guide in Word format (original upload) |
 
 ---
 
@@ -146,7 +140,7 @@ These are tools that work on ANY Excel file — not just the demo file. Intended
 | `vba/modUTL_Finance.bas` | 14 finance-specific tools |
 | `vba/modUTL_Audit.bas` | 8 audit tools |
 | `vba/modUTL_WorkbookMgmt.bas` | 15 workbook management tools |
-| `vba/modUTL_Branding.bas` | 2 tools — apply iPipeline branding + set theme colors |
+| `vba/modUTL_Branding.bas` | 2 tools — ApplyiPipelineBranding + set theme colors (VBA function names — cannot rename) |
 | `vba/modUTL_SheetTools.bas` | 4 tools — sheet index, template cloner, customer IDs, create folders |
 | `vba/NewTools/modUTL_DataCleaningPlus.bas` | 3 extra cleaning tools |
 | `vba/NewTools/modUTL_AuditPlus.bas` | 4 extra audit tools |
@@ -174,7 +168,7 @@ These are tools that work on ANY Excel file — not just the demo file. Intended
 
 | Folder / File | What It Does |
 |---------------|-------------|
-| `ipipeline-brand-styling.md` | Official iPipeline brand colors, fonts, and styling rules |
+| `ipipeline-brand-styling.md` | Official brand colors, fonts, and styling rules |
 | `day-to-day/OPERATIONS_RUNBOOK.md` | Day-to-day operations reference |
 | `day-to-day/SANITIZATION_PLAYBOOK.md` | Data sanitization procedures |
 | `day-to-day/USER_TRAINING_GUIDE.md` | User training reference |
@@ -212,42 +206,34 @@ These are tools that work on ANY Excel file — not just the demo file. Intended
 
 ---
 
-### `review/` — External Review Materials
+### `WrappingUpAP/` — Connor's Wrap-Up Playbook
 
 | File | What It Does |
 |------|-------------|
-| `PROJECT_OVERVIEW.md` | Full project overview written for an external Claude session to review |
-| `CODE_INVENTORY.md` | Complete code inventory |
-| `DemoWrapUp/` | Empty folder — was reserved for wrap-up review docs |
+| `CONNORS_WRAP_UP_PLAYBOOK.md` | Your personal step-by-step guide from GitHub download through SharePoint upload |
+| `FINAL_DELIVERABLES_CHECKLIST.md` | Exactly what files and actions are needed to deliver the finished product |
+| `WHATS_IN_THE_BRANCH.md` | This file — full inventory of everything in the repo |
 
 ---
 
-### `ProjectRefresh/` — Code Audit from Other Claude Session
+### `_internal/` — Dev-Only Folders (Not for Delivery)
 
-| File | What It Does |
-|------|-------------|
-| `CODE_AUDIT_FINDINGS.md` | 120 tools cross-referenced between Claude sessions (34 exact, 30 overlap, 56 new ideas) |
-| `Tool_Reference_All_120.md` | Full catalog of all 120 tools |
-| `RefreshCompareMerge/Code_Audit_Final_Report.md` | Final audit report — Demo A-, Universal B+, 20 prioritized recommendations |
-| `Universal_Toolkit_Chat1_Foundation.docx` | Original foundation doc from other Claude session |
+These folders were used during development. They're tucked away here to keep the top level clean. You don't need any of these for the final deliverables.
 
----
-
-### `NewTesting/` — Research & Ideas (3 files remaining)
-
-| File | What It Does |
-|------|-------------|
-| `2026-02-28T223817Z.md` | Full audit doc — 15 issues, 10 VBA macros, Python ETL, Power Query M-Code |
-| `Financial Model Correction Instructions.md` | 6-point fix checklist for the Excel model |
-| `VBA Examples (200) — Name — Purpose.txt` | Catalog of 200 macro ideas (source for the 7 new modules built on 3/1) |
+| Folder | What It Contains |
+|--------|-----------------|
+| `ProjectRefresh/` | Code audit from other Claude session — 120 tools cross-referenced, final report |
+| `review/` | External review materials — project overview, code inventory |
+| `Testing_Issues/` | Log of issues found during testing |
+| `TESTRUN/` | Test run starting point doc |
+| `NewTesting/` | Research ideas — already extracted and built into real modules |
+| `DemofileChartBuild/` | Chart sheet example file (work in progress) |
 
 ---
 
-### `DemofileChartBuild/` — Chart Work in Progress
+### `training/` — Final Approved Guides (empty)
 
-| File | What It Does |
-|------|-------------|
-| `chartexampleAP.xlsx` | Chart sheet example file (work in progress) |
+This is where guides move AFTER Connor reviews and approves them from `FinalRoughGuides/`.
 
 ---
 
@@ -258,23 +244,6 @@ These are tools that work on ANY Excel file — not just the demo file. Intended
 | `CLAUDE.md` | Master instructions file — project context, session summaries, rules, current status |
 | `README.md` | Professional repo README |
 | `.gitignore` | Git ignore rules |
-| `TESTRUN/START_HERE.md` | Test run starting point doc |
-| `Testing_Issues/TESTING_ISSUES_LOG.md` | Log of issues found during testing |
-
----
-
-### `CompletePackageStorage/` — Final Production Files (empty)
-
-| Folder | What It Does |
-|--------|-------------|
-| `production/` | Where the final ready-to-go files go after everything is approved |
-| `backups/` | Where dated backup copies go |
-
----
-
-### `training/` — Final Approved Guides (empty)
-
-This is where guides move AFTER Connor reviews and approves them from `FinalRoughGuides/`.
 
 ---
 
@@ -289,7 +258,7 @@ This is where guides move AFTER Connor reviews and approves them from `FinalRoug
 | Universal VBA modules | 13 |
 | Universal Python scripts | 22 |
 | Universal tools total | ~100 |
-| Training guides (draft) | 7 |
+| Training guides (draft) | 8 (7 + CoPilot guide) |
 | Total tests in test plan | 69 |
 | Tests passed | 15 |
 | Bugs found and fixed (all sessions) | 30+ |
