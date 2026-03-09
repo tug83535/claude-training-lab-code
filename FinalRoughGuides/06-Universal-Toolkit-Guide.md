@@ -1,6 +1,6 @@
 # Universal Toolkit Guide
 
-## iPipeline Universal Excel & Python Toolkit — Complete User Guide
+## Universal Excel & Python Toolkit — Complete User Guide
 
 **Total Tools:** 100+ (79 VBA tools + 22 Python scripts)
 
@@ -90,13 +90,22 @@ The VBA tools are stored as `.bas` files. To use them, you import the files into
    - Click **Save**
    - If Excel asks about compatibility, click **Yes** or **OK**
 
-#### Step 2: Open the VBA Editor
+#### Step 2: Enable Macros
+
+When you open an `.xlsm` file for the first time, Excel will show a **yellow security bar** at the top that says "Macros have been disabled." You must enable macros or the VBA tools will not work.
+
+1. Click **Enable Content** on the yellow bar
+2. If the bar does not appear, go to **File > Options > Trust Center > Trust Center Settings > Macro Settings** and select **"Disable VBA macros with notification"** — then close and re-open the file
+
+> **Macros blocked by IT?** Some companies block macros by default. If you cannot enable macros, contact your IT team and ask them to add your file's folder to the "Trusted Locations" list. Go to **File > Options > Trust Center > Trust Center Settings > Trusted Locations > Add new location** and add the folder where you keep the file (e.g., `C:\Users\YourName\Documents\P&L Toolkit\`). For a full walkthrough of this process, see the **"Getting Started — First Time Setup Guide."**
+
+#### Step 3: Open the VBA Editor
 
 1. Press **Alt + F11** on your keyboard
 2. The Visual Basic for Applications (VBA) Editor will open in a new window
 3. You will see a "Project Explorer" panel on the left side showing your workbook name
 
-#### Step 3: Import the Tool Modules
+#### Step 4: Import the Tool Modules
 
 1. In the VBA Editor, click **File** in the menu bar
 2. Click **Import File...**
@@ -118,13 +127,13 @@ You do not need to import all 13 modules. Import only what you need:
 | Format and style sheets | `modUTL_Core.bas` + `modUTL_Formatting.bas` | 9 formatting tools |
 | Manage workbook structure | `modUTL_Core.bas` + `modUTL_WorkbookMgmt.bas` | 15 management tools |
 | Fix number/text issues | `modUTL_Core.bas` + `modUTL_DataSanitizer.bas` | 4 sanitizer tools |
-| Apply iPipeline branding | `modUTL_Core.bas` + `modUTL_Branding.bas` | 2 branding tools |
+| Apply company branding | `modUTL_Core.bas` + `modUTL_Branding.bas` | 2 branding tools |
 | Clone sheets / manage tabs / create folders | `modUTL_Core.bas` + `modUTL_SheetTools.bas` | 4 sheet tools |
 | Everything | Import all 13 modules | All 79+ tools |
 
 > **Important:** Always import `modUTL_Core.bas` first — it contains shared utility functions that the other modules depend on.
 
-#### Step 4: Run a Tool
+#### Step 5: Run a Tool
 
 1. Close the VBA Editor (**Alt + Q** or click the X)
 2. Go back to Excel
@@ -135,7 +144,7 @@ You do not need to import all 13 modules. Import only what you need:
 
 > **What you should see:** The tool runs on your active workbook. Most tools show a message box when they finish, telling you what they did (e.g., "Removed 47 blank rows from Sheet1").
 
-#### Step 5: Save Your Workbook
+#### Step 6: Save Your Workbook
 
 After running a tool, save your workbook (**Ctrl + S**). If the file was originally `.xlsx`, remember to save as `.xlsm` to keep the macros.
 
@@ -163,7 +172,7 @@ Below is every VBA tool organized by module. For each tool:
 | `UTL_LastCol` | Finds the last column of data in a row |
 | `UTL_SafeNum` | Converts a value to a number safely (returns 0 if it can't) |
 | `UTL_SafeStr` | Converts a value to text safely (returns "" if it can't) |
-| `UTL_StyleHeader` | Applies professional iPipeline-branded header formatting |
+| `UTL_StyleHeader` | Applies professional branded header formatting |
 | `UTL_BackupSheet` | Creates a backup copy of a sheet before making changes |
 
 ---
@@ -555,13 +564,13 @@ Below is every VBA tool organized by module. For each tool:
 
 #### ApplyiPipelineBranding
 
-- **What it does:** Detects headers and total rows on the active sheet and applies iPipeline brand styling: iPipeline Blue header row with white bold text, Navy Blue total row, alternating row colors, Arial font throughout.
-- **When to use it:** When you want any workbook to look like an official iPipeline document.
+- **What it does:** Detects headers and total rows on the active sheet and applies company brand styling: blue header row with white bold text, navy total row, alternating row colors, Arial font throughout.
+- **When to use it:** When you want any workbook to look like an official company document.
 
 #### SetiPipelineThemeColors
 
-- **What it does:** Sets the workbook's theme colors to the iPipeline brand palette so the standard Excel color picker shows iPipeline colors.
-- **When to use it:** Before building charts or formatting — the iPipeline colors will be the default choices in the color picker.
+- **What it does:** Sets the workbook's theme colors to the company brand palette so the standard Excel color picker shows brand colors.
+- **When to use it:** Before building charts or formatting — the brand colors will be the default choices in the color picker.
 
 ---
 
@@ -643,6 +652,12 @@ If you do want to use the Python scripts:
 5. When installation finishes, open Command Prompt (search for "cmd" in Start Menu)
 6. Type `python --version` and press Enter
 7. You should see something like `Python 3.11.5` — if you do, Python is installed
+
+> **What if IT won't let you install Python?** Some companies require IT approval for software installs. Two options:
+> 1. **Submit an IT request** — Ask IT to install Python 3.11+ and add it to PATH. Tell them it is a free, open-source tool used for data analysis.
+> 2. **Wait for the .exe versions** — We plan to convert all Python scripts to standalone `.exe` files that run without Python installed. This is on the roadmap.
+>
+> **You do not need Python to use the VBA tools.** The 79 VBA tools work without Python. Python is only needed for the 22 advanced scripts (fuzzy matching, PDF extraction, file consolidation, etc.).
 
 #### Step 2: Install Required Libraries
 
@@ -946,25 +961,16 @@ If you are new to the Universal Toolkit, start with these 20 tools. They solve t
 
 **A:** Check the "Top 20 Most Useful Tools" section or the "Use Case Playbooks" section above. If you still aren't sure, describe your problem to the Finance Automation Team and they can recommend the right tool.
 
+### Q: What if a tool gives me an error or I need help troubleshooting?
+
+**A:** Check the Troubleshooting section above first. If the issue is with VBA code or Python scripts, use the **CoPilot Prompt Guide** — it includes ready-made prompts you can paste into M365 CoPilot to get instant troubleshooting help, step-by-step run instructions, and code explanations tailored to this toolkit. The CoPilot Prompt Guide is included in the SharePoint package.
+
 ### Q: I don't have Python and don't want to install it. Can I still use the toolkit?
 
 **A:** Absolutely. The 79 VBA tools cover most common scenarios. Python is optional and only needed for advanced tasks (50+ file processing, fuzzy matching, PDF extraction). In the future, we plan to convert the Python scripts to standalone .exe files so you can run them without installing Python.
 
 ---
 
-## Document Information
-
-| Field | Value |
-|---|---|
-| **Document Title** | Universal Toolkit Guide |
-| **Version** | 1.0 |
-| **Last Updated** | March 5, 2026 |
-| **Author** | Finance Automation Team |
-| **Audience** | All iPipeline Employees |
-| **VBA Tools** | 79+ (13 modules) |
-| **Python Scripts** | 22+ |
-| **Total Tools** | 100+ |
-
 ---
 
-*This document is part of the iPipeline P&L Automation Toolkit documentation suite. For the P&L-specific Command Center, see "How to Use the Command Center." For initial setup, see "Getting Started — First Time Setup Guide."*
+*For the P&L-specific Command Center, see "How to Use the Command Center." For initial setup, see "Getting Started — First Time Setup Guide."*

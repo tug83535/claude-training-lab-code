@@ -1,7 +1,7 @@
 # How to Add a Dropdown Filter to Your Excel Charts
 ### Step-by-Step Guide for Finance & Accounting Staff
 
-**What You'll Build:** A dropdown that filters your charts by Product, Time Period, Region, or any category you choose — just like the Product filter in the iPipeline demo file.
+**What You'll Build:** A dropdown that filters your charts by Product, Time Period, Region, or any category you choose — just like the Product filter in the demo file.
 
 ---
 
@@ -57,7 +57,7 @@
 1. With the dropdown cell selected, make it stand out:
    - **Bold** the text (Ctrl+B)
    - Add a **border** (Home tab > Borders > All Borders)
-   - Give it a **fill color** — use iPipeline Blue (#0B4779) with white text
+   - Give it a **fill color** — use brand blue (#0B4779) with white text
 2. Add a label next to it: In the cell to the left, type "Filter by Product:" and bold it
 
 ---
@@ -229,5 +229,5 @@ For quarter filtering, map each quarter to month ranges:
 
 ---
 
-*Guide created: March 2026 | iPipeline Finance & Accounting Training*
+*Guide created: March 2026 | Finance & Accounting Training*
 *For questions, contact the Finance Automation team*

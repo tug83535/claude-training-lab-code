@@ -1,6 +1,6 @@
 # Video Demo Script & Storyboard
 
-## iPipeline P&L Automation Toolkit — Walkthrough Video Guide
+## P&L Automation Toolkit — Walkthrough Video Guide
 
 **Total Demo Length:** 18–22 minutes (or split into 3 parts of 6–7 minutes each)
 
@@ -27,7 +27,7 @@
 
 ### Format
 
-A screen recording with voice-over narration (your voice). You will walk viewers through the P&L Automation Toolkit, showing real actions running in real time. The goal is to make every Finance & Accounting employee at iPipeline excited about what this toolkit can do for them.
+A screen recording with voice-over narration (your voice). You will walk viewers through the P&L Automation Toolkit, showing real actions running in real time. The goal is to make every Finance & Accounting employee excited about what this toolkit can do for them.
 
 ### Tone
 
@@ -76,7 +76,7 @@ Complete every item on this list before hitting Record. Do not skip any step.
   - Outlook: Close it
 - [ ] Close any browser tabs (avoid accidental tab previews in recordings)
 - [ ] Set screen resolution to **1920x1080** (Full HD) for the clearest recording
-- [ ] Make sure your desktop wallpaper is professional (plain color or iPipeline branded — nothing distracting)
+- [ ] Make sure your desktop wallpaper is professional (plain color or company branded — nothing distracting)
 - [ ] Plug in your laptop (battery mode can throttle performance)
 - [ ] Close File Explorer and any other windows
 
@@ -139,7 +139,7 @@ Before recording, adjust Excel for the clearest visual:
 
 ### Font and Color Visibility
 
-The workbook already uses iPipeline brand styling (Navy headers, white text, alternating row colors). This photographs well on screen. No adjustments needed.
+The workbook already uses company brand styling (Navy headers, white text, alternating row colors). This photographs well on screen. No adjustments needed.
 
 ---
 
@@ -238,9 +238,9 @@ If you prefer to record one continuous video instead of three parts, combine the
 
 **[0:00 — Opening. Excel is open on the Report--> sheet.]**
 
-> "Hi everyone, I'm Connor from the Finance team. Today I want to show you something I've been building that I think is going to change the way we do P&L reporting at iPipeline.
+> "Hi everyone, I'm Connor from the Finance team. Today I want to show you something I've been building that I think is going to change the way we do P&L reporting.
 >
-> What you're looking at is the iPipeline P&L Automation Toolkit. It's a single Excel file — this file right here — that automates our entire monthly P&L close process. No software to install, no subscriptions, no IT tickets. Just open the file and go."
+> What you're looking at is the P&L Automation Toolkit. It's a single Excel file — this file right here — that automates our entire monthly P&L close process. No software to install, no subscriptions, no IT tickets. Just open the file and go."
 
 **[0:30 — Scroll through sheet tabs at the bottom.]**
 
@@ -326,7 +326,7 @@ If you prefer to record one continuous video instead of three parts, combine the
 >
 > (Run Action 12) ...and here's the Executive Dashboard. (Show the sheet with charts)
 >
-> Revenue trends, expense breakdowns, product comparisons, waterfall charts — all in iPipeline brand colors. All created in one click. All linked to the live data, so they update automatically when the numbers change.
+> Revenue trends, expense breakdowns, product comparisons, waterfall charts — all in company brand colors. All created in one click. All linked to the live data, so they update automatically when the numbers change.
 >
 > This is what you put up on the screen when the CFO walks in."
 
@@ -400,7 +400,7 @@ If you prefer to record one continuous video instead of three parts, combine the
 
 **[5:15 — Closing.]**
 
-> "So that's the iPipeline P&L Automation Toolkit. A single Excel file with 62 automated actions, covering everything from data quality to reconciliation to variance analysis to reporting.
+> "So that's the P&L Automation Toolkit. A single Excel file with 62 automated actions, covering everything from data quality to reconciliation to variance analysis to reporting.
 >
 > Zero cost. Zero installation. Zero learning curve beyond 'open the file and press Ctrl+Shift+M.'
 >
@@ -422,7 +422,7 @@ Insert a simple title card between each part:
 
 | Card | Text |
 |---|---|
-| Opening | **iPipeline P&L Automation Toolkit** — Version 2.1.0 |
+| Opening | **P&L Automation Toolkit** — Version 2.1.0 |
 | Part 1 Title | **Part 1: Introduction and First Impressions** |
 | Part 2 Title | **Part 2: The Power Features — Live Demo** |
 | Part 3 Title | **Part 3: Advanced Capabilities** |
@@ -442,7 +442,7 @@ If your editing software supports it, zoom in on:
 Add text callout boxes pointing to key areas:
 - "Letter Grade" pointing to the A/B/C/D/F
 - "15%+ flagged" pointing to highlighted variances
-- "iPipeline brand colors" pointing to the dashboard charts
+- "company brand colors" pointing to the dashboard charts
 - "10 seconds" when reconciliation completes
 - "62 actions" when showing the Command Center
 
@@ -488,8 +488,8 @@ After recording, complete these steps:
 
 ### Distribution
 
-- [ ] Upload the video to SharePoint at `iPipeline P&L Demo/Video/`
-- [ ] Name the file clearly: `iPipeline_PL_Toolkit_Demo_v2.1_2026-03.mp4`
+- [ ] Upload the video to SharePoint at `P&L Toolkit Demo/Video/`
+- [ ] Name the file clearly: `PL_Toolkit_Demo_v2.1_2026-03.mp4`
 - [ ] If split into 3 parts: `Part1_Introduction.mp4`, `Part2_Power_Features.mp4`, `Part3_Advanced.mp4`
 - [ ] Test that the video plays correctly from SharePoint
 - [ ] Share the SharePoint link with the distribution list
@@ -536,17 +536,6 @@ After recording, complete these steps:
 
 ---
 
-## Document Information
-
-| Field | Value |
-|---|---|
-| **Document Title** | Video Demo Script & Storyboard |
-| **Version** | 1.0 |
-| **Last Updated** | March 5, 2026 |
-| **Author** | Finance Automation Team |
-| **Audience** | Presenter (Connor) |
-| **Video Length** | 18–22 minutes (or 3 parts of 6–7 min each) |
-
 ---
 
-*This document is part of the iPipeline P&L Automation Toolkit documentation suite. Use this script alongside the "Quick Reference Card" to prepare for recording.*
+*Use this script alongside the "Quick Reference Card" to prepare for recording.*

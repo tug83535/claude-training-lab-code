@@ -1,4 +1,4 @@
-# iPipeline P&L Automation Toolkit — Quick Reference Card
+# P&L Automation Toolkit — Quick Reference Card
 
 ## Command Center Cheat Sheet | Version 2.1.0
 
@@ -264,6 +264,6 @@ If you only remember 10 actions, remember these:
 
 ---
 
-**iPipeline P&L Automation Toolkit v2.1.0** | **62 Actions** | **34 VBA Modules** | **14 Python Scripts**
+**P&L Automation Toolkit v2.1.0** | **62 Actions** | **34 VBA Modules** | **14 Python Scripts**
 
 *Print this card and keep it at your desk for quick reference.*

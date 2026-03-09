@@ -1,6 +1,6 @@
 # How to Use the Command Center
 
-## iPipeline P&L Automation Toolkit — Complete User Guide
+## P&L Automation Toolkit — Complete User Guide
 
 ---
 
@@ -21,7 +21,7 @@
 
 ## 1. What Is the Command Center?
 
-The Command Center is a single control panel built into the iPipeline P&L Excel workbook. It gives you one-click access to **62 automated actions** — everything from generating monthly reports to running data quality scans to exporting PDF packages.
+The Command Center is a single control panel built into the P&L Excel workbook. It gives you one-click access to **62 automated actions** — everything from generating monthly reports to running data quality scans to exporting PDF packages.
 
 **Think of it like a remote control for the entire workbook.** Instead of navigating menus, writing formulas, or remembering where things are, you open the Command Center, pick the action you want, and click Run.
 
@@ -313,7 +313,7 @@ Below is every single action available in the Command Center, organized by categ
 
 #### Action 12: Build Dashboard Charts
 
-- **What it does:** Creates a set of professional charts on the Executive Dashboard sheet, including revenue trends, expense breakdowns, product comparisons, and waterfall charts. All charts are formatted with iPipeline brand colors.
+- **What it does:** Creates a set of professional charts on the Executive Dashboard sheet, including revenue trends, expense breakdowns, product comparisons, and waterfall charts. All charts are formatted with company brand colors.
 - **When to use it:** When preparing for a presentation, leadership review, or any time you want a visual summary of the P&L data.
 - **What to expect:** The "Executive Dashboard" sheet will be created (or updated if it already exists) with multiple charts. All charts are automatically linked to the workbook data and will update when the data changes.
 
@@ -837,19 +837,6 @@ Instead of manually formatting and printing each sheet, use **Action 10 (Export 
 
 ---
 
-## Document Information
-
-| Field | Value |
-|---|---|
-| **Document Title** | How to Use the Command Center |
-| **Version** | 1.0 |
-| **Last Updated** | March 5, 2026 |
-| **Author** | Finance Automation Team |
-| **Audience** | All iPipeline Finance & Accounting Employees |
-| **Toolkit Version** | 2.1.0 |
-| **Total Actions** | 62 |
-| **Total Categories** | 15 + All Actions |
-
 ---
 
-*This document is part of the iPipeline P&L Automation Toolkit documentation suite. For setup instructions, see "Getting Started — First Time Setup Guide." For a one-page summary of all actions, see "Quick Reference Card."*
+*For setup instructions, see "Getting Started — First Time Setup Guide." For a one-page summary of all actions, see "Quick Reference Card."*

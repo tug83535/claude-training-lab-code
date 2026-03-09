@@ -1,6 +1,6 @@
 # What This File Does — Leadership Overview
 
-## iPipeline P&L Automation Toolkit — Executive Briefing
+## P&L Automation Toolkit — Executive Briefing
 
 **Reading Time:** 8–10 minutes
 
@@ -9,11 +9,11 @@
 ## Table of Contents
 
 1. [One-Paragraph Summary](#1-one-paragraph-summary)
-2. [The Problem We Solved](#2-the-problem-we-solved)
+2. [What This Makes Possible](#2-what-this-makes-possible)
 3. [What the Toolkit Does](#3-what-the-toolkit-does)
 4. [How It Works (Non-Technical)](#4-how-it-works-non-technical)
 5. [Key Capabilities — What You Can Do Now](#5-key-capabilities--what-you-can-do-now)
-6. [Business Impact — Before vs. After](#6-business-impact--before-vs-after)
+6. [Business Impact](#6-business-impact)
 7. [What Leadership Sees](#7-what-leadership-sees)
 8. [Quality and Reliability](#8-quality-and-reliability)
 9. [Who Uses It and How](#9-who-uses-it-and-how)
@@ -26,37 +26,28 @@
 
 ## 1. One-Paragraph Summary
 
-The iPipeline P&L Automation Toolkit is a single Excel file that automates the entire monthly P&L close process — from data import to reconciliation to variance analysis to PDF reporting — through a 62-action Command Center. What previously required 15+ hours of manual work across multiple spreadsheets, copy-paste operations, and manual checks can now be accomplished in under 2 hours with higher accuracy, full audit trails, and presentation-ready output. The toolkit was built entirely in-house using VBA (inside Excel), Python (for advanced analytics), and SQL (for data management), with zero licensing costs.
+The P&L Automation Toolkit is a single Excel file that automates the entire monthly P&L close process — from data import to reconciliation to variance analysis to PDF reporting — through a 62-action Command Center. The full close cycle can be accomplished in under 2 hours with higher accuracy, full audit trails, and presentation-ready output. The toolkit was built entirely in-house using VBA (inside Excel), Python (for advanced analytics), and SQL (for data management), with zero licensing costs.
 
 ---
 
-## 2. The Problem We Solved
+## 2. What This Makes Possible
 
-### The Old Way
+### The Vision
 
-The monthly P&L close process at iPipeline involved:
+A single, self-contained Excel file that handles every part of the monthly P&L close process. One file. One Command Center. 62 automated actions. Zero external software required.
 
-- **Manual data gathering** — Downloading GL exports from Crossfire, copying data between spreadsheets, reconciling by hand
-- **Manual calculations** — Revenue allocations, cost distributions, variance calculations done in separate workbooks with manual formulas
-- **Manual checks** — Eyeballing numbers for errors, comparing sheets by hand, no systematic validation
-- **Manual reporting** — Reformatting data for presentation, building charts from scratch each month, creating PDFs by printing individual sheets
-- **No version control** — Overwriting files, no ability to roll back, no record of what changed
-- **No audit trail** — No log of who did what or when, making audit prep time-consuming
+### What the Toolkit Enables
 
-### The Risks of the Old Way
-
-| Risk | Impact |
+| Capability | What's Possible |
 |---|---|
-| Human error in copy-paste | Incorrect P&L figures reported to leadership |
-| Inconsistent formatting | Unprofessional reports that undermine credibility |
-| No reconciliation automation | Errors found late (or not at all) in the close cycle |
-| No version history | Inability to answer "What changed between last month and this month?" |
-| Key-person dependency | Only one or two people know how the spreadsheets work |
-| Time consumption | 15+ hours per close cycle that could be spent on analysis |
-
-### What We Built
-
-A single, self-contained Excel file that eliminates every one of these risks. One file. One Command Center. 62 automated actions. Zero external software required.
+| **Automated data import** | GL exports flow directly into the workbook with built-in validation |
+| **One-click reconciliation** | Every number cross-checked across all sheets in seconds with 100% coverage |
+| **Automated variance analysis** | Month-over-month and year-over-year variances calculated instantly with draft commentary |
+| **Professional reporting** | Formatted PDF packages, executive dashboards, and branded charts created in one click |
+| **Built-in version control** | Timestamped snapshots with one-click restore — always know what changed and when |
+| **Full audit trail** | Every action logged automatically with timestamps for compliance documentation |
+| **Scenario modeling** | Save, load, and compare unlimited what-if scenarios in seconds |
+| **Self-documenting system** | 62 labeled actions with a complete user guide — no key-person dependency |
 
 ---
 
@@ -192,7 +183,7 @@ All code is maintained in a GitHub repository with version control, code review,
 
 ### Capability 8: Executive Dashboard
 
-**What it does:** Creates a visual dashboard with revenue trend charts, expense breakdowns, product comparisons, and waterfall charts — all in iPipeline brand colors.
+**What it does:** Creates a visual dashboard with revenue trend charts, expense breakdowns, product comparisons, and waterfall charts — all in company brand colors.
 
 **Business value:** Turns raw numbers into a presentation-ready visual summary. No more building charts from scratch for board presentations.
 
@@ -216,41 +207,41 @@ All code is maintained in a GitHub repository with version control, code review,
 
 ---
 
-## 6. Business Impact — Before vs. After
+## 6. Business Impact
 
-### Time Savings
+### What the Toolkit Delivers Per Close Cycle
 
-| Task | Before (Manual) | After (Toolkit) | Time Saved |
-|---|---|---|---|
-| Monthly data import and validation | 3 hours | 15 minutes | 2 hrs 45 min |
-| Reconciliation checks | 2 hours | 10 seconds | ~2 hours |
-| Variance analysis + commentary | 3 hours | 15 minutes | 2 hrs 45 min |
-| Dashboard and chart creation | 2 hours | 30 seconds | ~2 hours |
-| PDF report package creation | 1 hour | 10 seconds | ~1 hour |
-| Version management and audit prep | 2 hours | 5 minutes | 1 hr 55 min |
-| Ad-hoc what-if scenarios | 1 hour per scenario | 30 seconds per scenario | ~1 hour |
-| **Total per close cycle** | **~15 hours** | **~1.5 hours** | **~13.5 hours** |
+| Task | Toolkit Time |
+|---|---|
+| Monthly data import and validation | 15 minutes |
+| Reconciliation checks (100% coverage) | 10 seconds |
+| Variance analysis + auto-commentary | 15 minutes |
+| Dashboard and chart creation | 30 seconds |
+| PDF report package creation | 10 seconds |
+| Version snapshot + audit log | 5 minutes |
+| Ad-hoc what-if scenarios | 30 seconds per scenario |
+| **Total per close cycle** | **~1.5 hours** |
 
-### Quality Improvements
+### Quality and Reliability
 
-| Metric | Before | After |
-|---|---|---|
-| Reconciliation coverage | Spot-check (~20% of items) | 100% automated coverage |
-| Data quality checks | Manual review (inconsistent) | 6-category automated scan with letter grade |
-| Formula errors caught | Depends on who is looking | All #REF!, #VALUE!, #DIV/0! detected automatically |
-| Version history | Save-as with date in filename | Timestamped snapshots with one-click restore |
-| Audit documentation | Reconstructed from memory after the fact | Real-time automated log of every action |
-| Report consistency | Varies by person creating it | Identical professional format every time |
+| Capability | What It Provides |
+|---|---|
+| Reconciliation coverage | 100% automated — every number cross-checked across all sheets |
+| Data quality scoring | 6-category automated scan with A–F letter grade |
+| Formula error detection | All #REF!, #VALUE!, #DIV/0! found automatically across every sheet |
+| Version history | Timestamped snapshots with one-click restore to any point in time |
+| Audit documentation | Real-time automated log of every action — exportable for auditors |
+| Report consistency | Identical professional format every time, regardless of who runs it |
 
-### Risk Reduction
+### Risk Controls
 
-| Risk | Before | After |
-|---|---|---|
-| Reporting incorrect figures | Manual cross-checking (error-prone) | Automated reconciliation with 100% coverage |
-| Losing work | "File > Save As" with manual naming | Built-in version control with restore capability |
-| Key-person dependency | 1–2 people know the spreadsheets | Self-documenting system with 62 labeled actions |
-| Audit findings | Scramble to produce documentation | One-click audit log export |
-| Inconsistent processes | Depends on who runs the close | Same automated workflow every month |
+| Area | What the Toolkit Provides |
+|---|---|
+| Number accuracy | Automated reconciliation with 100% coverage |
+| Work protection | Built-in version control with point-in-time restore |
+| Knowledge continuity | Self-documenting system with 62 labeled actions and complete user guide |
+| Audit readiness | One-click audit log export with full action history |
+| Process consistency | Same automated workflow every month, every time |
 
 ---
 
@@ -261,7 +252,7 @@ All code is maintained in a GitHub repository with version control, code review,
 When presenting to leadership, the toolkit user can:
 
 1. **Toggle Executive Mode** (Ctrl+Shift+R) — hides all technical sheets, showing only the polished reporting sheets
-2. **Show the Executive Dashboard** — professional charts in iPipeline brand colors
+2. **Show the Executive Dashboard** — professional charts in company brand colors
 3. **Show the Data Quality Letter Grade** — instant visual indicator that the data is trustworthy
 4. **Show the Variance Analysis** — what changed and why, with auto-generated commentary
 5. **Show the Reconciliation Scorecard** — PASS across the board confirms everything ties
@@ -506,17 +497,6 @@ The toolkit comes with a complete documentation suite:
 
 ---
 
-## Document Information
-
-| Field | Value |
-|---|---|
-| **Document Title** | What This File Does — Leadership Overview |
-| **Version** | 1.0 |
-| **Last Updated** | March 5, 2026 |
-| **Author** | Finance Automation Team |
-| **Audience** | CFO, CEO, FP&A Leadership, Department Heads |
-| **Classification** | Internal |
-
 ---
 
-*This document is part of the iPipeline P&L Automation Toolkit documentation suite. For detailed action-by-action instructions, see "How to Use the Command Center." For setup instructions, see "Getting Started — First Time Setup Guide."*
+*For detailed action-by-action instructions, see "How to Use the Command Center." For setup instructions, see "Getting Started — First Time Setup Guide."*

@@ -1,6 +1,6 @@
 # Getting Started — First Time Setup Guide
 
-## iPipeline P&L Automation Toolkit — Setup from Scratch
+## P&L Automation Toolkit — Setup from Scratch
 
 **Estimated Time:** 10–15 minutes
 
@@ -57,7 +57,7 @@
 4. Click **"Download"**
 5. The file will download to your **Downloads** folder
 6. **Move the file** from Downloads to a permanent location on your computer. We recommend:
-   - `C:\Users\YourName\Documents\iPipeline P&L\` (create this folder if it doesn't exist)
+   - `C:\Users\YourName\Documents\P&L Toolkit\` (create this folder if it doesn't exist)
    - Or any folder on your local drive that you will remember
 
 ### If the File Was Shared via Email
@@ -65,7 +65,7 @@
 1. Open the email containing the attachment
 2. Click on the attached file name to download it
 3. Save it to a permanent location (not your Downloads folder — it's easy to lose files there)
-4. We recommend: `C:\Users\YourName\Documents\iPipeline P&L\`
+4. We recommend: `C:\Users\YourName\Documents\P&L Toolkit\`
 
 ### If the File Was Shared via Teams
 
@@ -79,7 +79,7 @@
 
 If you open the file directly from a SharePoint or OneDrive link (without downloading first), it may open in "read-only" mode or in the browser, which does not support macros. **Always download the file first, then open it from your local computer.**
 
-> **What you should see at this point:** The `.xlsm` file saved in a folder on your local computer (e.g., `C:\Users\YourName\Documents\iPipeline P&L\ExcelDemoFile_adv.xlsm`).
+> **What you should see at this point:** The `.xlsm` file saved in a folder on your local computer (e.g., `C:\Users\YourName\Documents\P&L Toolkit\ExcelDemoFile_adv.xlsm`).
 
 ---
 
@@ -161,7 +161,7 @@ This tells Excel: "Any file in this specific folder is trusted." This is the saf
    - A small dialog box will appear
 
 8. **Click "Browse..."** and navigate to the folder where you saved the P&L file
-   - Example: `C:\Users\YourName\Documents\iPipeline P&L\`
+   - Example: `C:\Users\YourName\Documents\P&L Toolkit\`
 
 9. **Select the folder** and click **"OK"**
 
@@ -400,7 +400,7 @@ The recommended workflow for month-end close is documented in the "How to Use th
 When the Finance Automation Team releases an updated version of the P&L file:
 
 1. Download the new file
-2. Save it to your iPipeline P&L folder (replacing the old file, or keeping both)
+2. Save it to your P&L Toolkit folder (replacing the old file, or keeping both)
 3. Open the new file — it will already have the latest macros
 4. You do NOT need to re-do the Trust Center settings (if you set up a Trusted Location, any file in that folder is automatically trusted)
 
@@ -555,22 +555,8 @@ Use this checklist to confirm you have completed all setup steps:
 - [ ] Ran my first 5 actions (Steps 7.1 through 7.5) successfully
 - [ ] I know where to find help if I need it
 
-**If all boxes are checked — you are ready to use the iPipeline P&L Automation Toolkit.**
+**If all boxes are checked — you are ready to use the P&L Automation Toolkit.**
 
 ---
 
-## Document Information
-
-| Field | Value |
-|---|---|
-| **Document Title** | Getting Started — First Time Setup Guide |
-| **Version** | 1.0 |
-| **Last Updated** | March 5, 2026 |
-| **Author** | Finance Automation Team |
-| **Audience** | All iPipeline Employees (First-Time Setup) |
-| **Estimated Setup Time** | 10–15 minutes |
-| **Prerequisites** | Windows PC + Excel Desktop (2019/2021/365) |
-
----
-
-*This document is part of the iPipeline P&L Automation Toolkit documentation suite. After completing setup, see "How to Use the Command Center" for a complete guide to all 62 actions.*
+*After completing setup, see "How to Use the Command Center" for a complete guide to all 62 actions.*
