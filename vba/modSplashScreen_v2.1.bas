@@ -23,9 +23,7 @@ Option Explicit
 ' VERSION:  2.1.0
 '===============================================================================
 
-' --- Splash screen colors (iPipeline brand) ---
-Private Const SPLASH_BG      As Long = 1132409   ' RGB(9,71,17) -> actually use CLR_NAVY
-Private Const SPLASH_ACCENT  As Long = 13303487   ' RGB(191,241,140) Lime accent
+' (No private color constants needed — uses CLR_NAVY from modConfig)
 
 '===============================================================================
 ' ShowSplash - Display branded splash screen
@@ -82,7 +80,7 @@ End Sub
 '===============================================================================
 Private Sub ShowMsgBoxSplash()
     Dim msg As String
-    Dim border As String: border = String(50, Chr(9472))
+    Dim border As String: border = String(50, "=")
 
     msg = border & vbCrLf & vbCrLf
     msg = msg & "   KEYSTONE BENEFITECH" & vbCrLf

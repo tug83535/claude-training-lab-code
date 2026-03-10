@@ -36,7 +36,7 @@ Public Sub ShowSplash()
     Dim wbName As String: wbName = ThisWorkbook.Name
     Dim sheetCount As Long: sheetCount = ThisWorkbook.Worksheets.Count
 
-    Dim border As String: border = String(50, Chr(9472))
+    Dim border As String: border = String(50, "=")
     Dim msg As String
 
     msg = border & vbCrLf & vbCrLf
@@ -68,7 +68,7 @@ Public Sub ShowSplashCustom(ByVal title As String, ByVal subtitle As String)
     Dim wbName As String: wbName = ThisWorkbook.Name
     Dim sheetCount As Long: sheetCount = ThisWorkbook.Worksheets.Count
 
-    Dim border As String: border = String(50, Chr(9472))
+    Dim border As String: border = String(50, "=")
     Dim msg As String
 
     msg = border & vbCrLf & vbCrLf
