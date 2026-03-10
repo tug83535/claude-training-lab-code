@@ -146,6 +146,19 @@ All fixes committed and pushed (commit a22dd76).
 
 ---
 
+## Last Optional Adds
+- [ ] **Time Saved Calculator** — Calculate how long each of the 62 Command Center actions would take manually vs. running the macro. Build a summary table showing per-action time savings and a grand total (e.g., "Manual: 47 hours/month → Automated: 2 hours/month"). Great talking point for CFO/CEO.
+- [ ] **Splash Screen on Open** — When the file opens, display a branded iPipeline welcome screen (logo colors, version number, "Launch Command Center" button). Auto-dismisses after 5 seconds or on click. Makes the file feel like a product, not a spreadsheet.
+- [ ] **Animated Progress Bar for Long Macros** — Replace simple status bar messages with a UserForm progress bar showing percentage complete, estimated time remaining, and the iPipeline logo. Makes 10-second waits feel intentional instead of frozen.
+- [ ] **Live "What If" Scenario Demo** — Build a one-click scenario demo: "What if revenue drops 15%?" or "What if AWS costs increase 10%?" — runs the scenario tool and instantly shows the P&L impact. Speaks the CFO's language directly.
+- [ ] **Anomaly Detector with Plain English Explanations** — Instead of just flagging data issues, generate plain English insights like: "March rent expense is $47,000 — 3x higher than the 6-month average of $15,200. Possible double-booking." Turns a data check into an AI-level insight.
+- [ ] **One-Page Executive Brief Auto-Generator** — One button that scans the entire workbook and generates a plain English summary: "Revenue up 8% MoM. Three expense lines exceeded budget. Cash position strong. Two reconciliation items need attention." Ready to paste into an email or print.
+- [ ] **Power BI Connection (Mention Only)** — During the demo, mention that the same data structure could feed a live Power BI dashboard as a Phase 2 initiative. Don't build it — just plant the seed to show forward thinking.
+- [ ] **Teams Bot Integration (Mention Only)** — During the demo, mention the concept of typing `/pnl-status` in Teams to get an instant P&L summary. Don't build it — shows vision and where this could go next.
+- [ ] **Copilot + Macros Integration (Mention Only)** — Demo how someone could ask Copilot a question and then use YOUR tools to verify or act on the answer. Position the macros as the "trust but verify" layer for AI outputs. Ties into the CoPilot Prompt Guide already built.
+
+---
+
 ## Backlog (Nice to Have — After Demo)
 - [ ] Dynamic Progress Bar KPI Shape (visual KPI indicator on dashboard)
 - [ ] Financial Statement Generator from Trial Balance (requires account mapping design)
