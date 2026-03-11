@@ -1,7 +1,7 @@
 # KBT P&L Toolkit — Validation Report
 
 > **Workbook:** ExcelDemoFile_adv.xlsm
-> **Validation Date:** 2026-02-20
+> **Validation Date:** 2026-02-20 (data validation) | 2026-03-11 (doc updated)
 > **Toolkit Version:** 2.1.0
 
 ---
@@ -200,3 +200,17 @@ See the Issue Closure Confirmation Table (ISSUE_CLOSURE.md) for the complete ver
 | **Total** | **72** | **69** | **0** | **All checks pass** |
 
 **Conclusion:** The toolkit is validated and production-ready. All 9 reconciliation checks on the Checks sheet pass. Zero failures.
+
+---
+
+## 9. Post-Validation Updates (2026-03-11)
+
+Since the original validation date (2026-02-20), the following changes have been made:
+
+- **VBA modules:** Expanded from 14 to **39 demo modules** + **14 universal toolkit modules**
+- **Python scripts:** All 14 scripts remain functional; pytest: 99 passed, 15 skipped, 0 failures
+- **Bugs found and fixed:** 35 total across 5 review phases (see BUG_LOG.md)
+- **Workbook data:** GL data, reconciliation checks, and allocation shares remain unchanged — all validation results above still apply
+- **Note:** T1.02 (module count) needs re-testing after importing all 39 modules into the workbook
+
+The data integrity checks (Sections 1-5) remain valid as the underlying workbook data has not changed. The VBA and Python ecosystem sections should be re-validated after the full 39-module import.

@@ -10,6 +10,101 @@ Format follows [Semantic Versioning](https://semver.org/): MAJOR.MINOR.PATCH
 
 ---
 
+## [2.1.1] — 2026-03-11
+
+### Added
+
+**VBA Modules — New v2.1 Modules (2026-03-01, 7 modules):**
+- modDemoTools_v2.1.bas — AddControlSheetButtons, SetParameterizedPrintArea, CreatePrintableExecSummary
+- modDataGuards_v2.1.bas — ValidateAssumptionsPresence, CheckSumOfDrivers, FindNegativeAmounts, FindZeroAmounts, FindSuspiciousRoundNumbers
+- modDrillDown_v2.1.bas — AddReconciliationDrillLinks, AutoPopulateReconciliationChecks, ApplyReconciliationHeatmap, RunGoldenFileCompare
+- modAuditTools_v2.1.bas — AppendChangeLogEntry, FindExternalLinks, FixExternalLinks, AuditHiddenSheets, CreateMaskedCopy, ExportErrorSummaryClipboard
+- modETLBridge_v2.1.bas — TriggerETLLocally, ImportETLOutput
+- modTrendReports_v2.1.bas — CreateRolling12MonthView, CreateReconciliationTrendChart, ArchiveReconciliationResults
+- modSheetIndex_v2.1.bas — CreateHomeSheet, ListAllSheetsWithLinks
+
+**VBA Modules — Optional Add-Ins (2026-03-11, 5 modules):**
+- modTimeSaved_v2.1.bas (305 lines) — Time Saved Calculator: manual vs automated time for all 62 actions
+- modSplashScreen_v2.1.bas — Branded welcome screen with UserForm + MsgBox fallback
+- modProgressBar_v2.1.bas (270 lines) — Animated progress bar with %, ETA, elapsed time
+- modWhatIf_v2.1.bas (558 lines) — Live What-If scenarios: 7 presets + custom + baseline restore
+- modExecBrief_v2.1.bas (447 lines) — Executive Brief auto-generator scanning 5 workbook sections
+
+**VBA Modules — ProjectRefresh Enhancements (2026-03-05):**
+- modDashboardAdvanced_v2.1.bas (NEW) — Split from modDashboard (was 1,398 lines)
+- modDataQuality_v2.1.bas — Added Data Quality Letter Grade (A-F scoring)
+- modVarianceAnalysis_v2.1.bas — Added YoY Variance Analysis
+- modDataSanitizer_v2.1.bas — Numeric-only sanitizer with header keyword skip protection
+
+**Universal Toolkit Modules (2026-03-04 through 2026-03-11, 14 modules total):**
+- modUTL_Core.bas — Shared utilities (UTL_BackupSheet, UTL_TurboOn/Off)
+- modUTL_Branding.bas — ApplyiPipelineBranding, SetiPipelineThemeColors
+- modUTL_SheetTools.bas — ListAllSheetsWithLinks, TemplateCloner, GenerateUniqueCustomerIDs
+- modUTL_DataSanitizer.bas — RunFullSanitize, PreviewSanitizeChanges, FixFloatingPointTails, ConvertTextStoredNumbers
+- modUTL_ProgressBar.bas (NEW 2026-03-11) — Standalone status bar progress bar, ASCII visual
+- modUTL_SplashScreen.bas (NEW 2026-03-11) — Standalone MsgBox splash screen
+- modUTL_ExecBrief.bas (NEW 2026-03-11, 253 lines) — Universal workbook scanner, zero dependencies
+- Plus 7 previously existing universal modules (modUTL_Audit, modUTL_DataQuality, modUTL_Search, etc.)
+
+**Python Enhancements:**
+- pnl_forecast.py — Added Forecast Accuracy Scoring (MAPE calculation)
+- date_format_unifier.py — Fixed missing `day_first` parameter in `detect_date_columns()`
+
+**Training Guides (6 drafts in FinalRoughGuides/):**
+- Dynamic-Chart-Filter-Setup-Guide.md
+- Plus 5 additional training guides for coworkers
+
+**CoPilot Prompt Guide v2.0 (2026-03-07):**
+- AP_Copilot_PromptGuideHelpV2.md — Fixed all broken quick reference links, added working anchors
+
+**Video Package (2026-03-07):**
+- COMPILED_VIDEO_PACKAGE.md — Demo build checklist, tool counts, file stats
+- Sample_Quarterly_Report.xlsx — Built for Video 3 universal tools demo
+
+### Fixed
+
+**Bug Fixes — Testing Phase (2026-03-03 through 2026-03-04, 21 bugs):**
+- BUG-T2.01: 9 missing sheet-name constants in modConfig (commit af44453)
+- BUG-T2.03a/b: CLR_NAVY and CLR_ALT_ROW wrong hex-to-decimal conversion (commit 19320db)
+- BUG-T2.04a/b: TestUpdateHeaderText wrapper + NumberFormat text fix (commits 6f40f91, ed3276f)
+- BUG-T4.04a: Windows PermissionError on temp file cleanup (commit 3024c44)
+- BUG-T5.01a/b: ExecDashboard row 1 vs HDR_ROW_REPORT + Error 5 crash (commits 6c17bd5, 847a982)
+- BUG-T5.02: WaterfallChart hardcoded row label (commit 304743b)
+- SR-01 through SR-12: 2 critical logic bugs + 9 LogAction signature bugs + 1 constant fix (commit 22ba831)
+
+**Bug Fixes — Pre-Delivery Code Review (2026-03-07, 7 bugs):**
+- CR-01: LogAction instance #13 in modReconciliation
+- CR-02/03: HDR_ROW_REPORT in modReconciliation (ValidateCrossSheet + FindFYCol)
+- CR-04: modPDFExport hardcoded 7 sheets → dynamic discovery
+- CR-05/06: SpecialCells rng reset in modDataSanitizer + modAuditTools
+- CR-07: xlSheetVeryHidden → xlSheetHidden in modDrillDown
+
+**Bug Fixes — 5-Pass Review (2026-03-11, 3 bugs):**
+- BR-01/02: Chr(9472) crashes VBA in modSplashScreen + modUTL_SplashScreen (3 locations)
+- BR-03: Unused SPLASH_BG/SPLASH_ACCENT constants removed
+
+**Bug Fixes — Code Review (2026-03-05, 4 bugs):**
+- 3 more LogAction signature bugs (modDataQuality, modReconciliation, modPDFExport)
+- Python `detect_date_columns()` missing `day_first` parameter
+
+### Changed
+- modFormBuilder_v2.1.bas — ExecuteAction router expanded from 50 to 62 actions
+- modMasterMenu_v2.1.bas — Menu expanded from 50 to 62 items (4 pages)
+- modDashboard_v2.1.bas — Split into base + advanced modules
+- `_internal/` moved to `OldRoughVersions/_internal/` for repo cleanup (2026-03-11)
+- `LastCallOptionalAddIns/` folder created for future add-in guides (2026-03-11)
+
+### Statistics (Updated)
+- Demo VBA modules: **39 total** (24 original + 8 new v2.1 + 2 enhancements + 5 optional add-ins)
+- Universal Toolkit VBA modules: **14 total** (~100+ tools)
+- Python scripts: **14 total**
+- Total bugs found and fixed: **35** (9 testing + 12 self-review + 7 code review + 4 code review #2 + 3 five-pass review)
+- Training guides: 6 drafts complete
+- CoPilot Prompt Guide v2.0 complete
+- Video package draft complete
+
+---
+
 ## [2.1.0] — 2026-02-20
 
 ### ⚠️ Breaking Changes

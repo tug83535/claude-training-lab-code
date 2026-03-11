@@ -1,8 +1,8 @@
 # KBT P&L Toolkit — Test Plan
 
-> **Version:** 2.1.0
-> **Date:** 2026-03-01
-> **Scope:** Verification of all 15 pre-audit issues, integration testing, regression testing, and 8 new v2.1 modules.
+> **Version:** 2.1.1
+> **Date:** 2026-03-11 (updated)
+> **Scope:** Verification of all 15 pre-audit issues, integration testing, regression testing, 8 new v2.1 modules, and 5 optional add-in modules.
 
 ---
 
@@ -55,12 +55,12 @@
 
 ### Category T1 — Compilation & Load (8 tests)
 
-Verifies all 32 VBA modules compile without error and all Python scripts import cleanly.
+Verifies all 39 VBA modules compile without error and all Python scripts import cleanly.
 
 | Test ID | Test Name | Procedure | Pass Criteria |
 |---------|-----------|-----------|---------------|
 | T1.01 | VBA project compiles | Open VBA Editor → Debug → Compile VBAProject | Zero compile errors |
-| T1.02 | All 32 modules present | Check Project Explorer modules list | All 32 module names visible |
+| T1.02 | All 39 modules present | Check Project Explorer modules list | All 39 module names visible |
 | T1.03 | Option Explicit on all | Search all modules for "Option Explicit" | Found in every module |
 | T1.04 | modConfig loads | Immediate Window: `?APP_VERSION` | Returns "2.1.0" |
 | T1.05 | Python pnl_config imports | `python pnl_config.py` | Prints config summary, no errors |
@@ -132,9 +132,9 @@ Verifies ISSUE-001 through ISSUE-007 fixes.
 | T7.03 | End-to-end month close | Execute all OPERATIONS_RUNBOOK month-close steps (3.1–3.12) | All steps complete without error |
 | T7.04 | Python month-end close | `python pnl_runner.py month-end --month 1` | CloseReport generated with check results |
 
-### Category T8 — New v2.1 Modules (29 tests)
+### Category T8 — New v2.1 Modules (36 tests)
 
-Tests for the 8 modules added in the 2026-03-01 session, plus verification of 4 bug fixes from the pre-import code review.
+Tests for the 8 modules added in the 2026-03-01 session, 5 optional add-in modules added 2026-03-11, plus verification of 4 bug fixes from the pre-import code review.
 
 **modDataGuards**
 
@@ -205,6 +205,38 @@ Tests for the 8 modules added in the 2026-03-01 session, plus verification of 4 
 | T8.28 | CreateReconciliationTrendChart — no archive | Run CreateReconciliationTrendChart when NO "Recon Archive" sheet exists | Message says "No reconciliation archive found" and tells you to run ArchiveReconciliationResults first. No error |
 | T8.29 | CreateReconciliationTrendChart — with archive | Run CreateReconciliationTrendChart AFTER running ArchiveReconciliationResults at least once | "Recon Trend Chart" sheet created with a data table (Run Date, PASS, FAIL) and a clustered column chart showing green bars (PASS) and red bars (FAIL). Tab color is green |
 
+**modTimeSaved (Optional Add-In — 2026-03-11)**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.34 | TimeSavedReport generates | Run TimeSavedReport | "Time Saved Analysis" sheet created with all 62 actions listed, manual vs automated minutes per action, grand total row, and Executive Summary box showing annual hours saved |
+
+**modSplashScreen (Optional Add-In — 2026-03-11)**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.35 | ShowSplash displays | Run ShowSplash | Branded splash screen appears (UserForm if frmSplash exists, MsgBox fallback otherwise) with iPipeline branding and a Launch button |
+
+**modProgressBar (Optional Add-In — 2026-03-11)**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.36 | Progress bar lifecycle | In Immediate Window: `StartProgress "Test", 10` then `UpdateProgress 5, "Halfway"` then `EndProgress` | Progress shows %, ETA, elapsed time. EndProgress clears the bar cleanly with no error. Falls back to status bar if frmProgress doesn't exist |
+
+**modWhatIf (Optional Add-In — 2026-03-11)**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.37 | WhatIf preset scenario | Run RunWhatIfDemo → select "Revenue +15%" | Baseline saved (first run only), Assumptions drivers matching "rev" increased by 15%, impact report sheet created with color-coded changes |
+| T8.38 | WhatIf restore baseline | Run RestoreBaseline after running a scenario | All Assumptions values restored to originals, impact sheets deleted, WhatIf_Baseline sheet removed. Message confirms restoration |
+
+**modExecBrief (Optional Add-In — 2026-03-11)**
+
+| Test ID | Test Name | Procedure | Pass Criteria |
+|---------|-----------|-----------|---------------|
+| T8.39 | GenerateExecBrief creates report | Run GenerateExecBrief | "Executive Brief" sheet created with 5 sections: Revenue (Total Revenue/Expense/Net Income + MoM change), Reconciliation (PASS/FAIL counts), Assumptions (first 8 drivers), Products (revenue per product), Workbook Health (sheet count, file size, version) |
+| T8.40 | ExecBrief handles missing sheets | Delete or hide a sheet referenced by ExecBrief, then run GenerateExecBrief | Report generates without crashing. Missing sections show "N/A" or "Sheet not found" instead of a runtime error |
+
 **Bug Fix Verifications (commit c232ca7)**
 
 | Test ID | Test Name | Procedure | Pass Criteria |
@@ -221,7 +253,7 @@ Tests for the 8 modules added in the 2026-03-01 session, plus verification of 4 
 ### Pre-Test Setup
 1. Start with a fresh copy of `ExcelDemoFile_adv.xlsm`
 2. Enable macros and Trust Access per IMPLEMENTATION_GUIDE.md
-3. Import all 32 VBA modules from the `vba/` folder
+3. Import all 39 VBA modules from the `vba/` folder (18 files need re-import if updating from previous version — see CLAUDE.md "Re-Import Required" list)
 4. Build the frmCommandCenter (Mode A or B)
 5. Verify Python environment: `pip install -r requirements.txt`
 
@@ -233,7 +265,7 @@ Tests for the 8 modules added in the 2026-03-01 session, plus verification of 4 
 5. **T5 (Advanced)** — Tests Phase 3 features
 6. **T6 (Data Integrity)** — Tests workbook data
 7. **T7 (Integration)** — Full system tests
-8. **T8 (New v2.1 Modules)** — Tests the 8 new modules + 4 bug fix verifications
+8. **T8 (New v2.1 Modules)** — Tests the 8 new modules + 5 optional add-ins + 4 bug fix verifications
 
 ### Recording Results
 For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
@@ -250,7 +282,7 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 - **T5 tests:** 5 of 6 PASS minimum
 - **T6 tests:** All PASS
 - **T7 tests:** 3 of 4 PASS minimum (Python month-end may skip if no Python env)
-- **T8 tests:** 25 of 29 PASS minimum (T8.24, T8.25 may SKIP if you have the ETL script/output file present; T8.28 is superseded if you already ran ArchiveReconciliationResults; T8.22 can only run once per baseline)
+- **T8 tests:** 30 of 36 PASS minimum (T8.24, T8.25 may SKIP if you have the ETL script/output file present; T8.28 is superseded if you already ran ArchiveReconciliationResults; T8.22 can only run once per baseline; T8.40 is an error-handling edge case)
 
 ### Known Acceptable Failures
 - T5.06 (Search cap): Depends on data volume — may need to use a single-character search to trigger the cap.
@@ -259,14 +291,14 @@ For each test, record: Test ID, Date, Tester, Result (PASS/FAIL/SKIP), Notes.
 
 ## 6. Test Execution Results
 
-### Run Date: 2026-03-03 (initial) / 2026-03-04 (updated)
+### Run Date: 2026-03-03 (initial) / 2026-03-04 / 2026-03-07 / 2026-03-11 (updated)
 
 #### Category T1 — Compilation & Load
 
 | Test ID | Result | Notes |
 |---------|--------|-------|
 | T1.01 | PASS | Debug > Compile — zero errors |
-| T1.02 | PASS | All 32 modules present in Project Explorer |
+| T1.02 | PASS | All modules present in Project Explorer (32 at time of test — re-test needed with 39 modules after re-import) |
 | T1.03 | PASS | Option Explicit found in every module |
 | T1.04 | PASS | `?APP_VERSION` returns "2.1.0" |
 | T1.05 | PASS | pnl_config.py prints config summary, no errors |
@@ -340,3 +372,23 @@ These bugs were found by self-reviewing all remaining untested code against the 
 | SR-10 | MODERATE | modTrendReports_v2.1.bas | 153 | Same LogAction issue — CreateRolling12MonthView | Moved elapsed into message string |
 | SR-11 | MODERATE | modMonthlyTabGenerator_v2.1.bas | 110 | Same LogAction issue — GenerateMonthlyTabs | Moved elapsed into message string |
 | SR-12 | MODERATE | modMonthlyTabGenerator_v2.1.bas | 230 | Same LogAction issue — GenerateNextMonthOnly | Moved elapsed into message string |
+
+### Bugs Found During Pre-Delivery Code Review (2026-03-07, commits 6818b01 + b132885)
+
+| Bug # | Severity | Module | Description | Fix | Commit |
+|-------|----------|--------|-------------|-----|--------|
+| CR-01 | MODERATE | modReconciliation_v2.1.bas | LogAction 4th arg = `ElapsedSeconds()` (Double) — instance #13 | Moved elapsed into message string | 6818b01 |
+| CR-02 | HIGH | modReconciliation_v2.1.bas | ValidateCrossSheet trendLastCol scanned row 1 instead of HDR_ROW_REPORT | Changed to HDR_ROW_REPORT | 6818b01 |
+| CR-03 | HIGH | modReconciliation_v2.1.bas | FindFYCol scanned row 1 instead of HDR_ROW_REPORT | Changed to HDR_ROW_REPORT | 6818b01 |
+| CR-04 | HIGH | modPDFExport_v2.1.bas | GetReportSheetList hardcoded to 7 sheets — misses Apr-Dec tabs | Now dynamically discovers all monthly tabs | 6818b01 |
+| CR-05 | HIGH | modDataSanitizer_v2.1.bas | rng not reset before SpecialCells in 2 worker functions | Added `Set rng = Nothing` before each SpecialCells call | 6818b01 |
+| CR-06 | HIGH | modAuditTools_v2.1.bas | rng not reset before SpecialCells in FindExternalLinks | Added `Set rng = Nothing` before SpecialCells call | 6818b01 |
+| CR-07 | MODERATE | modDrillDown_v2.1.bas | HideGLSheet used xlSheetVeryHidden — blocks hyperlink navigation | Changed to xlSheetHidden | b132885 |
+
+### Bugs Found During 5-Pass Bug Review (2026-03-11)
+
+| Bug # | Severity | Module | Description | Fix |
+|-------|----------|--------|-------------|-----|
+| BR-01 | HIGH | modSplashScreen_v2.1.bas | `Chr(9472)` crashes VBA — Chr() only handles 0-255 | Changed to `String(50, "=")` |
+| BR-02 | HIGH | modUTL_SplashScreen.bas | `Chr(9472)` in 2 locations — same crash | Changed to `String(50, "=")` |
+| BR-03 | LOW | modSplashScreen_v2.1.bas | Unused SPLASH_BG and SPLASH_ACCENT constants | Removed unused constants |

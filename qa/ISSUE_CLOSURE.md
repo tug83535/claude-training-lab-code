@@ -1,7 +1,7 @@
 # KBT P&L Toolkit — Issue Closure Confirmation
 
 > **Version:** 2.1.0
-> **Date:** 2026-02-20
+> **Date:** 2026-02-20 (original) | 2026-03-11 (updated)
 > **Total Issues:** 15 identified in pre-audit
 > **Resolved:** 12 | **Pending:** 3
 
@@ -16,7 +16,7 @@
 | ISSUE-003 | CRITICAL | FixTextNumbers data bomb | Phase 1 | modDataQuality_v2.1.bas | Call `FixTextNumbers` without running `ScanAll` first — shows "Run Scan Data Quality first" message and exits safely | **CLOSED** |
 | ISSUE-004 | CRITICAL | Keyboard shortcuts override Excel builtins | Phase 1 | modNavigation_v2.1.bas | Run `AssignShortcuts`, then press Ctrl+H — Excel Find & Replace opens normally (not overridden). Ctrl+Shift+M opens Command Center | **CLOSED** |
 | ISSUE-005 | HIGH | Timer midnight rollover | Phase 1 | modPerformance_v2.1.bas | In Immediate Window: `m_StartTime = 86390` then `?ElapsedSeconds()` — returns small positive number (not negative) | **CLOSED** |
-| ISSUE-006 | HIGH | modMasterMenu 14 items behind (36→50) | Phase 2 | modMasterMenu_v2.1.bas, modFormBuilder_v2.1.bas, frmCommandCenter_code.txt | Press Ctrl+Shift+M → "All Actions" shows 50 items; type 44 in InputBox fallback → runs Integration Test | **CLOSED** |
+| ISSUE-006 | HIGH | modMasterMenu 14 items behind (36→62) | Phase 2 | modMasterMenu_v2.1.bas, modFormBuilder_v2.1.bas, frmCommandCenter_code.txt | Press Ctrl+Shift+M → "All Actions" shows 62 items; type 44 in InputBox fallback → runs Integration Test | **CLOSED** |
 | ISSUE-007 | HIGH | modPDFExport hardcodes month sheet names | Phase 1 | modPDFExport_v2.1.bas | Search the module for "Jan 25" or "Feb 25" as literal strings — zero hits. All month references use modConfig constants `SH_FUNC_JAN`, `SH_FUNC_FEB`, `SH_FUNC_MAR` | **CLOSED** |
 | ISSUE-008 | HIGH | Python UTF-8 encoding artifacts | Phase 4A, 4B | All 10 .py files + .sql + requirements.txt | Run `python3 -c "..."` scanner for suspect codepoints (U+00E2, U+00C3, U+00C2) across all files — zero hits. Symbols display correctly: ✓ ✗ ⚠ → ↓ ↑ — ─ Δ 📊 ▲ ▼ ▶ ↔ | **CLOSED** |
 | ISSUE-009 | MEDIUM | modDashboard missing 3 advanced charts | Phase 3A | modDashboard_v2.1.bas | Run `CreateExecutiveDashboard` — creates "Executive Dashboard" sheet with KPI tiles and charts. Run `WaterfallChart` — waterfall chart appears. Run `ProductComparison` — grouped bar chart with 4 product series | **CLOSED** |
