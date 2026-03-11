@@ -21,9 +21,9 @@ employee at the best company in the world.
 - Note: VBA modConfig color constants (CLR_NAVY etc.) predate this guide and use slightly different values — do NOT change working VBA code, but any NEW styling work should use the official brand colors
 
 ## Repo Structure
-- `vba/` — VBA modules (.bas files)
+- `vba/` — VBA modules (.bas files) for the demo P&L file (39 modules)
 - `sql/` — SQL scripts
-- `python/` — Python scripts
+- `python/` — Python scripts (14 scripts)
 - `docs/day-to-day/` — day-to-day reference docs
 - `docs/overview/` — project overview docs
 - `docs/setup/` — setup guides
@@ -32,12 +32,15 @@ employee at the best company in the world.
 - `qa/` — QA tracking, test plans, checklists, and bug logs
 - `tasks/` — session management files, todo.md and lessons.md
 - `DemoVidCode/` — demo file source code (excel/, python/, sql/ grouped together)
-- `UniversalToolsForAllFiles/` — future Excel Add-In package for tools that work on any file (backlog, not needed for demo)
-- `_internal/` — dev-only folders not needed for delivery (ProjectRefresh, review, Testing_Issues, TESTRUN, NewTesting, DemofileChartBuild)
+- `UniversalToolsForAllFiles/` — future Excel Add-In package for tools that work on any file (14 VBA modules, ~100+ tools)
+- `LastCallOptionalAddIns/` — folder for future guides related to the 5 optional add-in modules
+- `OldRoughVersions/` — archived folders (includes `_internal/` dev-only folders moved here for cleanup)
+- `CoPilotPromptGuide/` — CoPilot Prompt Guide v2.0 files
+- `videodraft/` — video package draft and sample demo files
 
 ## Sharing Plan
-- **Scenario 1 (Primary — Demo + coworkers):** Share the finished `.xlsm` file directly. All 32 macros are already inside it. Coworkers open the file and use the Command Center. This is the plan for the CFO/CEO demo and general coworker access.
-- **Scenario 2 (Future backlog):** Package 8 universal tools (Data Sanitizer, Find Negatives/Zeros/Round Numbers, Find External Links, Audit Hidden Sheets, Cross-Sheet Search) into `KBT_UniversalTools.xlam` for coworkers who want to run those tools on their own separate Excel files. Source files staged in `UniversalToolsForAllFiles/`. Do this AFTER the demo.
+- **Scenario 1 (Primary — Demo + coworkers):** Share the finished `.xlsm` file directly. All 39 VBA modules (62 Command Center actions + 5 optional add-ins) are inside it. Coworkers open the file and use the Command Center. This is the plan for the CFO/CEO demo and general coworker access.
+- **Scenario 2 (Future backlog):** Package 14 universal tool modules (~100+ tools) into `KBT_UniversalTools.xlam` for coworkers who want to run those tools on their own separate Excel files. Source files staged in `UniversalToolsForAllFiles/`. Do this AFTER the demo.
 
 ## My Audience
 Training docs and guides are written for non-technical Finance & Accounting staff.
@@ -109,24 +112,100 @@ Before delivering ANYTHING ask yourself:
 - Original VBA system complete — 24 modules, all 62 Command Center actions covered (2026-02-28)
 - All Python scripts complete — 14 scripts, all functional (2026-02-28)
 - 7 new VBA modules added from NewTesting ideas (2026-03-01)
-- 34 VBA modules total (32 + modSheetIndex + modDashboardAdvanced) — need re-import (13 files updated)
+- 5 optional add-in modules built (2026-03-11): modTimeSaved, modSplashScreen, modProgressBar, modWhatIf, modExecBrief
+- **39 demo VBA modules total** (34 previous + 5 optional add-ins) — need re-import (18 files updated)
+- **14 universal toolkit VBA modules** (11 previous + 3 new: modUTL_ProgressBar, modUTL_SplashScreen, modUTL_ExecBrief)
 - T1 complete (T1.01–T1.08 all PASS), T2 partially tested (T2.01–T2.04 done, T2.05–T2.07 not yet run)
 - T5.01 and T5.02 tested and fixed (ExecDashboard + WaterfallChart)
 - Self-review of all remaining tests completed — 12 additional bugs found and fixed preemptively
 - Python pytest: 99 passed, 15 skipped, 0 failures (T4.04 criteria met)
-- Universal Tools: ~100 tools built (12 VBA + 4 new VBA NewTools + 4 new Python + CreateFoldersFromSelection), code-reviewed, bugs fixed
+- Universal Tools: ~100+ tools built (14 VBA modules + Python tools), code-reviewed, bugs fixed
 - ProjectRefresh COMPLETE — audit done, all recommendations implemented as working code
 - Demo enhancements: Data Quality Letter Grade, Forecast Accuracy MAPE, YoY Variance, modDashboard split, modUTL_Core, backup-before-destructive, SpecialCells perf fixes
 - 6 training guides complete in FinalRoughGuides/ — ready for Connor review
 - CoPilot Prompt Guide v2.0 complete in CoPilotPromptGuide/ (2026-03-07)
 - Video package draft (COMPILED_VIDEO_PACKAGE.md) + sample file in videodraft/ (2026-03-07)
 - Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, ProjectRefresh COMPLETE, Training Guides COMPLETE (draft)
+- `_internal/` moved to `OldRoughVersions/_internal/` for repo cleanup (2026-03-11)
+- `LastCallOptionalAddIns/` folder created for future add-in guides (2026-03-11)
 - Branch: `claude/resume-ipipeline-demo-qKRHn` (active branch)
+- Bug review (2026-03-11): 5-pass review of all new code — 1 bug found (Chr(9472) crash) + unused constants cleanup
 - Bug review (2026-03-07): Pre-delivery code review — 7 bugs found and fixed (6 VBA in commit 6818b01 + T8.19 drill links in b132885)
 - Total LogAction signature bugs found to date: 13
 - Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
-## Session Summary — 2026-03-07 (Latest — Code Review + Bug Fixes + Video Package + CoPilot Guide)
+## Session Summary — 2026-03-11 (Latest — Optional Add-Ins + Universal Expansions + Repo Cleanup)
+
+### What Was Done This Session
+Built 5 "Last Call Optional Add-Ins" from the todo.md backlog, created 3 universal toolkit versions, moved `_internal/` to `OldRoughVersions/` for cleanup, ran 5-pass bug review, and updated all docs.
+
+**Branch:** `claude/resume-ipipeline-demo-qKRHn`
+
+### Repo Cleanup
+- Moved `_internal/` folder into `OldRoughVersions/_internal/` — dev-only folders no longer clutter root
+- Created `LastCallOptionalAddIns/` folder for future guides related to the 5 new add-in modules
+
+### 5 New Demo File Modules (Optional Add-Ins)
+1. **`vba/modTimeSaved_v2.1.bas`** (305 lines) — Time Saved Calculator
+   - Shows manual vs automated time for all 62 Command Center actions
+   - Builds styled report sheet with per-action savings and Executive Summary box
+   - Key output: "Manual: X hrs/month -> Automated: Y hrs/month -> Annual: Z hrs/year"
+   - Demo-specific (depends on modConfig, modPerformance, modLogger)
+
+2. **`vba/modSplashScreen_v2.1.bas`** — Branded Welcome Screen
+   - Professional splash on workbook open with iPipeline branding
+   - `ShowSplash` tries UserForm first, falls back to MsgBox
+   - `BuildSplashForm` programmatically creates frmSplash UserForm
+
+3. **`vba/modProgressBar_v2.1.bas`** (270 lines) — Animated Progress Bar
+   - 3-call API: `StartProgress`, `UpdateProgress`, `EndProgress`
+   - Shows %, ETA, elapsed time with animated bar fill
+   - Falls back to status bar if frmProgress UserForm doesn't exist
+   - `BuildProgressForm` creates frmProgress programmatically
+
+4. **`vba/modWhatIf_v2.1.bas`** (558 lines) — Live "What If" Scenario Demo
+   - 7 preset scenarios + custom + restore baseline
+   - Presets: Revenue +/-15/10%, AWS +25%, Headcount +20%, Expenses -10%, Best/Worst Case
+   - `SaveBaseline` saves Assumptions to hidden sheet (first run only)
+   - `RestoreBaseline` restores originals and cleans up impact sheets
+   - Demo-specific (depends on Assumptions sheet structure)
+
+5. **`vba/modExecBrief_v2.1.bas`** (447 lines) — Executive Brief Auto-Generator
+   - One-click executive brief scanning 5 sections: Revenue, Reconciliation, Assumptions, Products, Workbook Health
+   - Builds styled report sheet with color-coded status indicators
+
+### 3 New Universal Toolkit Modules
+1. **`UniversalToolsForAllFiles/vba/modUTL_ProgressBar.bas`** — Standalone progress bar using status bar only (no UserForm dependency). ASCII visual bar: `[=========>          ] 45%`
+2. **`UniversalToolsForAllFiles/vba/modUTL_SplashScreen.bas`** — Standalone splash screen using MsgBox only. Customizable title/subtitle.
+3. **`UniversalToolsForAllFiles/vba/modUTL_ExecBrief.bas`** (253 lines) — Scans any workbook: Overview, Sheet Inventory, Data Quality (errors + formulas via SpecialCells), Hidden Sheets. Zero dependencies.
+
+### 5-Pass Bug Review
+**Pass 1 — Known patterns from lessons.md:** Checked LogAction signatures, SpecialCells guards, StyleHeader args, HDR_ROW_REPORT usage. All clean.
+**Pass 2 — VBA-specific issues:** Checked On Error patterns, TurboOn/TurboOff pairing, variable resets. All clean.
+**Pass 3 — Cross-module dependencies:** Verified all 19 modConfig constants referenced by new modules exist. Confirmed universal modules have zero dependencies.
+**Pass 4 — Edge cases:** Checked midnight timer rollover, empty sheet handling, division by zero guards. All clean.
+**Pass 5 — Character encoding linter:** Found `Chr(9472)` in 3 locations — crashes VBA (only handles 0-255). Fixed all to `String(50, "=")`. Also removed unused `SPLASH_BG` and `SPLASH_ACCENT` constants.
+
+### Module Counts (Updated)
+- Demo file VBA modules: **39 total** (34 previous + 5 optional add-ins)
+- Universal Toolkit VBA modules: **14 total** (11 previous + 3 new)
+- Universal Toolkit tools: **~100+ total**
+
+### Re-Import Required (Updated — 18 files)
+Previous 13 files + 5 new:
+14. modTimeSaved_v2.1.bas (NEW)
+15. modSplashScreen_v2.1.bas (NEW)
+16. modProgressBar_v2.1.bas (NEW)
+17. modWhatIf_v2.1.bas (NEW)
+18. modExecBrief_v2.1.bas (NEW)
+
+### Docs Updated
+- CLAUDE.md — Full update: Repo Structure, Sharing Plan, Current Status, Session Summary
+- tasks/lessons.md — Added Chr() range limitation lesson, CLAUDE.md update reminder lesson
+
+---
+
+## Session Summary — 2026-03-07 (Code Review + Bug Fixes + Video Package + CoPilot Guide)
 
 ### What Was Done This Session
 Pre-delivery code review of all 46 live-Excel test pass criteria. Found and fixed 7 bugs across 5 VBA modules. Improved CoPilot Prompt Guide, built video package draft, created sample Excel file for demo.

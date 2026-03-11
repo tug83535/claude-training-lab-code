@@ -203,3 +203,24 @@ This will save us both time — I shouldn't be discovering basic bugs during tes
 - If you need a sheet hidden but still navigable via hyperlinks or drill-down links, use `xlSheetHidden` instead
 - `xlSheetHidden` = hidden from tab bar, visible in Unhide dialog, hyperlinks work
 - Found in modDrillDown: HideGLSheet used xlSheetVeryHidden which broke T8.19 drill link navigation
+
+## VBA Chr() Function Range Limitation (2026-03-11)
+- VBA `Chr()` only handles character codes 0-255 (ASCII/Latin-1 range)
+- Using `Chr(9472)` (box-drawing), `Chr(8212)` (em dash), or any code > 255 crashes with "Invalid procedure call or argument"
+- This is different from Python's `chr()` which handles full Unicode
+- Use ASCII alternatives: `String(50, "=")` instead of `String(50, Chr(9472))`
+- Found in 3 locations on 2026-03-11: modSplashScreen line 85, modUTL_SplashScreen lines 39 and 71
+- Previously found with `Chr(8212)` on 2026-03-04 — same root cause, same fix
+- BEFORE delivering any VBA code, search for `Chr(` and verify all codes are <= 255
+
+## Keep CLAUDE.md Updated Every Session (2026-03-11)
+- CLAUDE.md is the single most important handoff document between sessions and Claude accounts
+- It MUST be updated at the end of EVERY session with:
+  1. Current module/tool counts (demo VBA, universal VBA, Python)
+  2. New session summary with what was built, fixed, or changed
+  3. Updated Repo Structure if folders were added/moved/deleted
+  4. Updated Sharing Plan if module counts changed
+  5. Updated Current Status with latest milestones
+- If CLAUDE.md falls out of date, the next session starts with stale context and wastes time re-discovering what exists
+- Check: Does CLAUDE.md mention today's date? If not, it needs updating
+- Also update tasks/lessons.md with any new patterns discovered during the session
