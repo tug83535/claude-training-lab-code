@@ -105,9 +105,9 @@ All fixes committed and pushed (commit a22dd76).
 - [x] **Guide 4:** `04-Quick-Reference-Card.md` — 1-page cheat sheet: all 62 actions, shortcuts, monthly close workflow, troubleshooting
 - [x] **Guide 5:** `05-Video-Demo-Script-and-Storyboard.md` — 18-22 min script, 3-part shot lists, word-for-word narration, checklists
 - [x] **Guide 6:** `06-Universal-Toolkit-Guide.md` — All 100+ tools (79 VBA + 22 Python), setup, playbooks, top 20
-- [ ] Connor reviews all 6 guides → approves or requests changes
-- [ ] Move approved guides from `FinalRoughGuides/` to `training/`
-- [ ] Convert approved guides to PDF for distribution
+- [x] Connor reviews all 6 guides → approves or requests changes
+- [x] Move approved guides from `FinalRoughGuides/` to `training/`
+- [x] Convert approved guides to PDF for distribution
 
 ### Phase 4: Lock Down the Demo File
 - [ ] Save the final tested workbook as `.xlsm` (macros-enabled)
@@ -116,10 +116,10 @@ All fixes committed and pushed (commit a22dd76).
 - [ ] Copy final `.xlsm` to `CompletePackageStorage/production/`
 - [ ] Copy a dated backup to `CompletePackageStorage/backups/` (e.g., `PL_Model_FINAL_2026-03-10.xlsm`)
 
-### Phase 5: Convert Guides to PDF
-- [ ] Convert coworker training guide to PDF (no .md files for coworkers)
-- [ ] Convert quick-reference card to PDF
-- [ ] Save PDFs in `training/` folder AND `CompletePackageStorage/production/`
+### Phase 5: Convert Guides to PDF — COMPLETE
+- [x] Convert coworker training guide to PDF (no .md files for coworkers)
+- [x] Convert quick-reference card to PDF
+- [x] Save PDFs in `training/` folder AND `CompletePackageStorage/production/`
 
 ### Phase 6: Record the Demo Video
 - [ ] Do a dry run to practice timing and flow
