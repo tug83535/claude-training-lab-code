@@ -361,9 +361,33 @@ Public Sub ReorderTabs()
                           "Reorder Tabs - Step 2 of 2")
     If Len(Trim(dirChoice)) = 0 Then Exit Sub
 
-    '--- Parse selections ---
+    '--- Parse selections and resolve to sheet NAMES (indices shift during moves) ---
     Dim parts() As String
     parts = Split(choice, ",")
+
+    Dim sheetNames() As String
+    ReDim sheetNames(LBound(parts) To UBound(parts))
+    Dim validCount As Long
+    validCount = 0
+
+    Dim p As Long
+    For p = LBound(parts) To UBound(parts)
+        Dim numStr As String
+        numStr = Trim(parts(p))
+        If IsNumeric(numStr) Then
+            Dim idx As Long
+            idx = CLng(numStr)
+            If idx >= 1 And idx <= ThisWorkbook.Sheets.Count Then
+                sheetNames(p) = ThisWorkbook.Sheets(idx).Name
+                validCount = validCount + 1
+            End If
+        End If
+    Next p
+
+    If validCount = 0 Then
+        MsgBox "No valid sheet numbers entered.", vbExclamation, "Reorder Tabs"
+        Exit Sub
+    End If
 
     Dim moved As Long
     moved = 0
@@ -371,31 +395,19 @@ Public Sub ReorderTabs()
     Select Case Trim(dirChoice)
         Case "1"  ' Move to front
             Dim p1 As Long
-            For p1 = UBound(parts) To LBound(parts) Step -1
-                Dim num1 As String
-                num1 = Trim(parts(p1))
-                If IsNumeric(num1) Then
-                    Dim idx1 As Long
-                    idx1 = CLng(num1)
-                    If idx1 >= 1 And idx1 <= ThisWorkbook.Sheets.Count Then
-                        ThisWorkbook.Sheets(idx1).Move Before:=ThisWorkbook.Sheets(1)
-                        moved = moved + 1
-                    End If
+            For p1 = UBound(sheetNames) To LBound(sheetNames) Step -1
+                If Len(sheetNames(p1)) > 0 Then
+                    ThisWorkbook.Sheets(sheetNames(p1)).Move Before:=ThisWorkbook.Sheets(1)
+                    moved = moved + 1
                 End If
             Next p1
 
         Case "2"  ' Move to back
             Dim p2 As Long
-            For p2 = LBound(parts) To UBound(parts)
-                Dim num2 As String
-                num2 = Trim(parts(p2))
-                If IsNumeric(num2) Then
-                    Dim idx2 As Long
-                    idx2 = CLng(num2)
-                    If idx2 >= 1 And idx2 <= ThisWorkbook.Sheets.Count Then
-                        ThisWorkbook.Sheets(idx2).Move After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count)
-                        moved = moved + 1
-                    End If
+            For p2 = LBound(sheetNames) To UBound(sheetNames)
+                If Len(sheetNames(p2)) > 0 Then
+                    ThisWorkbook.Sheets(sheetNames(p2)).Move After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count)
+                    moved = moved + 1
                 End If
             Next p2
 
@@ -406,18 +418,14 @@ Public Sub ReorderTabs()
             Dim afterIdx As Long
             afterIdx = CLng(afterStr)
             If afterIdx < 1 Or afterIdx > ThisWorkbook.Sheets.Count Then Exit Sub
+            Dim afterName As String
+            afterName = ThisWorkbook.Sheets(afterIdx).Name
 
             Dim p3 As Long
-            For p3 = LBound(parts) To UBound(parts)
-                Dim num3 As String
-                num3 = Trim(parts(p3))
-                If IsNumeric(num3) Then
-                    Dim idx3 As Long
-                    idx3 = CLng(num3)
-                    If idx3 >= 1 And idx3 <= ThisWorkbook.Sheets.Count And idx3 <> afterIdx Then
-                        ThisWorkbook.Sheets(idx3).Move After:=ThisWorkbook.Sheets(afterIdx)
-                        moved = moved + 1
-                    End If
+            For p3 = LBound(sheetNames) To UBound(sheetNames)
+                If Len(sheetNames(p3)) > 0 And sheetNames(p3) <> afterName Then
+                    ThisWorkbook.Sheets(sheetNames(p3)).Move After:=ThisWorkbook.Sheets(afterName)
+                    moved = moved + 1
                 End If
             Next p3
 

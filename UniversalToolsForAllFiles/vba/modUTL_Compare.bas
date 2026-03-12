@@ -18,7 +18,7 @@ Option Explicit
 Private Const REPORT_SHEET As String = "UTL_CompareReport"
 Private Const CLR_DIFF As Long = 255        ' Red highlight for differences
 Private Const CLR_MATCH As Long = 5287936   ' Green for matches (RGB 80,200,0)
-Private Const CLR_HDR As Long = 7930635     ' RGB(11,71,121) iPipeline Blue
+Private Const CLR_HDR As Long = 7948043     ' RGB(11,71,121) iPipeline Blue
 
 '==============================================================================
 ' PUBLIC: CompareSheets

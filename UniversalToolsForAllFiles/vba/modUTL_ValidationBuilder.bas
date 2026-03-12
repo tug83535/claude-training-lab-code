@@ -18,7 +18,7 @@ Attribute VB_Name = "modUTL_ValidationBuilder"
 '==============================================================================
 Option Explicit
 
-Private Const CLR_HDR As Long = 7930635   ' RGB(11,71,121)
+Private Const CLR_HDR As Long = 7948043   ' RGB(11,71,121)
 
 '==============================================================================
 ' PUBLIC: CreateDropdownList

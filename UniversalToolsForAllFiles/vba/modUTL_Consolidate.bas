@@ -16,7 +16,7 @@ Attribute VB_Name = "modUTL_Consolidate"
 Option Explicit
 
 Private Const OUTPUT_SHEET As String = "UTL_Consolidated"
-Private Const CLR_HDR As Long = 7930635   ' RGB(11,71,121)
+Private Const CLR_HDR As Long = 7948043   ' RGB(11,71,121)
 
 '==============================================================================
 ' PUBLIC: ConsolidateSheets
@@ -118,6 +118,23 @@ Public Sub ConsolidateSheets()
     Set wsOut = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
     wsOut.Name = OUTPUT_SHEET
 
+    '--- Pre-scan all sheets to find max column width (for consistent source column) ---
+    Dim maxColWidth As Long
+    maxColWidth = 0
+    If addSource Then
+        Dim sc As Long
+        For sc = 1 To selectedCount
+            Dim wsPre As Worksheet
+            Set wsPre = ThisWorkbook.Sheets(selectedSheets(sc))
+            Dim preCol As Long
+            preCol = wsPre.Cells(1, wsPre.Columns.Count).End(xlToLeft).Column
+            If wsPre.UsedRange.Columns.Count + wsPre.UsedRange.Column - 1 > preCol Then
+                preCol = wsPre.UsedRange.Columns.Count + wsPre.UsedRange.Column - 1
+            End If
+            If preCol > maxColWidth Then maxColWidth = preCol
+        Next sc
+    End If
+
     '--- Consolidate data ---
     Dim outRow As Long
     outRow = 1
@@ -160,7 +177,7 @@ Public Sub ConsolidateSheets()
         '--- Add source column ---
         If addSource Then
             Dim srcCol As Long
-            srcCol = srcLastCol + 1
+            srcCol = maxColWidth + 1
 
             ' Header on first sheet
             If s = 1 And hasHeaders Then

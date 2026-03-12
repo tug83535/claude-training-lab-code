@@ -152,6 +152,13 @@ Public Sub HighlightTopBottom()
     n = CLng(nStr)
     If n < 1 Then Exit Sub
 
+    '--- Safety cap: prevent overflow on very large ranges ---
+    If rng.Cells.CountLarge > 500000 Then
+        MsgBox "Selected range has over 500,000 cells. Please select a smaller range.", _
+               vbExclamation, "Highlight Top/Bottom"
+        Exit Sub
+    End If
+
     Application.ScreenUpdating = False
 
     '--- Collect all numeric values ---
@@ -247,6 +254,13 @@ Public Sub HighlightDuplicateValues()
                                     "Highlight Duplicates", Type:=8)
     On Error GoTo ErrHandler
     If rng Is Nothing Then Exit Sub
+
+    '--- Safety cap: prevent slow loop on very large ranges ---
+    If rng.Cells.CountLarge > 500000 Then
+        MsgBox "Selected range has over 500,000 cells. Please select a smaller range.", _
+               vbExclamation, "Highlight Duplicates"
+        Exit Sub
+    End If
 
     Application.ScreenUpdating = False
 
