@@ -30,7 +30,7 @@ Private Const MAX_TOOLS As Long = 200
 Private Const MAX_CUSTOM As Long = 50
 Private Const CUSTOM_SHEET As String = "UTL_CustomTools"
 Private Const INVENTORY_SHEET As String = "UTL_ToolInventory"
-Private Const VERSION_LABEL As String = "Universal Command Center v1.0"
+Private Const VERSION_LABEL As String = "Universal Command Center v1.1"
 
 '--- Tool record type ---------------------------------------------------------
 Private Type ToolRecord
@@ -807,6 +807,100 @@ Private Sub LoadBuiltInTools()
             "Create a clean copy for distribution (values only, no macros)", "Built-in"
     AddTool "Workbook Management", "Workbook Health Check", "modUTL_WorkbookMgmt.WorkbookHealthCheckagentId", _
             "Run a comprehensive health check on the workbook", "Built-in"
+
+    '=== COLUMN OPERATIONS (4 tools) ===
+    AddTool "Column Operations", "Split Column", "modUTL_ColumnOps.SplitColumn", _
+            "Split a column by delimiter into multiple columns", "Built-in"
+    AddTool "Column Operations", "Combine Columns", "modUTL_ColumnOps.CombineColumns", _
+            "Merge multiple columns into one with a separator", "Built-in"
+    AddTool "Column Operations", "Extract Pattern", "modUTL_ColumnOps.ExtractPattern", _
+            "Extract numbers, text before/after delimiter, first/last N chars", "Built-in"
+    AddTool "Column Operations", "Swap Columns", "modUTL_ColumnOps.SwapColumns", _
+            "Swap the contents of two columns", "Built-in"
+
+    '=== COMMENTS (4 tools) ===
+    AddTool "Comments", "Extract All Comments", "modUTL_Comments.ExtractAllComments", _
+            "Export all comments to a summary sheet", "Built-in"
+    AddTool "Comments", "Delete Sheet Comments", "modUTL_Comments.DeleteSheetComments", _
+            "Delete comments from user-selected sheets", "Built-in"
+    AddTool "Comments", "Delete All Comments", "modUTL_Comments.DeleteAllComments", _
+            "Delete all comments in the workbook", "Built-in"
+    AddTool "Comments", "Count Comments", "modUTL_Comments.CountComments", _
+            "Quick count of comments per sheet", "Built-in"
+
+    '=== COMPARISON (3 tools) ===
+    AddTool "Comparison", "Compare Sheets", "modUTL_Compare.CompareSheets", _
+            "Compare two sheets cell-by-cell and highlight differences", "Built-in"
+    AddTool "Comparison", "Compare Ranges", "modUTL_Compare.CompareRanges", _
+            "Compare two selected ranges cell-by-cell", "Built-in"
+    AddTool "Comparison", "Clear Compare Highlights", "modUTL_Compare.ClearCompareHighlights", _
+            "Remove comparison highlighting from sheets", "Built-in"
+
+    '=== CONSOLIDATION (2 tools) ===
+    AddTool "Consolidation", "Consolidate Sheets", "modUTL_Consolidate.ConsolidateSheets", _
+            "Combine selected sheets into one master sheet", "Built-in"
+    AddTool "Consolidation", "Consolidate by Pattern", "modUTL_Consolidate.ConsolidateByPattern", _
+            "Combine sheets matching a keyword pattern", "Built-in"
+
+    '=== HIGHLIGHTS (5 tools) ===
+    AddTool "Highlights", "Highlight by Threshold", "modUTL_Highlights.HighlightByThreshold", _
+            "Highlight cells above/below a value you type", "Built-in"
+    AddTool "Highlights", "Highlight Top/Bottom N", "modUTL_Highlights.HighlightTopBottom", _
+            "Highlight the top N or bottom N values", "Built-in"
+    AddTool "Highlights", "Highlight Duplicate Values", "modUTL_Highlights.HighlightDuplicateValues", _
+            "Highlight cells with duplicate values", "Built-in"
+    AddTool "Highlights", "Apply Color Scale", "modUTL_Highlights.ApplyColorScale", _
+            "Red-Yellow-Green gradient based on values", "Built-in"
+    AddTool "Highlights", "Clear Highlights", "modUTL_Highlights.ClearHighlights", _
+            "Remove highlighting from selection, sheet, or all sheets", "Built-in"
+
+    '=== LOOKUP BUILDER (4 tools) ===
+    AddTool "Lookup Builder", "Build VLOOKUP", "modUTL_LookupBuilder.BuildVLOOKUP", _
+            "Build VLOOKUP formulas step by step", "Built-in"
+    AddTool "Lookup Builder", "Build INDEX-MATCH", "modUTL_LookupBuilder.BuildINDEXMATCH", _
+            "Build INDEX-MATCH formulas (more flexible than VLOOKUP)", "Built-in"
+    AddTool "Lookup Builder", "Match and Pull", "modUTL_LookupBuilder.MatchAndPull", _
+            "Match two lists and pull values across", "Built-in"
+    AddTool "Lookup Builder", "Find Unmatched", "modUTL_LookupBuilder.FindUnmatched", _
+            "Find values in list A that don't exist in list B", "Built-in"
+
+    '=== PIVOT TOOLS (4 tools) ===
+    AddTool "Pivot Tools", "Refresh All Pivots", "modUTL_PivotTools.RefreshAllPivots", _
+            "Refresh every pivot table (skips external connections)", "Built-in"
+    AddTool "Pivot Tools", "Refresh Selected Pivots", "modUTL_PivotTools.RefreshSelectedPivots", _
+            "Pick which pivot tables to refresh", "Built-in"
+    AddTool "Pivot Tools", "List All Pivots", "modUTL_PivotTools.ListAllPivots", _
+            "Build an inventory sheet of all pivot tables", "Built-in"
+    AddTool "Pivot Tools", "Clear Old Pivot Cache", "modUTL_PivotTools.ClearOldPivotCache", _
+            "Report on orphaned pivot caches (file size bloat)", "Built-in"
+
+    '=== TAB ORGANIZER (6 tools) ===
+    AddTool "Tab Organizer", "Color Tabs by Keyword", "modUTL_TabOrganizer.ColorTabsByKeyword", _
+            "Color tabs matching a keyword", "Built-in"
+    AddTool "Tab Organizer", "Color Tabs Interactive", "modUTL_TabOrganizer.ColorTabsInteractive", _
+            "Pick specific sheets and assign a tab color", "Built-in"
+    AddTool "Tab Organizer", "Bulk Hide Sheets", "modUTL_TabOrganizer.BulkHideSheets", _
+            "Hide multiple sheets at once", "Built-in"
+    AddTool "Tab Organizer", "Bulk Unhide Sheets", "modUTL_TabOrganizer.BulkUnhideSheets", _
+            "Unhide multiple sheets at once", "Built-in"
+    AddTool "Tab Organizer", "Reorder Tabs", "modUTL_TabOrganizer.ReorderTabs", _
+            "Move sheets to front, back, or after a specific sheet", "Built-in"
+    AddTool "Tab Organizer", "Bulk Rename Tabs", "modUTL_TabOrganizer.BulkRenameTabs", _
+            "Find/replace text in sheet tab names", "Built-in"
+
+    '=== VALIDATION BUILDER (6 tools) ===
+    AddTool "Validation Builder", "Create Dropdown List", "modUTL_ValidationBuilder.CreateDropdownList", _
+            "Create a dropdown from a range or typed list", "Built-in"
+    AddTool "Validation Builder", "Number Validation", "modUTL_ValidationBuilder.ApplyNumberValidation", _
+            "Restrict cells to numbers (with min/max options)", "Built-in"
+    AddTool "Validation Builder", "Date Validation", "modUTL_ValidationBuilder.ApplyDateValidation", _
+            "Restrict cells to dates (with range options)", "Built-in"
+    AddTool "Validation Builder", "Copy Validation Rules", "modUTL_ValidationBuilder.CopyValidationRules", _
+            "Copy validation from one cell to another range", "Built-in"
+    AddTool "Validation Builder", "Find Validation Violations", "modUTL_ValidationBuilder.FindValidationViolations", _
+            "Find cells that break their validation rules", "Built-in"
+    AddTool "Validation Builder", "Remove All Validation", "modUTL_ValidationBuilder.RemoveAllValidation", _
+            "Remove validation from selection, sheet, or workbook", "Built-in"
 
     '=== COMMAND CENTER SELF (3 tools) ===
     AddTool "Command Center", "Register Custom Tool", "modUTL_CommandCenter.RegisterCustomTool", _
