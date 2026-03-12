@@ -376,7 +376,7 @@ Public Sub AddNamedRanges()
     End If
 
     Dim ws As Worksheet: Set ws = ThisWorkbook.Worksheets(SH_ASSUMPTIONS)
-    Dim lastRow As Long: lastRow = LastRow(ws, 1)
+    Dim lRow As Long: lRow = LastRow(ws, 1)
     Dim products As Variant: products = GetProducts()
 
     Dim created As Long: created = 0
@@ -388,7 +388,7 @@ Public Sub AddNamedRanges()
         ' Search column A for a row containing both the product name and "rev share"
         Dim r As Long
         Dim foundRow As Long: foundRow = 0
-        For r = DATA_ROW_ASSUME To lastRow
+        For r = DATA_ROW_ASSUME To lRow
             Dim cellText As String: cellText = LCase(SafeStr(ws.Cells(r, 1).Value))
             If InStr(cellText, LCase(prodName)) > 0 And _
                (InStr(cellText, "rev share") > 0 Or InStr(cellText, "revenue share") > 0) Then
@@ -399,7 +399,7 @@ Public Sub AddNamedRanges()
 
         ' Fallback: search for just the product name in rev share area (rows 6-19)
         If foundRow = 0 Then
-            For r = DATA_ROW_ASSUME To Application.Min(lastRow, 19)
+            For r = DATA_ROW_ASSUME To Application.Min(lRow, 19)
                 cellText = LCase(SafeStr(ws.Cells(r, 1).Value))
                 If InStr(cellText, LCase(prodName)) > 0 Then
                     foundRow = r
