@@ -1,17 +1,15 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
-## Current Status (2026-03-07, updated)
+## Current Status (2026-03-12, updated)
 - **Branch:** `claude/resume-ipipeline-demo-qKRHn` (active working branch)
-- **VBA Modules:** 34 total (32 demo + modSheetIndex + modDashboardAdvanced) — need re-import
+- **Demo VBA Modules:** 39 total (34 core + 5 optional add-ins) — need re-import (18 files updated)
 - **Python Scripts:** 14 complete and functional (main project) + pnl_forecast.py enhanced with MAPE accuracy
-- **Universal Tools:** ~100 tools built (12 VBA modules + 4 new Python scripts + 4 new VBA NewTools + CreateFoldersFromSelection), code-reviewed, bugs fixed
-- **ProjectRefresh:** Complete — CODE_AUDIT_FINDINGS.md + Code_Audit_Final_Report.md produced, all recommendations implemented
-- **Demo Enhancements (2026-03-05):** Data Quality Letter Grade, Forecast Accuracy (MAPE), YoY Variance Analysis, modDashboard split, modUTL_Core shared utils, backup-before-destructive, SpecialCells performance fixes
-- **Training Guides:** 6 complete guides built in FinalRoughGuides/ (2026-03-05) — ready for Connor's review
-- **CoPilot Prompt Guide:** v2.0 complete in CoPilotPromptGuide/ (2026-03-07) — fixed all broken links, improved formatting
-- **Video Package:** COMPILED_VIDEO_PACKAGE.md drafted in videodraft/ (2026-03-07) — tool counts corrected, sample file built
+- **Universal Toolkit VBA Modules:** 23 total (14 previous + 9 new: modUTL_ColumnOps, modUTL_Compare, modUTL_Consolidate, modUTL_Highlights, modUTL_PivotTools, modUTL_TabOrganizer, modUTL_Comments, modUTL_ValidationBuilder, modUTL_LookupBuilder + modUTL_WhatIf + modUTL_CommandCenter), code-reviewed, 8 bugs fixed
+- **Universal Toolkit Tools:** ~140+ total across 23 VBA modules + Python tools
+- **Training Guides:** 6 guides in training/ (final), 8 guides in training/LastGuidesReview/ (pending review)
+- **CoPilot Prompt Guide:** v2.0 complete + Quick Start Card + VBA Module Reference List added (2026-03-12)
 - **Testing Phase:** T1 COMPLETE, T2 partially done (T2.01–T2.04 PASS, T2.05–T2.07 not yet run), T5.01+T5.02 PASS
-- **Bug Review (2026-03-07):** Pre-delivery code review of all 46 live-Excel tests — 7 bugs found and fixed (6 in commit 6818b01 + 1 T8.19 fix in b132885)
+- **Bug Reviews:** 5-pass review (2026-03-11), pre-delivery review (2026-03-07), universal toolkit review (2026-03-12) — 8 bugs found and fixed in 7 modules
 - **Overall:** Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, Training Guides COMPLETE (draft), ProjectRefresh COMPLETE
 
 ### ⚠ IMPORTANT — RE-IMPORT NEEDED
@@ -53,8 +51,8 @@ A separate Claude session independently built VBA and Python code for this same 
 5. Log all results in qa/TEST_PLAN.md Section 6 (Test Execution Results)
 6. Any new issues found → add to Testing_Issues/TESTING_ISSUES_LOG.md
 
-### Universal Tools — COMPLETE (Track B + Track C + Backlog Item 1)
-~100 tools built (8 modules), code-reviewed, 9 bugs fixed, how-to guide written. 3 new modules added 2026-03-04 (Branding, SheetTools, DataSanitizer). CreateFoldersFromSelection added 2026-03-05 to modUTL_SheetTools (Tool 4). No further action needed until after demo.
+### Universal Tools — COMPLETE (Track B + Track C + Backlog Item 1 + 2026-03-12 Expansion)
+~140+ tools built (23 VBA modules), code-reviewed, all bugs fixed, how-to guide written. 9 new modules added 2026-03-12 (ColumnOps, Compare, Consolidate, Highlights, PivotTools, TabOrganizer, Comments, ValidationBuilder, LookupBuilder). modUTL_WhatIf and modUTL_CommandCenter also added. Bug review agent found 8 bugs across 7 modules — all fixed (commit 63482a4). CoPilot Quick Start Card + VBA Module Reference List added to training/LastGuidesReview/.
 
 **Security note:** Profiles.md contains personal account emails/credentials and should be removed from the repo. Flag this to Connor.
 
@@ -183,7 +181,52 @@ All fixes committed and pushed (commit a22dd76).
 
 ---
 
-## Completed — This Session (2026-03-07)
+## Completed — This Session (2026-03-12)
+
+### 9 New Universal Toolkit Modules Built (commit cc45970)
+- [x] modUTL_ColumnOps.bas — Column insert/delete/move/split/merge/fill/swap (7 tools)
+- [x] modUTL_Compare.bas — Sheet comparison with color-coded diff report (1 tool)
+- [x] modUTL_Consolidate.bas — Multi-sheet data consolidation with source tracking (1 tool)
+- [x] modUTL_Highlights.bas — Conditional highlighting: threshold, top/bottom N, duplicates (3 tools)
+- [x] modUTL_PivotTools.bas — PivotTable creation, refresh all, style, drill-down (4 tools)
+- [x] modUTL_TabOrganizer.bas — Sort/color/group/reorder/rename tabs in bulk (6 tools)
+- [x] modUTL_Comments.bas — Extract/clear/convert comments/notes (3 tools)
+- [x] modUTL_ValidationBuilder.bas — Data validation builder: lists, numbers, dates, custom (5 tools)
+- [x] modUTL_LookupBuilder.bas — VLOOKUP/INDEX-MATCH formula builder with preview (2 tools)
+
+### Universal Toolkit Bug Review — 8 Bugs Fixed (commit 63482a4)
+- [x] CLR_HDR constant wrong (7930635 → 7948043) in 5 modules: Compare, Consolidate, PivotTools, Comments, ValidationBuilder
+- [x] ReorderTabs index shifting bug — resolved indices to sheet names before moving
+- [x] Consolidate source column inconsistency — pre-scan all sheets for max width
+- [x] Highlights safety cap — added 500K cell limit on HighlightTopBottom and HighlightDuplicateValues
+
+### CoPilot Guide Additions (commit 92b6cd3)
+- [x] CoPilot-Quick-Start-Card.md — One-page cheat sheet pointing coworkers to the right prompt
+- [x] VBA-Module-Reference-List.md — All 38 modules + 1 UserForm with descriptions, grouped by category
+
+### Earlier Today (before context compaction)
+- [x] modUTL_WhatIf.bas — Universal What-If scenario tool (commit 0cc3d0e)
+- [x] modUTL_CommandCenter.bas — Universal Command Center for all toolkit tools (commit d063cca)
+- [x] What-If Demo actions 63-65 added to demo Command Center (commit 2c72df8)
+- [x] What-If guides for demo and universal tools (commits 5c367c8, ec203b7)
+- [x] User Training Guide updated to 65 commands (commit 41400cc)
+- [x] Operations Runbook updated (commit 41400cc)
+- [x] TestingPreVid.md standalone testing guide (commit dfadfa3)
+- [x] Demo Excel file renamed to ExcelDemoFile_adv.xlsm (commit 6309434)
+- [x] Compile error fix: local lastRow renamed to lRow in AddNamedRanges (commit 351c9b2)
+- [x] QA docs updated to reflect 39 modules, 5 add-ins, 35 bugs (commit 0359842)
+- [x] Guide review and PDF conversion marked complete (commit 203361c)
+
+---
+
+## Completed — Previous Session (2026-03-11)
+
+### Optional Add-Ins + Universal Expansions + Repo Cleanup
+- See CLAUDE.md session summary for 2026-03-11 for full details
+
+---
+
+## Completed — Previous Session (2026-03-07)
 
 ### File Uploads (2026-03-06)
 - [x] Connor uploaded CoPilot Prompt Guide files (AP_Copilot_PromptGuideHelpV2.docx + .md)

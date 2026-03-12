@@ -32,7 +32,7 @@ employee at the best company in the world.
 - `qa/` — QA tracking, test plans, checklists, and bug logs
 - `tasks/` — session management files, todo.md and lessons.md
 - `DemoVidCode/` — demo file source code (excel/, python/, sql/ grouped together)
-- `UniversalToolsForAllFiles/` — future Excel Add-In package for tools that work on any file (14 VBA modules, ~100+ tools)
+- `UniversalToolsForAllFiles/` — future Excel Add-In package for tools that work on any file (23 VBA modules, ~140+ tools)
 - `LastCallOptionalAddIns/` — folder for future guides related to the 5 optional add-in modules
 - `OldRoughVersions/` — archived folders (includes `_internal/` dev-only folders moved here for cleanup)
 - `CoPilotPromptGuide/` — CoPilot Prompt Guide v2.0 files
@@ -40,7 +40,7 @@ employee at the best company in the world.
 
 ## Sharing Plan
 - **Scenario 1 (Primary — Demo + coworkers):** Share the finished `.xlsm` file directly. All 39 VBA modules (62 Command Center actions + 5 optional add-ins) are inside it. Coworkers open the file and use the Command Center. This is the plan for the CFO/CEO demo and general coworker access.
-- **Scenario 2 (Future backlog):** Package 14 universal tool modules (~100+ tools) into `KBT_UniversalTools.xlam` for coworkers who want to run those tools on their own separate Excel files. Source files staged in `UniversalToolsForAllFiles/`. Do this AFTER the demo.
+- **Scenario 2 (Future backlog):** Package 23 universal tool modules (~140+ tools) into `KBT_UniversalTools.xlam` for coworkers who want to run those tools on their own separate Excel files. Source files staged in `UniversalToolsForAllFiles/`. Do this AFTER the demo.
 
 ## My Audience
 Training docs and guides are written for non-technical Finance & Accounting staff.
@@ -113,28 +113,99 @@ Before delivering ANYTHING ask yourself:
 - All Python scripts complete — 14 scripts, all functional (2026-02-28)
 - 7 new VBA modules added from NewTesting ideas (2026-03-01)
 - 5 optional add-in modules built (2026-03-11): modTimeSaved, modSplashScreen, modProgressBar, modWhatIf, modExecBrief
+- What-If Demo actions 63-65 added to Command Center (2026-03-12)
 - **39 demo VBA modules total** (34 previous + 5 optional add-ins) — need re-import (18 files updated)
-- **14 universal toolkit VBA modules** (11 previous + 3 new: modUTL_ProgressBar, modUTL_SplashScreen, modUTL_ExecBrief)
+- **23 universal toolkit VBA modules** (14 previous + 9 new 2026-03-12: ColumnOps, Compare, Consolidate, Highlights, PivotTools, TabOrganizer, Comments, ValidationBuilder, LookupBuilder + WhatIf + CommandCenter)
+- **~140+ universal toolkit tools total** across 23 VBA modules + Python tools
 - T1 complete (T1.01–T1.08 all PASS), T2 partially tested (T2.01–T2.04 done, T2.05–T2.07 not yet run)
 - T5.01 and T5.02 tested and fixed (ExecDashboard + WaterfallChart)
 - Self-review of all remaining tests completed — 12 additional bugs found and fixed preemptively
 - Python pytest: 99 passed, 15 skipped, 0 failures (T4.04 criteria met)
-- Universal Tools: ~100+ tools built (14 VBA modules + Python tools), code-reviewed, bugs fixed
 - ProjectRefresh COMPLETE — audit done, all recommendations implemented as working code
 - Demo enhancements: Data Quality Letter Grade, Forecast Accuracy MAPE, YoY Variance, modDashboard split, modUTL_Core, backup-before-destructive, SpecialCells perf fixes
-- 6 training guides complete in FinalRoughGuides/ — ready for Connor review
-- CoPilot Prompt Guide v2.0 complete in CoPilotPromptGuide/ (2026-03-07)
+- 6 training guides finalized in training/ + 8 guides pending review in training/LastGuidesReview/
+- CoPilot Prompt Guide v2.0 complete + Quick Start Card + VBA Module Reference List (2026-03-12)
 - Video package draft (COMPILED_VIDEO_PACKAGE.md) + sample file in videodraft/ (2026-03-07)
 - Track B COMPLETE, Track C COMPLETE, Backlog Item 1 COMPLETE, ProjectRefresh COMPLETE, Training Guides COMPLETE (draft)
 - `_internal/` moved to `OldRoughVersions/_internal/` for repo cleanup (2026-03-11)
 - `LastCallOptionalAddIns/` folder created for future add-in guides (2026-03-11)
 - Branch: `claude/resume-ipipeline-demo-qKRHn` (active branch)
+- Bug review (2026-03-12): Universal toolkit review — 8 bugs found and fixed across 7 modules (commit 63482a4)
 - Bug review (2026-03-11): 5-pass review of all new code — 1 bug found (Chr(9472) crash) + unused constants cleanup
 - Bug review (2026-03-07): Pre-delivery code review — 7 bugs found and fixed (6 VBA in commit 6818b01 + T8.19 drill links in b132885)
 - Total LogAction signature bugs found to date: 13
 - Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
-## Session Summary — 2026-03-11 (Latest — Optional Add-Ins + Universal Expansions + Repo Cleanup)
+## Session Summary — 2026-03-12 (Latest — Universal Toolkit Expansion + Bug Review + CoPilot Guides)
+
+### What Was Done This Session
+Massive universal toolkit expansion: built 9 new VBA modules (38 tools), added modUTL_WhatIf and modUTL_CommandCenter, ran bug review agent that found 8 bugs across 7 modules — all fixed. Built CoPilot Quick Start Card and VBA Module Reference List. Updated demo Command Center with What-If actions 63-65. Multiple training guides and QA docs updated.
+
+**Branch:** `claude/resume-ipipeline-demo-qKRHn`
+
+### 9 New Universal Toolkit Modules (commit cc45970)
+1. **modUTL_ColumnOps.bas** — Column insert/delete/move/split/merge/fill/swap (7 tools)
+2. **modUTL_Compare.bas** — Sheet comparison with color-coded diff report
+3. **modUTL_Consolidate.bas** — Multi-sheet data consolidation with source tracking
+4. **modUTL_Highlights.bas** — Conditional highlighting: threshold, top/bottom N, duplicates (3 tools)
+5. **modUTL_PivotTools.bas** — PivotTable creation, refresh all, style, drill-down (4 tools)
+6. **modUTL_TabOrganizer.bas** — Sort/color/group/reorder/rename tabs in bulk (6 tools)
+7. **modUTL_Comments.bas** — Extract/clear/convert comments/notes (3 tools)
+8. **modUTL_ValidationBuilder.bas** — Data validation builder: lists, numbers, dates, custom (5 tools)
+9. **modUTL_LookupBuilder.bas** — VLOOKUP/INDEX-MATCH formula builder with preview (2 tools)
+
+### Additional Modules Built Earlier in Session
+- **modUTL_WhatIf.bas** — Universal What-If scenario tool (commit 0cc3d0e)
+- **modUTL_CommandCenter.bas** — Universal Command Center menu for all toolkit tools (commit d063cca)
+- What-If Demo actions 63-65 added to demo Command Center (commit 2c72df8)
+
+### Bug Review — 8 Bugs Found and Fixed (commit 63482a4)
+Ran automated bug review agent across all 9 new modules. Found 1 CRITICAL, 5 MEDIUM, 2 LOW issues:
+1. **CLR_HDR color constant wrong** (7930635 → 7948043) in 5 modules — green channel 3 instead of 71 (near-black vs iPipeline Blue)
+2. **ReorderTabs index shifting** — sheet indices change during `.Move` operations; fixed by resolving to names first
+3. **Consolidate source column inconsistency** — `srcLastCol + 1` varies per sheet width; fixed with max-width pre-scan
+4. **Highlights overflow risk** — `ReDim vals(1 To rng.Cells.Count)` on large ranges; added 500K cell safety cap
+
+### CoPilot Guide Additions (commit 92b6cd3)
+- **CoPilot-Quick-Start-Card.md** — One-page cheat sheet: 5 scenarios → points to exact prompt section
+- **VBA-Module-Reference-List.md** — All 38 demo modules + frmCommandCenter, grouped by category, with "easiest to adapt" section
+
+### Training & QA Docs Updated
+- User Training Guide updated to 65 commands (commit 41400cc)
+- Operations Runbook updated (commit 41400cc)
+- TestingPreVid.md standalone testing guide added (commit dfadfa3)
+- QA docs updated to reflect 39 modules, 5 add-ins, 35 bugs (commit 0359842)
+- Guide review and PDF conversion marked complete (commit 203361c)
+- What-If guides moved to training/LastGuidesReview/ (commit ec203b7)
+
+### Module Counts (Updated)
+- Demo file VBA modules: **39 total** (34 core + 5 optional add-ins)
+- Universal Toolkit VBA modules: **23 total** (14 previous + 9 new)
+- Universal Toolkit tools: **~140+ total**
+
+### Key Commits (14 total today)
+- 92b6cd3 — CoPilot Quick Start Card + VBA Module Reference List
+- 63482a4 — Fix 8 bugs across 7 universal toolkit modules
+- cc45970 — Add 9 new universal toolkit modules (38 tools)
+- d063cca — Add Universal Command Center
+- 0cc3d0e — Add modUTL_WhatIf
+- 2c72df8 — Add What-If Demo actions 63-65
+- 5c367c8, ec203b7 — What-If guides
+- 41400cc — Update User Training Guide + Operations Runbook
+- dfadfa3 — TestingPreVid.md
+- 6309434 — Rename demo Excel file
+- 351c9b2 — Fix compile error in AddNamedRanges
+- 0359842 — Update QA docs
+- 203361c — Mark guide review complete
+
+### Docs Updated
+- CLAUDE.md — Full update: Repo Structure, Sharing Plan, Current Status, Session Summary
+- tasks/todo.md — Updated current status, added completed work for 2026-03-12
+- tasks/lessons.md — Added 4 new patterns: RGB constant verification, sheet index shifting, consolidation consistency, large range safety caps
+
+---
+
+## Session Summary — 2026-03-11 (Optional Add-Ins + Universal Expansions + Repo Cleanup)
 
 ### What Was Done This Session
 Built 5 "Last Call Optional Add-Ins" from the todo.md backlog, created 3 universal toolkit versions, moved `_internal/` to `OldRoughVersions/` for cleanup, ran 5-pass bug review, and updated all docs.

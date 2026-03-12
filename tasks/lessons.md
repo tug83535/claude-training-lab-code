@@ -213,6 +213,30 @@ This will save us both time — I shouldn't be discovering basic bugs during tes
 - Previously found with `Chr(8212)` on 2026-03-04 — same root cause, same fix
 - BEFORE delivering any VBA code, search for `Chr(` and verify all codes are <= 255
 
+## VBA RGB Color Constant Verification (2026-03-12)
+- VBA `RGB(R,G,B)` computes as `R + G*256 + B*65536` — verify the Long constant matches
+- iPipeline Blue = `RGB(11, 71, 121)` = `11 + 71*256 + 121*65536` = **7,948,043**
+- Found CLR_HDR = 7,930,635 in 5 modules — decodes to RGB(11, **3**, 121), green channel 3 instead of 71 (near-black vs iPipeline Blue)
+- When copy-pasting color constants to new modules, always verify the Long value against the RGB formula
+- Quick check: `7948043 Mod 256 = 11` (R), `(7948043 \ 256) Mod 256 = 71` (G), `7948043 \ 65536 = 121` (B)
+
+## Sheet Index Shifting During .Move Operations (2026-03-12)
+- When reordering sheets by index, each `.Move` call changes the indices of ALL other sheets
+- If user enters indices 5, 3, 7 and you move sheet 5 first, sheets 3 and 7 now have different positions
+- Fix: resolve ALL user-entered indices to sheet **names** first, then `.Move` by name (names don't shift)
+- Same pattern applies to any batch sheet operation using indices: delete, copy, hide
+
+## Consolidation Source Column Consistency (2026-03-12)
+- When consolidating multiple sheets with different column widths, the "Source Sheet" column must be placed consistently
+- If placed at `srcLastCol + 1` per sheet, sheets with fewer columns put the source tag in column 6 while wider sheets put it in column 10 — data misaligns
+- Fix: pre-scan ALL source sheets to find the maximum column width, then use `maxColWidth + 1` for every sheet
+
+## Large Range Safety Caps (2026-03-12)
+- `ReDim vals(1 To rng.Cells.Count)` will overflow if `rng` covers a full-sheet selection (16K+ columns x 1M+ rows)
+- VBA `Long` max is ~2.1 billion but `ReDim` with massive arrays causes out-of-memory crashes
+- Use `rng.Cells.CountLarge` (returns LongLong) for the check, and cap at a reasonable limit (e.g., 500,000 cells)
+- Always add a user-friendly MsgBox explaining the limit rather than silently crashing
+
 ## Keep CLAUDE.md Updated Every Session (2026-03-11)
 - CLAUDE.md is the single most important handoff document between sessions and Claude accounts
 - It MUST be updated at the end of EVERY session with:
