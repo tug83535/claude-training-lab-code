@@ -27,13 +27,13 @@ Option Explicit
 ' VERSION:  2.1.0
 ' CHANGES:  v2.1.0:
 '           + Added GetFormInstallGuide for step-by-step install to Immediate
-'           + Verified all 50 items in ExecuteAction match training reference
+'           + Verified all 65 items in ExecuteAction match training reference
 '           + Version header updated
 '===============================================================================
 
 ' --- Category & Action Data ---
-Private Const CAT_COUNT As Long = 15
-Private Const ACT_COUNT As Long = 62
+Private Const CAT_COUNT As Long = 16
+Private Const ACT_COUNT As Long = 65
 
 '===============================================================================
 ' LaunchCommandCenter - Show UserForm or fall back to InputBox
@@ -137,7 +137,7 @@ Public Sub BuildCommandCenter()
         ' Version Label
         Set ctrl = frm.Controls.Add("Forms.Label.1", "lblVersion")
         With ctrl
-            .Caption = "v" & APP_VERSION & " | " & ThisWorkbook.Worksheets.Count & " sheets | 62 actions"
+            .Caption = "v" & APP_VERSION & " | " & ThisWorkbook.Worksheets.Count & " sheets | 65 actions"
             .Left = 12: .Top = 30: .Width = 350: .Height = 14
             .Font.Size = 8: .Font.Italic = True
             .ForeColor = &H808080
@@ -310,8 +310,8 @@ Private Function GetFormCode() As String
 
     ' --- LoadActions - one line per action, no line continuations ---
     s = s & "Private Sub LoadActions()" & vbCrLf
-    s = s & "    m_ActionCount = 62" & vbCrLf
-    s = s & "    ReDim m_Actions(1 To 62)" & vbCrLf
+    s = s & "    m_ActionCount = 65" & vbCrLf
+    s = s & "    ReDim m_Actions(1 To 65)" & vbCrLf
     s = s & "    AddAction 1, ""Monthly Operations"", ""Generate Monthly Tabs""" & vbCrLf
     s = s & "    AddAction 2, ""Monthly Operations"", ""Delete Generated Tabs""" & vbCrLf
     s = s & "    AddAction 3, ""Monthly Operations"", ""Run Reconciliation Checks""" & vbCrLf
@@ -374,6 +374,9 @@ Private Function GetFormCode() As String
     s = s & "    AddAction 60, ""Sheet Tools"", ""Highlight Hardcoded Numbers""" & vbCrLf
     s = s & "    AddAction 61, ""Sheet Tools"", ""Toggle Presentation Mode""" & vbCrLf
     s = s & "    AddAction 62, ""Sheet Tools"", ""Unmerge and Fill Down""" & vbCrLf
+    s = s & "    AddAction 63, ""What-If Demo"", ""Run What-If Scenario Demo""" & vbCrLf
+    s = s & "    AddAction 64, ""What-If Demo"", ""Custom What-If Analysis""" & vbCrLf
+    s = s & "    AddAction 65, ""What-If Demo"", ""Restore Baseline (Undo What-If)""" & vbCrLf
     s = s & "End Sub" & vbCrLf & vbCrLf
     
     ' --- LoadCategories ---
@@ -384,7 +387,7 @@ Private Function GetFormCode() As String
     s = s & "    cats = Array(""Monthly Operations"", ""Analysis"", ""Data Quality"", _" & vbCrLf
     s = s & "        ""Reporting"", ""Utilities"", ""Data & Import"", ""Forecasting"", _" & vbCrLf
     s = s & "        ""Scenarios"", ""Allocation"", ""Consolidation"", _" & vbCrLf
-    s = s & "        ""Version Control"", ""Governance"", ""Admin & Testing"", ""Advanced"", ""Sheet Tools"")" & vbCrLf
+    s = s & "        ""Version Control"", ""Governance"", ""Admin & Testing"", ""Advanced"", ""Sheet Tools"", ""What-If Demo"")" & vbCrLf
     s = s & "    Dim c As Variant" & vbCrLf
     s = s & "    For Each c In cats" & vbCrLf
     s = s & "        lstCategories.AddItem CStr(c)" & vbCrLf
@@ -412,7 +415,7 @@ Private Function GetFormCode() As String
     s = s & "    End If" & vbCrLf
     s = s & "    Dim srch As String: srch = LCase(Trim(txtSearch.Text))" & vbCrLf
     s = s & "    Dim cnt As Long: cnt = 0" & vbCrLf
-    s = s & "    ReDim m_FilteredNums(1 To 62)" & vbCrLf
+    s = s & "    ReDim m_FilteredNums(1 To 65)" & vbCrLf
     s = s & "    Dim i As Long" & vbCrLf
     s = s & "    For i = 1 To m_ActionCount" & vbCrLf
     s = s & "        Dim catMatch As Boolean" & vbCrLf
@@ -485,7 +488,7 @@ End Function
 
 '===============================================================================
 ' ExecuteAction - Central router (called by form, same as modMasterMenu)
-' ALL 50 ITEMS — single routing table. modMasterMenu delegates here.
+' ALL 65 ITEMS — single routing table. modMasterMenu delegates here.
 '===============================================================================
 Public Sub ExecuteAction(ByVal num As Long)
     On Error GoTo ErrHandler
@@ -583,6 +586,11 @@ Public Sub ExecuteAction(ByVal num As Long)
         Case 61: modUtilities.TogglePresentationMode
         Case 62: modUtilities.UnmergeAndFillDown
 
+        ' --- What-If Demo (63-65) ---
+        Case 63: modWhatIf.RunWhatIfDemo
+        Case 64: modWhatIf.QuickWhatIf
+        Case 65: modWhatIf.RestoreBaseline
+
         Case Else
             MsgBox "Unknown action #" & num, vbExclamation, APP_NAME
     End Select
@@ -599,7 +607,7 @@ End Sub
 Private Sub ShowAbout()
     MsgBox "KEYSTONE BENEFITECH AUTOMATION TOOLKIT" & vbCrLf & _
            "Version " & APP_VERSION & " | Build " & APP_BUILD_DATE & vbCrLf & vbCrLf & _
-           "30 VBA modules | 62 menu options" & vbCrLf & _
+           "39 VBA modules | 65 menu options" & vbCrLf & _
            "Built for: Keystone BenefitTech, Inc." & vbCrLf & _
            "Model: P&L Reporting & Allocation" & vbCrLf & vbCrLf & _
            "UserForm Command Center (BUG-038 resolved)" & vbCrLf & _
@@ -708,7 +716,7 @@ Public Sub GetFormInstallGuide()
     g = g & "Step 4: Verify" & vbCrLf
     g = g & "  - Save the workbook (Ctrl+S)" & vbCrLf
     g = g & "  - Press Ctrl+Shift+M from any sheet" & vbCrLf
-    g = g & "  - Command Center should open with 62 actions" & vbCrLf
+    g = g & "  - Command Center should open with 65 actions" & vbCrLf
     g = g & "  - Try clicking categories, searching, running an action" & vbCrLf & vbCrLf
     
     g = g & String(70, "=") & vbCrLf
