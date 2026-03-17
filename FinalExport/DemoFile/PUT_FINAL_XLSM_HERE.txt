@@ -1,0 +1,6 @@
+After you complete the final re-import of all 39 VBA modules into Excel:
+
+1. Save the file as ExcelDemoFile_adv.xlsm
+2. Drop it into this folder
+3. This is the file that goes on SharePoint for coworkers
+4. This is the file you open when recording the demo video

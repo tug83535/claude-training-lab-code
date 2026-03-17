@@ -1,0 +1,241 @@
+Option Explicit
+
+'===============================================================================
+' frmCommandCenter - UserForm Code-Behind
+' Keystone BenefitTech, Inc. - P&L Reporting & Allocation Model
+'===============================================================================
+' PURPOSE:  Code module for the frmCommandCenter UserForm.
+'           This file is for Mode B (manual install). Paste this entire file
+'           into the form's code module after creating the form and controls
+'           per the instructions in modFormBuilder.GetFormInstallGuide.
+'
+' CONTROLS REQUIRED (must exist on the form with these exact names):
+'   lblTitle        - Label, top title
+'   lblVersion      - Label, version info
+'   txtSearch       - TextBox, search filter
+'   lstCategories   - ListBox, category list (left panel)
+'   lstActions      - ListBox, action list (right panel, 2 columns)
+'   btnRun          - CommandButton, "Run Selected"
+'   btnRunClose     - CommandButton, "Run & Close"
+'   btnClose        - CommandButton, "Close" (Cancel = True)
+'   lblStatus       - Label, status bar at bottom
+'
+' VERSION:  2.1.0
+'===============================================================================
+
+Private Type ActionEntry
+    Num As Long
+    Category As String
+    Label As String
+End Type
+
+Private m_Actions() As ActionEntry
+Private m_FilteredNums() As Long
+Private m_ActionCount As Long
+
+'===============================================================================
+' UserForm_Initialize - Load data and populate controls on form open
+'===============================================================================
+Private Sub UserForm_Initialize()
+    LoadActions
+    LoadCategories
+    lstCategories.ListIndex = 0
+End Sub
+
+'===============================================================================
+' LoadActions - Define all 62 actions (category + label pairs)
+'===============================================================================
+Private Sub LoadActions()
+    m_ActionCount = 62
+    ReDim m_Actions(1 To 62)
+    Dim i As Long
+    Dim d As Variant
+    d = Array( _
+        "Monthly Operations", "Generate Monthly Tabs", _
+        "Monthly Operations", "Delete Generated Tabs", _
+        "Monthly Operations", "Run Reconciliation Checks", _
+        "Monthly Operations", "Export Reconciliation Report", _
+        "Analysis", "Run Sensitivity Analysis", _
+        "Analysis", "Run Variance Analysis", _
+        "Data Quality", "Scan for Data Quality Issues", _
+        "Data Quality", "Fix Text-Stored Numbers", _
+        "Data Quality", "Fix Duplicate Rows", _
+        "Reporting", "Export Report Package (PDF)", _
+        "Reporting", "Export Active Sheet (PDF)", _
+        "Reporting", "Build Dashboard Charts", _
+        "Utilities", "Refresh Table of Contents", _
+        "Utilities", "Recalculate AWS Allocations", _
+        "Utilities", "Quick Jump to Sheet", _
+        "Utilities", "Go Home (Report-->)", _
+        "Data & Import", "Import GL Data Pipeline", _
+        "Forecasting", "Rolling Forecast", _
+        "Forecasting", "Append Month to Trend", _
+        "Scenarios", "Save Current Scenario", _
+        "Scenarios", "Load Scenario", _
+        "Scenarios", "Compare Scenarios", _
+        "Scenarios", "Delete Scenario", _
+        "Allocation", "Run Allocation Engine", _
+        "Allocation", "Allocation Scenario Preview", _
+        "Consolidation", "Consolidation Menu", _
+        "Consolidation", "Add Entity File", _
+        "Consolidation", "Generate Consolidated P&L", _
+        "Consolidation", "View Loaded Entities", _
+        "Consolidation", "Add Elimination Entry", _
+        "Version Control", "Version Control Menu", _
+        "Version Control", "Save Version", _
+        "Version Control", "Compare Versions", _
+        "Version Control", "Restore Version", _
+        "Version Control", "List Versions", _
+        "Governance", "Auto-Documentation", _
+        "Governance", "Change Management Menu", _
+        "Governance", "Add Change Request", _
+        "Governance", "Update CR Status", _
+        "Governance", "CR Summary Report", _
+        "Admin & Testing", "View Audit Log", _
+        "Admin & Testing", "Export Audit Log", _
+        "Admin & Testing", "Clear Audit Log", _
+        "Admin & Testing", "Full Integration Test", _
+        "Admin & Testing", "Quick Health Check", _
+        "Advanced", "Variance Commentary", _
+        "Advanced", "Cross-Sheet Validation", _
+        "Advanced", "Executive Mode Toggle", _
+        "Advanced", "Force Recalculate All", _
+        "Advanced", "About This Toolkit", _
+        "Sheet Tools", "Delete Blank Rows", _
+        "Sheet Tools", "Unhide All Sheets", _
+        "Sheet Tools", "Sort Sheets Alphabetically", _
+        "Sheet Tools", "Toggle Freeze Panes", _
+        "Sheet Tools", "Convert Selection to Values", _
+        "Sheet Tools", "AutoFit All Columns", _
+        "Sheet Tools", "Protect All Sheets", _
+        "Sheet Tools", "Unprotect All Sheets", _
+        "Sheet Tools", "Find & Replace All Sheets", _
+        "Sheet Tools", "Highlight Hardcoded Numbers", _
+        "Sheet Tools", "Toggle Presentation Mode", _
+        "Sheet Tools", "Unmerge and Fill Down")
+    For i = 1 To 62
+        m_Actions(i).Num = i
+        m_Actions(i).Category = d((i - 1) * 2)
+        m_Actions(i).Label = d((i - 1) * 2 + 1)
+    Next i
+End Sub
+
+'===============================================================================
+' LoadCategories - Populate the category list (left panel)
+'===============================================================================
+Private Sub LoadCategories()
+    lstCategories.Clear
+    lstCategories.AddItem "All Actions"
+    Dim cats As Variant
+    cats = Array("Monthly Operations", "Analysis", "Data Quality", _
+        "Reporting", "Utilities", "Data & Import", "Forecasting", _
+        "Scenarios", "Allocation", "Consolidation", _
+        "Version Control", "Governance", "Admin & Testing", "Advanced", _
+        "Sheet Tools")
+    Dim c As Variant
+    For Each c In cats
+        lstCategories.AddItem CStr(c)
+    Next c
+End Sub
+
+'===============================================================================
+' Event Handlers - Category selection and search trigger filtering
+'===============================================================================
+Private Sub lstCategories_Click()
+    FilterActions
+End Sub
+
+Private Sub txtSearch_Change()
+    FilterActions
+End Sub
+
+'===============================================================================
+' FilterActions - Apply category + search text filters to action list
+'===============================================================================
+Private Sub FilterActions()
+    lstActions.Clear
+    Dim selCat As String
+    If lstCategories.ListIndex >= 0 Then
+        selCat = lstCategories.List(lstCategories.ListIndex)
+    Else
+        selCat = "All Actions"
+    End If
+    Dim srch As String: srch = LCase(Trim(txtSearch.Text))
+    Dim cnt As Long: cnt = 0
+    ReDim m_FilteredNums(1 To 62)
+    Dim i As Long
+    For i = 1 To m_ActionCount
+        Dim catMatch As Boolean
+        catMatch = (selCat = "All Actions") Or (m_Actions(i).Category = selCat)
+        Dim srchMatch As Boolean
+        srchMatch = (srch = "") Or _
+            (InStr(1, LCase(m_Actions(i).Label), srch) > 0) Or _
+            (InStr(1, LCase(m_Actions(i).Category), srch) > 0)
+        If catMatch And srchMatch Then
+            cnt = cnt + 1
+            m_FilteredNums(cnt) = m_Actions(i).Num
+            lstActions.AddItem m_Actions(i).Num
+            lstActions.List(lstActions.ListCount - 1, 1) = m_Actions(i).Label
+        End If
+    Next i
+    lblStatus.Caption = cnt & " actions shown"
+    If cnt > 0 Then lstActions.ListIndex = 0
+End Sub
+
+'===============================================================================
+' Double-click an action to run it immediately
+'===============================================================================
+Private Sub lstActions_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+    RunSelected
+End Sub
+
+'===============================================================================
+' Button Handlers
+'===============================================================================
+Private Sub btnRun_Click()
+    RunSelected
+End Sub
+
+Private Sub btnRunClose_Click()
+    Dim actNum As Long: actNum = GetSelectedNum()
+    If actNum = 0 Then Exit Sub
+    Me.Hide
+    modFormBuilder.ExecuteAction actNum
+    Unload Me
+End Sub
+
+Private Sub btnClose_Click()
+    Unload Me
+End Sub
+
+'===============================================================================
+' RunSelected - Execute the currently highlighted action, then return to form
+'===============================================================================
+Private Sub RunSelected()
+    Dim actNum As Long: actNum = GetSelectedNum()
+    If actNum = 0 Then Exit Sub
+    lblStatus.Caption = "Running #" & actNum & "..."
+    Me.Hide
+    modFormBuilder.ExecuteAction actNum
+    Me.Show
+    lblStatus.Caption = "Last run: #" & actNum & " - Done"
+End Sub
+
+'===============================================================================
+' GetSelectedNum - Return the action number of the selected list item
+'===============================================================================
+Private Function GetSelectedNum() As Long
+    GetSelectedNum = 0
+    If lstActions.ListIndex < 0 Then
+        MsgBox "Select an action first.", vbExclamation
+        Exit Function
+    End If
+    GetSelectedNum = CLng(lstActions.List(lstActions.ListIndex, 0))
+End Function
+
+'===============================================================================
+' Escape key / X button closes the form
+'===============================================================================
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = 0 Then Unload Me
+End Sub
