@@ -16,6 +16,7 @@ plotly>=5.15.0
 # Forecasting (pnl_forecast.py)
 statsmodels>=0.14.0
 scikit-learn>=1.2.0
+scipy>=1.10.0
 
 # AP Matching (pnl_ap_matcher.py)
 thefuzz>=0.20.0
