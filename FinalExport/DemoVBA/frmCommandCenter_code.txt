@@ -43,11 +43,11 @@ Private Sub UserForm_Initialize()
 End Sub
 
 '===============================================================================
-' LoadActions - Define all 62 actions (category + label pairs)
+' LoadActions - Define all 65 actions (category + label pairs)
 '===============================================================================
 Private Sub LoadActions()
-    m_ActionCount = 62
-    ReDim m_Actions(1 To 62)
+    m_ActionCount = 65
+    ReDim m_Actions(1 To 65)
     Dim i As Long
     Dim d As Variant
     d = Array( _
@@ -112,8 +112,11 @@ Private Sub LoadActions()
         "Sheet Tools", "Find & Replace All Sheets", _
         "Sheet Tools", "Highlight Hardcoded Numbers", _
         "Sheet Tools", "Toggle Presentation Mode", _
-        "Sheet Tools", "Unmerge and Fill Down")
-    For i = 1 To 62
+        "Sheet Tools", "Unmerge and Fill Down", _
+        "What-If Demo", "Run What-If Scenario Demo", _
+        "What-If Demo", "Custom What-If Analysis", _
+        "What-If Demo", "Restore Baseline (Undo What-If)")
+    For i = 1 To 65
         m_Actions(i).Num = i
         m_Actions(i).Category = d((i - 1) * 2)
         m_Actions(i).Label = d((i - 1) * 2 + 1)
@@ -131,7 +134,7 @@ Private Sub LoadCategories()
         "Reporting", "Utilities", "Data & Import", "Forecasting", _
         "Scenarios", "Allocation", "Consolidation", _
         "Version Control", "Governance", "Admin & Testing", "Advanced", _
-        "Sheet Tools")
+        "Sheet Tools", "What-If Demo")
     Dim c As Variant
     For Each c In cats
         lstCategories.AddItem CStr(c)
@@ -162,7 +165,7 @@ Private Sub FilterActions()
     End If
     Dim srch As String: srch = LCase(Trim(txtSearch.Text))
     Dim cnt As Long: cnt = 0
-    ReDim m_FilteredNums(1 To 62)
+    ReDim m_FilteredNums(1 To 65)
     Dim i As Long
     For i = 1 To m_ActionCount
         Dim catMatch As Boolean
