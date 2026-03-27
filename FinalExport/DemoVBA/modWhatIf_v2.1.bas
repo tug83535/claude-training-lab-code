@@ -13,11 +13,13 @@ Option Explicit
 '
 ' PUBLIC SUBS:
 '   RunWhatIfDemo        - Show menu of preset scenarios and run the selected one
+'   RunWhatIfPreset      - Director-friendly: run a preset by number, no InputBox
 '   QuickWhatIf          - Custom what-if: user picks a driver and % change
 '   RestoreBaseline      - Restore original Assumptions values saved before what-if
+'   RestoreBaselineSilent - Director-friendly: restore baseline, no confirmation dialog
 '
 ' DEPENDENCIES: modConfig, modPerformance, modLogger
-' VERSION:  2.1.0
+' VERSION:  2.1.1
 '===============================================================================
 
 Private Const SH_WHATIF As String = "What-If Impact"
@@ -72,6 +74,92 @@ ErrHandler:
     modPerformance.TurboOff
     modLogger.LogAction "modWhatIf", "ERROR", Err.Description
     MsgBox "What-If error: " & Err.Description, vbCritical, APP_NAME
+End Sub
+
+'===============================================================================
+' RunWhatIfPreset - Run a preset scenario by number, no InputBox.
+' Called by modDirector for unattended video recording.
+' Valid presets: 1-7 (same as the RunWhatIfDemo menu).
+'===============================================================================
+Public Sub RunWhatIfPreset(ByVal presetNum As Long)
+    On Error GoTo ErrHandler
+
+    If Not modConfig.SheetExists(SH_ASSUMPTIONS) Then
+        Debug.Print "[modWhatIf] RunWhatIfPreset: Assumptions sheet not found."
+        Exit Sub
+    End If
+
+    Select Case presetNum
+        Case 1: ApplyPresetScenario "Revenue Drops 15%", "rev", -0.15
+        Case 2: ApplyPresetScenario "Revenue Increases 10%", "rev", 0.1
+        Case 3: ApplyPresetScenario "AWS Costs Increase 25%", "aws", 0.25
+        Case 4: ApplyPresetScenario "Headcount Grows 20%", "head", 0.2
+        Case 5: ApplyPresetScenario "All Expenses Cut 10%", "expense", -0.1
+        Case 6: ApplyComboScenario "Best Case", "rev", 0.15, "expense", -0.05
+        Case 7: ApplyComboScenario "Worst Case", "rev", -0.2, "expense", 0.15
+        Case Else
+            Debug.Print "[modWhatIf] RunWhatIfPreset: Invalid preset number: " & presetNum
+    End Select
+    Exit Sub
+
+ErrHandler:
+    modPerformance.TurboOff
+    Debug.Print "[modWhatIf] RunWhatIfPreset ERROR: " & Err.Description
+End Sub
+
+'===============================================================================
+' RestoreBaselineSilent - Restore baseline without confirmation dialog.
+' Called by modDirector for unattended video recording.
+' Same logic as RestoreBaseline minus the MsgBox prompts.
+'===============================================================================
+Public Sub RestoreBaselineSilent()
+    On Error GoTo ErrHandler
+
+    If Not modConfig.SheetExists(SH_BASELINE) Then
+        Debug.Print "[modWhatIf] RestoreBaselineSilent: No baseline found."
+        Exit Sub
+    End If
+
+    modPerformance.TurboOn
+    modPerformance.UpdateStatus "Restoring baseline...", 0.3
+
+    Dim wsA As Worksheet: Set wsA = ThisWorkbook.Worksheets(SH_ASSUMPTIONS)
+    Dim wsBL As Worksheet: Set wsBL = ThisWorkbook.Worksheets(SH_BASELINE)
+    Dim lastRow As Long: lastRow = modConfig.LastRow(wsBL, 1)
+
+    Dim restored As Long: restored = 0
+    Dim r As Long
+    For r = 1 To lastRow
+        Dim blDriver As String: blDriver = Trim(CStr(wsBL.Cells(r, 1).Value))
+        If blDriver <> "" Then
+            Dim ar As Long
+            For ar = DATA_ROW_ASSUME To modConfig.LastRow(wsA, 1)
+                If LCase(Trim(CStr(wsA.Cells(ar, 1).Value))) = LCase(blDriver) Then
+                    wsA.Cells(ar, 2).Value = wsBL.Cells(r, 2).Value
+                    restored = restored + 1
+                    Exit For
+                End If
+            Next ar
+        End If
+    Next r
+
+    ' Clean up
+    modConfig.SafeDeleteSheet SH_BASELINE
+    modConfig.SafeDeleteSheet SH_WHATIF
+
+    Application.Calculate
+    DoEvents
+
+    modPerformance.TurboOff
+    wsA.Activate
+
+    modLogger.LogAction "modWhatIf", "RestoreBaselineSilent", restored & " drivers restored"
+    Debug.Print "[modWhatIf] Baseline restored silently: " & restored & " drivers"
+    Exit Sub
+
+ErrHandler:
+    modPerformance.TurboOff
+    Debug.Print "[modWhatIf] RestoreBaselineSilent ERROR: " & Err.Description
 End Sub
 
 '===============================================================================
