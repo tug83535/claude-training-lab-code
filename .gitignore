@@ -65,3 +65,15 @@ build/
 # OS-Generated Files
 # ------------------------------------------------------------
 .directory
+
+# ------------------------------------------------------------
+# Video / Audio Media Files (too large for git)
+# Folder structure is preserved via .gitkeep files.
+# ------------------------------------------------------------
+*.mp3
+*.mp4
+*.wav
+*.mov
+*.avi
+*.mkv
+*.m4a

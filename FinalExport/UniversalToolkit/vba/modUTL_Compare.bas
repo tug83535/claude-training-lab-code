@@ -526,3 +526,118 @@ Private Sub BuildCompareReport(ByVal name1 As String, ByVal name2 As String, _
     ws.Activate
     ws.Range("A1").Select
 End Sub
+
+'==============================================================================
+' DIRECTOR WRAPPERS — Silent subs for video automation (no dialogs)
+'==============================================================================
+
+'==============================================================================
+' DirectorCompareSheets
+' Compares two sheets by name, creates diff report with color-coded differences.
+' No InputBox/MsgBox. Highlights differences in red on both sheets.
+'==============================================================================
+Public Sub DirectorCompareSheets(sheet1Name As String, sheet2Name As String)
+    On Error Resume Next
+
+    If Len(sheet1Name) = 0 Or Len(sheet2Name) = 0 Then
+        Debug.Print "[Director] CompareSheets: Both sheet names required."
+        Exit Sub
+    End If
+    If sheet1Name = sheet2Name Then
+        Debug.Print "[Director] CompareSheets: Cannot compare a sheet to itself."
+        Exit Sub
+    End If
+
+    Dim ws1 As Worksheet, ws2 As Worksheet
+    Set ws1 = ThisWorkbook.Sheets(sheet1Name)
+    Set ws2 = ThisWorkbook.Sheets(sheet2Name)
+
+    If ws1 Is Nothing Then
+        Debug.Print "[Director] CompareSheets: Sheet '" & sheet1Name & "' not found."
+        Exit Sub
+    End If
+    If ws2 Is Nothing Then
+        Debug.Print "[Director] CompareSheets: Sheet '" & sheet2Name & "' not found."
+        Exit Sub
+    End If
+
+    Application.ScreenUpdating = False
+    Application.StatusBar = "Comparing sheets..."
+
+    ' Determine comparison range
+    Dim maxRow As Long, maxCol As Long
+    Dim lastRow1 As Long, lastRow2 As Long
+    Dim lastCol1 As Long, lastCol2 As Long
+
+    lastRow1 = ws1.Cells(ws1.Rows.Count, 1).End(xlUp).Row
+    lastRow2 = ws2.Cells(ws2.Rows.Count, 1).End(xlUp).Row
+    lastCol1 = ws1.Cells(1, ws1.Columns.Count).End(xlToLeft).Column
+    lastCol2 = ws2.Cells(1, ws2.Columns.Count).End(xlToLeft).Column
+
+    If ws1.UsedRange.Rows.Count + ws1.UsedRange.Row - 1 > lastRow1 Then
+        lastRow1 = ws1.UsedRange.Rows.Count + ws1.UsedRange.Row - 1
+    End If
+    If ws2.UsedRange.Rows.Count + ws2.UsedRange.Row - 1 > lastRow2 Then
+        lastRow2 = ws2.UsedRange.Rows.Count + ws2.UsedRange.Row - 1
+    End If
+    If ws1.UsedRange.Columns.Count + ws1.UsedRange.Column - 1 > lastCol1 Then
+        lastCol1 = ws1.UsedRange.Columns.Count + ws1.UsedRange.Column - 1
+    End If
+    If ws2.UsedRange.Columns.Count + ws2.UsedRange.Column - 1 > lastCol2 Then
+        lastCol2 = ws2.UsedRange.Columns.Count + ws2.UsedRange.Column - 1
+    End If
+
+    If lastRow1 > lastRow2 Then maxRow = lastRow1 Else maxRow = lastRow2
+    If lastCol1 > lastCol2 Then maxCol = lastCol1 Else maxCol = lastCol2
+
+    ' Safety cap
+    If maxRow > 10000 Then maxRow = 10000
+    If maxCol > 256 Then maxCol = 256
+
+    ' Compare cell by cell
+    Dim diffCount As Long, matchCount As Long, totalCells As Long
+    diffCount = 0
+    matchCount = 0
+    totalCells = maxRow * maxCol
+
+    Dim diffCells() As String, diffVal1() As String, diffVal2() As String
+    ReDim diffCells(1 To 5000)
+    ReDim diffVal1(1 To 5000)
+    ReDim diffVal2(1 To 5000)
+
+    Dim r As Long, c As Long
+    For r = 1 To maxRow
+        If r Mod 500 = 0 Then
+            Application.StatusBar = "Comparing row " & r & " of " & maxRow & "..."
+        End If
+        For c = 1 To maxCol
+            Dim v1 As Variant, v2 As Variant
+            v1 = ws1.Cells(r, c).Value
+            v2 = ws2.Cells(r, c).Value
+
+            If Not CellsMatch(v1, v2) Then
+                diffCount = diffCount + 1
+                If diffCount <= 5000 Then
+                    diffCells(diffCount) = ws1.Cells(r, c).Address(False, False)
+                    diffVal1(diffCount) = Left(CStr(Nz(v1, "")), 100)
+                    diffVal2(diffCount) = Left(CStr(Nz(v2, "")), 100)
+                End If
+                ' Highlight differences in red on both sheets
+                ws1.Cells(r, c).Interior.Color = CLR_DIFF
+                ws2.Cells(r, c).Interior.Color = CLR_DIFF
+            Else
+                matchCount = matchCount + 1
+            End If
+        Next c
+    Next r
+
+    ' Build report
+    BuildCompareReport ws1.Name, ws2.Name, diffCount, matchCount, totalCells, _
+                       diffCells, diffVal1, diffVal2
+
+    Application.StatusBar = False
+    Application.ScreenUpdating = True
+
+    Debug.Print "[Director] CompareSheets: '" & sheet1Name & "' vs '" & sheet2Name & "' — " & _
+                diffCount & " difference(s) found out of " & totalCells & " cells."
+End Sub

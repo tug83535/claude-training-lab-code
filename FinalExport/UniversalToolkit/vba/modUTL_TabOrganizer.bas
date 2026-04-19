@@ -522,3 +522,79 @@ Public Sub BulkRenameTabs()
 ErrHandler:
     MsgBox "Error " & Err.Number & ": " & Err.Description, vbCritical, "Bulk Rename Tabs"
 End Sub
+
+'==============================================================================
+' DIRECTOR WRAPPERS — Silent subs for video automation (no dialogs)
+'==============================================================================
+
+'==============================================================================
+' DirectorColorTabsByKeyword
+' Colors all tabs whose name contains the keyword. No InputBox/MsgBox.
+' Hardcoded: keyword="Revenue", color=blue RGB(0,112,192).
+'==============================================================================
+Public Sub DirectorColorTabsByKeyword()
+    On Error Resume Next
+
+    Dim keyword As String
+    keyword = "Revenue"
+
+    Dim tabColor As Long
+    tabColor = RGB(0, 112, 192)   ' Blue
+
+    Dim count As Long
+    count = 0
+
+    Dim ws As Worksheet
+    For Each ws In ThisWorkbook.Worksheets
+        If InStr(1, ws.Name, keyword, vbTextCompare) > 0 Then
+            ws.Tab.Color = tabColor
+            count = count + 1
+        End If
+    Next ws
+
+    Debug.Print "[Director] ColorTabsByKeyword: " & count & " tab(s) matching '" & keyword & "' colored blue."
+End Sub
+
+'==============================================================================
+' DirectorReorderTabs
+' Sorts all worksheet tabs alphabetically (A-Z). No dialogs.
+'==============================================================================
+Public Sub DirectorReorderTabs()
+    On Error Resume Next
+
+    Dim sheetCount As Long
+    sheetCount = ThisWorkbook.Worksheets.Count
+
+    If sheetCount < 2 Then
+        Debug.Print "[Director] ReorderTabs: Only 1 sheet, nothing to sort."
+        Exit Sub
+    End If
+
+    ' Collect all sheet names
+    Dim names() As String
+    ReDim names(1 To sheetCount)
+    Dim i As Long
+    For i = 1 To sheetCount
+        names(i) = ThisWorkbook.Worksheets(i).Name
+    Next i
+
+    ' Bubble sort names alphabetically
+    Dim j As Long
+    Dim tmp As String
+    For i = 1 To sheetCount - 1
+        For j = i + 1 To sheetCount
+            If StrComp(names(i), names(j), vbTextCompare) > 0 Then
+                tmp = names(i)
+                names(i) = names(j)
+                names(j) = tmp
+            End If
+        Next j
+    Next i
+
+    ' Move sheets into sorted order
+    For i = 1 To sheetCount
+        ThisWorkbook.Worksheets(names(i)).Move Before:=ThisWorkbook.Worksheets(i)
+    Next i
+
+    Debug.Print "[Director] ReorderTabs: " & sheetCount & " tabs sorted alphabetically."
+End Sub

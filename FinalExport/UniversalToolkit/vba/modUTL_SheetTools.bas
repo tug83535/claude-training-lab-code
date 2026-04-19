@@ -537,3 +537,156 @@ NextCell:
 
     MsgBox summary, vbInformation, "UTL — Create Folders"
 End Sub
+
+'==============================================================================
+' DIRECTOR WRAPPERS — Silent subs for video automation (no dialogs)
+'==============================================================================
+
+'==============================================================================
+' DirectorTemplateCloner
+' Clones the named sheet N times. No InputBox/MsgBox.
+'==============================================================================
+Public Sub DirectorTemplateCloner(sheetName As String, copies As Long)
+    On Error Resume Next
+
+    If Len(sheetName) = 0 Then
+        Debug.Print "[Director] TemplateCloner: No sheet name provided."
+        Exit Sub
+    End If
+    If copies < 1 Or copies > 50 Then
+        Debug.Print "[Director] TemplateCloner: copies must be 1-50."
+        Exit Sub
+    End If
+
+    Dim sourceWS As Worksheet
+    Set sourceWS = ActiveWorkbook.Worksheets(sheetName)
+    If sourceWS Is Nothing Then
+        Debug.Print "[Director] TemplateCloner: Sheet '" & sheetName & "' not found."
+        Exit Sub
+    End If
+
+    UTL_TurboOn
+
+    Dim baseName As String
+    baseName = sourceWS.Name
+
+    Dim i As Long
+    Dim createdCount As Long
+    For i = 1 To copies
+        sourceWS.Copy After:=ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.Count)
+
+        Dim newWS As Worksheet
+        Set newWS = ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.Count)
+
+        Dim newName As String
+        newName = baseName & " (" & i & ")"
+        If Len(newName) > 31 Then
+            newName = Left(baseName, 31 - Len(" (" & i & ")")) & " (" & i & ")"
+        End If
+
+        newWS.Name = newName
+        If Err.Number <> 0 Then
+            Err.Clear
+            newWS.Name = Left(newName, 27) & "_" & i
+        End If
+
+        createdCount = createdCount + 1
+    Next i
+
+    sourceWS.Activate
+    UTL_TurboOff
+
+    Debug.Print "[Director] TemplateCloner: " & createdCount & " clone(s) of '" & baseName & "' created."
+End Sub
+
+'==============================================================================
+' DirectorListAllSheetsWithLinks
+' Creates the sheet index without any MsgBox at the end. Silent version.
+'==============================================================================
+Public Sub DirectorListAllSheetsWithLinks()
+    On Error Resume Next
+
+    UTL_TurboOn
+
+    Dim indexName As String
+    indexName = "UTL_SheetIndex"
+
+    Dim ws As Worksheet
+    Set ws = ActiveWorkbook.Sheets(indexName)
+
+    If ws Is Nothing Then
+        Set ws = ActiveWorkbook.Sheets.Add( _
+            After:=ActiveWorkbook.Sheets(ActiveWorkbook.Sheets.Count))
+        ws.Name = indexName
+    End If
+
+    ' Build dictionary of sheets already listed
+    Dim existing As Object
+    Set existing = CreateObject("Scripting.Dictionary")
+
+    Dim lastExisting As Long
+    lastExisting = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If lastExisting >= 4 Then
+        Dim chk As Long
+        For chk = 4 To lastExisting
+            Dim existName As String
+            existName = Trim(CStr(ws.Cells(chk, 1).Value))
+            If Len(existName) > 0 Then existing(existName) = True
+        Next chk
+    End If
+
+    ' Write title and headers if sheet is new
+    If Trim(CStr(ws.Cells(1, 1).Value)) = "" Then
+        ws.Range("A1").Value = "Sheet Index - " & ActiveWorkbook.Name
+        ws.Range("A1").Font.Bold = True
+        ws.Range("A1").Font.Size = 14
+        ws.Range("A2").Value = "Generated: " & Format(Now, "MM/DD/YYYY h:mm AM/PM")
+        ws.Range("A2").Font.Italic = True
+        ws.Range("A3").Value = "Sheet Name"
+        ws.Range("B3").Value = "Navigate"
+        ws.Range("C3").Value = "Status"
+        ws.Range("A3:C3").Font.Bold = True
+        ws.Range("A3:C3").Interior.Color = RGB(11, 71, 121)
+        ws.Range("A3:C3").Font.Color = RGB(255, 255, 255)
+    End If
+
+    Dim outRow As Long
+    outRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row + 1
+    If outRow < 4 Then outRow = 4
+
+    Dim addedCount As Long
+    Dim sheetWS As Worksheet
+
+    For Each sheetWS In ActiveWorkbook.Worksheets
+        If sheetWS.Name = indexName Then GoTo DirNextSheet
+
+        If existing.exists(sheetWS.Name) Then GoTo DirNextSheet
+
+        ws.Cells(outRow, 1).Value = sheetWS.Name
+        ws.Hyperlinks.Add _
+            Anchor:=ws.Cells(outRow, 2), _
+            Address:="", _
+            SubAddress:="'" & sheetWS.Name & "'!A1", _
+            TextToDisplay:="Go to Sheet"
+
+        Select Case sheetWS.Visible
+            Case xlSheetVisible:    ws.Cells(outRow, 3).Value = "Visible"
+            Case xlSheetHidden:     ws.Cells(outRow, 3).Value = "Hidden"
+            Case xlSheetVeryHidden: ws.Cells(outRow, 3).Value = "Very Hidden"
+        End Select
+
+        If outRow Mod 2 = 0 Then
+            ws.Range(ws.Cells(outRow, 1), ws.Cells(outRow, 3)).Interior.Color = RGB(237, 242, 249)
+        End If
+
+        addedCount = addedCount + 1
+        outRow = outRow + 1
+DirNextSheet:
+    Next sheetWS
+
+    ws.Columns("A:C").AutoFit
+    ws.Activate
+    UTL_TurboOff
+
+    Debug.Print "[Director] ListAllSheetsWithLinks: " & addedCount & " sheet(s) added to index."
+End Sub

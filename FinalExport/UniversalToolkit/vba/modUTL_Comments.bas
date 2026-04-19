@@ -297,3 +297,67 @@ Public Sub CountComments()
 ErrHandler:
     MsgBox "Error " & Err.Number & ": " & Err.Description, vbCritical, "Comment Count"
 End Sub
+
+'==============================================================================
+' DIRECTOR-ONLY: Silent wrappers for automated recording (no dialogs)
+'==============================================================================
+Sub DirectorExtractComments()
+    ' Same as ExtractAllComments but no MsgBox at end
+    On Error Resume Next
+    Application.ScreenUpdating = False
+    Application.StatusBar = "Extracting comments..."
+
+    Dim wsOut As Worksheet
+    On Error Resume Next
+    Set wsOut = ThisWorkbook.Sheets("Comment Inventory")
+    On Error GoTo 0
+    If Not wsOut Is Nothing Then
+        Application.DisplayAlerts = False
+        wsOut.Delete
+        Application.DisplayAlerts = True
+    End If
+
+    Set wsOut = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+    wsOut.Name = "Comment Inventory"
+
+    wsOut.Range("A1").Value = "Comment Inventory"
+    wsOut.Range("A1").Font.Bold = True: wsOut.Range("A1").Font.Size = 14
+    wsOut.Range("A2").Value = "Generated: " & Format(Now, "yyyy-mm-dd hh:nn:ss")
+    wsOut.Range("A2").Font.Italic = True
+
+    wsOut.Cells(4, 1).Value = "#": wsOut.Cells(4, 2).Value = "Sheet"
+    wsOut.Cells(4, 3).Value = "Cell": wsOut.Cells(4, 4).Value = "Cell Value"
+    wsOut.Cells(4, 5).Value = "Comment Author": wsOut.Cells(4, 6).Value = "Comment Text"
+    wsOut.Range("A4:F4").Font.Bold = True
+    wsOut.Range("A4:F4").Interior.Color = RGB(11, 71, 121)
+    wsOut.Range("A4:F4").Font.Color = RGB(255, 255, 255)
+
+    Dim r As Long: r = 4
+    Dim cnt As Long: cnt = 0
+    Dim ws As Worksheet
+    For Each ws In ThisWorkbook.Worksheets
+        If ws.Name = "Comment Inventory" Then GoTo NextDirSheet
+        Dim cmt As Comment
+        For Each cmt In ws.Comments
+            cnt = cnt + 1: r = r + 1
+            wsOut.Cells(r, 1).Value = cnt
+            wsOut.Cells(r, 2).Value = ws.Name
+            wsOut.Cells(r, 3).Value = cmt.Parent.Address(False, False)
+            On Error Resume Next
+            wsOut.Cells(r, 4).Value = Left(CStr(cmt.Parent.Value), 100)
+            wsOut.Cells(r, 5).Value = cmt.Author
+            wsOut.Cells(r, 6).Value = cmt.Text
+            On Error GoTo 0
+            If cnt Mod 2 = 0 Then wsOut.Range(wsOut.Cells(r, 1), wsOut.Cells(r, 6)).Interior.Color = RGB(235, 241, 250)
+        Next cmt
+NextDirSheet:
+    Next ws
+
+    wsOut.Range("A3").Value = "Total Comments: " & cnt
+    wsOut.Range("A3").Font.Bold = True
+    wsOut.Columns("A:F").AutoFit
+    wsOut.Activate
+    Application.StatusBar = False
+    Application.ScreenUpdating = True
+    Debug.Print "[Director] Comments extracted: " & cnt
+End Sub

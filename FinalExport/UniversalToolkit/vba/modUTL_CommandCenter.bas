@@ -1072,3 +1072,84 @@ Private Function GetOrCreateCustomSheet() As Worksheet
 
     Set GetOrCreateCustomSheet = ws
 End Function
+
+'==============================================================================
+' DIRECTOR WRAPPERS — Silent subs for video automation (no dialogs)
+'==============================================================================
+
+'==============================================================================
+' DirectorShowCommandCenter
+' Prints the full tool inventory to a styled sheet (same as ListAllTools)
+' without any InputBox menus. The viewer sees the UTL_ToolInventory sheet
+' with every tool listed by category.
+'==============================================================================
+Public Sub DirectorShowCommandCenter()
+    On Error Resume Next
+
+    LoadRegistry
+
+    If m_ToolCount = 0 Then
+        Debug.Print "[Director] ShowCommandCenter: No tools in registry."
+        Exit Sub
+    End If
+
+    ' Create or clear inventory sheet
+    Dim ws As Worksheet
+    Set ws = Nothing
+    Set ws = ThisWorkbook.Sheets(INVENTORY_SHEET)
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+        ws.Name = INVENTORY_SHEET
+    Else
+        ws.Cells.Clear
+    End If
+
+    Application.ScreenUpdating = False
+
+    ' Title
+    ws.Range("A1").Value = VERSION_LABEL & " — Tool Inventory"
+    ws.Range("A1").Font.Bold = True
+    ws.Range("A1").Font.Size = 14
+    ws.Range("A2").Value = "Generated: " & Format(Now, "yyyy-mm-dd hh:nn:ss") & " | Total tools: " & m_ToolCount
+    ws.Range("A2").Font.Italic = True
+
+    ' Headers
+    ws.Cells(4, 1).Value = "#"
+    ws.Cells(4, 2).Value = "Category"
+    ws.Cells(4, 3).Value = "Tool Name"
+    ws.Cells(4, 4).Value = "Macro"
+    ws.Cells(4, 5).Value = "Description"
+    ws.Cells(4, 6).Value = "Source"
+
+    Dim hdrRng As Range
+    Set hdrRng = ws.Range(ws.Cells(4, 1), ws.Cells(4, 6))
+    hdrRng.Font.Bold = True
+    hdrRng.Font.Color = RGB(255, 255, 255)
+    hdrRng.Interior.Color = RGB(11, 71, 121)
+
+    ' Write tools
+    Dim i As Long
+    For i = 1 To m_ToolCount
+        Dim outRow As Long
+        outRow = 4 + i
+        ws.Cells(outRow, 1).Value = i
+        ws.Cells(outRow, 2).Value = m_Tools(i).Category
+        ws.Cells(outRow, 3).Value = m_Tools(i).ToolName
+        ws.Cells(outRow, 4).Value = m_Tools(i).MacroName
+        ws.Cells(outRow, 5).Value = m_Tools(i).Description
+        ws.Cells(outRow, 6).Value = m_Tools(i).Source
+
+        If i Mod 2 = 0 Then
+            ws.Range(ws.Cells(outRow, 1), ws.Cells(outRow, 6)).Interior.Color = RGB(235, 241, 250)
+        End If
+    Next i
+
+    ws.Columns("A:F").AutoFit
+    ws.Activate
+    ws.Range("A1").Select
+
+    Application.ScreenUpdating = True
+
+    Debug.Print "[Director] ShowCommandCenter: " & m_ToolCount & " tools listed on '" & INVENTORY_SHEET & "' sheet."
+End Sub

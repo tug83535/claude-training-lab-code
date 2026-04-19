@@ -1,5 +1,43 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
+## Post-Recording Fixes (2026-03-31) — Fix Before Sharing With Coworkers
+
+### Bugs to Fix
+- [ ] **RestoreBaseline (Action 65) errors out** — "Restore error:" with blank message. Coworkers using Action 65 manually will hit this error. Investigate SaveBaseline in modWhatIf.
+- [ ] **BuildDashboard charts empty (Action 12)** — Bar/line charts on Report--> show axes but no data. Pie chart works. Root cause: chart data series reference formulas replaced with values.
+- [ ] **Executive Dashboard waterfall chart empty** — Empty "Plot Area" box at bottom of Executive Dashboard. Low priority — KPI cards and table are the main visual.
+
+### Fixed (2026-03-31)
+- [x] **Executive Dashboard enhanced** — Added product breakdown, monthly trend, MoM growth, status indicators
+- [x] **Executive Brief colored headers** — Added colored section header bars (green, orange, blue, purple, teal)
+- [x] **Reconciliation Checks column A coloring** — PASS rows now green, FAIL rows now red in column A
+- [x] **Sensitivity Analysis $0 values** — Fixed impact calculation to scale against baseline revenue
+- [x] **Report--> scroll overshoots** — All scrolls capped at 2 steps
+- [x] **Audio clipping** — WaitForAudioEnd replaces fragile timing math
+- [x] **Checks sheet cleared by cleanup** — CleanupAllOutputSheets no longer wipes Checks data
+- [x] **GL sheet name mismatch** — Director uses "CrossfireHiddenWorksheet" instead of "General Ledger"
+- [x] **Executive Mode hides sheets permanently** — ForceUnhideAllSheets runs after toggle and during cleanup
+- [x] **PDF Export page breaks** — Director resets view to Normal after PDF export
+- [x] **SendKeys for all completion MsgBoxes** — All macros auto-dismiss their dialogs during recording
+- [x] **Clip 9 sheet tour misaligned with script** — Timing and sheet order now matches narration
+- [x] **Clip 10 Command Center too brief** — CC stays up 30+ seconds with slow category browsing
+
+### Video 4 — Ready to Record (Manual Recording)
+- [ ] **Install Python packages:** Open Command Prompt → `cd C:\Users\connor.atlee\RecTrial\UniversalToolkit\python` → `pip install pandas openpyxl pdfplumber thefuzz python-Levenshtein python-dateutil python-docx`
+- [ ] **Test one script:** `python compare_files.py "C:\Users\connor.atlee\RecTrial\Video4DemoFiles\Q1_Revenue_v1.xlsx" "C:\Users\connor.atlee\RecTrial\Video4DemoFiles\Q1_Revenue_v2.xlsx"` — verify it creates COMPARISON_REPORT.xlsx
+- [ ] **Check all script command-line args:** Run `python script_name.py --help` for each of the 8 scripts to verify the flags match what's in the recording guide
+- [ ] **Set up Command Prompt appearance:** Maximize, Consolas 16pt font, dark background
+- [ ] **Test run all 10 clips** following the recording guide at `RecTrial\Guide\VIDEO_4_RECORDING_GUIDE.md`
+- [ ] **Record final Video 4** with OBS
+
+### Improvements for Coworker Experience (Post-Recording)
+- [ ] **Add YoY Variance Analysis to Command Center** — Not assigned an action number.
+- [ ] **Report--> TOC links point to old external file** — Fix to use internal sheet references.
+- [ ] **Report--> Add Command Center launch button** — Add clickable button + auto-run AssignShortcuts.
+- [ ] **TOC Refresh (Action 13) fails on merged cells** — Handle merged cells on Report--> page.
+- [ ] **AssignShortcuts doesn't persist** — Add auto-run via Workbook_Open event.
+- [ ] **Dashboard Charts (Action 12) chart data ranges** — Fix source data to match current cell values.
+
 ## Current Status (2026-03-12, updated)
 - **Branch:** `claude/resume-ipipeline-demo-qKRHn` (active working branch)
 - **Demo VBA Modules:** 39 total (34 core + 5 optional add-ins) — need re-import (18 files updated)

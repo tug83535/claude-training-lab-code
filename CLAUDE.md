@@ -1,5 +1,57 @@
 # Claude Training Lab - APCLDmerge Project
 
+## ⚡ CURRENT WORK (2026-04-16) — 4-VIDEO DEMO RECORDING PROJECT
+
+The active work right now is recording 4 demo videos using an Excel VBA "Director" macro that automates the entire recording. Videos 1-2 are done. Video 3 is mid-debug (Path A silent wrappers just implemented). Video 4 is ready to record manually.
+
+### Working Folder
+**`C:\Users\connor.atlee\RecTrial\`** — self-contained workspace with all audio clips, VBA files, sample Excel files, demo input files, and recording guides. This is NOT in the repo — it's a local working copy. The repo at this path holds the source of truth for commits.
+
+### Video Status
+- **Video 1** ("What's Possible") — DONE
+- **Video 2** ("Full Demo Walkthrough") — DONE
+- **Video 3** ("Universal Tools") — Path A silent wrappers implemented, needs test run + Gemini review
+- **Video 4** ("Python Automation for Finance") — audio clips generated, demo files built, ready to record manually
+
+### Key Architecture
+**modDirector.bas** (v2.0) is the master VBA "puppeteer" module. It automates recording by:
+- Playing AI narration (ElevenLabs MP3s) via Windows mciSendString API
+- Navigating between sheets, running macros, scrolling, pausing
+- User presses `RunVideo1`/`RunVideo2`/`RunVideo3` and watches hands-free
+- Video 4 is manual (Command Prompt Python demos, not automated)
+
+### The Path A Pattern (CRITICAL — applies to any new dialog-heavy VBA demo)
+The original Video 3 approach used `Application.SendKeys` to auto-fill dialog boxes during recording. This was fragile and failed constantly. Gemini's review (8 PASS / 50 FAIL) confirmed. The fix: for each UTL macro that shows dialogs, add a `DirectorXxx` silent wrapper sub at the bottom of the .bas file that takes parameters directly and replicates the core logic with no InputBox/MsgBox. Then the Director clip calls `Application.Run "DirectorXxx", param1, param2, ...`. This is the same pattern used for Video 2 Clips 22 and 23 (SaveCopyAs direct call, RunWhatIfPreset, RestoreBaselineSilent). **Never use SendKeys against modal dialogs — always add a silent wrapper instead.**
+
+### Backup of Pre-Path-A Code
+`RecTrial\VBABackup_PrePathA\` — 10 files backed up before Path A refactor, in case we need to revert.
+
+### UTL Files with Director Wrappers Added
+- modUTL_DataSanitizer.bas (DirectorRunFullSanitize, DirectorPreviewSanitize)
+- modUTL_Highlights.bas (DirectorHighlightThreshold, DirectorHighlightDuplicates, DirectorClearHighlights)
+- modUTL_Comments.bas (DirectorExtractComments)
+- modUTL_TabOrganizer.bas (DirectorColorTabsByKeyword, DirectorReorderTabs)
+- modUTL_ColumnOps.bas (DirectorSplitColumn, DirectorCombineColumns)
+- modUTL_SheetTools.bas (DirectorTemplateCloner, DirectorListAllSheetsWithLinks)
+- modUTL_Compare.bas (DirectorCompareSheets)
+- modUTL_Consolidate.bas (DirectorConsolidateSheets)
+- modUTL_CommandCenter.bas (DirectorShowCommandCenter)
+
+### Important Rules for This Work
+1. Edit VBA files in BOTH places when needed: `RecTrial\VBAToImport\modDirector.bas` AND `RecTrial\DemoVBA\modDirector.bas` (sync with `cp` command).
+2. Any new UTL macro that shows dialogs needs a DirectorXxx wrapper before Video 3 can use it.
+3. Sample file for Video 3 is at `RecTrial\SampleFile\SampleFileV2\` — clean backup at `RecTrial\SampleFile\SampleFileBackup_nonMacroClean\`.
+4. Feedback from Gemini AI reviews goes in `RecTrial\Feedback\Video3\` (and eventually Video4\).
+5. All narration audio clips are in `RecTrial\AudioClips\Video1-4\`.
+6. Pivot tables can NOT be created via openpyxl — must be created manually in Excel or via Copilot prompt.
+
+### Files That Should Stay Synced
+- `RecTrial\VBAToImport\modDirector.bas` ↔ `RecTrial\DemoVBA\modDirector.bas` (always same)
+- `RecTrial\UniversalToolkit\vba\*.bas` — authoritative, edit here
+- Memory folder at `C:\Users\connor.atlee\.claude\projects\c--Users-connor-atlee--claude-projects-claude-training-lab-code\memory\` — stays linked to this repo path
+
+---
+
 ## About Me
 I am not a developer. I work on guides, training docs, VBA, SQL, and Python demos
 for Finance & Accounting at iPipeline. Keep all explanations in plain English.

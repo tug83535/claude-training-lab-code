@@ -1,5 +1,25 @@
 # Lessons Learned - APCLDmerge Project
 
+## Video Recording Automation (Video 3 / 4 / Director Macro) — 2026-04-15
+- **NEVER use SendKeys against modal dialogs.** `Application.InputBox` with `Type:=8` (range picker) cannot be filled by SendKeys — it blocks waiting for mouse selection. Regular `InputBox` sometimes works with SendKeys but timing is unreliable. Sequential multi-dialog staging (dismiss MsgBox, then fill InputBox, then pick direction) fails constantly.
+- **The Path A pattern is the only reliable approach for dialog-heavy macros:** add a `DirectorXxx` silent wrapper sub at the bottom of each UTL/module .bas file that takes parameters directly and replicates the core logic with NO InputBox/MsgBox. Example: `Sub DirectorHighlightThreshold(rng As Range, threshold As Double, direction As Long)`. Then the Director calls `Application.Run "DirectorXxx", param1, param2, ...`. Video 2 Clips 22 and 23 prove this pattern works (SaveCopyAs direct, RunWhatIfPreset, RestoreBaselineSilent).
+- **Reason:** Clip 22/23 went from fragile SendKeys ("y{ENTER}", "1{ENTER}") to bulletproof silent calls. Gemini reviewed Video 3 after the SendKeys approach: 18 PASS / 50 FAIL. After switching to Path A wrappers: the clips will execute the core logic directly with no user interaction.
+- **When adding a new UTL macro that shows dialogs:** also add the Director wrapper at the same time. Don't ship without both.
+- **Keep UTL macros untouched for coworkers.** The DirectorXxx wrappers are ADDED at the bottom of the file — existing subs that real users call stay exactly as they were.
+- **openpyxl CANNOT create Excel PivotTable objects.** For demo files that need pivots, either create them manually in Excel (2 minutes) or use a Copilot prompt. Don't try to fake it with Python.
+- **mciSendString audio duration drift:** measure clip duration at runtime (`status alias length`), don't hardcode seconds. Fragile timing constants break when audio clips are regenerated.
+- **Always call ResetMCI at the top of every public entry point** (RunVideo1, RunVideo2, RunVideo3, QuickTest, TestClip, RunPreflight). Interrupted runs leave the MCI device stuck open and silent-fail future audio.
+- **WaitForAudioEnd beats fragile math.** Polling `status alias mode` until it's not "playing" is more reliable than `WaitSec m_ClipDurSec - X` math that breaks when scroll speeds change.
+- **Keep backups before major refactors.** `VBABackup_PrePathA\` saved 10 files before the Path A refactor in case we needed to revert. Free insurance.
+- **Sync VBA files when edited:** the Director has two copies at `RecTrial\VBAToImport\modDirector.bas` AND `RecTrial\DemoVBA\modDirector.bas`. After any edit, always `cp` to sync.
+
+## Project Folder Structure (Learned 2026-04-16)
+- **RecTrial is the active working folder**, NOT the repo. Contains all audio clips, VBA files being imported, sample Excel files, demo inputs, and recording output folders.
+- **The repo at `C:\Users\connor.atlee\.claude\projects\claude-training-lab-code\` is source of truth for commits.** RecTrial changes need to be copied back to the repo when stable.
+- **Memory folder is linked to the repo path** (Claude Code auto-links based on working directory). If the repo moves, memory breaks.
+- **Never delete the repo's `.git` folder.** Once lost, commit history is gone.
+- **Duplicate repo folders (Old1projects issue):** if two copies of a repo exist at different paths, git may create a "new empty repo" at one location while all history lives at the other. Always verify with `git log --oneline` before deleting anything.
+
 ## Guides & Documentation
 - Always number every single step no matter how small or obvious
 - Never summarize — full detail on every step

@@ -395,3 +395,156 @@ ErrHandler:
     Application.CutCopyMode = False
     MsgBox "Error " & Err.Number & ": " & Err.Description, vbCritical, "Consolidate by Pattern"
 End Sub
+
+'==============================================================================
+' DIRECTOR WRAPPERS — Silent subs for video automation (no dialogs)
+'==============================================================================
+
+'==============================================================================
+' DirectorConsolidateSheets
+' Consolidates the named sheets into one output sheet with source tracking.
+' Takes an array of sheet names (String). Assumes headers in row 1.
+' No InputBox/MsgBox.
+'
+' Usage: DirectorConsolidateSheets Array("Sheet1","Sheet2","Sheet3")
+'==============================================================================
+Public Sub DirectorConsolidateSheets(sheetNames As Variant)
+    On Error Resume Next
+
+    If Not IsArray(sheetNames) Then
+        Debug.Print "[Director] ConsolidateSheets: sheetNames must be an array."
+        Exit Sub
+    End If
+
+    Dim selectedCount As Long
+    selectedCount = 0
+
+    ' Validate all sheet names exist
+    Dim validNames() As String
+    ReDim validNames(1 To UBound(sheetNames) - LBound(sheetNames) + 1)
+
+    Dim n As Variant
+    Dim ws As Worksheet
+    For Each n In sheetNames
+        Set ws = Nothing
+        Set ws = ThisWorkbook.Sheets(CStr(n))
+        If Not ws Is Nothing Then
+            selectedCount = selectedCount + 1
+            validNames(selectedCount) = CStr(n)
+        End If
+    Next n
+
+    If selectedCount < 2 Then
+        Debug.Print "[Director] ConsolidateSheets: Need at least 2 valid sheets. Found " & selectedCount & "."
+        Exit Sub
+    End If
+
+    Application.ScreenUpdating = False
+    Application.StatusBar = "Consolidating sheets..."
+
+    ' Create or replace output sheet
+    Dim wsOut As Worksheet
+    Set wsOut = Nothing
+    Set wsOut = ThisWorkbook.Sheets(OUTPUT_SHEET)
+
+    If Not wsOut Is Nothing Then
+        Application.DisplayAlerts = False
+        wsOut.Delete
+        Application.DisplayAlerts = True
+    End If
+
+    Set wsOut = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+    wsOut.Name = OUTPUT_SHEET
+
+    ' Pre-scan for max column width (for consistent source column)
+    Dim maxColWidth As Long
+    maxColWidth = 0
+    Dim sc As Long
+    For sc = 1 To selectedCount
+        Dim wsPre As Worksheet
+        Set wsPre = ThisWorkbook.Sheets(validNames(sc))
+        Dim preCol As Long
+        preCol = wsPre.Cells(1, wsPre.Columns.Count).End(xlToLeft).Column
+        If wsPre.UsedRange.Columns.Count + wsPre.UsedRange.Column - 1 > preCol Then
+            preCol = wsPre.UsedRange.Columns.Count + wsPre.UsedRange.Column - 1
+        End If
+        If preCol > maxColWidth Then maxColWidth = preCol
+    Next sc
+
+    ' Consolidate data (assumes headers in row 1)
+    Dim outRow As Long
+    outRow = 1
+    Dim totalRows As Long
+    totalRows = 0
+
+    Dim s As Long
+    For s = 1 To selectedCount
+        Application.StatusBar = "Consolidating sheet " & s & " of " & selectedCount & ": " & validNames(s) & "..."
+
+        Dim wsSrc As Worksheet
+        Set wsSrc = ThisWorkbook.Sheets(validNames(s))
+
+        Dim srcLastRow As Long, srcLastCol As Long
+        srcLastRow = wsSrc.Cells(wsSrc.Rows.Count, 1).End(xlUp).Row
+        srcLastCol = wsSrc.Cells(1, wsSrc.Columns.Count).End(xlToLeft).Column
+        If wsSrc.UsedRange.Columns.Count + wsSrc.UsedRange.Column - 1 > srcLastCol Then
+            srcLastCol = wsSrc.UsedRange.Columns.Count + wsSrc.UsedRange.Column - 1
+        End If
+
+        If srcLastRow < 1 Then GoTo DirNextSheet
+        If srcLastCol < 1 Then srcLastCol = 1
+
+        Dim startRow As Long
+        If s = 1 Then startRow = 1 Else startRow = 2  ' Skip header on sheets 2+
+
+        If startRow > srcLastRow Then GoTo DirNextSheet
+
+        ' Copy data
+        Dim srcRange As Range
+        Set srcRange = wsSrc.Range(wsSrc.Cells(startRow, 1), wsSrc.Cells(srcLastRow, srcLastCol))
+        srcRange.Copy wsOut.Cells(outRow, 1)
+
+        ' Add source column
+        Dim srcCol As Long
+        srcCol = maxColWidth + 1
+
+        If s = 1 Then
+            wsOut.Cells(1, srcCol).Value = "Source Sheet"
+            Dim dr As Long
+            For dr = 2 To outRow + (srcLastRow - startRow)
+                wsOut.Cells(dr, srcCol).Value = validNames(s)
+            Next dr
+        Else
+            Dim dr2 As Long
+            For dr2 = outRow To outRow + (srcLastRow - startRow)
+                wsOut.Cells(dr2, srcCol).Value = validNames(s)
+            Next dr2
+        End If
+
+        totalRows = totalRows + (srcLastRow - startRow + 1)
+        outRow = outRow + (srcLastRow - startRow + 1)
+
+DirNextSheet:
+    Next s
+
+    ' Style the header row
+    If outRow > 1 Then
+        Dim hdrLastCol As Long
+        hdrLastCol = wsOut.Cells(1, wsOut.Columns.Count).End(xlToLeft).Column
+        Dim hdrRng As Range
+        Set hdrRng = wsOut.Range(wsOut.Cells(1, 1), wsOut.Cells(1, hdrLastCol))
+        hdrRng.Font.Bold = True
+        hdrRng.Font.Color = RGB(255, 255, 255)
+        hdrRng.Interior.Color = CLR_HDR
+    End If
+
+    wsOut.Columns.AutoFit
+    wsOut.Activate
+    wsOut.Range("A1").Select
+
+    Application.StatusBar = False
+    Application.ScreenUpdating = True
+    Application.CutCopyMode = False
+
+    Debug.Print "[Director] ConsolidateSheets: " & selectedCount & " sheets combined, " & totalRows & " total rows. Output: " & OUTPUT_SHEET
+End Sub

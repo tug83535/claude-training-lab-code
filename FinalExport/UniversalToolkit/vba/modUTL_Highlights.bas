@@ -24,16 +24,27 @@ Option Explicit
 Public Sub HighlightByThreshold()
     On Error GoTo ErrHandler
 
+    Dim rng As Range
+
+    ' If a multi-cell range is already selected, use it (Director-friendly)
+    If Not TypeOf Selection Is Range Then GoTo AskRange
+    If Selection.Cells.Count > 1 Then
+        Set rng = Selection
+        GoTo HaveRange
+    End If
+
+AskRange:
     MsgBox "Select the range of numbers to check against a threshold." & vbCrLf & vbCrLf & _
            "Cells meeting your criteria will be highlighted.", _
            vbInformation, "Highlight by Threshold"
 
-    Dim rng As Range
     On Error Resume Next
     Set rng = Application.InputBox("Select the range to check:", _
                                     "Highlight by Threshold - Step 1 of 3", Type:=8)
     On Error GoTo ErrHandler
     If rng Is Nothing Then Exit Sub
+
+HaveRange:
 
     '--- Ask for threshold value ---
     Dim threshStr As String
@@ -244,16 +255,27 @@ End Sub
 Public Sub HighlightDuplicateValues()
     On Error GoTo ErrHandler
 
+    Dim rng As Range
+
+    ' If a multi-cell range is already selected, use it (Director-friendly)
+    If Not TypeOf Selection Is Range Then GoTo AskDupRange
+    If Selection.Cells.Count > 1 Then
+        Set rng = Selection
+        GoTo HaveDupRange
+    End If
+
+AskDupRange:
     MsgBox "Select the range to check for duplicate values." & vbCrLf & vbCrLf & _
            "Duplicate values will be highlighted in orange.", _
            vbInformation, "Highlight Duplicates"
 
-    Dim rng As Range
     On Error Resume Next
     Set rng = Application.InputBox("Select the range:", _
                                     "Highlight Duplicates", Type:=8)
     On Error GoTo ErrHandler
     If rng Is Nothing Then Exit Sub
+
+HaveDupRange:
 
     '--- Safety cap: prevent slow loop on very large ranges ---
     If rng.Cells.CountLarge > 500000 Then
@@ -506,4 +528,54 @@ Private Sub SortArray(ByRef arr() As Double, ByVal count As Long)
             End If
         Next j
     Next i
+End Sub
+
+'==============================================================================
+' DIRECTOR-ONLY: Silent wrappers for automated recording (no dialogs)
+'==============================================================================
+Sub DirectorHighlightThreshold(ByVal rng As Range, ByVal threshold As Double, ByVal direction As Long)
+    ' Highlights cells above/below threshold. No dialogs.
+    ' direction: 1=above(green), 2=below(red), 3=both
+    On Error Resume Next
+    Application.ScreenUpdating = False
+    Dim cell As Range
+    For Each cell In rng.Cells
+        If IsNumeric(cell.Value) And Not IsEmpty(cell.Value) Then
+            Dim val As Double: val = CDbl(cell.Value)
+            Select Case direction
+                Case 1: If val > threshold Then cell.Interior.Color = RGB(198, 239, 206)
+                Case 2: If val < threshold Then cell.Interior.Color = RGB(255, 199, 206)
+                Case 3:
+                    If val > threshold Then cell.Interior.Color = RGB(198, 239, 206)
+                    If val < threshold Then cell.Interior.Color = RGB(255, 199, 206)
+            End Select
+        End If
+    Next cell
+    Application.ScreenUpdating = True
+End Sub
+
+Sub DirectorHighlightDuplicates(ByVal rng As Range)
+    ' Highlights duplicate values in orange. No dialogs.
+    On Error Resume Next
+    Application.ScreenUpdating = False
+    Dim dict As Object: Set dict = CreateObject("Scripting.Dictionary")
+    Dim cell As Range
+    For Each cell In rng.Cells
+        If Not IsEmpty(cell.Value) Then
+            Dim key As String: key = CStr(cell.Value)
+            If dict.Exists(key) Then
+                cell.Interior.Color = RGB(255, 192, 0)
+                rng.Cells(dict(key)).Interior.Color = RGB(255, 192, 0)
+            Else
+                dict.Add key, cell.Row - rng.Row + 1
+            End If
+        End If
+    Next cell
+    Application.ScreenUpdating = True
+End Sub
+
+Sub DirectorClearHighlights()
+    ' Clears interior color from all cells on active sheet. No dialogs.
+    On Error Resume Next
+    ActiveSheet.Cells.Interior.ColorIndex = xlNone
 End Sub

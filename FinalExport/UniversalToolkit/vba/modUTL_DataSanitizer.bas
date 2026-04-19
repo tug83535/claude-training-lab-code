@@ -502,3 +502,78 @@ Private Function IsSkippedCol(ByVal headerText As String) As Boolean
         End If
     Next kw
 End Function
+
+'==============================================================================
+' DIRECTOR-ONLY: Silent wrappers for automated recording (no dialogs)
+'==============================================================================
+Sub DirectorRunFullSanitize()
+    On Error Resume Next
+    UTL_TurboOn
+    Dim t1 As Long, t2 As Long, t3 As Long
+    t1 = InternalConvertTextNumbers()
+    t2 = InternalFixFloatingPoint()
+    t3 = InternalNormalizeIntegers()
+    UTL_TurboOff
+    Debug.Print "[Director] Sanitize: " & t1 & " text, " & t2 & " FP, " & t3 & " int"
+End Sub
+
+Sub DirectorPreviewSanitize()
+    ' Replicates PreviewSanitizeChanges core logic without any MsgBox
+    On Error Resume Next
+    UTL_TurboOn
+
+    Dim rptName As String: rptName = "UTL_Sanitizer_Preview"
+    Application.DisplayAlerts = False
+    On Error Resume Next
+    ActiveWorkbook.Sheets(rptName).Delete
+    On Error GoTo 0
+    Application.DisplayAlerts = True
+
+    Dim wsRpt As Worksheet
+    Set wsRpt = ActiveWorkbook.Sheets.Add(After:=ActiveWorkbook.Sheets(ActiveWorkbook.Sheets.Count))
+    wsRpt.Name = rptName
+
+    With wsRpt
+        .Range("A1").Value = "Sanitizer Preview - " & ActiveWorkbook.Name
+        .Range("A1").Font.Bold = True: .Range("A1").Font.Size = 14
+        .Range("A3").Value = "Sheet": .Range("B3").Value = "Cell"
+        .Range("C3").Value = "Issue Type": .Range("D3").Value = "Current Value"
+        .Range("E3").Value = "Proposed Value": .Range("F3").Value = "Reason"
+        .Range("A3:F3").Font.Bold = True
+        .Range("A3:F3").Interior.Color = RGB(11, 71, 121)
+        .Range("A3:F3").Font.Color = RGB(255, 255, 255)
+    End With
+
+    Dim outRow As Long: outRow = 4
+    Dim ws As Worksheet
+    For Each ws In ActiveWorkbook.Worksheets
+        If ws.Name = rptName Then GoTo NextPrevWS
+        If ws.Visible = xlSheetVeryHidden Then GoTo NextPrevWS
+        Dim usedRng As Range: Set usedRng = Nothing
+        On Error Resume Next
+        Set usedRng = ws.UsedRange
+        On Error GoTo 0
+        If usedRng Is Nothing Then GoTo NextPrevWS
+        Dim cell As Range
+        For Each cell In usedRng.Cells
+            If Not IsEmpty(cell.Value) And Not cell.HasFormula Then
+                If cell.NumberFormat = "@" And IsNumeric(cell.Value) Then
+                    wsRpt.Cells(outRow, 1).Value = ws.Name
+                    wsRpt.Cells(outRow, 2).Value = cell.Address
+                    wsRpt.Cells(outRow, 3).Value = "Text-Stored Number"
+                    wsRpt.Cells(outRow, 4).Value = cell.Value
+                    wsRpt.Cells(outRow, 5).Value = CDbl(cell.Value)
+                    wsRpt.Cells(outRow, 6).Value = "Text string passes IsNumeric()"
+                    wsRpt.Cells(outRow, 3).Font.Color = RGB(192, 0, 0)
+                    outRow = outRow + 1
+                End If
+            End If
+        Next cell
+NextPrevWS:
+    Next ws
+
+    wsRpt.Columns("A:F").AutoFit
+    wsRpt.Activate
+    UTL_TurboOff
+    Debug.Print "[Director] Preview: " & (outRow - 4) & " issues found"
+End Sub

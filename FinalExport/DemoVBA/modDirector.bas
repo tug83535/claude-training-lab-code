@@ -76,7 +76,7 @@ Option Explicit
 ' >>> AUDIO FILE PATH — Set this to YOUR AudioClips folder <<<
 ' Use the FULL path ending with a backslash.
 ' Example: "C:\Users\connor.atlee\Desktop\FinalExport\AudioClips\"
-Private Const AUDIO_BASE_PATH As String = "C:\Users\connor.atlee\.claude\projects\claude-training-lab-code\FinalExport\AudioClips\"
+Private Const AUDIO_BASE_PATH As String = "C:\Users\connor.atlee\RecTrial\AudioClips\"
 
 ' >>> TYPING SPEED — milliseconds between each character <<<
 Private Const TYPING_DELAY_MS As Long = 90
@@ -202,6 +202,24 @@ Private Sub StopAudio()
 End Sub
 
 '===============================================================================
+' WaitForAudioEnd - Wait until the current audio clip finishes playing.
+' Uses mciSendString "status ... mode" which returns "playing" or "stopped".
+' This replaces all fragile "WaitSec m_ClipDurSec - N" math.
+' Call this BEFORE StopAudio to ensure the full clip plays.
+'===============================================================================
+Private Sub WaitForAudioEnd()
+    Dim buf As String * 128
+    Dim mode As String
+    Do
+        DoEvents
+        Sleep 100
+        buf = Space$(128)
+        mciSendStringA "status director_audio mode", buf, 128, 0
+        mode = Trim(Replace(buf, vbNullChar, ""))
+    Loop While mode = "playing"
+End Sub
+
+'===============================================================================
 ' PlayClip - Play an audio clip by subfolder and filename, wait for it to finish.
 ' Duration is auto-measured — no manual timing needed.
 ' Parameters:
@@ -222,8 +240,8 @@ Private Sub PlayClip(ByVal subFolder As String, ByVal fileName As String)
     End If
 
     PlayAudio fullPath
-    ' Wait for the measured duration
-    WaitSec m_ClipDurSec
+    ' Wait for audio to finish naturally
+    WaitForAudioEnd
 End Sub
 
 '===============================================================================
@@ -401,18 +419,34 @@ Public Sub CleanupAllOutputSheets()
     End If
     On Error GoTo 0
 
-    ' Clear Checks sheet data
-    On Error Resume Next
-    Dim wsChk As Worksheet
-    Set wsChk = ThisWorkbook.Worksheets("Checks")
-    If Not wsChk Is Nothing Then
-        If wsChk.UsedRange.Rows.Count > 1 Then
-            wsChk.Rows("2:" & wsChk.UsedRange.Rows.Count).ClearContents
-        End If
-    End If
-    On Error GoTo 0
+    ' NOTE: Do NOT clear Checks sheet — it has pre-populated reconciliation
+    ' check data that Action 3 (RunAllChecks) needs to read and format.
+    ' Clearing it would cause "No checks found" during recording.
+
+    ' Force-unhide all sheets (in case Executive Mode left them hidden)
+    ForceUnhideAllSheets
 
     Debug.Print "[Director] All output sheets cleaned up."
+End Sub
+
+'===============================================================================
+' ForceUnhideAllSheets - Unhide all core sheets. Called after Executive Mode
+' toggle and during cleanup to prevent sheets from staying veryHidden if
+' the toggle errors or the recording is interrupted.
+'===============================================================================
+Private Sub ForceUnhideAllSheets()
+    On Error Resume Next
+    Dim sh As Worksheet
+    For Each sh In ThisWorkbook.Worksheets
+        ' Keep VBA_AuditLog hidden — it's internal
+        If sh.Name <> "VBA_AuditLog" Then
+            If sh.Visible <> xlSheetVisible Then
+                sh.Visible = xlSheetVisible
+                Debug.Print "[Director] Force-unhid: " & sh.Name
+            End If
+        End If
+    Next sh
+    On Error GoTo 0
 End Sub
 
 '===============================================================================
@@ -600,7 +634,7 @@ Private Function PreFlightCheck(ByVal videoNum As Long) As Boolean
     If videoNum <= 2 Then
         Dim reqSheets As Variant
         reqSheets = Array("Report-->", "P&L - Monthly Trend", "Product Line Summary", _
-                          "Assumptions", "General Ledger", "Checks")
+                          "Assumptions", "CrossfireHiddenWorksheet", "Checks")
         Dim s As Long
         For s = 0 To UBound(reqSheets)
             If Not SheetExistsLocal(CStr(reqSheets(s))) Then
@@ -750,7 +784,7 @@ Public Sub RunPreflight()
     report = report & vbCrLf & "Required sheets:" & vbCrLf
     Dim reqSheets As Variant
     reqSheets = Array("Report-->", "P&L - Monthly Trend", "Product Line Summary", _
-                      "Assumptions", "General Ledger", "Checks")
+                      "Assumptions", "CrossfireHiddenWorksheet", "Checks")
     Dim s As Long
     For s = 0 To UBound(reqSheets)
         report = report & "  " & reqSheets(s) & ": " & _
@@ -896,21 +930,20 @@ Private Sub V1_Clip2_OpeningHook()
     ' Wait 2 sec for first sentence, then start scrolling
     WaitSec 2
 
-    ' Slowly scroll down through the landing page (~12 seconds of scrolling)
-    SmoothScrollDown 15, 500
+    ' Slowly scroll down through the landing page
+    SmoothScrollDown 2, 600
 
     ' Pause on "62 automated actions" — hold still
     WaitSec 3
 
     ' Continue gentle scroll
-    SmoothScrollDown 5, 400
+    SmoothScrollDown 1, 500
 
-    ' Hold still for "show you what that looks like"
-    WaitSec m_ClipDurSec - 12   ' remaining audio time
+    ' Wait for audio to finish naturally (no clipping)
+    WaitForAudioEnd
 
     ' Silence tail
     SilencePad
-    StopAudio
 End Sub
 
 '===============================================================================
@@ -979,11 +1012,10 @@ Private Sub V1_Clip3_CommandCenter()
     End If
     On Error GoTo 0
 
-    ' Wait for remaining audio
-    WaitSec 2
+    ' Wait for audio to finish naturally
+    WaitForAudioEnd
 
     SilencePad
-    StopAudio
 End Sub
 
 '===============================================================================
@@ -1014,13 +1046,12 @@ Private Sub V1_Clip4_DataQuality()
     WaitSec 3
 
     ' Slowly scroll down through the category breakdown
-    SmoothScrollDown 8, 400
+    SmoothScrollDown 2, 500
 
-    ' Hold still for "Fifteen seconds, start to finish"
-    WaitSec 4
+    ' Wait for audio to finish naturally
+    WaitForAudioEnd
 
     SilencePad
-    StopAudio
 
     ' RESET: Delete the output sheet for next clip
     SafeDeleteSheet "Data Quality Report"
@@ -1054,7 +1085,7 @@ Private Sub V1_Clip5_VarianceCommentary()
     WaitSec 3
 
     ' Slowly scroll through the narratives
-    SmoothScrollDown 6, 500
+    SmoothScrollDown 2, 500
 
     ' Hover near a narrative (just select a cell in the middle)
     On Error Resume Next
@@ -1062,11 +1093,10 @@ Private Sub V1_Clip5_VarianceCommentary()
     On Error GoTo 0
     DoEvents
 
-    ' Hold still for "One click" line
-    WaitSec 4
+    ' Wait for audio to finish naturally ("One click")
+    WaitForAudioEnd
 
     SilencePad
-    StopAudio
 
     ' RESET: Delete output sheet
     SafeDeleteSheet "Variance Commentary"
@@ -1091,6 +1121,7 @@ Private Sub V1_Clip6_Dashboard()
     ShowCCTypeActionAndRun 12, 1
 
     ' Run Executive Dashboard (takes 5-10 seconds)
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modDashboardAdvanced.CreateExecutiveDashboard
     On Error GoTo 0
@@ -1103,18 +1134,17 @@ Private Sub V1_Clip6_Dashboard()
     WaitSec 2
 
     ' Scroll to waterfall chart
-    SmoothScrollDown 6, 400
+    SmoothScrollDown 2, 500
     WaitSec 2   ' hold on waterfall
 
     ' Scroll to product comparison
-    SmoothScrollDown 6, 400
+    SmoothScrollDown 2, 500
     WaitSec 2   ' hold on product comparison
 
-    ' Hold still for remaining audio (PDF mention)
-    WaitSec 3
+    ' Wait for audio to finish naturally
+    WaitForAudioEnd
 
     SilencePad
-    StopAudio
 
     ' RESET: Delete output sheet
     SafeDeleteSheet "Executive Dashboard"
@@ -1127,27 +1157,45 @@ End Sub
 ' Action: Navigate back to Report--> page, hold static
 '===============================================================================
 Private Sub V1_Clip7_BridgeClosing()
-    ' Navigate to Report--> landing page
+    ' Quick tour of key sheets while Bridge narration plays
+    SilencePad
+
+    ' Play Bridge narration: "That's a sample of what this file can do..."
+    PlayAudio AUDIO_BASE_PATH & "Video1\V1_S6_Bridge.mp3"
+
+    ' Show key sheets during narration
+    WaitSec 2
+    GoToSheet "P&L - Monthly Trend"
+    ScrollToTop
+    WaitSec 2
+
+    GoToSheet "Product Line Summary"
+    ScrollToTop
+    WaitSec 2
+
+    GoToSheet "Charts & Visuals"
+    ScrollToTop
+    WaitSec 2
+
+    ' Back to landing page
     GoToSheet "Report-->"
     SelectCell "A1"
     ScrollToTop
 
-    SilencePad
-
-    ' Play Bridge narration: "That's a sample of what this file can do..."
-    PlayClip "Video1", "V1_S6_Bridge.mp3"
-
-    ' Brief pause between clips
+    ' Wait for bridge audio to finish
+    WaitForAudioEnd
     WaitSec 1
 
     ' Play Closing narration: "Everything you just saw runs from this one Excel file..."
-    PlayClip "Video1", "V1_S7_Closing.mp3"
+    PlayAudio AUDIO_BASE_PATH & "Video1\V1_S7_Closing.mp3"
 
-    ' Hold still for "Thanks for watching" — 3 seconds
+    ' Hold still on Report--> while closing plays
+    WaitForAudioEnd
+
+    ' Hold for "Thanks for watching"
     WaitSec 3
 
     SilencePad
-    StopAudio
 End Sub
 
 '===============================================================================
@@ -1316,61 +1364,94 @@ Private Sub V2_Clip8_Opening()
     ' "Welcome to the full walkthrough..."
     PlayAudio AUDIO_BASE_PATH & "Video2\V2_S0_Opening.mp3"
 
-    WaitSec 3
-    SmoothScrollDown 12, 500
-    WaitSec m_ClipDurSec - 9
+    ' NO scrolling — just hold still on Report--> page while opening plays
+    WaitForAudioEnd
 
     SilencePad
-    StopAudio
 End Sub
 
 '===============================================================================
 ' CLIP 9 — Workbook Tour (~85 sec)
 ' Audio: V2_S1a_Workbook.mp3
-' Action: Click through sheet tabs to show workbook structure
+' Action: Click through sheet tabs aligned with narration
+'
+' SCRIPT TIMING (estimated from word count at ~150 wpm):
+'   0-5s:   "Let's start with what's inside this file."
+'   5-12s:  "The landing page — Report — gives you a summary of the
+'            workbook and quick navigation to any section. Think of it
+'            as your table of contents."
+'   12-15s: "[click through a few sheet tabs at the bottom]"
+'   15-20s: "The file has over a dozen sheets."
+'   20-30s: "You've got the main P&L Monthly Trend sheet — this is
+'            your core financial data, revenue and expenses by month,
+'            with a full-year total and budget column."
+'   30-36s: "There are Functional P&L Summary sheets — one for each
+'            month — that break things down by department."
+'   36-43s: "A Product Line Summary sheet showing revenue by product
+'            — iGO, Affirm, InsureSight, DocFast."
+'   43-50s: "An Assumptions sheet with the key financial drivers —
+'            growth rates, allocation percentages, revenue shares."
+'   50-55s: "And a General Ledger sheet with the raw transaction data."
+'   55-60s: "You don't need to memorize any of this — because
+'            everything runs from one place."
 '===============================================================================
 Private Sub V2_Clip9_WorkbookTour()
     GoToSheet "Report-->"
+    SelectCell "A1"
     ScrollToTop
 
     SilencePad
 
-    ' "Let's start with what's inside this file..."
     PlayAudio AUDIO_BASE_PATH & "Video2\V2_S1a_Workbook.mp3"
 
-    WaitSec 4   ' let intro line play
+    ' 0-12s: Hold on Report--> while narrator describes the landing page
+    WaitSec 12
 
-    ' Click through sheet tabs with pauses
-    GoToSheet "P&L - Monthly Trend"
-    ScrollToTop
-    WaitSec 3   ' pause on P&L Trend
+    ' ~12-15s: "click through a few sheet tabs" — quick flick through tabs
+    GoToSheet "Assumptions"
+    WaitSec 0.8
+    GoToSheet "Data Dictionary"
+    WaitSec 0.8
+    GoToSheet "Charts & Visuals"
+    WaitSec 0.8
+    GoToSheet "Checks"
+    WaitSec 0.8
+    GoToSheet "Report-->"
+    WaitSec 1
 
-    ' Click to a Functional P&L Summary tab (fall back to Jan 25 if missing)
-    If SheetExistsLocal("Functional P&L Summary") Then
-        GoToSheet "Functional P&L Summary"
-    Else
-        GoToSheet "Jan 25"
-    End If
-    WaitSec 2
-
-    GoToSheet "Product Line Summary"
-    ScrollToTop
+    ' ~18s: Wait for "P&L Monthly Trend" to be mentioned
     WaitSec 3
 
+    ' ~20-30s: "the main P&L Monthly Trend sheet"
+    GoToSheet "P&L - Monthly Trend"
+    ScrollToTop
+    WaitSec 8
+
+    ' ~30-36s: "Functional P&L Summary sheets — one for each month"
+    GoToSheet "Functional P&L Summary - Jan 25"
+    ScrollToTop
+    WaitSec 5
+
+    ' ~36-43s: "Product Line Summary sheet showing revenue by product"
+    GoToSheet "Product Line Summary"
+    ScrollToTop
+    WaitSec 6
+
+    ' ~43-50s: "Assumptions sheet with the key financial drivers"
     GoToSheet "Assumptions"
     ScrollToTop
-    WaitSec 2
+    WaitSec 6
 
-    GoToSheet "General Ledger"
+    ' ~50-55s: "General Ledger sheet with the raw transaction data"
+    GoToSheet "CrossfireHiddenWorksheet"
     ScrollToTop
-    SmoothScrollDown 3, 300
-    WaitSec 2
+    WaitSec 4
 
-    ' Wait for remaining audio
-    WaitSec m_ClipDurSec - 20
+    ' ~55-60s: "You don't need to memorize any of this..."
+    ' Wait for audio to finish
+    WaitForAudioEnd
 
     SilencePad
-    StopAudio
 End Sub
 
 '===============================================================================
@@ -1379,25 +1460,82 @@ End Sub
 ' Action: Open CC, scroll categories, search "reconciliation", close
 '===============================================================================
 Private Sub V2_Clip10_CommandCenter()
+    ' Go back to Report--> before opening Command Center
+    GoToSheet "Report-->"
+    SelectCell "A1"
+    ScrollToTop
+
     SilencePad
 
     PlayAudio AUDIO_BASE_PATH & "Video2\V2_S1b_CommandCenter.mp3"
 
-    WaitSec 2
+    ' Script: "You don't need to memorize... everything runs from one place"
+    WaitSec 4
 
-    ' Open CC and browse it
-    ShowCCAndSearch "reconciliation", 3
+    ' Script: "This is the Command Center"
+    On Error Resume Next
+    Dim frm As Object
+    Set frm = VBA.UserForms.Add("frmCommandCenter")
+    If Not frm Is Nothing Then
+        frm.Show vbModeless
+        DoEvents
 
-    WaitSec m_ClipDurSec - 10
+        ' Let viewer absorb the CC — hold for 5 seconds
+        WaitSec 5
+
+        ' Script: "organized by category... scroll through to browse"
+        ' Scroll through categories slowly
+        Dim catIdx As Long
+        On Error Resume Next
+        For catIdx = 0 To frm.lstCategories.ListCount - 1
+            frm.lstCategories.ListIndex = catIdx
+            DoEvents
+            WaitSec 1.2
+        Next catIdx
+        On Error GoTo 0
+
+        ' Hold on the full list for a moment
+        WaitSec 3
+
+        ' Script: "use the search bar to find what you need"
+        ' Type "reconciliation" in search box
+        On Error Resume Next
+        frm.txtSearch.SetFocus
+        DoEvents
+        On Error GoTo 0
+        SimulateType "reconciliation", 100
+        DoEvents
+
+        ' Script: "show filtered results"
+        ' Hold on filtered results for 5 seconds so viewer can read
+        WaitSec 5
+
+        ' Clear search
+        On Error Resume Next
+        frm.txtSearch.Value = ""
+        DoEvents
+        On Error GoTo 0
+        WaitSec 2
+
+        ' Script: "That's your home base"
+        ' Close the Command Center
+        Unload frm
+        DoEvents
+    Else
+        ' Fallback — no CC form, just wait for audio
+        WaitForAudioEnd
+    End If
+    On Error GoTo 0
+
+    WaitForAudioEnd
 
     SilencePad
-    StopAudio
 End Sub
 
 '===============================================================================
 ' CLIP 11 — GL Import (~45 sec)
 ' Audio: V2_S2_GL_Import.mp3
-' Action: Show CC, then navigate to General Ledger to show data
+' Action: Show CC, then navigate to GL sheet (CrossfireHiddenWorksheet) to show data
 ' NOTE: We skip the actual file dialog import to avoid UI blocking.
 '       Instead we show the GL sheet which already has data loaded.
 '===============================================================================
@@ -1412,14 +1550,14 @@ Private Sub V2_Clip11_GLImport()
     ShowCCTypeActionAndRun 17, 1.5
 
     ' Navigate to GL sheet to show data (skip actual import dialog)
-    GoToSheet "General Ledger"
+    GoToSheet "CrossfireHiddenWorksheet"
     ScrollToTop
     WaitSec 2
 
     ' Scroll through GL data
-    SmoothScrollDown 8, 350
+    SmoothScrollDown 2, 350
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1439,7 +1577,8 @@ Private Sub V2_Clip12_DataQuality()
 
     ShowCCTypeActionAndRun 7, 1.5
 
-    ' Run scan
+    ' Run scan — dismiss completion MsgBox
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modDataQuality.ScanAll
     On Error GoTo 0
@@ -1449,9 +1588,9 @@ Private Sub V2_Clip12_DataQuality()
     WaitSec 3
 
     ' Scroll through category breakdown
-    SmoothScrollDown 10, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 12
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1471,7 +1610,8 @@ Private Sub V2_Clip13_Reconciliation()
 
     ShowCCTypeActionAndRun 3, 1.5
 
-    ' Run reconciliation checks
+    ' Run reconciliation checks — dismiss completion MsgBox
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modReconciliation.RunAllChecks
     On Error GoTo 0
@@ -1482,9 +1622,9 @@ Private Sub V2_Clip13_Reconciliation()
     ScrollToTop
     WaitSec 3
 
-    SmoothScrollDown 6, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1504,6 +1644,11 @@ Private Sub V2_Clip14_VarianceAnalysis()
 
     ShowCCTypeActionAndRun 6, 1.5
 
+    ' Pre-stage Yes for confirmation + Enter for completion MsgBox
+    DoEvents
+    Application.SendKeys "y{ENTER}", True
+    DoEvents
+
     On Error Resume Next
     modVarianceAnalysis.RunVarianceAnalysis
     On Error GoTo 0
@@ -1513,9 +1658,9 @@ Private Sub V2_Clip14_VarianceAnalysis()
     WaitSec 2
 
     ' Scroll through flagged items
-    SmoothScrollDown 8, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1535,6 +1680,8 @@ Private Sub V2_Clip15_VarianceCommentary()
 
     ShowCCTypeActionAndRun 46, 1.5
 
+    ' Dismiss completion MsgBox
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modVarianceAnalysis.GenerateCommentary
     On Error GoTo 0
@@ -1544,14 +1691,14 @@ Private Sub V2_Clip15_VarianceCommentary()
     WaitSec 3
 
     ' Scroll narratives slowly
-    SmoothScrollDown 6, 600
+    SmoothScrollDown 2, 600
 
     ' Select a narrative cell to draw eye
     On Error Resume Next
     ActiveSheet.Range("B6").Select
     On Error GoTo 0
 
-    WaitSec m_ClipDurSec - 12
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1571,15 +1718,16 @@ Private Sub V2_Clip16_YoYVariance()
 
     ShowCCTypeActionAndRun 47, 1.5
 
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modVarianceAnalysis.RunYoYVarianceAnalysis
     On Error GoTo 0
     DoEvents
 
     WaitSec 2
-    SmoothScrollDown 8, 350
+    SmoothScrollDown 2, 350
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1608,9 +1756,9 @@ Private Sub V2_Clip17_DashboardCharts()
     WaitSec 3
 
     ' Scroll through charts
-    SmoothScrollDown 10, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 12
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1628,6 +1776,7 @@ Private Sub V2_Clip18_ExecDashboard()
 
     WaitSec 3
 
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modDashboardAdvanced.CreateExecutiveDashboard
     On Error GoTo 0
@@ -1637,14 +1786,14 @@ Private Sub V2_Clip18_ExecDashboard()
     WaitSec 2
 
     ' Waterfall chart
-    SmoothScrollDown 6, 350
+    SmoothScrollDown 2, 350
     WaitSec 2
 
     ' Product comparison
-    SmoothScrollDown 6, 350
+    SmoothScrollDown 2, 350
     WaitSec 2
 
-    WaitSec m_ClipDurSec - 12
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1675,7 +1824,7 @@ Private Sub V2_Clip19_PDFExport()
     ' Collect valid report sheets
     Dim candidates As Variant
     candidates = Array("Report-->", "P&L - Monthly Trend", "Product Line Summary", _
-                       "Functional P&L Summary", "Assumptions", "General Ledger", "Checks")
+                       "Functional P&L Summary", "Assumptions", "CrossfireHiddenWorksheet", "Checks")
     Dim valid() As String
     Dim cnt As Long: cnt = 0
     Dim i As Long
@@ -1706,7 +1855,13 @@ Private Sub V2_Clip19_PDFExport()
     ' Re-select single sheet for clean view
     GoToSheet "Report-->"
 
-    WaitSec m_ClipDurSec - 6
+    ' Reset page break view left by PDF export
+    On Error Resume Next
+    ActiveWindow.View = xlNormalView
+    ActiveSheet.DisplayPageBreaks = False
+    On Error GoTo 0
+
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1724,15 +1879,16 @@ Private Sub V2_Clip20_ExecBrief()
 
     WaitSec 3
 
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modExecBrief.GenerateExecBrief
     On Error GoTo 0
     DoEvents
 
     WaitSec 2
-    SmoothScrollDown 8, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 8
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1765,7 +1921,10 @@ Private Sub V2_Clip21_ExecutiveMode()
     On Error GoTo 0
     DoEvents
 
-    WaitSec m_ClipDurSec - 8
+    ' SAFETY: Force-unhide all core sheets in case toggle failed
+    ForceUnhideAllSheets
+
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1813,7 +1972,7 @@ Private Sub V2_Clip22_VersionControl()
 
     On Error GoTo 0
 
-    WaitSec m_ClipDurSec - 5
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1847,14 +2006,14 @@ Private Sub V2_Clip23_WhatIf()
     WaitSec 4
 
     ' Scroll through the impact analysis
-    SmoothScrollDown 8, 500
+    SmoothScrollDown 2, 500
     WaitSec 3
 
     ' Navigate to Assumptions to show changed values
     GoToSheet "Assumptions"
     ScrollToTop
     WaitSec 3
-    SmoothScrollDown 4, 400
+    SmoothScrollDown 2, 400
     WaitSec 2
 
     ' Go back to impact sheet
@@ -1868,7 +2027,7 @@ Private Sub V2_Clip23_WhatIf()
     On Error GoTo 0
     DoEvents
 
-    WaitSec m_ClipDurSec - 30
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1892,15 +2051,16 @@ Private Sub V2_Clip24_Sensitivity()
 
     ShowCCTypeActionAndRun 5, 1.5
 
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modSensitivity.RunSensitivityAnalysis
     On Error GoTo 0
     DoEvents
 
     WaitSec 2
-    SmoothScrollDown 8, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1920,6 +2080,11 @@ Private Sub V2_Clip25_IntegrationTest()
 
     ShowCCTypeActionAndRun 44, 1.5
 
+    ' Pre-stage Yes for the confirmation dialog
+    DoEvents
+    Application.SendKeys "y{ENTER}", True
+    DoEvents
+
     On Error Resume Next
     modIntegrationTest.RunFullTest
     On Error GoTo 0
@@ -1928,9 +2093,9 @@ Private Sub V2_Clip25_IntegrationTest()
     ' Pause on 18/18 PASS result
     WaitSec 3
 
-    SmoothScrollDown 6, 350
+    SmoothScrollDown 2, 350
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -1949,16 +2114,26 @@ Private Sub V2_Clip26_AuditLogClosing()
 
     WaitSec 2
 
-    ' Show the audit log
+    ' Show the audit log — SendKeys dismisses the info MsgBox
+    ' ViewLog unhides VBA_AuditLog sheet, navigates to it, then shows MsgBox
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modLogger.ViewLog
     On Error GoTo 0
     DoEvents
 
-    WaitSec 2
-    SmoothScrollDown 6, 350
+    ' Navigate to the audit log sheet (in case ViewLog didn't activate it)
+    On Error Resume Next
+    ThisWorkbook.Worksheets("VBA_AuditLog").Visible = xlSheetVisible
+    ThisWorkbook.Worksheets("VBA_AuditLog").Activate
+    On Error GoTo 0
+    DoEvents
+    ScrollToTop
 
-    WaitSec m_ClipDurSec - 8
+    WaitSec 2
+    SmoothScrollDown 2, 350
+
+    WaitForAudioEnd
     StopAudio
     WaitSec 1
 
@@ -1967,15 +2142,16 @@ Private Sub V2_Clip26_AuditLogClosing()
 
     WaitSec 2
 
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
     modTimeSaved.ShowTimeSavedReport
     On Error GoTo 0
     DoEvents
 
     WaitSec 2
-    SmoothScrollDown 8, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 8
+    WaitForAudioEnd
     StopAudio
     WaitSec 1
 
@@ -2020,11 +2196,9 @@ Public Sub RunVideo3()
         If resp = vbNo Then Exit Sub
     End If
 
-    ' Pre-flight check (lighter — Video 3 has different sheet requirements)
-    If Not PreFlightCheck(3) Then
-        MsgBox "Pre-flight check failed or cancelled. Video 3 not started.", vbExclamation, "Director"
-        Exit Sub
-    End If
+    ' Skip pre-flight for Video 3 — sample file doesn't have demo sheets
+    ' Pre-flight would show a dialog that blocks the recording
+    Debug.Print "[Director] Video 3: Pre-flight skipped (sample file)"
 
     StatusMsg "VIDEO 3 starting — Universal Tools"
     Debug.Print "========================================"
@@ -2120,22 +2294,43 @@ End Sub
 ' Action: Show messy sample file, slow scroll
 '===============================================================================
 Private Sub V3_Clip27_Opening()
-    ' Should already be on the sample file's first sheet
+    ' Navigate to Q1 Revenue (the main data sheet, not Cover)
     On Error Resume Next
-    ActiveWorkbook.Worksheets(1).Activate
+    ActiveWorkbook.Worksheets("Q1 Revenue").Activate
     On Error GoTo 0
+    SelectCell "A1"
     ScrollToTop
 
     SilencePad
 
     PlayAudio AUDIO_BASE_PATH & "Video3\V3_S0_Opening.mp3"
 
-    WaitSec 3
+    ' Hold on header area so viewer sees the column names
+    WaitSec 4
 
-    ' Slowly scroll to show the messy data
-    SmoothScrollDown 12, 500
+    ' Slowly scroll to show the messy data — blank rows, mixed dates, text numbers
+    SmoothScrollDown 2, 600
+    WaitSec 2
 
-    WaitSec m_ClipDurSec - 9
+    ' Quick tour of other sheets to show scope
+    GoToSheet "Q1 Expenses"
+    ScrollToTop
+    WaitSec 2
+
+    GoToSheet "Budget Summary"
+    ScrollToTop
+    WaitSec 2
+
+    GoToSheet "Contact List"
+    ScrollToTop
+    WaitSec 2
+
+    ' Back to Q1 Revenue for the demos
+    GoToSheet "Q1 Revenue"
+    ScrollToTop
+    WaitSec 1
+
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -2147,29 +2342,34 @@ End Sub
 ' Action: Run PreviewSanitizeChanges, then RunFullSanitize
 '===============================================================================
 Private Sub V3_Clip28_DataSanitizer()
+    GoToSheet "Q1 Revenue"
+    ScrollToTop
     SilencePad
 
     PlayAudio AUDIO_BASE_PATH & "Video3\V3_C1A_DataSanitizer.mp3"
 
     WaitSec 3
 
-    ' Preview first
+    ' Preview — silent, no dialogs
+    StatusMsg "Running: Data Sanitizer - Preview"
     On Error Resume Next
-    modUTL_DataSanitizer.PreviewSanitizeChanges
+    Application.Run "DirectorPreviewSanitize"
     On Error GoTo 0
     DoEvents
     WaitSec 4
 
-    ' Now run full sanitize
+    ' Full sanitize — silent, no dialogs
+    StatusMsg "Running: Data Sanitizer - Full Clean"
     On Error Resume Next
-    modUTL_DataSanitizer.RunFullSanitize
+    Application.Run "DirectorRunFullSanitize"
     On Error GoTo 0
     DoEvents
 
     WaitSec 3
-    SmoothScrollDown 6, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 14
+    WaitForAudioEnd
+    Application.StatusBar = False
 
     SilencePad
     StopAudio
@@ -2187,32 +2387,39 @@ Private Sub V3_Clip29_Highlights()
 
     WaitSec 3
 
-    ' Run threshold highlighting
-    ' These macros may prompt for input — use SendKeys
-    Application.SendKeys "5000{ENTER}", True
+    ' Select Amount column on Q1 Revenue
     On Error Resume Next
-    modUTL_Highlights.HighlightByThreshold
+    ActiveWorkbook.Worksheets("Q1 Revenue").Activate
+    Dim hlRng As Range
+    Set hlRng = ActiveSheet.Range("F2:F43")
+    On Error GoTo 0
+
+    ' Threshold highlight — silent, no dialogs
+    StatusMsg "Running: Highlight by Threshold (> $100,000)"
+    On Error Resume Next
+    Application.Run "DirectorHighlightThreshold", hlRng, 100000, 1
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
-    ' Run duplicate highlighting
+    ' Duplicate highlight — silent, no dialogs
+    StatusMsg "Running: Highlight Duplicate Values"
     On Error Resume Next
-    modUTL_Highlights.HighlightDuplicateValues
+    Application.Run "DirectorHighlightDuplicates", hlRng
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
-    SmoothScrollDown 4, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 12
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
 
-    ' Clear highlights for next clip
+    ' Clear highlights — silent
     On Error Resume Next
-    modUTL_Highlights.ClearHighlights
+    Application.Run "DirectorClearHighlights"
     On Error GoTo 0
 End Sub
 
@@ -2228,25 +2435,17 @@ Private Sub V3_Clip30_Comments()
 
     WaitSec 3
 
+    ' Extract comments — silent, no dialogs
+    StatusMsg "Running: Extract All Comments"
     On Error Resume Next
-    modUTL_Comments.CountComments
-    On Error GoTo 0
-    DoEvents
-    WaitSec 3
-
-    ' Dismiss any MsgBox
-    Application.SendKeys "{ENTER}", True
-    DoEvents
-    WaitSec 1
-
-    On Error Resume Next
-    modUTL_Comments.ExtractAllComments
+    Application.Run "DirectorExtractComments"
     On Error GoTo 0
     DoEvents
 
     WaitSec 3
 
-    WaitSec m_ClipDurSec - 12
+    WaitForAudioEnd
+    Application.StatusBar = False
 
     SilencePad
     StopAudio
@@ -2264,19 +2463,24 @@ Private Sub V3_Clip31_TabOrganizer()
 
     WaitSec 3
 
+    ' Color tabs — silent, no dialogs
+    StatusMsg "Running: Color Tabs by Keyword (Revenue = Blue)"
     On Error Resume Next
-    modUTL_TabOrganizer.ColorTabsByKeyword
+    Application.Run "DirectorColorTabsByKeyword"
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
+    ' Reorder tabs — silent, no dialogs
+    StatusMsg "Running: Reorder Tabs Alphabetically"
     On Error Resume Next
-    modUTL_TabOrganizer.ReorderTabs
+    Application.Run "DirectorReorderTabs"
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
+    Application.StatusBar = False
 
     SilencePad
     StopAudio
@@ -2294,19 +2498,30 @@ Private Sub V3_Clip32_ColumnOps()
 
     WaitSec 3
 
+    ' Split Full Name into First + Last — silent, no dialogs
+    ' After split: A=First, B=Last, C=Title, D=Department, E=Email, F=Phone, G=Office Location
+    StatusMsg "Running: Split Column (Full Name -> First + Last)"
     On Error Resume Next
-    modUTL_ColumnOps.SplitColumn
+    ActiveWorkbook.Worksheets("Contact List").Activate
+    Dim splitRng As Range
+    Set splitRng = ActiveSheet.Range("A2:A16")
+    Application.Run "DirectorSplitColumn", splitRng, " "
     On Error GoTo 0
     DoEvents
     WaitSec 4
 
+    ' Combine First + Last back into Full Name — demos the reverse of split
+    ' After split, A=First and B=Last, so combining A+B reconstructs the Full Name
+    StatusMsg "Running: Combine Columns (First + Last -> Full Name)"
     On Error Resume Next
-    modUTL_ColumnOps.CombineColumns
+    Dim combRng As Range
+    Set combRng = ActiveSheet.Range("A2:B16")
+    Application.Run "DirectorCombineColumns", combRng, " "
     On Error GoTo 0
     DoEvents
     WaitSec 4
 
-    WaitSec m_ClipDurSec - 14
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -2324,27 +2539,27 @@ Private Sub V3_Clip33_SheetTools()
 
     WaitSec 3
 
+    ' Sheet index — silent, no dialogs
+    StatusMsg "Running: Create Sheet Index with Links"
     On Error Resume Next
-    modUTL_SheetTools.ListAllSheetsWithLinks
+    Application.Run "DirectorListAllSheetsWithLinks"
     On Error GoTo 0
     DoEvents
     WaitSec 4
 
-    SmoothScrollDown 4, 350
+    SmoothScrollDown 2, 350
     WaitSec 2
 
-    ' TemplateCloner prompts for sheet name and count
-    Application.SendKeys "Sheet1{ENTER}", True
-    WaitSec 0.5
-    Application.SendKeys "2{ENTER}", True
-
+    ' Template cloner — silent, no dialogs
+    StatusMsg "Running: Template Cloner (Q1 Expenses x 2)"
     On Error Resume Next
-    modUTL_SheetTools.TemplateCloner
+    Application.Run "DirectorTemplateCloner", "Q1 Expenses", 2
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
-    WaitSec m_ClipDurSec - 14
+    WaitForAudioEnd
+    Application.StatusBar = False
 
     SilencePad
     StopAudio
@@ -2362,15 +2577,18 @@ Private Sub V3_Clip34_Compare()
 
     WaitSec 3
 
+    ' Compare sheets — silent, no dialogs
+    StatusMsg "Running: Compare Sheets (Q1 Revenue vs Q1 Revenue v2)"
     On Error Resume Next
-    modUTL_Compare.CompareSheets
+    Application.Run "DirectorCompareSheets", "Q1 Revenue", "Q1 Revenue v2"
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
-    SmoothScrollDown 6, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
+    Application.StatusBar = False
 
     SilencePad
     StopAudio
@@ -2388,15 +2606,18 @@ Private Sub V3_Clip35_Consolidate()
 
     WaitSec 3
 
+    ' Consolidate sheets — silent, no dialogs
+    StatusMsg "Running: Consolidate Sheets (Q1 Revenue + Q1 Revenue v2)"
     On Error Resume Next
-    modUTL_Consolidate.ConsolidateSheets
+    Application.Run "DirectorConsolidateSheets", Array("Q1 Revenue", "Q1 Revenue v2")
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
-    SmoothScrollDown 6, 400
+    SmoothScrollDown 2, 400
 
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
+    Application.StatusBar = False
 
     SilencePad
     StopAudio
@@ -2415,34 +2636,40 @@ Private Sub V3_Clip36_PivotLookup()
 
     WaitSec 3
 
+    StatusMsg "Running: List All Pivot Tables"
+    Application.SendKeys "{ENTER}", True
     On Error Resume Next
-    modUTL_PivotTools.ListAllPivots
+    Application.Run "ListAllPivots"
     On Error GoTo 0
     DoEvents
     WaitSec 3
 
-    WaitSec m_ClipDurSec - 8
+    WaitForAudioEnd
     StopAudio
     WaitSec 1
 
     ' --- Part B: Lookup/Validation ---
+    ' Skip BuildVLOOKUP and CreateDropdownList — they have too many
+    ' InputBox dialogs (4-5 each) that are impossible to pre-stage reliably.
+    ' Instead, navigate to Budget Summary to show the existing data
+    ' while the narration plays.
     PlayAudio AUDIO_BASE_PATH & "Video3\V3_C3D_LookupValidation.mp3"
 
     WaitSec 3
 
+    ' Show the Budget Summary sheet (already has formulas and dropdown source list)
     On Error Resume Next
-    modUTL_LookupBuilder.BuildVLOOKUP
+    ActiveWorkbook.Worksheets("Budget Summary").Activate
     On Error GoTo 0
+    ScrollToTop
     DoEvents
+    WaitSec 4
+
+    ' Scroll to show the dropdown source list at the bottom
+    SmoothScrollDown 2, 500
     WaitSec 3
 
-    On Error Resume Next
-    modUTL_ValidationBuilder.CreateDropdownList
-    On Error GoTo 0
-    DoEvents
-    WaitSec 3
-
-    WaitSec m_ClipDurSec - 10
+    WaitForAudioEnd
 
     SilencePad
     StopAudio
@@ -2460,13 +2687,18 @@ Private Sub V3_Clip37_CommandCenter()
 
     WaitSec 3
 
-    ' Show the Universal Command Center
+    ' Show tool inventory — silent, creates a styled sheet listing all tools
+    StatusMsg "Running: Universal Tool Inventory"
     On Error Resume Next
-    modUTL_CommandCenter.LaunchUTLCommandCenter
+    Application.Run "DirectorShowCommandCenter"
     On Error GoTo 0
     DoEvents
+    WaitSec 3
 
-    WaitSec m_ClipDurSec - 5
+    SmoothScrollDown 2, 400
+
+    WaitForAudioEnd
+    Application.StatusBar = False
 
     SilencePad
     StopAudio
@@ -2478,10 +2710,10 @@ End Sub
 ' Action: Hold on cleaned-up sample file, static
 '===============================================================================
 Private Sub V3_Clip38_Closing()
-    ' Navigate to first sheet
-    On Error Resume Next
-    ActiveWorkbook.Worksheets(1).Activate
-    On Error GoTo 0
+    ' Navigate to Q1 Revenue (not Cover) for closing shot
+    Application.StatusBar = False
+    GoToSheet "Q1 Revenue"
+    SelectCell "A1"
     ScrollToTop
 
     SilencePad
@@ -2629,7 +2861,7 @@ Public Sub QuickTest()
 
     ' --- Test 3: Scroll ---
     WaitSec 2
-    SmoothScrollDown 5, 400
+    SmoothScrollDown 2, 400
     WaitSec 2
 
     StopAudio
