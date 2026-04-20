@@ -60,6 +60,10 @@ A curated set of markdown documents was generated, originally under `Archive/doc
     - cherry-pick,
     - push-to-new-remote.
 
+- `CodexDraft/setup/VERY_BEGINNER_PUSH_GUIDE.md`
+  - Ultra-simple \"how to push\" instructions for non-developers.
+  - Includes common error handling (remote missing, auth issues, branch mismatch).
+
 ---
 
 ## 4) Why this structure was chosen
@@ -118,6 +122,7 @@ CodexDraft/
     BUILD_VIDEO_DEMO_WORKBOOK.md
     CODEX_GIT_BRANCH_FAQ.md
     MOVE_DOCS_TO_NEW_REPO.md
+    VERY_BEGINNER_PUSH_GUIDE.md
 ```
 
 This handoff should give the next AI enough context to continue implementation without re-discovery.

@@ -28,6 +28,8 @@ I created a package of docs to help you:
   - Beginner Git/Codex answers (branches, push, etc.).
 - **MOVE_DOCS_TO_NEW_REPO.md**
   - How to copy/push these docs into your new repo.
+- **VERY_BEGINNER_PUSH_GUIDE.md**
+  - Super simple push instructions with copy/paste commands and common error fixes.
 
 ### Top-level docs
 - **HANDOFF_FOR_NEXT_AI_DETAILED.md**
@@ -51,7 +53,8 @@ I created a package of docs to help you:
 3. `overview/FOUR_VIDEO_SHOT_BY_SHOT_RUN_SHEET.md`
 4. `setup/BUILD_VIDEO_DEMO_WORKBOOK.md`
 5. `setup/MOVE_DOCS_TO_NEW_REPO.md`
-6. `HANDOFF_FOR_NEXT_AI_DETAILED.md`
+6. `setup/VERY_BEGINNER_PUSH_GUIDE.md`
+7. `HANDOFF_FOR_NEXT_AI_DETAILED.md`
 
 ---
 
