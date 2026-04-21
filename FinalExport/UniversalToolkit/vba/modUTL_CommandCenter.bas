@@ -692,6 +692,14 @@ Private Sub LoadBuiltInTools()
     AddTool "Executive Brief", "Generate Exec Brief", "modUTL_ExecBrief.GenerateExecBrief", _
             "Scan any workbook and build an executive brief report", "Built-in"
 
+    '=== INTELLIGENCE (3 tools) ===
+    AddTool "Intelligence", "Materiality Classifier", "modUTL_Intelligence.MaterialityClassifierActiveSheet", _
+            "Tag rows on the active sheet as Material / Watch / Normal based on $ and % thresholds", "Built-in"
+    AddTool "Intelligence", "Exception Narratives", "modUTL_Intelligence.GenerateExceptionNarrativesActiveSheet", _
+            "Write plain-English narrative sentences for each row after Materiality has run", "Built-in"
+    AddTool "Intelligence", "Data Quality Scorecard", "modUTL_Intelligence.DataQualityScorecardActiveSheet", _
+            "Score the active sheet 0-100 on blanks and error cells", "Built-in"
+
     '=== FINANCE (14 tools) ===
     AddTool "Finance", "Duplicate Invoice Detector", "modUTL_Finance.DuplicateInvoiceDetector", _
             "Find duplicate invoices by amount, date, vendor", "Built-in"
