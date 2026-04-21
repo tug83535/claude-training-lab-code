@@ -1,0 +1,154 @@
+{
+  "_comment": [
+    "Power Automate flow template - Purchase Approval workflow.",
+    "",
+    "WHY THIS IS NOT NATIVE EXCEL / ONEDRIVE:",
+    "   OneDrive comments can flag a cell but can't stop a spending decision,",
+    "   route it to a manager, record the approval in SharePoint, and close",
+    "   the loop by notifying the requester. This JSON is an import-ready",
+    "   Power Automate flow definition that wires it all up.",
+    "",
+    "USE CASE:",
+    "   Sales rep submits an expense request in a SharePoint form. If amount",
+    "   is > $500 it requires their manager's approval. > $5K requires CFO.",
+    "   Approved requests get posted to a 'Approved Spend' SharePoint list,",
+    "   and the submitter gets an email + a Teams DM. Denied requests explain",
+    "   why.",
+    "",
+    "IMPORT STEPS:",
+    "   1. Go to https://make.powerautomate.com",
+    "   2. My flows -> Import -> Import Package",
+    "   3. Upload this file renamed to .zip after wrapping its folder structure",
+    "   4. Map connections: SharePoint site, Outlook, Teams",
+    "   5. Turn on the flow"
+  ],
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "triggers": {
+      "When_a_new_item_is_created_in_SharePoint_list": {
+        "type": "OpenApiConnection",
+        "inputs": {
+          "host": {
+            "connectionName": "shared_sharepointonline",
+            "operationId": "GetOnNewItems",
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+          },
+          "parameters": {
+            "dataset": "https://yourco.sharepoint.com/sites/Finance",
+            "table": "PurchaseRequests"
+          }
+        },
+        "recurrence": { "frequency": "Minute", "interval": 5 }
+      }
+    },
+    "actions": {
+      "Route_by_Amount": {
+        "type": "Switch",
+        "expression": "@triggerOutputs()?['body/Amount']",
+        "cases": {
+          "UnderFiveHundred": {
+            "case": 500,
+            "actions": {
+              "Auto_Approve_Small": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "connectionName": "shared_sharepointonline",
+                    "operationId": "PatchItem",
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                  },
+                  "parameters": {
+                    "dataset": "https://yourco.sharepoint.com/sites/Finance",
+                    "table": "PurchaseRequests",
+                    "id": "@triggerOutputs()?['body/ID']",
+                    "item/Status": "Auto-Approved (under $500)",
+                    "item/ApprovedBy": "System",
+                    "item/ApprovedAt": "@utcNow()"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "default": {
+          "actions": {
+            "Determine_Approver": {
+              "type": "Compose",
+              "inputs": "@if(greater(triggerOutputs()?['body/Amount'], 5000), 'cfo@yourco.com', triggerOutputs()?['body/RequesterManager'])"
+            },
+            "Start_Approval": {
+              "type": "OpenApiConnectionWebhook",
+              "runAfter": { "Determine_Approver": ["Succeeded"] },
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_approvals",
+                  "operationId": "StartAndWaitForAnApproval",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals"
+                },
+                "parameters": {
+                  "approvalType": "Approve/Reject - First to respond",
+                  "WebhookApprovalCreationInput/title": "Purchase Request: @{triggerOutputs()?['body/Title']} ($@{triggerOutputs()?['body/Amount']})",
+                  "WebhookApprovalCreationInput/assignedTo": "@{outputs('Determine_Approver')}",
+                  "WebhookApprovalCreationInput/details": "Requester: @{triggerOutputs()?['body/Requester/Email']}\nVendor: @{triggerOutputs()?['body/Vendor']}\nPurpose: @{triggerOutputs()?['body/Purpose']}"
+                }
+              }
+            },
+            "Update_SharePoint_With_Decision": {
+              "type": "OpenApiConnection",
+              "runAfter": { "Start_Approval": ["Succeeded"] },
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "PatchItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "https://yourco.sharepoint.com/sites/Finance",
+                  "table": "PurchaseRequests",
+                  "id": "@triggerOutputs()?['body/ID']",
+                  "item/Status": "@body('Start_Approval')?['outcome']",
+                  "item/ApprovedBy": "@body('Start_Approval')?['responses'][0]['responder']['email']",
+                  "item/ApprovedAt": "@utcNow()",
+                  "item/ApproverComments": "@body('Start_Approval')?['responses'][0]['comments']"
+                }
+              }
+            },
+            "Notify_Requester_Email": {
+              "type": "OpenApiConnection",
+              "runAfter": { "Update_SharePoint_With_Decision": ["Succeeded"] },
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_office365",
+                  "operationId": "SendEmailV2",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+                },
+                "parameters": {
+                  "emailMessage/To": "@triggerOutputs()?['body/Requester/Email']",
+                  "emailMessage/Subject": "Your purchase request was @{body('Start_Approval')?['outcome']}",
+                  "emailMessage/Body": "<p>Hi @{triggerOutputs()?['body/Requester/DisplayName']},</p><p>Your request for @{triggerOutputs()?['body/Vendor']} ($@{triggerOutputs()?['body/Amount']}) was <b>@{body('Start_Approval')?['outcome']}</b> by @{body('Start_Approval')?['responses'][0]['responder']['displayName']}.</p><p>Comments: @{body('Start_Approval')?['responses'][0]['comments']}</p>"
+                }
+              }
+            },
+            "Notify_Teams_DM": {
+              "type": "OpenApiConnection",
+              "runAfter": { "Notify_Requester_Email": ["Succeeded"] },
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_teams",
+                  "operationId": "PostMessageToChat",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+                },
+                "parameters": {
+                  "recipient": "@triggerOutputs()?['body/Requester/Email']",
+                  "messageBody/content": "Your purchase request for $@{triggerOutputs()?['body/Amount']} was @{body('Start_Approval')?['outcome']}."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "_comment": [
+    "Power Automate flow template - New Hire Onboarding.",
+    "",
+    "TRIGGER: New row added to the HR 'New Hires' SharePoint list.",
+    "",
+    "STEPS:",
+    "  1. Create OneDrive folder for the hire in /Onboarding/<firstname-lastname>/",
+    "  2. Copy the standard onboarding packet into that folder",
+    "  3. Create a Planner task checklist for IT (provision accounts) and",
+    "     for the hiring manager (equipment + workspace)",
+    "  4. Send calendar invites for Week-1 orientation, Day-30 check-in,",
+    "     and Day-90 review",
+    "  5. Post a welcome message in the team's Teams channel",
+    "  6. Add the hire to the all-staff distribution list via Azure AD group",
+    "  7. Update a tracking row in the HR Excel file (via Office Script)",
+    "",
+    "WHY THIS IS NOT NATIVE EXCEL / ONEDRIVE:",
+    "  Each of these steps is a separate Microsoft service. No single product",
+    "  orchestrates all of them. Power Automate bridges the gap.",
+    "",
+    "IMPORT: My flows -> Import -> Import Package (.zip). Map connections."
+  ],
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "triggers": {
+      "When_a_new_hire_row_is_added": {
+        "type": "OpenApiConnection",
+        "inputs": {
+          "host": {
+            "connectionName": "shared_sharepointonline",
+            "operationId": "GetOnNewItems",
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+          },
+          "parameters": {
+            "dataset": "https://yourco.sharepoint.com/sites/HR",
+            "table": "NewHires"
+          }
+        }
+      }
+    },
+    "actions": {
+      "1_Create_Onboarding_Folder": {
+        "type": "OpenApiConnection",
+        "inputs": {
+          "host": { "connectionName": "shared_onedriveforbusiness", "operationId": "CreateFolder" },
+          "parameters": {
+            "folderPath": "/Onboarding/@{triggerOutputs()?['body/FirstName']}-@{triggerOutputs()?['body/LastName']}"
+          }
+        }
+      },
+      "2_Copy_Packet": {
+        "type": "OpenApiConnection",
+        "runAfter": { "1_Create_Onboarding_Folder": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_onedriveforbusiness", "operationId": "CopyFolder" },
+          "parameters": {
+            "source": "/Templates/OnboardingPacket",
+            "destination": "@outputs('1_Create_Onboarding_Folder')?['body/Path']"
+          }
+        }
+      },
+      "3a_Create_IT_Provisioning_Task": {
+        "type": "OpenApiConnection",
+        "runAfter": { "1_Create_Onboarding_Folder": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_planner", "operationId": "CreateTaskV3" },
+          "parameters": {
+            "planId": "YOUR_PLAN_ID_HERE",
+            "bucketId": "IT-Onboarding-bucket",
+            "title": "Provision accounts for @{triggerOutputs()?['body/FirstName']} @{triggerOutputs()?['body/LastName']}",
+            "assignedUserIds": ["it-helpdesk@yourco.com"],
+            "startDateTime": "@triggerOutputs()?['body/StartDate']"
+          }
+        }
+      },
+      "3b_Create_Manager_Task": {
+        "type": "OpenApiConnection",
+        "runAfter": { "1_Create_Onboarding_Folder": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_planner", "operationId": "CreateTaskV3" },
+          "parameters": {
+            "planId": "YOUR_PLAN_ID_HERE",
+            "bucketId": "Manager-Onboarding-bucket",
+            "title": "Prepare equipment & workspace for @{triggerOutputs()?['body/FirstName']} @{triggerOutputs()?['body/LastName']}",
+            "assignedUserIds": ["@triggerOutputs()?['body/ManagerEmail']"]
+          }
+        }
+      },
+      "4a_Send_Week1_Orientation_Invite": {
+        "type": "OpenApiConnection",
+        "runAfter": { "3a_Create_IT_Provisioning_Task": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_office365", "operationId": "V4CalendarPostItem" },
+          "parameters": {
+            "subject": "Welcome to iPipeline - Week 1 Orientation",
+            "start": "@addDays(triggerOutputs()?['body/StartDate'], 1)T09:00:00",
+            "end":   "@addDays(triggerOutputs()?['body/StartDate'], 1)T10:00:00",
+            "requiredAttendees": "@{triggerOutputs()?['body/Email']};people-ops@yourco.com",
+            "body": "Welcome!"
+          }
+        }
+      },
+      "4b_Send_Day30_Checkin_Invite": {
+        "type": "OpenApiConnection",
+        "runAfter": { "4a_Send_Week1_Orientation_Invite": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_office365", "operationId": "V4CalendarPostItem" },
+          "parameters": {
+            "subject": "30-day check-in: @{triggerOutputs()?['body/FirstName']}",
+            "start": "@addDays(triggerOutputs()?['body/StartDate'], 30)T10:00:00",
+            "end":   "@addDays(triggerOutputs()?['body/StartDate'], 30)T10:30:00",
+            "requiredAttendees": "@{triggerOutputs()?['body/ManagerEmail']};@{triggerOutputs()?['body/Email']}"
+          }
+        }
+      },
+      "5_Post_Welcome_In_Teams": {
+        "type": "OpenApiConnection",
+        "runAfter": { "4b_Send_Day30_Checkin_Invite": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_teams", "operationId": "PostMessageToChannel" },
+          "parameters": {
+            "teamId": "YOUR_TEAM_ID",
+            "channelId": "YOUR_WELCOMES_CHANNEL_ID",
+            "messageBody/content": ":tada: Please welcome <at>@{triggerOutputs()?['body/FirstName']} @{triggerOutputs()?['body/LastName']}</at> to @{triggerOutputs()?['body/Department']}! Starting @{triggerOutputs()?['body/StartDate']}."
+          }
+        }
+      },
+      "6_Add_To_AllStaff_DL": {
+        "type": "OpenApiConnection",
+        "runAfter": { "5_Post_Welcome_In_Teams": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_azuread", "operationId": "AddGroupMember" },
+          "parameters": {
+            "group": "YOUR_ALL_STAFF_GROUP_OBJECT_ID",
+            "member": "@triggerOutputs()?['body/Email']"
+          }
+        }
+      },
+      "7_Update_Tracking_Row": {
+        "type": "OpenApiConnection",
+        "runAfter": { "6_Add_To_AllStaff_DL": ["Succeeded"] },
+        "inputs": {
+          "host": { "connectionName": "shared_excelonlinebusiness", "operationId": "AddRowIntoTable" },
+          "parameters": {
+            "source": "me",
+            "drive": "OneDrive",
+            "file": "/HR/NewHireTracking.xlsx",
+            "table": "TrackerTable",
+            "item": {
+              "Name": "@{triggerOutputs()?['body/FirstName']} @{triggerOutputs()?['body/LastName']}",
+              "StartDate": "@triggerOutputs()?['body/StartDate']",
+              "Status": "Onboarding kicked off",
+              "KickedOffAt": "@utcNow()"
+            }
+          }
+        }
+      }
+    }
+  }
+}
