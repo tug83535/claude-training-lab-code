@@ -1,5 +1,32 @@
 # Project Todo — APCLDmerge (iPipeline P&L Demo)
 
+## Codex Cherry-Pick Campaign (2026-04-20 — active)
+
+Porting select ideas from the parallel Codex build into Project A. Full tracker: `C:\Users\connor.atlee\RecTrial\CodexCompare\CHERRY_PICK_TRACKER.md`. Comparison report: `C:\Users\connor.atlee\RecTrial\CodexCompare\COMPARISON_REPORT.md`. Project A stays structurally as-is — no refactors, only additions.
+
+### Batch 1 — Small VBA wins
+- [ ] **K — Margin-threshold narrative labels** for What-If (≥60% aggressive / ≥50% monitor / <50% escalate) — `modWhatIf_v2.1.bas`
+- [ ] **B — `CreateRunReceiptSheet`** helper — `modUTL_Audit.bas` (new public sub)
+- [ ] **C — `UTL_DetectHeaderRow`** helper — `modUTL_Core.bas` (new public function)
+
+### Batch 2 — Capability
+- [ ] **A — `modUTL_Intelligence.bas`** — MaterialityClassifier + ExceptionNarratives + DataQualityScorecard (3 universal subs)
+- [ ] **D — Row-signature fast compare** helper — `modUTL_Compare.bas` (new entry point)
+
+### Batch 3 — Zero-install Python
+- [ ] **E1-E4** — `profile_workbook.py`, `sanitize_dataset.py`, `compare_workbooks.py`, `build_exec_summary.py` (stdlib only, new `UniversalToolkit\python\ZeroInstall\`)
+- [ ] **F, G, H** — `variance_classifier.py`, `scenario_runner.py`, `sheets_to_csv.py` (stdlib only)
+- [ ] **I/J — Talking-points auto-generator** — add to `word_report.py`
+
+### Batch 4 — Dual-logging pattern
+- [ ] **L — Dual-logging** (local `VBA_AuditLog` + universal logger) — careful integration with existing LogAction signature
+
+### Batch 5 — Docs
+- [ ] **9 — `CONSTRAINTS.md`** (repo root, next to `CLAUDE.md`)
+- [ ] **10 — `BRAND.md`** (repo root)
+- [ ] **4 — `RELEASE_READINESS_CHECKLIST.md`** (`RecTrial\Guide\`)
+- [ ] **5 — `TROUBLESHOOTING.md`** (`RecTrial\Guide\`)
+
 ## Post-Recording Fixes (2026-03-31) — Fix Before Sharing With Coworkers
 
 ### Bugs to Fix

@@ -188,6 +188,16 @@ Before delivering ANYTHING ask yourself:
 - Total LogAction signature bugs found to date: 13
 - Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
+### Codex Cherry-Pick Campaign (2026-04-20 — active)
+Parallel Codex build at `tug83535/AP_CodexVersion`; local clone at `C:\Users\connor.atlee\RecTrial\CodexCompare\`. Comparison report at `CodexCompare\COMPARISON_REPORT.md`. Tracker at `CodexCompare\CHERRY_PICK_TRACKER.md` lists every item being ported + live status. Project A stays structurally as-is — only ADD code/docs, no refactors. Plan: 5 batches.
+- Batch 1 (Small VBA wins): K (What-If margin labels), B (Run Receipt helper), C (UTL_DetectHeaderRow)
+- Batch 2 (Capability): A (modUTL_Intelligence.bas — materiality/narratives/quality scorecard), D (row-signature fast compare)
+- Batch 3 (Zero-install Python): profile/sanitize/compare/exec-summary + variance-classifier/scenario-runner/sheets-to-csv + talking-points generator
+- Batch 4 (Dual-logging): careful integration with existing LogAction signature
+- Batch 5 (Docs): top-level `CONSTRAINTS.md`, `BRAND.md`, plus `RELEASE_READINESS_CHECKLIST.md` and `TROUBLESHOOTING.md` in `RecTrial\Guide\`
+
+**Conventions:** ported VBA gets Project A's header comment block (Codex's has none). Brand RGBs from the docs at top of `modUTL_Branding.bas` — no off-brand inline colors. Path A pattern: any new sub with dialogs needs a `DirectorXxx` silent wrapper. Output sheets prefixed with `UTL_`.
+
 ## Session Summary — 2026-03-12 (Latest — Universal Toolkit Expansion + Bug Review + CoPilot Guides)
 
 ### What Was Done This Session
