@@ -2207,8 +2207,11 @@ Public Sub RunVideo3()
     Debug.Print "========================================"
 
     ' Inter-clip padding — gives the viewer a beat to absorb each tool's
-    ' output before the next clip starts. Target total runtime >= 8:00.
-    Const V3_CLIP_PADDING_SEC As Long = 7
+    ' output before the next clip starts. 3 sec is the sweet spot —
+    ' long enough to register the output, short enough to feel snappy.
+    ' (Was 7 sec to pad runtime past Gemini's 8:00 floor; dropped to 3
+    ' once Gemini review was no longer the acceptance criterion.)
+    Const V3_CLIP_PADDING_SEC As Long = 3
 
     ' --- Clip 27: Opening ---
     StatusMsg "V3 Clip 27 — Opening"
