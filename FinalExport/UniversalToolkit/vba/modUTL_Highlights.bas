@@ -562,7 +562,10 @@ Sub DirectorHighlightDuplicates(ByVal rng As Range)
     ' Uses pure saturated orange so video compression can't misread it as red.
     On Error Resume Next
     Application.ScreenUpdating = False
-    Dim orangeClr As Long: orangeClr = RGB(255, 140, 0)  ' Pure orange, unambiguous
+    ' Vivid "tangelo" orange — more yellow-leaning than RGB(255,140,0) so
+    ' video compression cannot mistake it for red. Gemini v2.4 read the
+    ' prior orange as red; this shifts the hue away from the red boundary.
+    Dim orangeClr As Long: orangeClr = RGB(255, 102, 0)
     Dim dict As Object: Set dict = CreateObject("Scripting.Dictionary")
     Dim cell As Range
     For Each cell In rng.Cells

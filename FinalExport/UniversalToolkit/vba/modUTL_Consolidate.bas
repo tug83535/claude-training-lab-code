@@ -536,6 +536,22 @@ DirNextSheet:
     End If
 
     wsOut.Columns.AutoFit
+
+    ' Legibility pass on Column A (Source Sheet): explicit width + bold
+    ' Arial 11pt + Navy color so multi-word sheet names like
+    ' "Q1 Revenue v2" read cleanly on camera and are not visually
+    ' confusable with shorter names (fixes Gemini v2.4 Q2-vs-v2 misread).
+    If outRow > 1 Then
+        Dim srcDataRng As Range
+        Set srcDataRng = wsOut.Range(wsOut.Cells(2, 1), wsOut.Cells(outRow - 1, 1))
+        srcDataRng.Font.Name = "Arial"
+        srcDataRng.Font.Size = 11
+        srcDataRng.Font.Bold = True
+        srcDataRng.Font.Color = RGB(17, 46, 81)   ' Navy
+        srcDataRng.HorizontalAlignment = xlLeft
+    End If
+    wsOut.Columns("A").ColumnWidth = 25
+
     wsOut.Activate
     wsOut.Range("A1").Select
 
