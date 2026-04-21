@@ -408,3 +408,116 @@ Public Sub ClearOldPivotCache()
 ErrHandler:
     MsgBox "Error " & Err.Number & ": " & Err.Description, vbCritical, "Clear Pivot Cache"
 End Sub
+
+'==============================================================================
+' DIRECTOR-ONLY: Silent wrapper for automated recording (no dialogs)
+'==============================================================================
+Public Sub DirectorListAllPivots()
+    ' Silent version of ListAllPivots. Builds the pivot inventory sheet
+    ' exactly the same way, but with NO MsgBox at the end.
+    On Error Resume Next
+
+    Application.ScreenUpdating = False
+
+    Dim wsOut As Worksheet
+    Set wsOut = Nothing
+    Set wsOut = ThisWorkbook.Sheets(REPORT_SHEET)
+
+    If wsOut Is Nothing Then
+        Set wsOut = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+        wsOut.Name = REPORT_SHEET
+    Else
+        wsOut.Cells.Clear
+    End If
+
+    wsOut.Range("A1").Value = "Pivot Table Inventory"
+    wsOut.Range("A1").Font.Bold = True
+    wsOut.Range("A1").Font.Size = 14
+    wsOut.Range("A2").Value = "Generated: " & Format(Now, "yyyy-mm-dd hh:nn:ss")
+    wsOut.Range("A2").Font.Italic = True
+
+    Dim hdr As Long: hdr = 4
+    wsOut.Cells(hdr, 1).Value = "#"
+    wsOut.Cells(hdr, 2).Value = "Pivot Name"
+    wsOut.Cells(hdr, 3).Value = "Sheet"
+    wsOut.Cells(hdr, 4).Value = "Source Type"
+    wsOut.Cells(hdr, 5).Value = "Source Range/Connection"
+    wsOut.Cells(hdr, 6).Value = "Row Fields"
+    wsOut.Cells(hdr, 7).Value = "Column Fields"
+    wsOut.Cells(hdr, 8).Value = "Data Fields"
+    wsOut.Cells(hdr, 9).Value = "Location"
+
+    Dim hdrRng As Range
+    Set hdrRng = wsOut.Range(wsOut.Cells(hdr, 1), wsOut.Cells(hdr, 9))
+    hdrRng.Font.Bold = True
+    hdrRng.Font.Color = RGB(255, 255, 255)
+    hdrRng.Interior.Color = CLR_HDR
+
+    Dim r As Long: r = hdr
+    Dim cnt As Long: cnt = 0
+    Dim ws As Worksheet
+    For Each ws In ThisWorkbook.Worksheets
+        Dim pt As PivotTable
+        For Each pt In ws.PivotTables
+            cnt = cnt + 1
+            r = r + 1
+            wsOut.Cells(r, 1).Value = cnt
+            wsOut.Cells(r, 2).Value = pt.Name
+            wsOut.Cells(r, 3).Value = ws.Name
+
+            Dim srcType As String
+            Select Case pt.PivotCache.SourceType
+                Case xlDatabase: srcType = "Worksheet Range"
+                Case xlExternal: srcType = "External Connection"
+                Case xlConsolidation: srcType = "Consolidation"
+                Case Else: srcType = "Other"
+            End Select
+            wsOut.Cells(r, 4).Value = srcType
+
+            Dim srcData As String: srcData = ""
+            srcData = pt.SourceData
+            If Len(srcData) = 0 Then srcData = "(external/connection)"
+            wsOut.Cells(r, 5).Value = srcData
+
+            Dim rowFlds As String, colFlds As String, dataFlds As String
+            Dim fld As PivotField
+            For Each fld In pt.RowFields
+                If fld.Name <> "Data" Then
+                    If Len(rowFlds) > 0 Then rowFlds = rowFlds & ", "
+                    rowFlds = rowFlds & fld.Name
+                End If
+            Next fld
+            For Each fld In pt.ColumnFields
+                If fld.Name <> "Data" Then
+                    If Len(colFlds) > 0 Then colFlds = colFlds & ", "
+                    colFlds = colFlds & fld.Name
+                End If
+            Next fld
+            For Each fld In pt.DataFields
+                If Len(dataFlds) > 0 Then dataFlds = dataFlds & ", "
+                dataFlds = dataFlds & fld.Name
+            Next fld
+
+            wsOut.Cells(r, 6).Value = rowFlds
+            wsOut.Cells(r, 7).Value = colFlds
+            wsOut.Cells(r, 8).Value = dataFlds
+            wsOut.Cells(r, 9).Value = pt.TableRange1.Address(False, False)
+
+            If cnt Mod 2 = 0 Then
+                wsOut.Range(wsOut.Cells(r, 1), wsOut.Cells(r, 9)).Interior.Color = RGB(235, 241, 250)
+            End If
+        Next pt
+    Next ws
+
+    wsOut.Range("A3").Value = "Total Pivot Tables: " & cnt
+    wsOut.Range("A3").Font.Bold = True
+
+    wsOut.Columns("A:I").AutoFit
+    If wsOut.Columns("E").ColumnWidth > 50 Then wsOut.Columns("E").ColumnWidth = 50
+
+    wsOut.Activate
+    wsOut.Range("A1").Select
+    Application.ScreenUpdating = True
+
+    Debug.Print "[Director] ListAllPivots: " & cnt & " pivot table(s) inventoried."
+End Sub

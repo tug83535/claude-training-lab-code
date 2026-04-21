@@ -679,3 +679,85 @@ ErrHandler:
     UTL_TurboOff
     MsgBox "Error: " & Err.Description, vbCritical, "UTL Audit"
 End Sub
+
+
+' ============================================================
+' CreateRunReceiptSheet — Compliance artifact for any toolkit run
+' Drops a 6-row UTL_RunReceipt sheet with:
+'   Timestamp, User, Workbook, Feature, Sheets Touched, Cells Changed
+' Any toolkit tool can call this after a meaningful run.
+' Brand-styled header (iPipeline Blue / Arctic White).
+' No dialogs. No MsgBox. Always overwrites prior receipt.
+' Cherry-picked from Codex comparison (Batch 1, 2026-04-20).
+' ============================================================
+Public Sub CreateRunReceiptSheet(ByVal featureName As String, _
+                                 ByVal sheetsTouched As String, _
+                                 ByVal cellsChanged As Long)
+    On Error Resume Next
+    Dim sheetName As String: sheetName = "UTL_RunReceipt"
+
+    ' Remove any prior receipt quietly
+    Application.DisplayAlerts = False
+    Dim oldWs As Worksheet
+    Set oldWs = Nothing
+    Set oldWs = ActiveWorkbook.Sheets(sheetName)
+    If Not oldWs Is Nothing Then oldWs.Delete
+    Application.DisplayAlerts = True
+
+    Dim ws As Worksheet
+    Set ws = ActiveWorkbook.Sheets.Add(After:=ActiveWorkbook.Sheets(ActiveWorkbook.Sheets.Count))
+    ws.Name = sheetName
+
+    ' Title
+    ws.Range("A1").Value = "Run Receipt — iPipeline Universal Toolkit"
+    ws.Range("A1").Font.Bold = True
+    ws.Range("A1").Font.Size = 14
+    ws.Range("A1").Font.Name = "Arial"
+    ws.Range("A1").Font.Color = RGB(17, 46, 81)        ' Navy
+    ws.Range("A1:B1").Merge
+
+    ' Header row (row 3)
+    ws.Range("A3").Value = "Field"
+    ws.Range("B3").Value = "Value"
+    ws.Range("A3:B3").Font.Bold = True
+    ws.Range("A3:B3").Font.Name = "Arial"
+    ws.Range("A3:B3").Font.Color = RGB(249, 249, 249)  ' Arctic White
+    ws.Range("A3:B3").Interior.Color = RGB(11, 71, 121) ' iPipeline Blue
+
+    ' Receipt rows
+    ws.Range("A4").Value = "Timestamp"
+    ws.Range("B4").Value = Format(Now, "yyyy-mm-dd hh:nn:ss")
+
+    ws.Range("A5").Value = "User"
+    ws.Range("B5").Value = Environ("USERNAME")
+
+    ws.Range("A6").Value = "Workbook"
+    ws.Range("B6").Value = ActiveWorkbook.Name
+
+    ws.Range("A7").Value = "Feature"
+    ws.Range("B7").Value = featureName
+
+    ws.Range("A8").Value = "Sheets Touched"
+    ws.Range("B8").Value = sheetsTouched
+
+    ws.Range("A9").Value = "Cells Changed"
+    ws.Range("B9").Value = cellsChanged
+
+    ' Style field column
+    ws.Range("A4:A9").Font.Bold = True
+    ws.Range("A4:A9").Font.Name = "Arial"
+    ws.Range("A4:A9").Font.Color = RGB(22, 22, 22)     ' Charcoal
+
+    ws.Range("B4:B9").Font.Name = "Arial"
+    ws.Range("B4:B9").Font.Color = RGB(22, 22, 22)
+
+    ' Light alternating fill on value cells for readability
+    ws.Range("A5:B5").Interior.Color = RGB(240, 240, 238)
+    ws.Range("A7:B7").Interior.Color = RGB(240, 240, 238)
+    ws.Range("A9:B9").Interior.Color = RGB(240, 240, 238)
+
+    ws.Columns("A").ColumnWidth = 20
+    ws.Columns("B").ColumnWidth = 60
+
+    Debug.Print "[UTL] RunReceipt: " & featureName & " | " & cellsChanged & " cells | " & sheetsTouched
+End Sub

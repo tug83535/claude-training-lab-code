@@ -559,6 +559,7 @@ Public Sub DirectorTemplateCloner(sheetName As String, copies As Long)
     End If
 
     Dim sourceWS As Worksheet
+    Set sourceWS = Nothing
     Set sourceWS = ActiveWorkbook.Worksheets(sheetName)
     If sourceWS Is Nothing Then
         Debug.Print "[Director] TemplateCloner: Sheet '" & sheetName & "' not found."
@@ -567,36 +568,59 @@ Public Sub DirectorTemplateCloner(sheetName As String, copies As Long)
 
     UTL_TurboOn
 
-    Dim baseName As String
-    baseName = sourceWS.Name
+    ' Delete any stale clones from previous runs to avoid name-conflict fails
+    Dim wsIter As Worksheet
+    Application.DisplayAlerts = False
+    For Each wsIter In ActiveWorkbook.Worksheets
+        If Len(wsIter.Name) > Len(sheetName) + 2 Then
+            If Left(wsIter.Name, Len(sheetName) + 2) = sheetName & " (" Then
+                wsIter.Delete
+            End If
+        End If
+        If Left(wsIter.Name, Len(sheetName) + 1) = sheetName & "_" Then
+            wsIter.Delete
+        End If
+    Next wsIter
+    Application.DisplayAlerts = True
 
-    Dim i As Long
     Dim createdCount As Long
+    Dim i As Long
     For i = 1 To copies
-        sourceWS.Copy After:=ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.Count)
+        Dim beforeCount As Long
+        beforeCount = ActiveWorkbook.Worksheets.Count
 
-        Dim newWS As Worksheet
-        Set newWS = ActiveWorkbook.Worksheets(ActiveWorkbook.Worksheets.Count)
+        Err.Clear
+        sourceWS.Copy After:=ActiveWorkbook.Worksheets(beforeCount)
+        DoEvents
 
-        Dim newName As String
-        newName = baseName & " (" & i & ")"
-        If Len(newName) > 31 Then
-            newName = Left(baseName, 31 - Len(" (" & i & ")")) & " (" & i & ")"
-        End If
+        ' Verify copy succeeded by checking sheet count changed
+        If ActiveWorkbook.Worksheets.Count = beforeCount + 1 Then
+            Dim newWS As Worksheet
+            Set newWS = ActiveWorkbook.Worksheets(beforeCount + 1)
 
-        newWS.Name = newName
-        If Err.Number <> 0 Then
+            Dim newName As String
+            newName = sheetName & " (" & i & ")"
+            If Len(newName) > 31 Then
+                newName = Left(sheetName, 31 - Len(" (" & i & ")")) & " (" & i & ")"
+            End If
+
             Err.Clear
-            newWS.Name = Left(newName, 27) & "_" & i
-        End If
+            newWS.Name = newName
+            If Err.Number <> 0 Then
+                Err.Clear
+                newWS.Name = Left(sheetName, 25) & "_Clone" & i
+            End If
 
-        createdCount = createdCount + 1
+            createdCount = createdCount + 1
+        Else
+            Debug.Print "[Director] TemplateCloner: Copy #" & i & " failed (Err " & Err.Number & "): " & Err.Description
+        End If
     Next i
 
     sourceWS.Activate
     UTL_TurboOff
 
-    Debug.Print "[Director] TemplateCloner: " & createdCount & " clone(s) of '" & baseName & "' created."
+    Debug.Print "[Director] TemplateCloner: " & createdCount & " of " & copies & " clone(s) of '" & sheetName & "' created."
 End Sub
 
 '==============================================================================

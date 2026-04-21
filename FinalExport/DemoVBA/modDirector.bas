@@ -539,6 +539,7 @@ End Function
 ' StatusMsg - Show a message in the Excel status bar
 '===============================================================================
 Private Sub StatusMsg(ByVal msg As String)
+    Application.DisplayStatusBar = True
     Application.StatusBar = "[Director] " & msg
     DoEvents
 End Sub
@@ -2205,60 +2206,75 @@ Public Sub RunVideo3()
     Debug.Print "[Director] VIDEO 3 START: " & Now()
     Debug.Print "========================================"
 
+    ' Inter-clip padding — gives the viewer a beat to absorb each tool's
+    ' output before the next clip starts. Target total runtime >= 8:00.
+    Const V3_CLIP_PADDING_SEC As Long = 7
+
     ' --- Clip 27: Opening ---
     StatusMsg "V3 Clip 27 — Opening"
     V3_Clip27_Opening
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 28: Data Sanitizer ---
     StatusMsg "V3 Clip 28 — Data Sanitizer"
     V3_Clip28_DataSanitizer
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 29: Highlights ---
     StatusMsg "V3 Clip 29 — Highlights"
     V3_Clip29_Highlights
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 30: Comments ---
     StatusMsg "V3 Clip 30 — Comments"
     V3_Clip30_Comments
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 31: Tab Organizer ---
     StatusMsg "V3 Clip 31 — Tab Organizer"
     V3_Clip31_TabOrganizer
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 32: Column Ops ---
     StatusMsg "V3 Clip 32 — Column Ops"
     V3_Clip32_ColumnOps
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 33: Sheet Tools ---
     StatusMsg "V3 Clip 33 — Sheet Tools"
     V3_Clip33_SheetTools
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 34: Compare ---
     StatusMsg "V3 Clip 34 — Compare Sheets"
     V3_Clip34_Compare
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 35: Consolidate ---
     StatusMsg "V3 Clip 35 — Consolidate"
     V3_Clip35_Consolidate
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 36: Pivot Tools + Lookup/Validation ---
     StatusMsg "V3 Clip 36 — Pivot & Lookup Tools"
     V3_Clip36_PivotLookup
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 37: Universal Command Center ---
     StatusMsg "V3 Clip 37 — Universal Command Center"
     V3_Clip37_CommandCenter
     If CheckAbort Then GoTo Aborted
+    WaitSec V3_CLIP_PADDING_SEC
 
     ' --- Clip 38: Closing ---
     StatusMsg "V3 Clip 38 — Closing"
@@ -2271,9 +2287,7 @@ Public Sub RunVideo3()
 
     StopAudio
     Application.StatusBar = False
-    MsgBox "Video 3 recording complete!" & vbCrLf & vbCrLf & _
-           "Stop OBS recording now.", _
-           vbInformation, "Director - Video 3 Done"
+    MsgBox "Video 3 recording complete!", vbInformation, "Director - Video 3 Done"
     Exit Sub
 
 Aborted:
@@ -2498,14 +2512,14 @@ Private Sub V3_Clip32_ColumnOps()
 
     WaitSec 3
 
-    ' Split Full Name into First + Last — silent, no dialogs
+    ' Split Full Name into First + Last — silent, no dialogs.
+    ' Uses string params (sheet + address) to avoid Range marshaling bugs
+    ' through Application.Run.
     ' After split: A=First, B=Last, C=Title, D=Department, E=Email, F=Phone, G=Office Location
     StatusMsg "Running: Split Column (Full Name -> First + Last)"
     On Error Resume Next
     ActiveWorkbook.Worksheets("Contact List").Activate
-    Dim splitRng As Range
-    Set splitRng = ActiveSheet.Range("A2:A16")
-    Application.Run "DirectorSplitColumn", splitRng, " "
+    Application.Run "DirectorSplitColumn", "Contact List", "A2:A16", " "
     On Error GoTo 0
     DoEvents
     WaitSec 4
@@ -2514,9 +2528,7 @@ Private Sub V3_Clip32_ColumnOps()
     ' After split, A=First and B=Last, so combining A+B reconstructs the Full Name
     StatusMsg "Running: Combine Columns (First + Last -> Full Name)"
     On Error Resume Next
-    Dim combRng As Range
-    Set combRng = ActiveSheet.Range("A2:B16")
-    Application.Run "DirectorCombineColumns", combRng, " "
+    Application.Run "DirectorCombineColumns", "Contact List", "A2:B16", " "
     On Error GoTo 0
     DoEvents
     WaitSec 4
@@ -2637,9 +2649,8 @@ Private Sub V3_Clip36_PivotLookup()
     WaitSec 3
 
     StatusMsg "Running: List All Pivot Tables"
-    Application.SendKeys "{ENTER}", True
     On Error Resume Next
-    Application.Run "ListAllPivots"
+    Application.Run "DirectorListAllPivots"
     On Error GoTo 0
     DoEvents
     WaitSec 3
@@ -2725,6 +2736,12 @@ Private Sub V3_Clip38_Closing()
 
     SilencePad
     StopAudio
+
+    ' Give the viewer (and the reviewer watching the recording) a clear
+    ' "keep recording" cue so OBS isn't stopped before the final MsgBox
+    ' appears. The MsgBox fires immediately after this sub returns.
+    StatusMsg "Almost done — keep recording until the 'Video 3 recording complete!' MsgBox appears"
+    WaitSec 5
 End Sub
 
 '===============================================================================

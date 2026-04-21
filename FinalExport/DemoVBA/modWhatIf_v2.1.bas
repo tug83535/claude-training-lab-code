@@ -643,3 +643,62 @@ Private Sub BuildImpactReport(ByVal scenarioName As String, _
            "Run 'Restore Baseline' when done to reset values.", _
            vbInformation, APP_NAME
 End Sub
+
+
+' ============================================================
+' MarginVerdict — Classify a margin percentage into a plain-English verdict
+' Input: margin as a decimal (e.g. 0.48 = 48%)
+' Output: "AGGRESSIVE" | "MONITOR" | "ESCALATE" with a short reason
+' Cherry-picked from Codex comparison (Batch 1, 2026-04-20).
+' ============================================================
+Public Function MarginVerdict(ByVal marginPct As Double) As String
+    Select Case True
+        Case marginPct >= 0.6
+            MarginVerdict = "AGGRESSIVE  -  margin >= 60% - strong cushion"
+        Case marginPct >= 0.5
+            MarginVerdict = "MONITOR  -  margin 50-60% - on target, watch drift"
+        Case Else
+            MarginVerdict = "ESCALATE  -  margin < 50% - below threshold"
+    End Select
+End Function
+
+' ============================================================
+' AppendMarginVerdictRow — After a What-If preset runs, append a
+' labelled verdict row to the existing scenario impact sheet.
+' Called by What-If presets that want an at-a-glance CFO verdict.
+'   ws        : the sheet the preset wrote its impact to
+'   marginPct : the resulting margin (decimal, 0-1)
+' Brand-styled row so it reads as part of the same report.
+' ============================================================
+Public Sub AppendMarginVerdictRow(ByVal ws As Worksheet, ByVal marginPct As Double)
+    On Error Resume Next
+    If ws Is Nothing Then Exit Sub
+
+    Dim r As Long
+    r = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row + 2
+
+    ws.Cells(r, 1).Value = "CFO VERDICT"
+    ws.Cells(r, 1).Font.Bold = True
+    ws.Cells(r, 1).Font.Size = 11
+    ws.Cells(r, 1).Font.Name = "Arial"
+    ws.Cells(r, 1).Font.Color = RGB(17, 46, 81)        ' Navy
+
+    ws.Cells(r + 1, 1).Value = MarginVerdict(marginPct)
+    ws.Cells(r + 1, 1).Font.Bold = True
+    ws.Cells(r + 1, 1).Font.Size = 11
+    ws.Cells(r + 1, 1).Font.Name = "Arial"
+
+    ' Color the verdict text by severity — uses iPipeline palette
+    Select Case True
+        Case marginPct >= 0.6
+            ws.Cells(r + 1, 1).Font.Color = RGB(0, 128, 0)     ' Green (favorable)
+        Case marginPct >= 0.5
+            ws.Cells(r + 1, 1).Font.Color = RGB(17, 46, 81)    ' Navy (neutral)
+        Case Else
+            ws.Cells(r + 1, 1).Font.Color = RGB(200, 0, 0)     ' Red (unfavorable)
+    End Select
+
+    ws.Cells(r + 1, 1).Interior.Color = RGB(249, 249, 249)    ' Arctic White background
+
+    Debug.Print "[WhatIf] MarginVerdict: " & Format(marginPct, "0.0%") & " -> " & MarginVerdict(marginPct)
+End Sub

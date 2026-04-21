@@ -135,3 +135,48 @@ Public Function UTL_BackupSheet(ByVal ws As Worksheet) As Worksheet
     newWs.Visible = xlSheetHidden
     Set UTL_BackupSheet = newWs
 End Function
+
+
+' ============================================================
+' UTL_DetectHeaderRow — Find the most-likely header row on a sheet
+' Scans the first maxScanRows rows and returns the row with the
+' highest count of non-empty cells. Ties broken by earliest row.
+' Returns 1 if the sheet is empty.
+' Cherry-picked from Codex comparison (Batch 1, 2026-04-20).
+' ============================================================
+Public Function UTL_DetectHeaderRow(ByVal ws As Worksheet, _
+                                    Optional ByVal maxScanRows As Long = 25) As Long
+    UTL_DetectHeaderRow = 1
+    If ws Is Nothing Then Exit Function
+
+    Dim lastRow As Long
+    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If lastRow < 1 Then Exit Function
+
+    Dim scanUpTo As Long
+    scanUpTo = maxScanRows
+    If scanUpTo > lastRow Then scanUpTo = lastRow
+
+    Dim lastCol As Long
+    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    If ws.UsedRange.Columns.Count + ws.UsedRange.Column - 1 > lastCol Then
+        lastCol = ws.UsedRange.Columns.Count + ws.UsedRange.Column - 1
+    End If
+    If lastCol < 1 Then lastCol = 1
+
+    Dim bestRow As Long: bestRow = 1
+    Dim bestCount As Long: bestCount = -1
+    Dim r As Long, c As Long
+    For r = 1 To scanUpTo
+        Dim filled As Long: filled = 0
+        For c = 1 To lastCol
+            If Len(Trim(CStr(ws.Cells(r, c).Value))) > 0 Then filled = filled + 1
+        Next c
+        If filled > bestCount Then
+            bestCount = filled
+            bestRow = r
+        End If
+    Next r
+
+    UTL_DetectHeaderRow = bestRow
+End Function

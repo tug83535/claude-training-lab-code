@@ -547,35 +547,64 @@ End Function
 ' Splits the given single-column range by delimiter. Inserts new columns to
 ' the right. No InputBox/MsgBox/Application.InputBox.
 '==============================================================================
-Public Sub DirectorSplitColumn(rng As Range, delimiter As String)
+Public Sub DirectorSplitColumn(ByVal sheetName As String, ByVal rangeAddress As String, ByVal delimiter As String)
+    ' Robust string-parameter version. Avoids Range marshaling issues through
+    ' Application.Run by resolving the sheet + address on arrival.
     On Error Resume Next
 
+    If Len(sheetName) = 0 Or Len(rangeAddress) = 0 Or Len(delimiter) = 0 Then
+        Debug.Print "[Director] SplitColumn: Missing required parameter."
+        Exit Sub
+    End If
+
+    Dim ws As Worksheet
+    Set ws = Nothing
+    Set ws = ActiveWorkbook.Worksheets(sheetName)
+    If ws Is Nothing Then
+        Debug.Print "[Director] SplitColumn: Sheet '" & sheetName & "' not found."
+        Exit Sub
+    End If
+
+    Dim rng As Range
+    Set rng = Nothing
+    Set rng = ws.Range(rangeAddress)
     If rng Is Nothing Then
-        Debug.Print "[Director] SplitColumn: No range provided."
+        Debug.Print "[Director] SplitColumn: Range '" & rangeAddress & "' not valid."
         Exit Sub
     End If
     If rng.Columns.Count > 1 Then
         Debug.Print "[Director] SplitColumn: Range must be a single column."
         Exit Sub
     End If
-    If Len(delimiter) = 0 Then
-        Debug.Print "[Director] SplitColumn: No delimiter provided."
-        Exit Sub
-    End If
 
     Application.ScreenUpdating = False
 
-    ' Find max number of parts
+    ' Read all values into a 1-D array first so we're not iterating a Range
+    ' object across structural changes (column inserts).
+    Dim rowCount As Long
+    rowCount = rng.Rows.Count
+    Dim startRowIdx As Long
+    startRowIdx = rng.Row
+    Dim srcCol As Long
+    srcCol = rng.Column
+
+    Dim vals() As String
+    ReDim vals(1 To rowCount)
+    Dim i As Long
+    For i = 1 To rowCount
+        vals(i) = CStr(ws.Cells(startRowIdx + i - 1, srcCol).Value)
+    Next i
+
+    ' Determine max parts in any cell
     Dim maxParts As Long
     maxParts = 1
-    Dim cell As Range
-    For Each cell In rng.Cells
-        If Not IsEmpty(cell.Value) Then
+    For i = 1 To rowCount
+        If Len(vals(i)) > 0 Then
             Dim testParts() As String
-            testParts = Split(CStr(cell.Value), delimiter)
+            testParts = Split(vals(i), delimiter)
             If UBound(testParts) + 1 > maxParts Then maxParts = UBound(testParts) + 1
         End If
-    Next cell
+    Next i
 
     If maxParts <= 1 Then
         Application.ScreenUpdating = True
@@ -583,39 +612,38 @@ Public Sub DirectorSplitColumn(rng As Range, delimiter As String)
         Exit Sub
     End If
 
-    ' Insert new columns to the right
-    Dim insertCol As Long
-    insertCol = rng.Column + 1
+    ' Insert empty columns immediately to the right of the source column
     Dim colsNeeded As Long
     colsNeeded = maxParts - 1
-
     Dim c As Long
     For c = 1 To colsNeeded
-        rng.Parent.Columns(insertCol).Insert Shift:=xlToRight
+        ws.Columns(srcCol + 1).Insert Shift:=xlToRight
     Next c
 
-    ' Split the data
+    ' Write split parts back using explicit row/column indices (no Range
+    ' enumeration — safe across the earlier insert).
     Dim splitCount As Long
     splitCount = 0
-
-    For Each cell In rng.Cells
-        If Not IsEmpty(cell.Value) Then
+    For i = 1 To rowCount
+        If Len(vals(i)) > 0 Then
             Dim cellParts() As String
-            cellParts = Split(CStr(cell.Value), delimiter)
+            cellParts = Split(vals(i), delimiter)
             If UBound(cellParts) >= 1 Then
-                cell.Value = Trim(cellParts(0))
+                ws.Cells(startRowIdx + i - 1, srcCol).Value = Trim(cellParts(0))
                 Dim pi As Long
                 For pi = 1 To UBound(cellParts)
-                    cell.Offset(0, pi).Value = Trim(cellParts(pi))
+                    ws.Cells(startRowIdx + i - 1, srcCol + pi).Value = Trim(cellParts(pi))
                 Next pi
                 splitCount = splitCount + 1
             End If
         End If
-    Next cell
+    Next i
 
     Application.ScreenUpdating = True
 
-    Debug.Print "[Director] SplitColumn: " & splitCount & " cell(s) split by '" & delimiter & "', " & colsNeeded & " new column(s) added."
+    Debug.Print "[Director] SplitColumn: '" & sheetName & "' " & rangeAddress & _
+                " — " & splitCount & " cell(s) split by '" & delimiter & "', " & _
+                colsNeeded & " new column(s) added."
 End Sub
 
 '==============================================================================
@@ -623,11 +651,28 @@ End Sub
 ' Combines columns in the given multi-column range with separator. Result
 ' goes in a new column to the right. No InputBox/MsgBox/Application.InputBox.
 '==============================================================================
-Public Sub DirectorCombineColumns(rng As Range, separator As String)
+Public Sub DirectorCombineColumns(ByVal sheetName As String, ByVal rangeAddress As String, ByVal separator As String)
+    ' Robust string-parameter version. Avoids Range marshaling via Application.Run.
     On Error Resume Next
 
+    If Len(sheetName) = 0 Or Len(rangeAddress) = 0 Then
+        Debug.Print "[Director] CombineColumns: Missing required parameter."
+        Exit Sub
+    End If
+
+    Dim ws As Worksheet
+    Set ws = Nothing
+    Set ws = ActiveWorkbook.Worksheets(sheetName)
+    If ws Is Nothing Then
+        Debug.Print "[Director] CombineColumns: Sheet '" & sheetName & "' not found."
+        Exit Sub
+    End If
+
+    Dim rng As Range
+    Set rng = Nothing
+    Set rng = ws.Range(rangeAddress)
     If rng Is Nothing Then
-        Debug.Print "[Director] CombineColumns: No range provided."
+        Debug.Print "[Director] CombineColumns: Range '" & rangeAddress & "' not valid."
         Exit Sub
     End If
     If rng.Columns.Count < 2 Then
@@ -637,39 +682,52 @@ Public Sub DirectorCombineColumns(rng As Range, separator As String)
 
     Application.ScreenUpdating = False
 
-    ' Insert result column to the right
-    Dim resultCol As Long
-    resultCol = rng.Column + rng.Columns.Count
-    rng.Parent.Columns(resultCol).Insert Shift:=xlToRight
+    ' Snapshot all source values into a 2-D array first so we read before the
+    ' structural change (column insert) rearranges references.
+    Dim rowCount As Long, colCount As Long
+    rowCount = rng.Rows.Count
+    colCount = rng.Columns.Count
+    Dim startRowIdx As Long, startColIdx As Long
+    startRowIdx = rng.Row
+    startColIdx = rng.Column
 
-    ' Combine values
-    Dim r As Long
-    Dim combined As String
-    Dim rowCount As Long
-    rowCount = 0
-
-    For r = 1 To rng.Rows.Count
-        combined = ""
-        Dim ci As Long
-        For ci = 1 To rng.Columns.Count
-            Dim cellVal As String
-            If IsEmpty(rng.Cells(r, ci).Value) Or IsNull(rng.Cells(r, ci).Value) Then
-                cellVal = ""
+    Dim snap() As String
+    ReDim snap(1 To rowCount, 1 To colCount)
+    Dim r As Long, c As Long
+    For r = 1 To rowCount
+        For c = 1 To colCount
+            Dim v As Variant
+            v = ws.Cells(startRowIdx + r - 1, startColIdx + c - 1).Value
+            If IsEmpty(v) Or IsNull(v) Then
+                snap(r, c) = ""
             Else
-                cellVal = CStr(rng.Cells(r, ci).Value)
+                snap(r, c) = CStr(v)
             End If
-            If Len(cellVal) > 0 Then
+        Next c
+    Next r
+
+    ' Insert the result column immediately after the source range
+    Dim resultCol As Long
+    resultCol = startColIdx + colCount
+    ws.Columns(resultCol).Insert Shift:=xlToRight
+
+    ' Write combined values from the array snapshot
+    Dim combined As String
+    For r = 1 To rowCount
+        combined = ""
+        For c = 1 To colCount
+            If Len(snap(r, c)) > 0 Then
                 If Len(combined) > 0 And Len(separator) > 0 Then
                     combined = combined & separator
                 End If
-                combined = combined & cellVal
+                combined = combined & snap(r, c)
             End If
-        Next ci
-        rng.Parent.Cells(rng.Row + r - 1, resultCol).Value = combined
-        rowCount = rowCount + 1
+        Next c
+        ws.Cells(startRowIdx + r - 1, resultCol).Value = combined
     Next r
 
     Application.ScreenUpdating = True
 
-    Debug.Print "[Director] CombineColumns: " & rowCount & " row(s) combined with separator '" & separator & "'."
+    Debug.Print "[Director] CombineColumns: '" & sheetName & "' " & rangeAddress & _
+                " — " & rowCount & " row(s) combined with separator '" & separator & "'."
 End Sub

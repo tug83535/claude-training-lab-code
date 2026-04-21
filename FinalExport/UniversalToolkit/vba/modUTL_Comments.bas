@@ -356,6 +356,11 @@ NextDirSheet:
     wsOut.Range("A3").Value = "Total Comments: " & cnt
     wsOut.Range("A3").Font.Bold = True
     wsOut.Columns("A:F").AutoFit
+    ' Force "#" column (A) to wide readable size AFTER autofit so the
+    ' index column is unmistakably visible in screen captures. Also center
+    ' the number content so the narrow single-digit values don't hug the edge.
+    wsOut.Columns("A").ColumnWidth = 10
+    wsOut.Columns("A").HorizontalAlignment = xlCenter
     wsOut.Activate
     Application.StatusBar = False
     Application.ScreenUpdating = True

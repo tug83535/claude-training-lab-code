@@ -499,25 +499,22 @@ Public Sub DirectorConsolidateSheets(sheetNames As Variant)
 
         If startRow > srcLastRow Then GoTo DirNextSheet
 
-        ' Copy data
+        ' Copy data starting at column B (column A reserved for Source Sheet)
         Dim srcRange As Range
         Set srcRange = wsSrc.Range(wsSrc.Cells(startRow, 1), wsSrc.Cells(srcLastRow, srcLastCol))
-        srcRange.Copy wsOut.Cells(outRow, 1)
+        srcRange.Copy wsOut.Cells(outRow, 2)
 
-        ' Add source column
-        Dim srcCol As Long
-        srcCol = maxColWidth + 1
-
+        ' Fill Source Sheet column (Column A)
         If s = 1 Then
-            wsOut.Cells(1, srcCol).Value = "Source Sheet"
+            wsOut.Cells(1, 1).Value = "Source Sheet"
             Dim dr As Long
             For dr = 2 To outRow + (srcLastRow - startRow)
-                wsOut.Cells(dr, srcCol).Value = validNames(s)
+                wsOut.Cells(dr, 1).Value = validNames(s)
             Next dr
         Else
             Dim dr2 As Long
             For dr2 = outRow To outRow + (srcLastRow - startRow)
-                wsOut.Cells(dr2, srcCol).Value = validNames(s)
+                wsOut.Cells(dr2, 1).Value = validNames(s)
             Next dr2
         End If
 

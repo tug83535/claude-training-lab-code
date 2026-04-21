@@ -536,18 +536,21 @@ End Sub
 Sub DirectorHighlightThreshold(ByVal rng As Range, ByVal threshold As Double, ByVal direction As Long)
     ' Highlights cells above/below threshold. No dialogs.
     ' direction: 1=above(green), 2=below(red), 3=both
+    ' Uses saturated colors so screen recordings read unambiguously.
     On Error Resume Next
     Application.ScreenUpdating = False
+    Dim greenClr As Long: greenClr = RGB(0, 176, 80)   ' Excel "Status Good" green
+    Dim redClr As Long:   redClr = RGB(255, 0, 0)      ' Unambiguous red
     Dim cell As Range
     For Each cell In rng.Cells
         If IsNumeric(cell.Value) And Not IsEmpty(cell.Value) Then
             Dim val As Double: val = CDbl(cell.Value)
             Select Case direction
-                Case 1: If val > threshold Then cell.Interior.Color = RGB(198, 239, 206)
-                Case 2: If val < threshold Then cell.Interior.Color = RGB(255, 199, 206)
+                Case 1: If val > threshold Then cell.Interior.Color = greenClr
+                Case 2: If val < threshold Then cell.Interior.Color = redClr
                 Case 3:
-                    If val > threshold Then cell.Interior.Color = RGB(198, 239, 206)
-                    If val < threshold Then cell.Interior.Color = RGB(255, 199, 206)
+                    If val > threshold Then cell.Interior.Color = greenClr
+                    If val < threshold Then cell.Interior.Color = redClr
             End Select
         End If
     Next cell
@@ -556,16 +559,18 @@ End Sub
 
 Sub DirectorHighlightDuplicates(ByVal rng As Range)
     ' Highlights duplicate values in orange. No dialogs.
+    ' Uses pure saturated orange so video compression can't misread it as red.
     On Error Resume Next
     Application.ScreenUpdating = False
+    Dim orangeClr As Long: orangeClr = RGB(255, 140, 0)  ' Pure orange, unambiguous
     Dim dict As Object: Set dict = CreateObject("Scripting.Dictionary")
     Dim cell As Range
     For Each cell In rng.Cells
         If Not IsEmpty(cell.Value) Then
             Dim key As String: key = CStr(cell.Value)
             If dict.Exists(key) Then
-                cell.Interior.Color = RGB(255, 192, 0)
-                rng.Cells(dict(key)).Interior.Color = RGB(255, 192, 0)
+                cell.Interior.Color = orangeClr
+                rng.Cells(dict(key)).Interior.Color = orangeClr
             Else
                 dict.Add key, cell.Row - rng.Row + 1
             End If
