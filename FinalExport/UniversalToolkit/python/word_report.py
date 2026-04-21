@@ -35,8 +35,76 @@ except ImportError:
     sys.exit(1)
 
 
+def build_talking_points(dfs_by_sheet: dict) -> list:
+    """Auto-generate 3-5 plain-English talking points from the report data.
+
+    Cherry-picked concept from Codex comparison (Batch 3, 2026-04-21).
+    Takes a dict of {sheet_name: DataFrame} and returns a list of short
+    sentences suitable for a CFO one-pager.
+    """
+    points = []
+    if not dfs_by_sheet:
+        return points
+
+    # Totals across all sheets
+    total_rows = sum(len(df) for df in dfs_by_sheet.values())
+    total_cells = sum(df.size for df in dfs_by_sheet.values())
+    points.append(
+        f"Report covers {len(dfs_by_sheet)} sheet(s) with {total_rows:,} total data rows "
+        f"across {total_cells:,} cells."
+    )
+
+    # Largest sheet by row count
+    largest = max(dfs_by_sheet.items(), key=lambda kv: len(kv[1]))
+    points.append(
+        f"Largest dataset: '{largest[0]}' with {len(largest[1]):,} rows "
+        f"and {len(largest[1].columns)} columns."
+    )
+
+    # Data completeness (non-blank %)
+    non_blank = sum((df != "").sum().sum() for df in dfs_by_sheet.values())
+    completeness = (non_blank / total_cells * 100) if total_cells else 0
+    points.append(f"Data completeness: {completeness:.1f}% of cells contain values.")
+
+    # Sum of any "Amount" / "Total" / "Revenue" column we can find
+    finance_keywords = ("amount", "total", "revenue", "actual", "expense")
+    for sheet_name, df in dfs_by_sheet.items():
+        for col in df.columns:
+            if any(kw in str(col).lower() for kw in finance_keywords):
+                try:
+                    numeric = pd.to_numeric(df[col], errors="coerce").dropna()
+                    if len(numeric) > 0:
+                        total = numeric.sum()
+                        points.append(
+                            f"Total '{col}' across '{sheet_name}': "
+                            f"${total:,.0f} (n={len(numeric):,})."
+                        )
+                        break
+                except Exception:
+                    continue
+        if len(points) >= 4:
+            break
+
+    # Numeric column count (as a data-shape hint)
+    numeric_col_total = 0
+    for df in dfs_by_sheet.values():
+        for col in df.columns:
+            try:
+                if pd.to_numeric(df[col], errors="coerce").notna().sum() > 0:
+                    numeric_col_total += 1
+            except Exception:
+                continue
+    if numeric_col_total > 0:
+        points.append(
+            f"Numeric columns available for analysis: {numeric_col_total} "
+            f"across all sheets."
+        )
+
+    return points[:5]  # Cap at 5 points
+
+
 def generate_word_report(file_path: str, title: str, author: str,
-                          sheets: list = None) -> None:
+                          sheets: list = None, talking_points: bool = False) -> None:
     print(f"\n{'='*55}")
     print("  KBT Word Report Generator")
     print(f"{'='*55}")
@@ -83,11 +151,15 @@ def generate_word_report(file_path: str, title: str, author: str,
 
     doc.add_paragraph()
 
+    # Accumulate DataFrames for optional talking-points section
+    dfs_by_sheet = {}
+
     for sheet_name in sheets_to_include:
         print(f"  Processing sheet: {sheet_name}")
         try:
             df = pd.read_excel(file_path, sheet_name=sheet_name)
             df = df.fillna("")
+            dfs_by_sheet[sheet_name] = df
         except Exception as e:
             print(f"  ERROR reading '{sheet_name}': {e}")
             continue
@@ -146,6 +218,27 @@ def generate_word_report(file_path: str, title: str, author: str,
 
         doc.add_paragraph()
 
+    # Optional "Suggested Talking Points" section (opt-in via --talking-points)
+    if talking_points and dfs_by_sheet:
+        print("  Building suggested talking points...")
+        doc.add_heading("Suggested Talking Points", level=1)
+        intro = doc.add_paragraph()
+        intro_run = intro.add_run(
+            "Plain-English highlights auto-generated from the data above. "
+            "Review and adapt for your audience before sharing."
+        )
+        intro_run.font.italic = True
+        intro_run.font.size = Pt(10)
+        intro_run.font.color.rgb = RGBColor(0x60, 0x60, 0x60)
+
+        points = build_talking_points(dfs_by_sheet)
+        for point in points:
+            bullet_para = doc.add_paragraph(style="List Bullet")
+            run = bullet_para.add_run(point)
+            run.font.size = Pt(11)
+
+        doc.add_paragraph()
+
     # Footer note
     doc.add_paragraph()
     footer_para = doc.add_paragraph()
@@ -176,8 +269,12 @@ def main():
                         help='Author name for the report (default: "Finance Team")')
     parser.add_argument('--sheets', nargs='+', default=None,
                         help='Specific sheet names to include (default: all sheets)')
+    parser.add_argument('--talking-points', action='store_true',
+                        help='Append an auto-generated "Suggested Talking Points" section '
+                             'with 3-5 plain-English highlights for CFO/exec audiences.')
     args = parser.parse_args()
-    generate_word_report(args.file, args.title, args.author, args.sheets)
+    generate_word_report(args.file, args.title, args.author, args.sheets,
+                         args.talking_points)
 
 
 if __name__ == '__main__':
