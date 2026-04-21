@@ -1153,3 +1153,64 @@ Public Sub DirectorShowCommandCenter()
 
     Debug.Print "[Director] ShowCommandCenter: " & m_ToolCount & " tools listed on '" & INVENTORY_SHEET & "' sheet."
 End Sub
+
+
+' ============================================================
+' SetupCoverShowToolsButton — One-time setup sub
+' Adds a branded "Show Tools" button to the Cover sheet that
+' launches the full Command Center. Run once via Alt+F8 after
+' re-importing this module, then save the .xlsm. Safe to re-run:
+' it removes any prior button of the same name before adding.
+' ============================================================
+Public Sub SetupCoverShowToolsButton()
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = ActiveWorkbook.Worksheets("Cover")
+    On Error GoTo 0
+    If ws Is Nothing Then
+        MsgBox "No 'Cover' sheet found. Create a sheet named 'Cover' first.", _
+               vbExclamation, "Setup — Show Tools Button"
+        Exit Sub
+    End If
+
+    ' Remove any prior copy of the button so this sub is idempotent
+    Dim sh As Shape
+    On Error Resume Next
+    For Each sh In ws.Shapes
+        If sh.Name = "btn_ShowTools" Then sh.Delete
+    Next sh
+    On Error GoTo 0
+
+    ' Anchor the button top-right of the Cover sheet
+    Dim leftPos As Double, topPos As Double
+    Dim widthPx As Double, heightPx As Double
+    widthPx = 180
+    heightPx = 40
+    leftPos = 460
+    topPos = 40
+
+    Dim btn As Shape
+    Set btn = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftPos, topPos, widthPx, heightPx)
+    btn.Name = "btn_ShowTools"
+
+    ' iPipeline Blue fill, Arctic White text, Arial
+    btn.Fill.ForeColor.RGB = RGB(11, 71, 121)
+    btn.Line.Visible = msoFalse
+    btn.Shadow.Type = msoShadow21
+    btn.TextFrame2.TextRange.Text = "SHOW TOOLS"
+    btn.TextFrame2.TextRange.Font.Name = "Arial"
+    btn.TextFrame2.TextRange.Font.Bold = msoTrue
+    btn.TextFrame2.TextRange.Font.Size = 14
+    btn.TextFrame2.TextRange.Font.Fill.ForeColor.RGB = RGB(249, 249, 249)
+    btn.TextFrame2.HorizontalAnchor = msoAnchorCenter
+    btn.TextFrame2.VerticalAnchor = msoAnchorMiddle
+
+    ' Wire to Command Center
+    btn.OnAction = "LaunchCommandCenter"
+
+    ws.Activate
+    MsgBox "'Show Tools' button added to the Cover sheet." & Chr(10) & Chr(10) & _
+           "Save the workbook so the button persists." & Chr(10) & _
+           "Coworkers can click it to open the Command Center.", _
+           vbInformation, "Setup Complete"
+End Sub
