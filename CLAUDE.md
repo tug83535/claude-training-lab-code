@@ -198,6 +198,8 @@ Parallel Codex build at `tug83535/AP_CodexVersion`; local clone at `C:\Users\con
 
 **Conventions:** ported VBA gets Project A's header comment block (Codex's has none). Brand RGBs from the docs at top of `modUTL_Branding.bas` — no off-brand inline colors. Path A pattern: any new sub with dialogs needs a `DirectorXxx` silent wrapper. Output sheets prefixed with `UTL_`.
 
+**Active-video deferral rule:** Videos 1-2 are DONE (past). Videos 3 (in Gemini review cycle) and 4 (pending manual Python recording) are ACTIVE — protect their code paths. Ports that ADD new subs/functions are always safe (additive). Ports that MODIFY existing behavior in a Video 3/4 code path → defer to after both videos are recorded. Source code can still be written ahead of time; the *re-import into the .xlsm* or *Video 4 script modification* is what gets delayed. Current deferred re-imports (source code ready, hold off until Video 3 v2.4 passes Gemini): `modUTL_Core.bas` (new `UTL_DetectHeaderRow`), `modUTL_Compare.bas` (new `UTL_QuickRowCompareCount`). Video 4's active scripts: `aging_report.py`, `bank_reconciler.py`, `compare_files.py`, `forecast_rollforward.py`, `fuzzy_lookup.py`, `pdf_extractor.py`, `variance_analysis.py`, `variance_decomposition.py` — do not alter these until Video 4 is recorded. Full accounting lives in `RecTrial\CodexCompare\CHERRY_PICK_TRACKER.md`.
+
 ## Session Summary — 2026-03-12 (Latest — Universal Toolkit Expansion + Bug Review + CoPilot Guides)
 
 ### What Was Done This Session

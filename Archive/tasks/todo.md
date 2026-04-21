@@ -4,6 +4,15 @@
 
 Porting select ideas from the parallel Codex build into Project A. Full tracker: `C:\Users\connor.atlee\RecTrial\CodexCompare\CHERRY_PICK_TRACKER.md`. Comparison report: `C:\Users\connor.atlee\RecTrial\CodexCompare\COMPARISON_REPORT.md`. Project A stays structurally as-is — no refactors, only additions.
 
+**Active-video protection rule:** Videos 1/2 DONE (past). Videos 3 (Gemini review cycle) + 4 (pending Python recording) active. Additive ports are always safe. Modifications to existing Video 3/4 code paths are deferred until both videos are recorded. Source code can be written ahead; re-imports and Video 4 script edits get delayed.
+
+### Deferred re-imports (code done, don't import until Video 3 v2.4 passes Gemini)
+- [ ] `modUTL_Core.bas` — new `UTL_DetectHeaderRow` (Batch 1 item C)
+- [ ] `modUTL_Compare.bas` — new `UTL_QuickRowCompareCount` + `BuildRowHashMap` (Batch 2 item D)
+
+### Deferred implementations (wait until videos 3 + 4 done)
+*(none currently — all remaining batches are additive to non-video code)*
+
 ### Batch 1 — Small VBA wins
 - [ ] **K — Margin-threshold narrative labels** for What-If (≥60% aggressive / ≥50% monitor / <50% escalate) — `modWhatIf_v2.1.bas`
 - [ ] **B — `CreateRunReceiptSheet`** helper — `modUTL_Audit.bas` (new public sub)
