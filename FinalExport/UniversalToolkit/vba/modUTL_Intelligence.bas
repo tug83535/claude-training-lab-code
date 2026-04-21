@@ -304,6 +304,10 @@ End Sub
 
 ' Find the first column whose header text contains any of the candidate strings.
 ' Case-insensitive substring match. Returns 0 if not found.
+' Iterates CANDIDATES outer / COLUMNS inner so more specific candidates win.
+' Example: with candidates=("Materiality Status","Status") and columns
+' F="Status" G="Materiality Status", this returns G (not F). Fixes the
+' narrative-on-wrong-column bug observed on Budget Summary.
 Private Function FindColumnByHeaderText(ByVal ws As Worksheet, _
                                          ByVal headerRow As Long, _
                                          ByVal lastCol As Long, _
@@ -311,18 +315,20 @@ Private Function FindColumnByHeaderText(ByVal ws As Worksheet, _
     Dim col As Long
     Dim candidate As Variant
     Dim headerText As String
+    Dim candLower As String
 
-    For col = 1 To lastCol
-        headerText = LCase$(Trim$(CStr(ws.Cells(headerRow, col).Value2)))
-        If Len(headerText) > 0 Then
-            For Each candidate In candidates
-                If InStr(1, headerText, LCase$(CStr(candidate)), vbTextCompare) > 0 Then
+    For Each candidate In candidates
+        candLower = LCase$(CStr(candidate))
+        For col = 1 To lastCol
+            headerText = LCase$(Trim$(CStr(ws.Cells(headerRow, col).Value2)))
+            If Len(headerText) > 0 Then
+                If InStr(1, headerText, candLower, vbTextCompare) > 0 Then
                     FindColumnByHeaderText = col
                     Exit Function
                 End If
-            Next candidate
-        End If
-    Next col
+            End If
+        Next col
+    Next candidate
 End Function
 
 Private Function SafePercent(ByVal delta As Double, ByVal baseline As Double) As Double
