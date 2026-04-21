@@ -641,3 +641,87 @@ Public Sub DirectorCompareSheets(sheet1Name As String, sheet2Name As String)
     Debug.Print "[Director] CompareSheets: '" & sheet1Name & "' vs '" & sheet2Name & "' — " & _
                 diffCount & " difference(s) found out of " & totalCells & " cells."
 End Sub
+
+
+' ============================================================
+' UTL_QuickRowCompareCount — Fast row-level "are these close?" check
+' Returns the count of rows on sheet1 that have an exact match on sheet2
+' (by pipe-delimited row signature). Much faster than a full cell-by-cell
+' compare. Use as a pre-check before running the full Compare.
+' Cherry-picked from Codex comparison (Batch 2, 2026-04-20).
+'
+' Example:
+'   matches = UTL_QuickRowCompareCount("Q1 Revenue", "Q1 Revenue v2")
+'   If matches = 0 Then ' sheets are totally different, skip cell-by-cell
+' ============================================================
+Public Function UTL_QuickRowCompareCount(ByVal sheet1Name As String, _
+                                          ByVal sheet2Name As String) As Long
+    UTL_QuickRowCompareCount = 0
+    On Error Resume Next
+
+    Dim ws1 As Worksheet, ws2 As Worksheet
+    Set ws1 = ActiveWorkbook.Worksheets(sheet1Name)
+    Set ws2 = ActiveWorkbook.Worksheets(sheet2Name)
+    If ws1 Is Nothing Or ws2 Is Nothing Then
+        Debug.Print "[UTL Compare] QuickRowCompare: one or both sheets not found."
+        Exit Function
+    End If
+
+    Dim hdr1 As Long, hdr2 As Long
+    hdr1 = UTL_DetectHeaderRow(ws1)
+    hdr2 = UTL_DetectHeaderRow(ws2)
+
+    Dim map2 As Object
+    Set map2 = BuildRowHashMap(ws2, hdr2)
+    If map2 Is Nothing Then Exit Function
+
+    Dim lastRow1 As Long, lastCol1 As Long
+    lastRow1 = UTL_LastRow(ws1, 1)
+    lastCol1 = UTL_LastCol(ws1, hdr1)
+    If lastRow1 <= hdr1 Or lastCol1 < 1 Then Exit Function
+
+    Dim matches As Long
+    Dim r As Long, c As Long
+    Dim rowKey As String
+    For r = hdr1 + 1 To lastRow1
+        rowKey = ""
+        For c = 1 To lastCol1
+            rowKey = rowKey & "|" & Trim$(CStr(ws1.Cells(r, c).Value2))
+        Next c
+        If map2.Exists(rowKey) Then matches = matches + 1
+    Next r
+
+    Debug.Print "[UTL Compare] QuickRowCompare: '" & sheet1Name & "' vs '" & sheet2Name & _
+                "' — " & matches & " matching row(s) out of " & (lastRow1 - hdr1)
+    UTL_QuickRowCompareCount = matches
+End Function
+
+' Private helper — builds a Scripting.Dictionary of pipe-delimited row
+' signatures for every data row on a sheet. Used by UTL_QuickRowCompareCount.
+Private Function BuildRowHashMap(ByVal ws As Worksheet, ByVal headerRow As Long) As Object
+    Set BuildRowHashMap = Nothing
+    If ws Is Nothing Then Exit Function
+
+    Dim dict As Object
+    Set dict = CreateObject("Scripting.Dictionary")
+
+    Dim lastRow As Long, lastCol As Long
+    lastRow = UTL_LastRow(ws, 1)
+    lastCol = UTL_LastCol(ws, headerRow)
+    If lastRow <= headerRow Or lastCol < 1 Then
+        Set BuildRowHashMap = dict
+        Exit Function
+    End If
+
+    Dim r As Long, c As Long
+    Dim rowKey As String
+    For r = headerRow + 1 To lastRow
+        rowKey = ""
+        For c = 1 To lastCol
+            rowKey = rowKey & "|" & Trim$(CStr(ws.Cells(r, c).Value2))
+        Next c
+        If Not dict.Exists(rowKey) Then dict.Add rowKey, True
+    Next r
+
+    Set BuildRowHashMap = dict
+End Function
