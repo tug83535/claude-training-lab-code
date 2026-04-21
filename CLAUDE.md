@@ -188,17 +188,23 @@ Before delivering ANYTHING ask yourself:
 - Total LogAction signature bugs found to date: 13
 - Next phase: Continue Track A testing (T2.05+, then T3–T8), then demo readiness — see tasks/todo.md
 
-### Codex Cherry-Pick Campaign (2026-04-20 — active)
-Parallel Codex build at `tug83535/AP_CodexVersion`; local clone at `C:\Users\connor.atlee\RecTrial\CodexCompare\`. Comparison report at `CodexCompare\COMPARISON_REPORT.md`. Tracker at `CodexCompare\CHERRY_PICK_TRACKER.md` lists every item being ported + live status. Project A stays structurally as-is — only ADD code/docs, no refactors. Plan: 5 batches.
-- Batch 1 (Small VBA wins): K (What-If margin labels), B (Run Receipt helper), C (UTL_DetectHeaderRow)
-- Batch 2 (Capability): A (modUTL_Intelligence.bas — materiality/narratives/quality scorecard), D (row-signature fast compare)
-- Batch 3 (Zero-install Python): profile/sanitize/compare/exec-summary + variance-classifier/scenario-runner/sheets-to-csv + talking-points generator
-- Batch 4 (Dual-logging): careful integration with existing LogAction signature
-- Batch 5 (Docs): top-level `CONSTRAINTS.md`, `BRAND.md`, plus `RELEASE_READINESS_CHECKLIST.md` and `TROUBLESHOOTING.md` in `RecTrial\Guide\`
+### Codex Cherry-Pick Campaign (2026-04-20 — Batches 1-3 complete)
+Parallel Codex build at `tug83535/AP_CodexVersion`; local clone at `C:\Users\connor.atlee\RecTrial\CodexCompare\`. Comparison report at `CodexCompare\COMPARISON_REPORT.md`. Tracker at `CodexCompare\CHERRY_PICK_TRACKER.md`. Project A stays structurally as-is — only ADD code/docs, no refactors.
 
-**Conventions:** ported VBA gets Project A's header comment block (Codex's has none). Brand RGBs from the docs at top of `modUTL_Branding.bas` — no off-brand inline colors. Path A pattern: any new sub with dialogs needs a `DirectorXxx` silent wrapper. Output sheets prefixed with `UTL_`.
+**Batches 1-3 — COMPLETE and live in `Sample_Quarterly_ReportV2.xlsm` (2026-04-21):**
+- Batch 1: K (`MarginVerdict` + `AppendMarginVerdictRow` in modWhatIf_v2.1), B (`CreateRunReceiptSheet` in modUTL_Audit), C (`UTL_DetectHeaderRow` in modUTL_Core)
+- Batch 2: A (new `modUTL_Intelligence.bas` — MaterialityClassifier + ExceptionNarratives + DataQualityScorecard), D (`UTL_QuickRowCompareCount` + `BuildRowHashMap` in modUTL_Compare)
+- Batch 3: 7 stdlib-only Python scripts in `RecTrial\UniversalToolkit\python\ZeroInstall\` + `word_report.py --talking-points` opt-in flag
 
-**Active-video deferral rule:** Videos 1-2 are DONE (past). Videos 3 (in Gemini review cycle) and 4 (pending manual Python recording) are ACTIVE — protect their code paths. Ports that ADD new subs/functions are always safe (additive). Ports that MODIFY existing behavior in a Video 3/4 code path → defer to after both videos are recorded. Source code can still be written ahead of time; the *re-import into the .xlsm* or *Video 4 script modification* is what gets delayed. Current deferred re-imports (source code ready, hold off until Video 3 v2.4 passes Gemini): `modUTL_Core.bas` (new `UTL_DetectHeaderRow`), `modUTL_Compare.bas` (new `UTL_QuickRowCompareCount`). Video 4's active scripts: `aging_report.py`, `bank_reconciler.py`, `compare_files.py`, `forecast_rollforward.py`, `fuzzy_lookup.py`, `pdf_extractor.py`, `variance_analysis.py`, `variance_decomposition.py` — do not alter these until Video 4 is recorded. Full accounting lives in `RecTrial\CodexCompare\CHERRY_PICK_TRACKER.md`.
+**Batches 4-5 — DEFERRED until after Video 4 recording:**
+- Batch 4: Dual-logging pattern (demo file — careful integration with existing LogAction signature)
+- Batch 5: Top-level docs — `CONSTRAINTS.md`, `BRAND.md`, `RELEASE_READINESS_CHECKLIST.md`, `TROUBLESHOOTING.md`
+
+**Conventions used:** Project A header comment block on ported VBA (Codex's had none). iPipeline brand RGBs inline (`modUTL_Branding.bas` docs them at top, no named constants). Path A pattern for dialog-heavy subs. Output sheets prefixed `UTL_`.
+
+**Intelligence module wired into Command Center:** registered as static category #6 "Intelligence (3 tools)" so coworkers see it in the visible list without needing to scroll. Auto-discovery also catches it as "Intelligence (Discovered)" at position 31 — harmless duplicate backup. Narrative-on-wrong-column bug found and fixed via `FindColumnByHeaderText` candidates-outer/columns-inner ordering (commit 8eff337).
+
+**Video 4 protection rule still applies:** do not modify these 8 Python scripts until Video 4 is recorded — `aging_report.py`, `bank_reconciler.py`, `compare_files.py`, `forecast_rollforward.py`, `fuzzy_lookup.py`, `pdf_extractor.py`, `variance_analysis.py`, `variance_decomposition.py`. Anything else is fair game.
 
 ## Session Summary — 2026-03-12 (Latest — Universal Toolkit Expansion + Bug Review + CoPilot Guides)
 

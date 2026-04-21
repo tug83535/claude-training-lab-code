@@ -1,5 +1,19 @@
 # Lessons Learned - APCLDmerge Project
 
+## Codex Cherry-Pick Campaign Lessons — 2026-04-21
+
+- **Prefer candidate-outer over column-outer in header-name search.** `FindColumnByHeaderText` originally iterated columns outer and matched the first substring hit. On Budget Summary (with two columns: "Status" and "Materiality Status"), the generic "Status" in Column F beat the more specific "Materiality Status" in Column G because F came first. Fix: iterate candidates outer, columns inner — then specific candidates win even when they sit further right. Commit 8eff337.
+
+- **Command Center auto-discovery works but visibility is capped.** The LoadRegistry + AutoDiscoverTools flow picks up new `modUTL_*` modules automatically and lists them as "(Discovered)" categories. Problem: the LaunchCommandCenter input dialog only shows ~29 categories visually before cutting off, and it does NOT scroll — users navigate by typing a number. That means any Discovered category past position 29 is invisible to non-experts. **Fix pattern:** for tools coworkers should see, add them to the static registry in `LoadBuiltInTools` (creates a visible entry in the first 22ish positions). Auto-discovery still runs as a backup. Commit e05dced promoted modUTL_Intelligence to static category #6 "Intelligence (3 tools)".
+
+- **Application.Run with Range parameters is fragile.** Worked for HighlightThreshold, broke silently for SplitColumn. Variant/Range marshaling through Application.Run is unreliable. Always prefer string parameters (sheet name + range address string) and resolve the Range inside the callee. Already logged in Video 3 lessons but worth repeating.
+
+- **Static registry promotion strategy for new universal modules.** When porting a new `modUTL_*` module that coworkers should reach via the Command Center: (1) add a `'=== CATEGORY NAME (N tools) ===` block in `LoadBuiltInTools` in modUTL_CommandCenter.bas, (2) call `AddTool` for each public sub with a friendly name + description, (3) position it alphabetically or topically within the first 22 categories for maximum visibility. Auto-discovery continues to cover it too.
+
+- **Gemini perception vs. actual code correctness.** Some "bugs" Gemini flags are visual compression artifacts (RGB(255,140,0) reading as red, "Q1 Revenue v2" reading as "Q2 Revenue"). If the code is objectively correct, two options: (a) change the code to be more visually unmistakable (brighter saturated colors, bolder/wider text) or (b) accept and ship. User chose (b) for Video 3 v2.4 after 4 review cycles — correct call; perfection was not the bar.
+
+- **Video title card design automation.** `RecTrial\VideoTitleCards\generate_title_cards.py` uses Pillow to produce all 5 cards (V1-V4 + disclaimer) from scratch with iPipeline brand colors. Rerunnable for quick updates. Lesson: when the "same design, different text" pattern emerges, generate from code rather than edit images pixel-by-pixel.
+
 ## Video 3 v2.2 Gemini Review Findings — 2026-04-19
 - **Always set `Application.DisplayStatusBar = True` inside StatusMsg** (not just per-RunVideo). If Excel's display setting has the status bar hidden, every `Application.StatusBar = "..."` silently succeeds but renders nothing. Single-source fix: add the DisplayStatusBar call inside the StatusMsg helper so every status update guarantees visibility.
 - **Gemini may conflate a prominent cell value with the tab name.** The "Northeast" regression wasn't a file bug — cell A2 of Q1 Revenue happens to be "Northeast" (the first region), and it was the biggest visible text on screen. Fix: keep column widths modest so more of the data and the actual tab are both visible in frame.

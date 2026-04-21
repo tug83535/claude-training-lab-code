@@ -4,33 +4,28 @@
 
 Porting select ideas from the parallel Codex build into Project A. Full tracker: `C:\Users\connor.atlee\RecTrial\CodexCompare\CHERRY_PICK_TRACKER.md`. Comparison report: `C:\Users\connor.atlee\RecTrial\CodexCompare\COMPARISON_REPORT.md`. Project A stays structurally as-is — no refactors, only additions.
 
-**Active-video protection rule:** Videos 1/2 DONE (past). Videos 3 (Gemini review cycle) + 4 (pending Python recording) active. Additive ports are always safe. Modifications to existing Video 3/4 code paths are deferred until both videos are recorded. Source code can be written ahead; re-imports and Video 4 script edits get delayed.
+**Status as of 2026-04-21:** Batches 1-3 complete and live in the .xlsm. Video 3 shipped. Batches 4-5 deferred until after Video 4 recording.
 
-### Deferred re-imports (code done, don't import until Video 3 v2.4 passes Gemini)
-- [ ] `modUTL_Core.bas` — new `UTL_DetectHeaderRow` (Batch 1 item C)
-- [ ] `modUTL_Compare.bas` — new `UTL_QuickRowCompareCount` + `BuildRowHashMap` (Batch 2 item D)
+### Batch 1 — Small VBA wins ✅ LIVE
+- [x] **K — MarginVerdict + AppendMarginVerdictRow** — `modWhatIf_v2.1.bas`
+- [x] **B — CreateRunReceiptSheet** — `modUTL_Audit.bas`
+- [x] **C — UTL_DetectHeaderRow** — `modUTL_Core.bas`
 
-### Deferred implementations (wait until videos 3 + 4 done)
-*(none currently — all remaining batches are additive to non-video code)*
+### Batch 2 — Capability ✅ LIVE
+- [x] **A — modUTL_Intelligence.bas** — MaterialityClassifier + ExceptionNarratives + DataQualityScorecard. Registered in Command Center as static category "Intelligence" at position 6.
+- [x] **D — UTL_QuickRowCompareCount + BuildRowHashMap** — `modUTL_Compare.bas`
+- [x] Narrative-on-wrong-column bug fix (commit 8eff337) — `FindColumnByHeaderText` iterates candidates outer / columns inner so specific candidates beat generic ones
 
-### Batch 1 — Small VBA wins
-- [ ] **K — Margin-threshold narrative labels** for What-If (≥60% aggressive / ≥50% monitor / <50% escalate) — `modWhatIf_v2.1.bas`
-- [ ] **B — `CreateRunReceiptSheet`** helper — `modUTL_Audit.bas` (new public sub)
-- [ ] **C — `UTL_DetectHeaderRow`** helper — `modUTL_Core.bas` (new public function)
+### Batch 3 — Zero-install Python ✅ PORTED
+- [x] **E1-E4** — `profile_workbook.py`, `sanitize_dataset.py`, `compare_workbooks.py`, `build_exec_summary.py`
+- [x] **F, G, H** — `variance_classifier.py`, `scenario_runner.py`, `sheets_to_csv.py`
+- [x] **I/J — `--talking-points` opt-in flag in `word_report.py`**
+- [ ] Optional: spot-test the 7 ZeroInstall scripts on a real file
 
-### Batch 2 — Capability
-- [ ] **A — `modUTL_Intelligence.bas`** — MaterialityClassifier + ExceptionNarratives + DataQualityScorecard (3 universal subs)
-- [ ] **D — Row-signature fast compare** helper — `modUTL_Compare.bas` (new entry point)
+### Batch 4 — Dual-logging pattern — DEFERRED until after Video 4
+- [ ] **L — Dual-logging** (local `VBA_AuditLog` + universal logger in demo modules)
 
-### Batch 3 — Zero-install Python
-- [ ] **E1-E4** — `profile_workbook.py`, `sanitize_dataset.py`, `compare_workbooks.py`, `build_exec_summary.py` (stdlib only, new `UniversalToolkit\python\ZeroInstall\`)
-- [ ] **F, G, H** — `variance_classifier.py`, `scenario_runner.py`, `sheets_to_csv.py` (stdlib only)
-- [ ] **I/J — Talking-points auto-generator** — add to `word_report.py`
-
-### Batch 4 — Dual-logging pattern
-- [ ] **L — Dual-logging** (local `VBA_AuditLog` + universal logger) — careful integration with existing LogAction signature
-
-### Batch 5 — Docs
+### Batch 5 — Docs — DEFERRED until after Video 4
 - [ ] **9 — `CONSTRAINTS.md`** (repo root, next to `CLAUDE.md`)
 - [ ] **10 — `BRAND.md`** (repo root)
 - [ ] **4 — `RELEASE_READINESS_CHECKLIST.md`** (`RecTrial\Guide\`)
