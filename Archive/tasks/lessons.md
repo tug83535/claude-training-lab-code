@@ -1,5 +1,19 @@
 # Lessons Learned - APCLDmerge Project
 
+## Planning and Research Workflow Lessons — 2026-04-23
+
+- **When parallel AI sessions produce overlapping research, compile first, review second.** User ran parallel claude.ai / Codex / other-AI sessions that produced 14 raw research files. Trying to read all 14 in a single Claude Code session is wasteful. The right move is: compile them into 3-6 structured synthesis docs using targeted prompts, then review the synthesis rather than the raw files. A subagent back-check of the raw files afterward (to verify nothing was missed) takes 5 min and confirmed HIGH confidence the synthesis was complete.
+
+- **One master overview doc beats 8 scattered planning docs.** Before today, project state lived across: CLAUDE.md, memory/project_status.md, todo.md, lessons.md, CHERRY_PICK_TRACKER.md, VIDEO_4_DRAFT_IDEAS.md, VIDEO_4_CURRENT_PROPOSAL.md, FUTURE_AUTOMATION_IDEAS.md. Each served a specific audience. But when a user wants a second-opinion AI review, they need ONE file. Built `RecTrial\PROJECT_OVERVIEW.md` as a 15-section point-in-time snapshot with Section 14 explicitly listing "angles to push on" for a reviewer. Makes AI review cheap and reproducible.
+
+- **Snapshot before a long-running subagent task.** User asked me to do a 14-file research review that could take 5+ min. Before kicking off the subagent, snapshot the current proposal/thinking to disk + update memory files. This way if context gets compressed or the session needs to restart, nothing is lost. Habit: any task over ~3 min, snapshot first.
+
+- **"Gemini perception vs actual code correctness" principle.** Across 5 Video 3 Gemini review cycles, several flagged "bugs" (RGB 255,140,0 read as red, "Q1 Revenue v2" misread as "Q2 Revenue") were video-compression perception artifacts, not real code issues. Two responses available: (a) make the signal MORE extreme to beat compression (brighter orange, wider column, bolder font), OR (b) accept imperfect rubric scores and ship. User chose (b) at 70/4 Gemini score. Right call; perfection was not the bar.
+
+- **Pull the plug on a video plan before recording if it doesn't excite the user.** Original Video 4 (10 CMD-run scripts with ElevenLabs audio) had all assets built — MP3 clips generated, demo files created, interactive guides written. When user said "I want a Video 4 that is actually useful," I should have asked "do you want to start over?" sooner. Sunk-cost on pre-built assets is not a reason to record a video the creator isn't excited about. All V4 assets remain on disk — repurposable for the new plan or discardable.
+
+- **Videos for a 2,000-person non-dev audience need a SINGLE-FILE downloadable deliverable, not a CMD-based demo.** Every doc's research consensus: CFO won't tolerate seeing Command Prompt on screen, and coworkers won't run 8 scripts individually. The deliverable must be a menu-driven launcher (Combo 1) or an Excel-native button interface (Combo 2) or the hero-reveal artifact is explicit "here's the full output" (Combo 3). V4 redesign absorbs all three principles via split 4a+4b format.
+
 ## Codex Cherry-Pick Campaign Lessons — 2026-04-21
 
 - **Prefer candidate-outer over column-outer in header-name search.** `FindColumnByHeaderText` originally iterated columns outer and matched the first substring hit. On Budget Summary (with two columns: "Status" and "Materiality Status"), the generic "Status" in Column F beat the more specific "Materiality Status" in Column G because F came first. Fix: iterate candidates outer, columns inner — then specific candidates win even when they sit further right. Commit 8eff337.

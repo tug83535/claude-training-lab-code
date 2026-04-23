@@ -31,6 +31,45 @@ Porting select ideas from the parallel Codex build into Project A. Full tracker:
 - [ ] **4 — `RELEASE_READINESS_CHECKLIST.md`** (`RecTrial\Guide\`)
 - [ ] **5 — `TROUBLESHOOTING.md`** (`RecTrial\Guide\`)
 
+## Video 4 Replanning (2026-04-22 → 2026-04-23)
+
+Original V4 (10 CMD-run Python scripts + ElevenLabs audio) was pulled for stronger redesign. Full proposal at `C:\Users\connor.atlee\RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md`. Master overview at `C:\Users\connor.atlee\RecTrial\PROJECT_OVERVIEW.md`.
+
+### Current V4 direction (proposed, not locked)
+- [ ] **Video 4a** — "Python Shows You What Excel Can't" (6-7 min, CFO-led)
+  - Opener (~90 sec): **Workbook Dependency Scanner**
+  - Hero (~3-4 min): **SaaS ARR/MRR Waterfall Engine**
+- [ ] **Video 4b** — "Your Python Cookbook" (5-6 min, coworker-led)
+  - Recipe 1: **Finance Data Contract Checker**
+  - Recipe 2: **Exception Triage Engine**
+  - Recipe 3: **Control Evidence Pack Generator**
+- [ ] **Deliverable:** `finance_copilot.py` CLI menu wrapping all 28 existing scripts + 5 new ones
+
+### V4 open decisions (awaiting Connor)
+- [ ] Approve 4a+4b split (vs. single video)
+- [ ] ARR Waterfall hero vs. Revenue Leakage Finder (V3 of research preferred the latter)
+- [ ] Does Connor's team own SOX evidence work (affects SOX Evidence Collector inclusion)
+- [ ] xlwings Excel Button Edition — park as v2 post-V4 vs. build into V4 itself
+
+### V4 build list (once plan locks)
+- [ ] `saas_arr_waterfall.py` (Python, M)
+- [ ] `workbook_dependency_scanner.py` (Python, M)
+- [ ] `data_contract_checker.py` (Python, S)
+- [ ] `exception_triage_engine.py` (Python, M)
+- [ ] `control_evidence_pack.py` (Python, M)
+- [ ] `finance_copilot.py` menu wrapper (Python, S)
+- [ ] Generate demo input files for each recipe
+- [ ] Write narration + shot list for 4a + 4b
+- [ ] Record + edit
+
+### Research foundation (complete — no further review needed)
+- [x] 14 raw research files read + 6 AI-compiled synthesis docs produced (`RecTrial\Brainstorm\NewCodeResearch\`)
+- [x] ~156 ideas inventoried, ~40-60 curated per doc
+- [x] Claude Code subagent back-check of raw files — confirmed no new findings beyond synthesis
+
+### Future Automation Ideas doc (tracked separately)
+Full parking lot at `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md`. Major parked categories: AI API ideas, Outlook automation, Task Scheduler, warehouse SQL, ML libs, infrastructure, 3rd-party platforms.
+
 ## Post-Recording Fixes (2026-03-31) — Fix Before Sharing With Coworkers
 
 ### Bugs to Fix

@@ -206,6 +206,21 @@ Parallel Codex build at `tug83535/AP_CodexVersion`; local clone at `C:\Users\con
 
 **Video 4 protection rule still applies:** do not modify these 8 Python scripts until Video 4 is recorded — `aging_report.py`, `bank_reconciler.py`, `compare_files.py`, `forecast_rollforward.py`, `fuzzy_lookup.py`, `pdf_extractor.py`, `variance_analysis.py`, `variance_decomposition.py`. Anything else is fair game.
 
+### Video 4 replanning (2026-04-22 → 2026-04-23)
+Original V4 plan (10 ElevenLabs clips, 8 Python scripts run from CMD) was pulled for a stronger redesign. Current direction: **split V4 into 4a + 4b.** 4a = "Python Shows You What Excel Can't" (Workbook Dependency Scanner opener + SaaS ARR Waterfall hero). 4b = "Your Python Cookbook" (Finance Data Contract Checker + Exception Triage Engine + Control Evidence Pack Generator). Deliverable = `finance_copilot.py` CLI menu wrapping all 28 existing scripts + 5 new ones. xlwings Excel Button Edition parked as v2 post-V4.
+
+Plan informed by 14 raw research files + 6 AI-compiled synthesis docs (156 ideas inventoried, confidence HIGH nothing genuinely new was missed).
+
+**Key planning docs (living documents, always the current source of truth on V4 direction):**
+- `C:\Users\connor.atlee\RecTrial\PROJECT_OVERVIEW.md` — master project overview (human + AI readable, point-in-time)
+- `RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md` — active V4 proposal with open decisions
+- `RecTrial\Brainstorm\VIDEO_4_DRAFT_IDEAS.md` — the 17-idea initial draft
+- `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md` — parking lot (AI APIs, Outlook, Task Scheduler, warehouse SQL, ML libs)
+- `RecTrial\Brainstorm\NewCodeResearch\ResearchComplied\` — 6 compiled synthesis docs (V1-V6)
+- `RecTrial\Brainstorm\NewCodeResearch\ResearchFiles\` — 14 raw research files
+
+Original V4 ElevenLabs audio (at `RecTrial\AudioClips\Video4\`) + original demo files (at `RecTrial\Video4DemoFiles\`) remain untouched on disk. Will likely be largely rewritten once new V4 plan locks.
+
 ## Session Summary — 2026-03-12 (Latest — Universal Toolkit Expansion + Bug Review + CoPilot Guides)
 
 ### What Was Done This Session
