@@ -1,0 +1,55 @@
+# ============================================================
+# AP_CodexVersion — .gitignore
+# ============================================================
+
+# Excel temp/lock files
+~$*.xlsx
+~$*.xlsm
+~$*.xls
+~$*.xlsb
+*.~lock.*
+
+# Windows / macOS junk
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.venv
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Editor temp
+*.swp
+*.swo
+*.tmp
+*.bak
+*.orig
+*~
+
+# Logs
+*.log
+
+# Media (keep large files out of git)
+*.mp3
+*.mp4
+*.wav
+*.mov
+*.avi
+*.mkv
+*.m4a
