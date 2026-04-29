@@ -304,3 +304,72 @@ RecTrial is already impressive and business-relevant. The main unlock now is to 
 - easier to adopt,
 - easier to govern,
 - and easier to explain in outcome language (time saved, risk reduced, faster close decisions).
+
+
+---
+
+## 11) Pull-through Analysis from External ChatGPT Build Brief
+
+### What is strong and should be adopted
+
+1. **Safety-first operating model** is excellent for finance environments.
+2. **Phase-based build order** is practical and reduces chaos.
+3. **Top-10 v1 focus** avoids spreading effort too thin.
+4. **Template/stub strategy** is realistic for lower-priority tools.
+5. **Mandatory logging + sample mode** improves trust and demo reliability.
+
+### What should be modified before direct adoption
+
+1. The brief assumes greenfield build; RecTrial is not greenfield.
+2. Some proposed tools overlap existing capabilities in RecTrial.
+3. “Build everything under one new structure” is good for new work, but should not imply rewriting existing toolsets immediately.
+4. SQL/DAX/Power Query assets should start template-first unless a specific business scenario requires production-hardening.
+
+### What should be deferred
+
+1. Anything requiring credentials, outbound APIs, or live database integration in v1.
+2. Heavy UI/GUI layers before CLI/process reliability is proven.
+3. Any feature that cannot demonstrate clear finance-user value in a short walkthrough.
+
+### Net recommendation
+
+Use the external brief as a **governance and execution template**, not a literal rebuild instruction. In RecTrial context, the smartest move is:
+- integrate,
+- simplify,
+- harden,
+- and measure adoption.
+
+---
+
+## 12) “Don’t Hold Back” Expansion — Concrete Packaged Next Steps
+
+### A) Documentation package to lock direction
+
+- `PYTHON_SAFETY.md` (completed)
+- `TOOLKIT_ROADMAP.md` (completed)
+- `README.md` index for quick navigation (completed)
+
+### B) Shortlist for immediate implementation kickoff (if approved)
+
+1. Launcher hardening plan
+2. Evidence pack standardization
+3. Data contract checker profile library
+4. Reconciliation engine standard output schema
+5. Leakage + triage paired workflow
+
+### C) Success metrics to track from day 1
+
+- Time-to-run per tool
+- Number of manual steps removed
+- Exceptions surfaced per run
+- False-positive rate (for flagged issues)
+- User adoption count (runs per week)
+- % of runs with complete evidence package
+
+### D) Demo-readiness criteria
+
+- Non-technical user can run from instructions only
+- Output folder structure is predictable
+- Errors are understandable
+- Every output has a one-page summary
+- No source file mutation occurs

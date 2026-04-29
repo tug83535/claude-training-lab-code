@@ -1,8 +1,8 @@
 # Claude Training Lab - APCLDmerge Project
 
-## ⚡ CURRENT WORK (2026-04-16) — 4-VIDEO DEMO RECORDING PROJECT
+## ⚡ CURRENT WORK (2026-04-28) — 4-VIDEO DEMO RECORDING PROJECT
 
-The active work right now is recording 4 demo videos using an Excel VBA "Director" macro that automates the entire recording. Videos 1-2 are done. Video 3 is mid-debug (Path A silent wrappers just implemented). Video 4 is ready to record manually.
+The active work right now is preparing to record Video 4. Videos 1-3 are fully done and shipped. Video 4 planning is complete and all 6 Python scripts are built and smoke-tested — next up is the narration script, ElevenLabs audio (Connor), Excel button design, and recording.
 
 ### Working Folder
 **`C:\Users\connor.atlee\RecTrial\`** — self-contained workspace with all audio clips, VBA files, sample Excel files, demo input files, and recording guides. This is NOT in the repo — it's a local working copy. The repo at this path holds the source of truth for commits.
@@ -10,15 +10,31 @@ The active work right now is recording 4 demo videos using an Excel VBA "Directo
 ### Video Status
 - **Video 1** ("What's Possible") — DONE
 - **Video 2** ("Full Demo Walkthrough") — DONE
-- **Video 3** ("Universal Tools") — Path A silent wrappers implemented, needs test run + Gemini review
-- **Video 4** ("Python Automation for Finance") — audio clips generated, demo files built, ready to record manually
+- **Video 3** ("Universal Tools") — DONE (shipped 2026-04-21, Gemini 70/4 v2.4 result)
+- **Video 4** ("Python Automation for Finance") — PLANNING COMPLETE + PYTHON BUILD COMPLETE (2026-04-28). All 5 planning docs done. All 6 V4 Python scripts built and smoke-tested 5/5 PASS. Next: narration script, ElevenLabs audio (Connor), Excel button design. Do NOT touch the 8 protected Python scripts until V4 records.
+
+### Video 4 Locked Direction (as of 2026-04-28)
+
+- **Single video** — not split into 4a/4b
+- **Hero story:** "Python finds hidden revenue leakage your Excel can't see" — Revenue Leakage Finder as the story, ARR waterfall as the closing visual
+- **Public face:** 5–7 workflows shown, not all 140 tools
+- **Deliverable:** `finance_automation_launcher.py` CLI menu (renamed from finance_copilot.py)
+- **Audience:** ~50–150 coworkers at iPipeline (Finance & Accounting staff)
+- **Adoption goal:** Coworkers will actually USE the VBA, Python, and SQL tools on their own work files — not just watch the video
+- **xlwings:** Parked for v2 after V4 ships
+- **SOX Evidence Collector:** Out of V1 scope
+- **8 protected scripts** (do NOT edit until V4 records): `aging_report.py`, `bank_reconciler.py`, `compare_files.py`, `forecast_rollforward.py`, `fuzzy_lookup.py`, `pdf_extractor.py`, `variance_analysis.py`, `variance_decomposition.py`
+- **5 planning docs** (COMPLETE 2026-04-28, all in `RecTrial\Brainstorm\`): VIDEO_4_REVIEW_DECISION_MEMO.md, SUPPORTED_WORKFLOWS_V1.md, VIDEO_4_REVISED_PLAN.md, PYTHON_SAFETY.md, MINIMUM_DISTRIBUTION_PLAN.md
+- **6 V4 Python scripts** (BUILT + SMOKE-TESTED 5/5 PASS, 2026-04-28, all in `RecTrial\UniversalToolkit\python\ZeroInstall\`): `revenue_leakage_finder.py`, `data_contract_checker.py`, `exception_triage_engine.py`, `control_evidence_pack.py`, `workbook_dependency_scanner.py`, `finance_automation_launcher.py` + `common/` utilities + `smoke_test_video4_python.py` + `README_VIDEO4_PYTHON.md`
+- **Post-V4 backlog:** Universal Toolkit 2 (15 high-impact VBA tools) parked in `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md` Section 1.10
+- **Video 5 (planned):** Short supplemental "Getting Started" video (3–5 min) showing coworkers how to download the zip, open FinanceTools.xlsm, and run their first tool. Content and format TBD after V4 records. Kept separate from V4 so V4 stays focused on the revenue leakage story.
 
 ### Key Architecture
 **modDirector.bas** (v2.0) is the master VBA "puppeteer" module. It automates recording by:
 - Playing AI narration (ElevenLabs MP3s) via Windows mciSendString API
 - Navigating between sheets, running macros, scrolling, pausing
 - User presses `RunVideo1`/`RunVideo2`/`RunVideo3` and watches hands-free
-- Video 4 is manual (Command Prompt Python demos, not automated)
+- Video 4 delivery model: VBA Shell() + bundled Python 3.11 embeddable. `FinanceTools.xlsm` Excel buttons launch `finance_automation_launcher.py`. One zip on SharePoint. Zero install for coworkers. (Excel button design LOCKED 2026-04-28: Option A — one launcher button that opens the CLI numbered menu. No per-tool buttons in V1.)
 
 ### The Path A Pattern (CRITICAL — applies to any new dialog-heavy VBA demo)
 The original Video 3 approach used `Application.SendKeys` to auto-fill dialog boxes during recording. This was fragile and failed constantly. Gemini's review (8 PASS / 50 FAIL) confirmed. The fix: for each UTL macro that shows dialogs, add a `DirectorXxx` silent wrapper sub at the bottom of the .bas file that takes parameters directly and replicates the core logic with no InputBox/MsgBox. Then the Director clip calls `Application.Run "DirectorXxx", param1, param2, ...`. This is the same pattern used for Video 2 Clips 22 and 23 (SaveCopyAs direct call, RunWhatIfPreset, RestoreBaselineSilent). **Never use SendKeys against modal dialogs — always add a silent wrapper instead.**
@@ -57,11 +73,7 @@ I am not a developer. I work on guides, training docs, VBA, SQL, and Python demo
 for Finance & Accounting at iPipeline. Keep all explanations in plain English.
 
 ## The Project
-I am building a world-class demo P&L Excel file with VBA macros, SQL, and Python
-to present to 2,000+ employees and the CFO/CEO at iPipeline. I will also be
-creating a video walkthrough for coworkers. Everything produced must be perfect,
-polished, and professional — treat every output as if it represents the best
-employee at the best company in the world.
+I am building a world-class demo + adoption-grade Finance automation package — Excel VBA, Python, and SQL — for Finance & Accounting at iPipeline. The near-term audience is **50–150 coworkers** in Finance, Accounting, and adjacent operations. Broader rollout and any CFO/CEO showcase are deferred, not cancelled. Coworkers are expected to actually adopt the tools on their own files and workflows, not just watch the demo videos. Everything produced must be perfect, polished, and professional — treat every output as if it represents the best employee at the best company in the world.
 
 ## iPipeline Brand Styling
 - **Official brand guide:** `docs/ipipeline-brand-styling.md`
@@ -91,8 +103,8 @@ employee at the best company in the world.
 - `videodraft/` — video package draft and sample demo files
 
 ## Sharing Plan
-- **Scenario 1 (Primary — Demo + coworkers):** Share the finished `.xlsm` file directly. All 39 VBA modules (62 Command Center actions + 5 optional add-ins) are inside it. Coworkers open the file and use the Command Center. This is the plan for the CFO/CEO demo and general coworker access.
-- **Scenario 2 (Future backlog):** Package 23 universal tool modules (~140+ tools) into `KBT_UniversalTools.xlam` for coworkers who want to run those tools on their own separate Excel files. Source files staged in `UniversalToolsForAllFiles/`. Do this AFTER the demo.
+- **Scenario 1 (Primary — Adoption + coworkers):** Distribute as a self-contained zip (`FinanceTools_v1.0.zip`) via SharePoint. Contains `FinanceTools.xlsm` (all VBA modules), bundled Python 3.11 (embeddable, zero install), Python scripts, sample data, and docs. Lead with the 5–7 supported starter workflows; full ~140-tool toolkit stays discoverable inside the workbook's Command Center. Pilot: 10–20 users in Finance/Accounting/Billing before broader rollout. See `RecTrial\Brainstorm\MINIMUM_DISTRIBUTION_PLAN.md`.
+- **Scenario 2 (Future — v2 post-V1):** Excel button UI via xlwings or signed `.xlam` add-in for tighter Excel integration. Parked until V1 ships and pilot completes. `UniversalToolsForAllFiles/` contains VBA source. Do this AFTER V1 pilot succeeds.
 
 ## My Audience
 Training docs and guides are written for non-technical Finance & Accounting staff.
@@ -156,7 +168,7 @@ This prevents overload, mistakes, and missed steps.
 Before delivering ANYTHING ask yourself:
 - Is every step written out completely?
 - Have I reviewed every sheet, page, and file fully?
-- Would the CFO/CEO be proud to see this?
+- Would a Finance & Accounting coworker — and eventually the CFO/CEO — be proud to see this?
 - Is this truly world-class or just good enough?
 - If any answer is no — fix it before delivering
 
@@ -206,20 +218,29 @@ Parallel Codex build at `tug83535/AP_CodexVersion`; local clone at `C:\Users\con
 
 **Video 4 protection rule still applies:** do not modify these 8 Python scripts until Video 4 is recorded — `aging_report.py`, `bank_reconciler.py`, `compare_files.py`, `forecast_rollforward.py`, `fuzzy_lookup.py`, `pdf_extractor.py`, `variance_analysis.py`, `variance_decomposition.py`. Anything else is fair game.
 
-### Video 4 replanning (2026-04-22 → 2026-04-23)
-Original V4 plan (10 ElevenLabs clips, 8 Python scripts run from CMD) was pulled for a stronger redesign. Current direction: **split V4 into 4a + 4b.** 4a = "Python Shows You What Excel Can't" (Workbook Dependency Scanner opener + SaaS ARR Waterfall hero). 4b = "Your Python Cookbook" (Finance Data Contract Checker + Exception Triage Engine + Control Evidence Pack Generator). Deliverable = `finance_copilot.py` CLI menu wrapping all 28 existing scripts + 5 new ones. xlwings Excel Button Edition parked as v2 post-V4.
+### Video 4 replanning — LOCKED 2026-04-28
+Original V4 plan (10 ElevenLabs clips, 8 Python scripts run from CMD) was pulled 2026-04-22. Split 4a+4b plan was also pulled after a 5th-pass external review (2026-04-27). All 5 decisions locked by Connor 2026-04-28. 5-doc planning sprint complete.
 
-Plan informed by 14 raw research files + 6 AI-compiled synthesis docs (156 ideas inventoried, confidence HIGH nothing genuinely new was missed).
+**Locked V4 direction:**
+- **Single chaptered Video 4, 9–12 min** — no 4a+4b split
+- **Hero:** Revenue Leakage Finder (narrative: "Python found a possible billing problem") + ARR waterfall as closing visual artifact
+- **Deliverable:** `finance_automation_launcher.py` (NOT `finance_copilot.py` — "Copilot" implies AI)
+- **6 V4 scripts:** `revenue_leakage_finder.py`, `data_contract_checker.py`, `exception_triage_engine.py`, `control_evidence_pack.py`, `workbook_dependency_scanner.py`, `finance_automation_launcher.py`
+- **Distribution:** Excel buttons via VBA Shell() + bundled Python 3.11 embeddable. One zip on SharePoint. Pilot: 10–20 users first.
+- **Adoption-grade:** coworkers use on their own real files, not just watch
+- xlwings parked as v2 post-V4
 
-**Key planning docs (living documents, always the current source of truth on V4 direction):**
-- `C:\Users\connor.atlee\RecTrial\PROJECT_OVERVIEW.md` — master project overview (human + AI readable, point-in-time)
-- `RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md` — active V4 proposal with open decisions
-- `RecTrial\Brainstorm\VIDEO_4_DRAFT_IDEAS.md` — the 17-idea initial draft
+**Key planning docs (source of truth — all complete 2026-04-28):**
+- `RecTrial\Brainstorm\VIDEO_4_REVIEW_DECISION_MEMO.md` — 5 locks + what got cut + stale-reference table
+- `RecTrial\Brainstorm\SUPPORTED_WORKFLOWS_V1.md` — 7 supported starter workflows mapped to existing modules
+- `RecTrial\Brainstorm\VIDEO_4_REVISED_PLAN.md` — 8-chapter outline, sample data design lock, build effort
+- `RecTrial\UniversalToolkit\python\PYTHON_SAFETY.md` — 14 safety rules + adoption-grade guidance
+- `RecTrial\Brainstorm\MINIMUM_DISTRIBUTION_PLAN.md` — SharePoint zip, pilot plan, support intake, release gate
+- `RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md` — SUPERSEDED (historical: 4a+4b + ARR Waterfall hero)
+- `RecTrial\Brainstorm\NewCodeResearchExtra\` — 5 files from 5th-pass review (research input)
 - `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md` — parking lot (AI APIs, Outlook, Task Scheduler, warehouse SQL, ML libs)
-- `RecTrial\Brainstorm\NewCodeResearch\ResearchComplied\` — 6 compiled synthesis docs (V1-V6)
-- `RecTrial\Brainstorm\NewCodeResearch\ResearchFiles\` — 14 raw research files
 
-Original V4 ElevenLabs audio (at `RecTrial\AudioClips\Video4\`) + original demo files (at `RecTrial\Video4DemoFiles\`) remain untouched on disk. Will likely be largely rewritten once new V4 plan locks.
+Original V4 ElevenLabs audio (`RecTrial\AudioClips\Video4\`) + demo files (`RecTrial\Video4DemoFiles\`) remain untouched on disk.
 
 ## Session Summary — 2026-03-12 (Latest — Universal Toolkit Expansion + Bug Review + CoPilot Guides)
 
