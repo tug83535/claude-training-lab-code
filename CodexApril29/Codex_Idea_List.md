@@ -1,9 +1,17 @@
-# New Idea List Based on RecTrial
+# Codex Idea List — Expanded (Based on RecTrial)
+
+## How to read this list
+- These ideas are designed for **finance/business users** (not engineering-heavy workflows).
+- “Universal” means reusable across many files.
+- “File-Dependent” means strongest in a known workbook/data model.
+- Prioritize ideas with **High Demo Value + Easy/Medium build** for near-term wins.
+
+---
 
 ## Finance Copilot Launcher (One-Click Menu)
 
 - Simple: Put all the tools behind one easy menu so people click a number instead of remembering script names.
-- Technical: Build a Python CLI (`finance_copilot.py`) that reads a config file (JSON/YAML), lists tools by category, validates inputs, and runs selected scripts with friendly prompts.
+- Technical: Build a Python CLI (`finance_copilot.py`) that reads a config file, lists tools by category, validates inputs, and runs selected scripts with friendly prompts.
 - Category: Universal
 - Best Tool: Python
 - Demo Value: High
@@ -13,139 +21,298 @@
 ## Reconciliation Control Tower Dashboard
 
 - Simple: A scoreboard that shows which reconciliations are done, stuck, or risky.
-- Technical: Use Power Query to combine reconciliation output files, load into Power BI, and build DAX KPIs (open items, aged exceptions, unresolved dollar amount, completion %).
+- Technical: Use Power Query to combine reconciliation outputs, load into Power BI, and build DAX KPIs (open items, aged exceptions, unresolved dollars, completion %).
 - Category: Universal
 - Best Tool: Power BI / DAX
 - Demo Value: High
-- Why It Fits Rectrial: RecTrial already has reconciliation scripts and exception outputs that can feed a control dashboard.
+- Why It Fits Rectrial: RecTrial already has reconciliation and exception-oriented outputs that can feed this directly.
 - Build Difficulty: Medium
 
 ## Data Contract Checker for Incoming Files
 
-- Simple: A gatekeeper that checks if a file is “in the right shape” before processing.
-- Technical: Python validates required columns, datatypes, date formats, duplicates, and null thresholds; outputs a PASS/FAIL report sheet and a remediation checklist.
+- Simple: A gatekeeper that checks if files are in the right shape before processing.
+- Technical: Python validates required columns, data types, date formats, duplicates, and null thresholds; emits PASS/FAIL and remediation checklist.
 - Category: Universal
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Extends existing sanitizer/quality tools and prevents bad data from entering downstream workflows.
+- Why It Fits Rectrial: Extends existing sanitizer/quality logic and prevents garbage-in downstream.
 - Build Difficulty: Easy
 
 ## Exception Triage Scoring Engine
 
-- Simple: Auto-rank the most important problems first so teams fix the biggest issues before small ones.
-- Technical: Use Python or DAX scoring model: `priority = impact * confidence * recency_weight`; generate top-20 action list and owner assignment export.
+- Simple: Rank the most important problems first so teams fix the biggest issues before small ones.
+- Technical: Python or DAX scoring model (`impact * confidence * recency`) with action-owner export and top-20 queue.
 - Category: Universal
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Matches existing variance/reconciliation focus and improves “what to do first” decisions.
+- Why It Fits Rectrial: Fits reconciliation + variance decision workflows already in the project.
 - Build Difficulty: Medium
 
 ## Variance Narrative Builder (Finance-Friendly Text)
 
-- Simple: Turn big number changes into plain-English bullet points for leaders.
-- Technical: Python template engine + rule logic (materiality thresholds, YoY/MoM logic, trend direction labels) to produce narrative text and “talking points” sheets.
+- Simple: Turn big number changes into plain-English bullet points for leadership.
+- Technical: Python rule templates using thresholds (materiality, trend direction, MoM/YoY context) to auto-generate talking points.
 - Category: Universal
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Builds directly on variance modules and reporting outputs already present.
+- Why It Fits Rectrial: Builds directly on variance modules and executive brief patterns.
 - Build Difficulty: Medium
 
 ## Workbook Dependency Risk Map
 
-- Simple: Show which sheets/formulas depend on each other so you can see where one change could break many things.
-- Technical: Parse formulas with Python/openpyxl, build dependency graph, output HTML network view plus a high-risk node list.
+- Simple: Show what depends on what, so one formula change doesn’t surprise everyone later.
+- Technical: Parse formulas with openpyxl, create cross-sheet dependency graph (HTML), and rank high-risk nodes by fan-in/fan-out.
 - Category: File-Dependent
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Fits the existing “show what Excel alone can’t easily show” storyline.
+- Why It Fits Rectrial: Matches the “show what Excel alone doesn’t show clearly” demo angle.
 - Build Difficulty: Medium
 
 ## ARR/MRR Waterfall Builder
 
-- Simple: Turn subscription changes into a clean “start-to-end revenue waterfall” chart.
-- Technical: Python ingests subscription transaction data, computes New/Expansion/Contraction/Churn bridges, writes waterfall table, and renders branded chart (matplotlib/plotly).
+- Simple: Show how subscription revenue moved from start to end.
+- Technical: Python computes New/Expansion/Contraction/Churn bridges and outputs branded waterfall visuals + table.
 - Category: File-Dependent
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Aligns with current Video 4 finance storytelling around SaaS metrics.
+- Why It Fits Rectrial: Strong match for SaaS finance storytelling in current planning docs.
 - Build Difficulty: Medium
 
 ## Monthly Close Evidence Pack Generator
 
-- Simple: One button creates an audit-ready folder with reports, checks, hashes, and a manifest.
-- Technical: Python zips source outputs + metadata, creates checksum manifest (SHA-256), writes a control summary document, and timestamps package.
+- Simple: One click creates an audit-ready folder with proof files.
+- Technical: Python bundles outputs, creates hash manifest (SHA-256), adds timestamp and control summary document.
 - Category: Universal
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Supports governance and audit-readiness themes already present in docs and toolset.
+- Why It Fits Rectrial: Complements audit/governance direction already present.
 - Build Difficulty: Medium
 
-## Power Query “Universal Ingestion Template”
+## Power Query Universal Ingestion Template
 
-- Simple: A reusable import template that cleans many messy files the same way every month.
-- Technical: Build parameterized Power Query functions for folder import, column standardization, type enforcement, and exception tagging; output clean model tables.
+- Simple: Import messy files with one reusable cleanup pipeline.
+- Technical: Parameterized Power Query functions for folder ingestion, schema alignment, and exception tagging.
 - Category: Universal
 - Best Tool: Power Query
 - Demo Value: Medium
-- Why It Fits Rectrial: Complements VBA/Python sanitizers with a no-code option for Excel-first users.
+- Why It Fits Rectrial: Good no-code bridge for Excel-first users.
 - Build Difficulty: Medium
 
 ## SQL Reconciliation View Generator
 
-- Simple: Compare two data sources in SQL and instantly see matched, missing, and mismatched records.
-- Technical: Use SQL templates with configurable keys/amount/date tolerances; output three views (`matched`, `missing`, `mismatch`) and summary counts by reason code.
+- Simple: Compare two systems and instantly see matched/missing/mismatched records.
+- Technical: SQL templates with configurable keys and tolerances, plus reason-code summary views.
 - Category: Universal
 - Best Tool: SQL
 - Demo Value: Medium
-- Why It Fits Rectrial: Extends existing SQL staging/validation patterns into a reusable reconciliation framework.
+- Why It Fits Rectrial: Extends existing SQL validation/template posture.
 - Build Difficulty: Medium
 
-## VBA “Quick Demo Mode” Macro
+## VBA Quick Demo Mode Macro
 
-- Simple: A shortcut button that runs a curated set of 5–8 impressive tools in sequence.
-- Technical: Add a VBA orchestrator subroutine that calls existing toolkit procedures with safe defaults and logs each step to an audit sheet.
+- Simple: One button runs a small “best of” sequence for fast demos.
+- Technical: VBA orchestrator calls top tools with safe defaults, logs each step, and displays concise completion summary.
 - Category: File-Dependent
 - Best Tool: VBA
 - Demo Value: High
-- Why It Fits Rectrial: Leverages rich VBA inventory and improves live demo reliability for business audiences.
+- Why It Fits Rectrial: Improves consistency and confidence in live demos.
 - Build Difficulty: Easy
 
 ## Cross-File Master Data Mapper
 
-- Simple: Teach the system that “Cust ID,” “Customer_ID,” and “Client Number” mean the same thing.
-- Technical: Maintain mapping dictionary table, apply fuzzy matching + manual override layer, then standardize columns before consolidation/reconciliation.
+- Simple: Teach the tool that different column names can mean the same thing.
+- Technical: Dictionary + fuzzy matcher + manual override table to standardize fields pre-consolidation.
 - Category: Universal
 - Best Tool: Python
 - Demo Value: Medium
-- Why It Fits Rectrial: Natural extension of existing mapping/cleaning/fuzzy tools in UniversalToolkit.
+- Why It Fits Rectrial: Natural extension of existing mapping and cleanup utilities.
 - Build Difficulty: Medium
 
 ## Forecast Backtest Scorecard
 
-- Simple: Compare last month’s forecast vs what really happened and grade forecast quality.
-- Technical: Python computes MAPE, bias, and error bands by account/entity; Power BI displays trend of forecast accuracy over time.
+- Simple: Grade forecast quality by comparing predictions to actuals.
+- Technical: Python metrics (MAPE, bias, error bands) + Power BI trend views by entity/account.
 - Category: File-Dependent
 - Best Tool: Python + Power BI / DAX
 - Demo Value: High
-- Why It Fits Rectrial: Strengthens forecast modules with measurable model accountability.
+- Why It Fits Rectrial: Adds measurable accountability to forecasting workflows.
 - Build Difficulty: Medium
 
-## AP Duplicate and Near-Duplicate Detector (Explainable)
+## AP Duplicate + Near-Duplicate Detector (Explainable)
 
-- Simple: Catch likely duplicate invoices and explain why each one was flagged.
-- Technical: Python rule engine + fuzzy scoring on vendor, invoice number, date, amount; output confidence score and reason tags per match pair.
+- Simple: Catch likely duplicate invoices and explain why each was flagged.
+- Technical: Python rules + fuzzy scoring on vendor/invoice/date/amount with confidence labels.
 - Category: Universal
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Directly aligns with existing finance validation and reconciliation objectives.
+- Why It Fits Rectrial: Direct fit with AP reconciliation and exception tooling.
 - Build Difficulty: Medium
 
 ## Executive Brief Pack in 3 Formats
 
-- Simple: Create the same executive summary as Excel tab, PDF, and PowerPoint notes.
-- Technical: Python composes a single narrative dataset and exports to multiple outputs (`openpyxl`, `python-docx`/PDF workflow, PPT template injection).
+- Simple: Create one summary and export it as Excel, PDF, and slide notes.
+- Technical: Python composes narrative dataset and writes multi-format outputs from one source payload.
 - Category: File-Dependent
 - Best Tool: Python
 - Demo Value: High
-- Why It Fits Rectrial: Builds on existing exec-brief and reporting scripts while improving executive communication.
+- Why It Fits Rectrial: Expands existing exec-brief concepts into multi-channel communication.
 - Build Difficulty: Hard
+
+## Journal Entry Risk Scanner
+
+- Simple: Highlight unusual journal entries that deserve a second look.
+- Technical: Python rules for weekends, odd amounts, late-night postings, reversed sequences, and rare account-user combos.
+- Category: Universal
+- Best Tool: Python
+- Demo Value: High
+- Why It Fits Rectrial: Reinforces finance controls and exception-review use cases.
+- Build Difficulty: Medium
+
+## Balance Sheet Flux Explainer
+
+- Simple: Explain why major balance sheet accounts moved this month.
+- Technical: SQL/Python driver table links account movement to top transaction classes and produces “top drivers” summaries.
+- Category: File-Dependent
+- Best Tool: SQL + Python
+- Demo Value: High
+- Why It Fits Rectrial: Adds leadership-friendly context to close reporting.
+- Build Difficulty: Medium
+
+## Cash Forecast Bridge View
+
+- Simple: Show how expected cash changed from last forecast to this forecast.
+- Technical: Power BI model with DAX waterfall bridge (prior forecast, wins/losses, timing shifts, revised total).
+- Category: File-Dependent
+- Best Tool: Power BI / DAX
+- Demo Value: High
+- Why It Fits Rectrial: Strong visual story for treasury/FP&A updates.
+- Build Difficulty: Medium
+
+## Auto Commentary Library by KPI
+
+- Simple: Save reusable explanation sentences so reports are faster each month.
+- Technical: Build a curated text library table keyed by KPI direction/severity; Python assembles draft commentary blocks.
+- Category: Universal
+- Best Tool: Python
+- Demo Value: Medium
+- Why It Fits Rectrial: Works with existing narrative and variance workflows.
+- Build Difficulty: Easy
+
+## Close Calendar SLA Tracker
+
+- Simple: Track which close tasks are on time, late, or at risk.
+- Technical: Power Query task ingestion + DAX SLA metrics + status heatmap by owner/workstream.
+- Category: Universal
+- Best Tool: Power BI / DAX
+- Demo Value: Medium
+- Why It Fits Rectrial: Connects operational rhythm to automation outcomes.
+- Build Difficulty: Easy
+
+## Intercompany Mismatch Radar
+
+- Simple: Find transactions that should match between entities but don’t.
+- Technical: SQL/Python pair-matching with tolerance windows and unmatched buckets by reason.
+- Category: File-Dependent
+- Best Tool: SQL + Python
+- Demo Value: High
+- Why It Fits Rectrial: Practical reconciliation pain point with clear business value.
+- Build Difficulty: Medium
+
+## Revenue Leakage Finder
+
+- Simple: Catch revenue that should have been billed or recognized but was missed.
+- Technical: SQL rules + Python exception classifier on contract dates, usage events, and billing patterns.
+- Category: File-Dependent
+- Best Tool: SQL + Python
+- Demo Value: High
+- Why It Fits Rectrial: High executive interest and strong demo narrative.
+- Build Difficulty: Hard
+
+## Vendor Payment Pattern Analyzer
+
+- Simple: Spot unusual payment behavior by vendor before it becomes a bigger issue.
+- Technical: Python time-series profiles for vendor cadence, amount volatility, and outlier flags.
+- Category: Universal
+- Best Tool: Python
+- Demo Value: Medium
+- Why It Fits Rectrial: Extends AP and reconciliation analytics.
+- Build Difficulty: Medium
+
+## Excel to Power BI Semantic Bridge
+
+- Simple: Turn the same Excel logic into repeatable Power BI metrics.
+- Technical: Define mapping table between workbook KPIs and DAX measures; auto-check value parity with Python tests.
+- Category: File-Dependent
+- Best Tool: Power BI / DAX + Python
+- Demo Value: Medium
+- Why It Fits Rectrial: Helps teams graduate from workbook-only to shared reporting.
+- Build Difficulty: Hard
+
+## Workbook Policy Validator
+
+- Simple: Check if a workbook follows your team’s “house rules.”
+- Technical: VBA/Python scanner for banned formulas, hidden sheets, missing headers, inconsistent date formats, and styling violations.
+- Category: Universal
+- Best Tool: VBA
+- Demo Value: High
+- Why It Fits Rectrial: Strong governance fit with existing standardization goals.
+- Build Difficulty: Medium
+
+## Formula Fingerprint Drift Alert
+
+- Simple: Warn when key formulas changed unexpectedly between versions.
+- Technical: Hash normalized formulas by region/sheet and compare snapshots; output drift report with severity buckets.
+- Category: File-Dependent
+- Best Tool: Python
+- Demo Value: High
+- Why It Fits Rectrial: Powerful control story for finance sign-off and audit confidence.
+- Build Difficulty: Medium
+
+## Scenario Batch Runner (What-If at Scale)
+
+- Simple: Run many what-if cases in one go instead of one-by-one.
+- Technical: Python scenario table driver applies assumptions, recalculates outputs, and exports ranked scenario outcomes.
+- Category: File-Dependent
+- Best Tool: Python
+- Demo Value: High
+- Why It Fits Rectrial: Directly extends what-if functionality already present in demos.
+- Build Difficulty: Medium
+
+## CFO One-Page Pulse Report
+
+- Simple: A single page that shows red/yellow/green status for the most important metrics.
+- Technical: Power BI report with KPI cards, tiny trend lines, and threshold-driven statuses from a governed dataset.
+- Category: Universal
+- Best Tool: Power BI / DAX
+- Demo Value: High
+- Why It Fits Rectrial: Aligns perfectly with executive audience needs.
+- Build Difficulty: Easy
+
+## Month-End Narrative Diff
+
+- Simple: Show what changed in this month’s story compared to last month’s story.
+- Technical: Python compares prior/current commentary blocks and marks changed claims, amounts, and drivers.
+- Category: File-Dependent
+- Best Tool: Python
+- Demo Value: Medium
+- Why It Fits Rectrial: Enhances consistency and review confidence for recurring executive packs.
+- Build Difficulty: Medium
+
+## Demo Adoption Telemetry Sheet
+
+- Simple: Track which tools people actually use so you know what to improve.
+- Technical: Lightweight VBA/Python logging events to a structured usage table (tool, timestamp, duration, outcome).
+- Category: Universal
+- Best Tool: VBA
+- Demo Value: Medium
+- Why It Fits Rectrial: Moves roadmap decisions from intuition to evidence.
+- Build Difficulty: Easy
+
+## Priority shortlist (suggested first 6 builds)
+
+1. Finance Copilot Launcher
+2. Data Contract Checker
+3. Exception Triage Scoring Engine
+4. Reconciliation Control Tower Dashboard
+5. Monthly Close Evidence Pack Generator
+6. CFO One-Page Pulse Report
