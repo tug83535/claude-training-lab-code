@@ -304,6 +304,8 @@ RecTrial is already impressive and business-relevant. The main unlock now is to 
 - easier to adopt,
 - easier to govern,
 - and easier to explain in outcome language (time saved, risk reduced, faster close decisions).
+<<<<<<< HEAD
+=======
 
 
 ---
@@ -373,3 +375,4 @@ Use the external brief as a **governance and execution template**, not a literal
 - Errors are understandable
 - Every output has a one-page summary
 - No source file mutation occurs
+>>>>>>> origin/April23CLD

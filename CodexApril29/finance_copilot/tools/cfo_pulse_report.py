@@ -40,9 +40,15 @@ def build_pulse(df: pd.DataFrame, thresholds: dict[str, Any]) -> pd.DataFrame:
     rules = thresholds.get("kpis", {})
     records = []
 
-    for _, row in df.iterrows():
+    for row_idx, row in df.iterrows():
         kpi = str(row["kpi"])
-        value = float(row["value"])
+        raw_value = row["value"]
+        value = pd.to_numeric(raw_value, errors="coerce")
+        if pd.isna(value):
+            raise ValueError(
+                f"Invalid numeric KPI value at row {row_idx} for KPI {kpi!r}: {raw_value!r}"
+            )
+        value = float(value)
         rule = rules.get(kpi, {"direction": "higher_is_better", "green": value, "yellow": value})
         status = _status_for_value(value, rule)
         records.append(

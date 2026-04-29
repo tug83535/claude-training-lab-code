@@ -39,7 +39,8 @@ def compute_scores(df: pd.DataFrame, weights: dict) -> pd.DataFrame:
 
     bins = [-1, 0.33, 0.66, 1.1]
     labels = ["LOW", "MEDIUM", "HIGH"]
-    out["priority_band"] = pd.cut(out["priority_score"], bins=bins, labels=labels)
+    band_score = out["priority_score"].clip(lower=0.0, upper=1.0)
+    out["priority_band"] = pd.cut(band_score, bins=bins, labels=labels)
 
     return out
 

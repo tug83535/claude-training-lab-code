@@ -37,7 +37,7 @@ def _check_type(series: pd.Series, expected: str) -> bool:
         return True
 
     if expected == "string":
-        return True
+        return non_null.map(lambda value: isinstance(value, str)).all()
     if expected == "number":
         coerced = pd.to_numeric(non_null, errors="coerce")
         return coerced.notna().all()
