@@ -64,13 +64,15 @@ Original V4 (10 CMD-run Python scripts + ElevenLabs audio) was pulled 2026-04-22
 - [x] `finance_automation_launcher.py` — DONE (numbered menu, 14 safety rules, Explorer shortcut)
 - [x] `smoke_test_video4_python.py` — DONE (5/5 PASS)
 - [x] `README_VIDEO4_PYTHON.md` — DONE
-- [ ] **Git commit** — all V4 Python files built 2026-04-28 not yet committed ⚠️
+- [x] **Git commit** — all V4 Python files + narration script v1.1 + shot list committed 2026-04-28 (commits d9b7ea0, d9f2ad0, 48d133f)
 - [x] **Update CLAUDE.md** — mark V4 Python build complete, update status section — DONE 2026-04-28
 - [ ] `FinanceTools.xlsm` — Excel workbook with ONE VBA Shell() launcher button (Option A LOCKED 2026-04-28): single button → `finance_automation_launcher.py` → numbered CLI menu → coworker picks tool. No per-tool buttons in V1.
+  - [ ] **Connor reviews `modFinanceToolsLauncher.bas`** — VBA Shell() launcher code drafted 2026-04-28 at `RecTrial\UniversalToolkit\python\ZeroInstall\modFinanceToolsLauncher.bas`. Review and provide feedback before importing into FinanceTools.xlsm.
 - [ ] Test scripts with bundled Python 3.11 embeddable (confirm zero-install path works)
-- [ ] Write narration script for V4 (8 chapters, 9–12 min) — BLOCKING for recording
-- [ ] Write shot list / screen recording guide per chapter
-- [ ] Connor generates ElevenLabs audio clips from narration script
+- [x] Write narration script for V4 (8 chapters, 9–12 min) — DONE 2026-04-28 (v1.1 at `RecTrial\Video4_V1\VIDEO_4_NARRATION_SCRIPT_v1.md` + `RecTrial\Brainstorm\VIDEO_4_NARRATION_SCRIPT.md`)
+- [x] Write shot list / screen recording guide per chapter — DONE 2026-04-28 (`RecTrial\Video4_V1\VIDEO_4_SHOT_LIST_v1.md`)
+- [ ] Connor reviews narration script + adjusts wording to match natural speaking style
+- [ ] Connor generates ElevenLabs audio clips from narration script (9 clips: V4_C01 through V4_C08, with C03a + C03b)
 - [ ] Confirm coworker pip access (Connor real-world task — affects stdlib-only requirement)
 - [ ] Identify 10–20 pilot users (Connor real-world task per MINIMUM_DISTRIBUTION_PLAN.md)
 - [ ] Assemble SharePoint zip distribution package
