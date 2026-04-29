@@ -14,11 +14,11 @@ def log_event(
     error_message: str = "",
 ) -> Path:
     telemetry_path.parent.mkdir(parents=True, exist_ok=True)
-    file_exists = telemetry_path.exists()
+    needs_header = not telemetry_path.exists() or telemetry_path.stat().st_size == 0
 
     with telemetry_path.open("a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        if not file_exists:
+        if needs_header:
             writer.writerow(
                 [
                     "timestamp_utc",
