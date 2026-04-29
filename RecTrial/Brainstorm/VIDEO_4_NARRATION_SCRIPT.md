@@ -2,23 +2,46 @@
 ## Python Automation for Finance — iPipeline
 
 **Owner:** Connor Atlee — Finance & Accounting, iPipeline
-**Version:** v1.0 — 2026-04-28
+**Version:** v1.1 — 2026-04-28 (added clip names + stdlib flag)
 **Target length:** 9–12 minutes
 **Format:** Word-for-word narration for ElevenLabs. Read at a conversational pace (~130 words/min).
 **[ON SCREEN] cues** are for recording reference only — not read aloud.
+**[FLAG]** markers call out decisions or upgrade points — not read aloud.
+
+---
+
+## CLIP NAMING CONVENTION
+
+| Clip | Chapter | Notes |
+|---|---|---|
+| V4_C01 | Chapter 1 — Why Python? | Single clip |
+| V4_C02 | Chapter 2 — Safety First | Single clip |
+| V4_C03a | Chapter 3 — Hero intro + problem setup | Split: ends before results appear |
+| V4_C03b | Chapter 3 — Hero results + waterfall + ranked CSV | Split: re-record this half if numbers change |
+| V4_C04 | Chapter 4 — Data Contract Checker | Single clip |
+| V4_C05 | Chapter 5 — Exception Triage Engine | Single clip |
+| V4_C06 | Chapter 6 — Control Evidence Pack | Single clip |
+| V4_C07 | Chapter 7 — Finance Automation Launcher | Single clip |
+| V4_C08 | Chapter 8 — How to Start | Single clip |
+
+**Why C03 is split:** The setup (what the tool does, why it matters) is stable.
+The results half references specific numbers (123 contracts, 336 rows, 38 exceptions) that
+would need re-recording if sample data ever changes. Splitting lets you re-record only
+the affected half.
 
 ---
 
 ## HOW TO USE THIS SCRIPT
 
-- Record each chapter as a separate ElevenLabs clip (or all at once if you prefer a single take)
-- [ON SCREEN] notes tell you what to show on screen while each paragraph plays
+- Record each clip as a separate ElevenLabs file named exactly as above (V4_C01.mp3, etc.)
+- [ON SCREEN] notes tell you what to show on screen while each clip plays
+- [FLAG] notes are decisions or future upgrade points — ignore when recording
 - Pause naturally at periods — do not rush through sentences
 - Aim for the same tone as Videos 1–3: plain, confident, Finance-literate
 
 ---
 
-## CHAPTER 1 — Why Python After Excel and VBA?
+## V4_C01 — CHAPTER 1: Why Python After Excel and VBA?
 **Target time:** 45 seconds | **Word count:** ~95
 
 ---
@@ -38,7 +61,7 @@ This video shows four tools a Finance analyst can run without any programming ba
 
 ---
 
-## CHAPTER 2 — Safety First
+## V4_C02 — CHAPTER 2: Safety First
 **Target time:** 60 seconds | **Word count:** ~130
 
 ---
@@ -63,8 +86,9 @@ Accounting team. Those rules are in writing right here, and this file ships with
 
 ---
 
-## CHAPTER 3 — Revenue Leakage Finder
-**Target time:** 2 minutes 30 seconds – 3 minutes 30 seconds | **Word count:** ~365
+## V4_C03a — CHAPTER 3: Revenue Leakage Finder (Setup)
+**Target time:** ~60 seconds | **Word count:** ~120
+**Re-record trigger:** Only if the demo approach changes (e.g., no longer using Excel button)
 
 ---
 
@@ -85,6 +109,14 @@ a few lines of output, then "Analysis complete." Output folder path printed at t
 
 [ON SCREEN: Switch to browser. The HTML summary report opens automatically.]
 
+---
+
+## V4_C03b — CHAPTER 3: Revenue Leakage Finder (Results)
+**Target time:** ~1 minute 45 seconds | **Word count:** ~245
+**Re-record trigger:** If sample data numbers change (exception counts, row counts)
+
+---
+
 Here is the summary. Against 123 contracts and 336 billing records, the tool found
 38 exceptions across five categories.
 
@@ -95,7 +127,12 @@ a contract reconciliation manually.
 Ten contracts are expired but still generating invoices. Nine invoices show amounts that
 differ from the expected contract value by more than ten percent, with no overage explanation.
 
-[ON SCREEN: Scroll to the ARR waterfall chart in the report.]
+[ON SCREEN: Scroll to the ARR waterfall chart in the HTML report.]
+
+[FLAG — stdlib vs pandas/matplotlib: The waterfall shown here is a pure HTML/CSS bar chart
+(stdlib only, no matplotlib). If coworker pip access is confirmed post-V4, this could be
+upgraded to a proper matplotlib figure with cleaner axes, gradient fills, and export-ready
+resolution. The narration line below does not need to change — only the visual would upgrade.]
 
 This is the ARR waterfall — expected revenue by customer tier compared to what is actually
 billing. The gap in the mid-market band is where most of the leakage concentrates. This is
@@ -114,7 +151,7 @@ export. The structure is documented in the README that ships with the toolkit.
 
 ---
 
-## CHAPTER 4 — Data Contract Checker
+## V4_C04 — CHAPTER 4: Data Contract Checker
 **Target time:** 90 seconds | **Word count:** ~185
 
 ---
@@ -142,7 +179,7 @@ thirty-minute analysis. Run it every time you get a new data export.
 
 ---
 
-## CHAPTER 5 — Exception Triage Engine
+## V4_C05 — CHAPTER 5: Exception Triage Engine
 **Target time:** 90 seconds | **Word count:** ~185
 
 ---
@@ -170,7 +207,7 @@ at first.
 
 ---
 
-## CHAPTER 6 — Control Evidence Pack
+## V4_C06 — CHAPTER 6: Control Evidence Pack
 **Target time:** 90 seconds | **Word count:** ~185
 
 ---
@@ -197,7 +234,7 @@ that question precisely. Attach it to the ticket.
 
 ---
 
-## CHAPTER 7 — Finance Automation Launcher
+## V4_C07 — CHAPTER 7: Finance Automation Launcher
 **Target time:** 60 seconds | **Word count:** ~130
 
 ---
@@ -223,7 +260,7 @@ and one number away.
 
 ---
 
-## CHAPTER 8 — How to Start
+## V4_C08 — CHAPTER 8: How to Start
 **Target time:** 30 seconds | **Word count:** ~70
 
 ---
@@ -243,50 +280,60 @@ and Accounting.
 
 ---
 
-## WORD COUNT SUMMARY
+## CLIP SUMMARY
 
-| Chapter | Words | Est. Time |
+| Clip | Words | Est. Time | Re-record if... |
+|---|---|---|---|
+| V4_C01 | ~95 | ~44 sec | Demo approach changes |
+| V4_C02 | ~130 | ~60 sec | Safety rules change |
+| V4_C03a | ~120 | ~55 sec | Demo approach changes |
+| V4_C03b | ~245 | ~1 min 53 sec | Sample data numbers change |
+| V4_C04 | ~185 | ~1 min 26 sec | Demo approach changes |
+| V4_C05 | ~185 | ~1 min 26 sec | Demo approach changes |
+| V4_C06 | ~185 | ~1 min 26 sec | Demo approach changes |
+| V4_C07 | ~130 | ~60 sec | Button design changes |
+| V4_C08 | ~70 | ~32 sec | Rarely |
+| **Total** | **~1,345** | **~10 min 22 sec** | |
+
+Target range: 9–12 min. This draft lands at ~10:22 — solidly in range.
+Adjust by trimming or expanding V4_C03b (it has the most flex room).
+
+---
+
+## OPEN FLAG SUMMARY
+
+| Clip | Flag | Decision needed |
 |---|---|---|
-| 1 — Why Python? | ~95 | ~44 sec |
-| 2 — Safety First | ~130 | ~60 sec |
-| 3 — Revenue Leakage Finder | ~365 | ~2 min 49 sec |
-| 4 — Data Contract Checker | ~185 | ~1 min 26 sec |
-| 5 — Exception Triage Engine | ~185 | ~1 min 26 sec |
-| 6 — Control Evidence Pack | ~185 | ~1 min 26 sec |
-| 7 — Finance Automation Launcher | ~130 | ~60 sec |
-| 8 — How to Start | ~70 | ~32 sec |
-| **Total** | **~1,345** | **~10 min 23 sec** |
-
-Target range: 9–12 min. This draft lands at ~10:23 — solidly in range.
-Adjust by trimming or expanding Chapter 3 (it has the most flex).
+| V4_C03b | stdlib waterfall (CSS) vs matplotlib waterfall | Confirm coworker pip access. If yes, upgrade visual before recording. Narration line unchanged. |
 
 ---
 
 ## RECORDING NOTES FOR CONNOR
 
-**ElevenLabs:** Record narration-only (no [ON SCREEN] text). Each chapter can be one clip,
-or record the whole script as one take and split in post.
+**ElevenLabs:** Record each clip separately, named V4_C01.mp3 through V4_C08.mp3
+(with V4_C03a.mp3 and V4_C03b.mp3 for the split chapter).
 
 **Screen recording:** Record separately from narration. Match screen actions to the
 timestamps below.
 
 **Rough sync guide:**
-- 0:00–0:44 — Chapter 1 (static slide on screen)
-- 0:44–1:44 — Chapter 2 (scroll PYTHON_SAFETY.md, show outputs folder)
-- 1:44–4:33 — Chapter 3 (Excel button → menu → HTML report → waterfall → ranked CSV)
-- 4:33–5:59 — Chapter 4 (menu → FAIL → fix in Notepad → PASS)
-- 5:59–7:25 — Chapter 5 (menu → scored output → top_10_action_list.csv in Excel)
-- 7:25–8:51 — Chapter 6 (menu → manifest → evidence_summary.html)
-- 8:51–9:51 — Chapter 7 (Excel button → full menu → option 7 → option 8)
-- 9:51–10:23 — Chapter 8 (text card with 4 rules)
+- 0:00–0:44 — V4_C01 (static slide on screen)
+- 0:44–1:44 — V4_C02 (scroll PYTHON_SAFETY.md, show outputs folder)
+- 1:44–2:39 — V4_C03a (Excel button → menu → pick option 1 → processing → browser opens)
+- 2:39–4:32 — V4_C03b (HTML report → waterfall → ranked CSV in Excel)
+- 4:32–5:58 — V4_C04 (menu → FAIL → fix in Notepad → PASS)
+- 5:58–7:24 — V4_C05 (menu → scored output → top_10_action_list.csv in Excel)
+- 7:24–8:50 — V4_C06 (menu → manifest → evidence_summary.html)
+- 8:50–9:50 — V4_C07 (Excel button → full menu → option 7 → option 8)
+- 9:50–10:22 — V4_C08 (text card with 4 rules)
 
-**Chapter 3 demo tip:** Move through the CLI window quickly — it is not the story.
+**Chapter 3 tip:** Move through the CLI window quickly — it is not the story.
 Cut to the HTML report as fast as possible. The browser report is the hero visual.
 
-**Chapter 4 demo tip:** The FAIL → fix → PASS sequence is fast. Do not slow down.
-Confidence that "this is easy" is the message — not a detailed walkthrough.
+**Chapter 4 tip:** The FAIL → fix → PASS sequence is fast. Do not slow down.
+Confidence that "this is easy" is the message.
 
 ---
 
-*End of narration script. Version v1.0 — 2026-04-28.*
+*End of narration script. Version v1.1 — 2026-04-28.*
 *Review, adjust wording to match your natural speaking style, then record.*
