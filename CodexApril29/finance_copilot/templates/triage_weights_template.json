@@ -1,0 +1,7 @@
+{
+  "impact_weight": 0.5,
+  "confidence_weight": 0.3,
+  "recency_weight": 0.2,
+  "days_scale": 30,
+  "required_columns": ["id", "impact", "confidence", "days_open"]
+}

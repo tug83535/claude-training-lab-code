@@ -1,0 +1,19 @@
+{
+  "kpis": {
+    "close_sla_pct": {
+      "direction": "higher_is_better",
+      "green": 0.95,
+      "yellow": 0.85
+    },
+    "unreconciled_amount": {
+      "direction": "lower_is_better",
+      "green": 10000,
+      "yellow": 50000
+    },
+    "forecast_accuracy": {
+      "direction": "higher_is_better",
+      "green": 0.9,
+      "yellow": 0.8
+    }
+  }
+}
