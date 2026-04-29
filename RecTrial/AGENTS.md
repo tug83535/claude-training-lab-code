@@ -1,7 +1,7 @@
 # AI Agent Instructions — RecTrial (Finance Automation Demo)
 
 ## Project Overview
-This is a Finance & Accounting automation demo for iPipeline (SaaS, insurance industry). It combines Excel VBA, Python, and SQL to showcase what's possible in Finance workflows. Audience: 2,000+ employees + CFO/CEO.
+This is a Finance & Accounting **adoption-grade automation package + demo videos** for iPipeline (SaaS, insurance industry). It combines Excel VBA, Python, and SQL. **Near-term audience: 50–150 coworkers** in Finance, Accounting, and adjacent operations. Broader rollout and any CFO/CEO showcase are deferred. Coworkers are expected to actually use the tools on their own files.
 
 Two-prong architecture:
 - **Prong 1 — Universal Toolkit:** File-agnostic VBA macros + Python utilities. No hardcoded sheet names. Works on any workbook.

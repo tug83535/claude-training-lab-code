@@ -1,5 +1,23 @@
 # Lessons Learned - APCLDmerge Project
 
+## V4 Delivery Model — VBA Shell() + Bundled Python — 2026-04-28
+
+- **VBA Shell() works on iPipeline laptops.** Confirmed during V4 planning: Excel can call `Shell()` to launch a `.py` file through a local Python executable. This eliminates the need for coworkers to open a Command Prompt. They click an Excel button and the script runs invisibly. This was not obvious at the start of V4 planning and changes the entire distribution approach.
+
+- **Bundled Python 3.11 embeddable = zero install for coworkers.** The Python 3.11 embeddable zip (~10 MB) is a standalone folder — no installation, no admin rights, no PATH changes. Drop it next to the workbook. VBA Shell() points at `python-embedded\python.exe`. Coworkers never touch Python setup. Confirmed this is the V1 delivery model.
+
+- **The delivery path: `ThisWorkbook.Path & "\python\python-embedded\python.exe"`**. All paths must be relative to the workbook location so the zip works wherever it's unzipped. Do not hardcode drive letters or user paths.
+
+- **Excel button design decision: one launcher button OR individual per-tool buttons.** A single button that opens `finance_automation_launcher.py` (numbered menu) is simpler to build. Per-tool buttons (one per script) give coworkers faster access but require more VBA wiring. This decision gates the FinanceTools.xlsm build — ask Connor before building.
+
+- **Stdlib-only Python is the right default for coworker distribution.** All 6 V4 scripts use only Python standard library — csv, json, pathlib, datetime, hashlib, zipfile, xml.etree, subprocess, re, collections, difflib. No pip required. This means the bundled embeddable Python works with no additional packages. If coworkers have pip access, pandas/openpyxl could be added later, but V1 ships with zero dependencies.
+
+- **Analysis date anchoring prevents false positives as real time passes.** revenue_leakage_finder.py originally used `date.today()` to detect stale contracts. This caused Class 2 (stale contracts) to over-count massively once real calendar time passed beyond the sample data window. Fix: derive "today" from `max(billing_period dates) + 45 days`. The script now gives correct results regardless of when it's run, as long as the billing data is consistent.
+
+- **word-boundary regex + known_sheets filter for cross-sheet references.** workbook_dependency_scanner.py regex alone cannot reliably distinguish Excel sheet names from formula text like "SUM(Data" or "B12-Data". Fix: regex captures candidates, then filter against the set of actual sheet names from workbook.xml. Only names that appear in both the formula AND the sheet list are true cross-sheet references.
+
+- **Timestamped output folders prevent overwrite accidents.** Every V4 script writes to `outputs/YYYYMMDD_HHMMSS_toolname/`. Previous runs are never touched. This is the correct pattern for coworker-facing tools — they can re-run anytime without fear of losing prior results.
+
 ## Planning and Research Workflow Lessons — 2026-04-23
 
 - **When parallel AI sessions produce overlapping research, compile first, review second.** User ran parallel claude.ai / Codex / other-AI sessions that produced 14 raw research files. Trying to read all 14 in a single Claude Code session is wasteful. The right move is: compile them into 3-6 structured synthesis docs using targeted prompts, then review the synthesis rather than the raw files. A subagent back-check of the raw files afterward (to verify nothing was missed) takes 5 min and confirmed HIGH confidence the synthesis was complete.

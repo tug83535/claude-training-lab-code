@@ -316,3 +316,62 @@
 4. Reconciliation Control Tower Dashboard
 5. Monthly Close Evidence Pack Generator
 6. CFO One-Page Pulse Report
+<<<<<<< HEAD
+=======
+
+
+---
+
+## External Brief Alignment Notes (Applied)
+
+- The external brief’s strongest contribution is not “more ideas”; it is **execution discipline**.
+- This idea list should be filtered by:
+  1. Safety compliance,
+  2. Local-first execution,
+  3. Repeatability (logs + outputs),
+  4. Finance-user clarity.
+
+## Recommended Build Gate for Any Idea
+
+Before moving any idea into implementation:
+
+1. Can it run without internet/API dependencies?
+2. Can it avoid editing source files?
+3. Can it produce clear outputs + logs?
+4. Can a finance analyst understand the value in under 1 minute?
+5. Does it duplicate an existing RecTrial capability?
+
+If any answer is “no,” move the idea to template/stub or defer.
+
+## Updated Priority Stack (Operational)
+
+### Priority Tier 1 (Build first, build well)
+
+- Finance Copilot Launcher
+- Data Contract Checker
+- Python Reconciliation Engine
+- Control Evidence Pack Generator
+- Exception Triage Scoring Engine
+- Revenue Leakage Finder
+- Workbook Health Check
+- Excel Cell-Level Diff Tool
+- Budget vs Actual Variance Generator
+- File/Data Cleaner
+
+### Priority Tier 2 (Template-first)
+
+- Power Query Folder Consolidator Template
+- Power Query Unpivot Template
+- Power Query Fuzzy Match Template
+- SQL Trial Balance/GL Template
+- SQL Variance Template
+- DAX Budget vs Actual Measure Pack
+
+### Priority Tier 3 (After adoption metrics are live)
+
+- Journal Entry Formatter/Validator
+- Formula Fingerprint Drift Alert
+- Intercompany Mismatch Radar
+- Excel to Power BI Semantic Bridge
+- Month-End Narrative Diff
+>>>>>>> origin/April23CLD
