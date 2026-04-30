@@ -1,0 +1,124 @@
+customer_id,customer_name,deployment_type,environment,billing_basis,status,currency,base_fee,base_quantity,band1_rate,transaction_multiplier,term_start,term_end,expected_annual_revenue
+ATC-00001,Northstar Insurance Group,SaaS,eSign,Annually,Active,USD,88000.0,396493,0.225,1.15,2021-06-12,2026-07-07,102470.6
+ATC-00002,Northstar Insurance Group,On-Prem,On-Prem,Annually,Active,USD,186100.0,1142059,0.403,1.37,2021-02-11,2026-11-10,358031.51
+ATC-00003,Harbor Life Systems,On-Prem,On-Prem,Annually_in_arrears,Active,USD,33800.0,47758,0.78,1.65,2020-11-04,2026-07-07,60526.23
+ATC-00004,Pioneer Benefits Co.,SaaS,eSign,Annually,Active,USD,52300.0,18390,1.449,1.3,2022-09-29,2026-04-18,73778.11
+ATC-00005,Summit Policy Services,Embedded,eSign,Annually,Active,USD,12400.0,10133,1.885,1.21,2021-08-30,2026-02-25,18188.81
+ATC-00006,Keystone Admin Solutions,On-Prem,On-Prem,Annually,Active,USD,64100.0,27916,1.612,1.8,2021-01-18,2025-12-20,112416.73
+ATC-00007,Atlas Brokerage Network,SaaS,Pronto2,Annually,Active,USD,35900.0,61921,1.371,1.55,2022-09-17,2025-10-14,118569.44
+ATC-00008,Meridian Life & Casualty,SaaS,eSign,Annually,Active,USD,215100.0,713405,0.198,1.07,2021-03-13,2025-10-23,284811.2
+ATC-00009,Meridian Life & Casualty,On-Prem,On-Prem,Annually,Active,USD,253200.0,1967588,0.489,0.84,2021-08-20,2025-12-11,364930.38
+ATC-00010,Lakewood Financial Group,SaaS,eSign,Annually_in_arrears,Active,USD,1000.0,14960,1.943,2.65,2022-07-05,2026-01-30,58656.65
+ATC-00011,Crestview Insurance Partners,SaaS,Pronto2,Annually,Active,USD,42100.0,76436,0.682,1.62,2022-07-16,2027-02-18,92626.75
+ATC-00012,Ironbridge Benefits,On-Prem,On-Prem,Annually_in_arrears,Active,USD,38000.0,64493,1.797,0.71,2022-05-10,2026-12-19,38000.0
+ATC-00013,Stillwater Mutual,SaaS,eSign,Annually_in_arrears,Active,USD,238700.0,1861110,0.447,1.22,2024-02-22,2025-10-04,577927.5
+ATC-00014,BluePeak Advisory,Embedded,eSign,Annually,Active,USD,3800.0,9064,1.861,0.23,2022-02-18,2026-10-24,3800.0
+ATC-00015,Ridgeline Health Plans,SaaS,eSign,Annually,Active,USD,63800.0,96174,0.645,1.15,2021-09-30,2026-01-29,86051.76
+ATC-00016,Coastal Re Solutions,SaaS,Pronto2,Quarterly_in_arrears,Active,USD,14600.0,12483,1.179,2.76,2020-09-21,2026-01-25,54646.97
+ATC-00017,Pinnacle Trust Services,On-Prem,On-Prem,Annually,Active,USD,234100.0,520527,0.299,0.91,2021-03-05,2026-10-02,274110.36
+ATC-00018,Cirencester Benefits Ltd,SaaS,UK_AWS,Monthly,Active,GBP,32700.0,12105,0.645,1.04,2024-10-02,2027-01-04,36212.65
+ATC-00019,Aldgate Re Partners,SaaS,UK_AWS,Annually_in_arrears,Active,GBP,3600.0,9295,1.947,0.44,2023-06-01,2025-06-29,3600.0
+ATC-00020,Broadview Life Partners,SaaS,eSign,Annually,Active,USD,63600.0,40657,1.358,1.92,2020-06-29,2026-10-28,121397.1
+ATC-00021,Cascade Insurance Group,On-Prem,On-Prem,Annually,Active,USD,77500.0,148373,1.482,1.53,2021-05-10,2026-07-08,289983.98
+ATC-00022,Dellwood Mutual Benefits,SaaS,eSign,Annually,Active,USD,5600.0,14739,1.518,0.54,2020-12-28,2027-02-25,5600.0
+ATC-00023,Eastbrook Policy Services,Embedded,eSign,Annually,Stale,USD,3300.0,1163,1.708,0.36,2021-06-06,2024-06-05,3300.0
+ATC-00024,Frontier Benefits Assoc.,SaaS,Pronto2,Annually,Active,USD,46000.0,80001,1.37,0.82,2022-11-27,2025-07-12,46000.0
+ATC-00025,Granite State Insurance,On-Prem,On-Prem,Monthly,Active,USD,43100.0,130987,1.55,0.79,2021-07-22,2026-12-12,43100.0
+ATC-00026,Harborview Life & Annuity,SaaS,eSign,Annually,Active,USD,198200.0,1728982,0.146,1.26,2022-05-20,2026-06-25,346042.64
+ATC-00027,Inland Empire Brokers,SaaS,eSign,Annually,Active,USD,66000.0,35644,0.823,0.79,2020-09-03,2026-04-13,66000.0
+ATC-00028,Junction Benefits Corp.,On-Prem,On-Prem,Annually,Active,USD,27500.0,26761,1.076,1.79,2023-03-13,2026-08-17,61594.03
+ATC-00029,Kingsbridge Casualty,SaaS,eSign,Annually,Active,USD,14500.0,12346,1.849,0.67,2021-09-22,2025-05-16,14500.0
+ATC-00030,Lakeshore Annuity Services,SaaS,Pronto2,Annually,Active,USD,21500.0,7565,1.781,0.9,2022-07-05,2025-06-30,23955.71
+ATC-00031,Mountainview Mutual,On-Prem,On-Prem,Annually,Active,USD,56300.0,134577,0.701,0.95,2022-05-21,2026-11-21,86309.97
+ATC-00032,Northfield Insurance Co.,SaaS,eSign,Annually,Active,USD,62400.0,21985,0.565,1.22,2021-09-19,2025-07-02,70705.79
+ATC-00033,Oakdale Benefits Group,SaaS,eSign,Annually,Stale,USD,1200.0,3044,1.069,0.39,2021-12-03,2024-12-02,1200.0
+ATC-00034,Pacific Crest Insurance,SaaS,eSign,Annually,Stale,USD,230400.0,1498937,0.159,1.26,2021-06-06,2024-06-05,360260.44
+ATC-00035,Quorum Financial Services,On-Prem,On-Prem,Annually,Active,USD,56900.0,89361,0.81,1.09,2023-04-18,2025-11-26,84612.11
+ATC-00036,Redwood Benefits Partners,SaaS,Pronto2,Annually,Active,USD,10700.0,169833,1.798,1.99,2022-12-26,2025-07-14,330813.35
+ATC-00037,Silvergate Insurance,SaaS,eSign,Annually,Stale,USD,75300.0,25033,1.643,1.05,2023-05-07,2024-05-06,80081.42
+ATC-00038,Timberline Policy Group,On-Prem,On-Prem,Monthly_in_arrears,Active,USD,9200.0,13223,1.654,0.22,2020-10-24,2026-03-06,9200.0
+ATC-00039,Union Square Benefits,SaaS,eSign,Annually,Active,USD,75700.0,42203,0.844,1.83,2021-01-14,2025-08-15,124621.34
+ATC-00040,Valley Trust Insurance,Embedded,eSign,Annually,Active,USD,3200.0,5617,1.204,1.98,2023-03-06,2027-01-10,11241.56
+ATC-00041,Westport Mutual Holdings,SaaS,eSign,Annually,Active,USD,240500.0,1939269,0.253,0.8,2024-06-21,2025-08-03,263441.19
+ATC-00042,Xerxes Benefits Network,On-Prem,On-Prem,Annually,Active,USD,61900.0,151619,1.417,1.34,2023-04-16,2025-10-13,147830.0
+ATC-00043,Yosemite Life Systems,SaaS,eSign,Monthly,Active,USD,48200.0,103787,1.257,0.72,2020-11-18,2025-09-30,48200.0
+ATC-00044,Zenith Policy Services,SaaS,Pronto2,Annually,Active,USD,72900.0,62070,1.387,1.5,2020-04-17,2025-06-10,134214.69
+ATC-00045,Arcadian Insurance Trust,SaaS,eSign,Annually,Active,USD,62500.0,69059,1.624,1.96,2022-06-24,2027-01-26,241454.49
+ATC-00046,Bayshore Life & Casualty,On-Prem,On-Prem,Monthly_in_arrears,Active,USD,61600.0,94080,1.517,1.12,2024-08-14,2025-10-31,121559.03
+ATC-00047,Clearwater Benefits Inc.,SaaS,eSign,Annually,Active,USD,2400.0,11489,1.108,2.64,2023-05-14,2026-01-29,34818.69
+ATC-00048,Driftwood Annuity Group,SaaS,eSign,Annually,Stale,USD,4600.0,13030,1.871,0.82,2021-11-08,2023-11-08,5489.62
+ATC-00049,Elmwood Financial Partners,Embedded,eSign,Annually,Active,USD,14500.0,4573,1.351,1.63,2023-03-13,2025-07-11,21129.41
+ATC-00050,Fairview Insurance Network,SaaS,Pronto2,Monthly_in_arrears,Active,USD,18100.0,75475,0.732,1.94,2022-11-25,2025-05-29,81413.97
+ATC-00051,Glenwood Mutual Services,On-Prem,On-Prem,Annually,Stale,USD,61000.0,89228,1.067,1.98,2021-12-08,2023-12-08,163022.23
+ATC-00052,Highmark Benefits Co.,SaaS,eSign,Monthly,Active,USD,13100.0,121309,0.502,1.89,2023-09-10,2026-01-16,92087.81
+ATC-00053,Ironwood Policy Advisors,SaaS,eSign,Annually,Active,USD,3000.0,7066,1.07,2.06,2020-08-06,2027-03-18,13071.39
+ATC-00054,Juniper Life Holdings,On-Prem,On-Prem,Annually,Active,USD,208300.0,1598575,0.316,1.08,2024-01-22,2026-03-04,313231.24
+ATC-00055,Kirkland Insurance Partners,SaaS,eSign,Annually,Stale,USD,75800.0,184554,1.473,0.76,2020-12-08,2023-12-08,75800.0
+ATC-00056,Laurel Benefits Group,SaaS,Pronto2,Annually,Active,USD,4300.0,7043,1.786,1.9,2024-10-03,2026-03-08,18701.58
+ATC-00057,Maple Ridge Insurance,On-Prem,On-Prem,Annually,Active,USD,45800.0,199927,0.721,0.63,2020-12-20,2025-12-05,45800.0
+ATC-00058,Newbury Policy Services,SaaS,eSign,Annually,Active,USD,67300.0,68569,1.375,0.84,2022-11-17,2025-08-04,67300.0
+ATC-00059,Orchard Trust Benefits,SaaS,eSign,Annually,Active,USD,9200.0,12590,1.073,1.36,2023-05-21,2026-08-30,18691.37
+ATC-00060,Plum Creek Mutual,Embedded,eSign,Annually,Active,USD,7400.0,3997,1.148,2.13,2020-11-07,2026-05-29,16074.88
+ATC-00061,Queensway Financial Group,SaaS,eSign,Monthly_in_arrears,Active,USD,25300.0,189429,1.173,0.58,2024-02-28,2026-07-10,25300.0
+ATC-00062,Rosewood Life Partners,On-Prem,On-Prem,Monthly_in_arrears,Active,USD,66100.0,182001,1.19,1.34,2022-03-14,2025-09-14,176571.94
+ATC-00063,Sagebrush Insurance Co.,SaaS,eSign,Annually_in_arrears,Active,USD,67100.0,139324,1.055,1.86,2022-04-11,2027-01-18,242272.97
+ATC-00064,Thornwood Benefits Inc.,SaaS,Pronto2,Annually,Active,USD,28100.0,71812,1.592,0.92,2022-02-04,2026-08-04,51671.96
+ATC-00065,Upland Casualty Services,SaaS,eSign,Annually,Active,USD,6600.0,11690,1.286,0.96,2023-06-02,2026-02-06,7844.29
+ATC-00066,Vineyard Life Systems,On-Prem,On-Prem,Annually,Active,USD,26200.0,188914,0.699,0.82,2023-12-25,2025-10-02,26200.0
+ATC-00067,Whitmore Insurance Trust,SaaS,eSign,Annually,Active,USD,14400.0,117138,1.006,1.65,2022-02-22,2026-06-30,164576.46
+ATC-00068,Xenon Policy Partners,Embedded,eSign,Annually,Active,USD,5700.0,96,1.943,1.04,2020-06-19,2026-12-11,5737.72
+ATC-00069,Yellowstone Mutual Holdings,SaaS,eSign,Monthly_in_arrears,Active,USD,269100.0,1345322,0.504,1.43,2022-05-29,2026-11-03,750013.2
+ATC-00070,Zion Benefits Network,On-Prem,On-Prem,Annually,Active,USD,37200.0,182341,1.383,1.11,2022-01-13,2025-05-30,83419.08
+ATC-00071,Ashford Life Services,SaaS,Pronto2,Annually,Active,USD,47400.0,110290,1.269,1.49,2024-01-16,2027-01-28,122981.9
+ATC-00072,Birchwood Insurance Co.,SaaS,eSign,Annually,Active,USD,800.0,6211,1.327,1.47,2022-03-03,2025-11-03,6309.37
+ATC-00073,Crestwood Benefits Alliance,On-Prem,On-Prem,Monthly_in_arrears,Active,USD,27700.0,28471,1.111,1.62,2023-03-14,2026-07-06,48379.0
+ATC-00074,Devonshire Policy Group,SaaS,eSign,Quarterly_in_arrears,Active,USD,14800.0,177853,0.552,0.55,2023-07-02,2027-02-25,14800.0
+ATC-00075,Elsinore Mutual Partners,SaaS,eSign,Monthly_in_arrears,Active,USD,3600.0,7758,1.669,1.78,2021-04-10,2025-10-04,15708.95
+ATC-00076,Foxhill Insurance Services,On-Prem,On-Prem,Annually,Active,USD,21700.0,166186,1.753,1.58,2020-06-16,2026-05-13,333872.51
+ATC-00077,Greystone Life Holdings,SaaS,eSign,Annually,Active,USD,226400.0,854221,0.396,1.44,2023-01-05,2025-08-19,448365.92
+ATC-00078,Hillcrest Benefits Trust,SaaS,Pronto2,Monthly,Active,USD,51400.0,171427,0.816,1.55,2023-08-24,2025-07-17,154492.21
+ATC-00079,Inverness Policy Co.,Embedded,eSign,Annually,Active,USD,11700.0,5688,1.533,2.05,2024-01-30,2026-12-01,21348.74
+ATC-00080,Juneau Life Partners,SaaS,eSign,Annually,Active,USD,67600.0,34666,1.064,1.04,2024-09-08,2026-07-05,82755.72
+ATC-00081,Kestrel Insurance Network,On-Prem,On-Prem,Annually,Active,USD,22300.0,143772,1.755,0.91,2023-11-25,2026-07-20,73819.81
+ATC-00082,Linwood Mutual Benefits,SaaS,eSign,Annually,Active,USD,6500.0,11977,1.592,1.1,2022-01-17,2026-08-20,10466.36
+ATC-00083,Millbrook Policy Advisors,SaaS,eSign,Monthly,Active,USD,27100.0,128820,1.241,1.5,2023-03-12,2026-08-05,139299.76
+ATC-00084,Norwood Insurance Alliance,On-Prem,On-Prem,Annually,Active,USD,44100.0,100015,1.537,1.01,2022-12-08,2025-11-03,100308.72
+ATC-00085,Overland Benefits Group,SaaS,Pronto2,Annually,Active,USD,10700.0,57084,0.611,1.58,2023-03-18,2026-11-21,41699.2
+ATC-00086,Pinehurst Life Services,SaaS,eSign,Annually_in_arrears,Active,USD,9700.0,8041,1.448,0.25,2020-11-19,2026-08-31,9700.0
+ATC-00087,Quarry Hill Insurance,Embedded,eSign,Annually,Active,USD,10000.0,6046,1.473,1.69,2023-05-24,2026-03-10,18706.63
+ATC-00088,Riverdale Mutual Holdings,SaaS,eSign,Annually_in_arrears,Active,USD,257800.0,768152,0.267,0.96,2022-11-26,2026-04-26,306402.39
+ATC-00089,Stonegate Benefits Co.,On-Prem,On-Prem,Annually,Active,USD,76600.0,187922,0.741,0.82,2020-08-04,2026-10-31,76600.0
+ATC-00090,Thornbury Policy Services,SaaS,eSign,Annually,Active,USD,51800.0,33352,1.582,0.94,2020-06-30,2026-10-20,55793.69
+ATC-00091,Upton Life Partners,SaaS,Pronto2,Annually,Active,USD,1900.0,745,1.974,1.75,2020-10-14,2026-10-29,3720.92
+ATC-00092,Verdant Insurance Trust,On-Prem,On-Prem,Annually,Active,USD,17200.0,10215,1.246,1.2,2020-07-15,2026-09-15,22436.57
+ATC-00093,Weston Benefits Alliance,SaaS,eSign,Annually,Active,USD,75900.0,132233,0.648,0.6,2024-06-20,2026-01-14,75900.0
+ATC-00094,Ximena Policy Group,SaaS,eSign,Annually,Active,USD,2300.0,13289,1.563,1.05,2020-11-28,2025-06-24,12009.18
+ATC-00095,Yellowrock Mutual Services,On-Prem,On-Prem,Annually,Active,USD,52400.0,0,0.793,1.28,2020-06-21,2026-07-01,52400.0
+ATC-00096,Zephyr Benefits Inc.,SaaS,Pronto2,Annually,Active,USD,4600.0,10174,1.06,2.89,2021-06-16,2026-07-14,26219.72
+ATC-00097,Andover Insurance Co.,SaaS,eSign,Annually_in_arrears,Active,USD,28500.0,28282,0.704,0.76,2021-04-01,2025-12-03,28500.0
+ATC-00098,Belmont Life Holdings,On-Prem,On-Prem,Annually,Active,USD,42900.0,15556,0.801,1.56,2022-03-26,2026-12-30,55343.71
+ATC-00099,Clearfield Benefits Trust,SaaS,eSign,Annually,Active,USD,13900.0,12907,1.791,1.85,2020-11-26,2025-12-26,47300.71
+ATC-00100,Dunmore Policy Services,Embedded,eSign,Annually,Active,USD,3400.0,2441,1.908,2.51,2024-02-11,2026-11-09,10766.63
+ATC-00101,Evergreen Insurance Partners,SaaS,eSign,Annually,Stale,USD,269500.0,1393713,0.562,1.11,2021-04-07,2024-04-06,518658.63
+ATC-00102,Falmouth Mutual Benefits,On-Prem,On-Prem,Annually,Active,USD,45000.0,136445,1.069,1.4,2022-07-02,2026-02-03,175993.22
+ATC-00103,Grantham Life Systems,SaaS,Pronto2,Annually,Active,USD,11800.0,67011,1.75,1.75,2021-05-16,2026-01-12,146969.16
+ATC-00104,Hartwell Insurance Co.,SaaS,eSign,Quarterly_in_arrears,Active,USD,67500.0,158059,0.552,1.63,2020-06-20,2027-03-20,149231.54
+ATC-00105,Ingram Benefits Alliance,On-Prem,On-Prem,Annually,Active,USD,79800.0,121264,1.325,1.24,2023-03-14,2025-11-02,125633.49
+ATC-00106,Jasper Policy Services,SaaS,eSign,Annually,Stale,USD,10100.0,14053,1.161,1.35,2022-03-08,2024-03-07,20175.71
+ATC-00107,Kingston Mutual Partners,SaaS,eSign,Annually,Active,USD,12600.0,30084,0.909,0.98,2022-07-06,2026-11-15,22453.23
+ATC-00108,Lockwood Life Insurance,Embedded,eSign,Annually,Active,USD,9900.0,8889,1.462,0.35,2021-11-15,2025-05-02,9900.0
+ATC-00109,Marlowe Benefits Group,SaaS,eSign,Annually,Active,USD,40900.0,20529,0.765,1.32,2021-12-18,2027-01-31,53617.83
+ATC-00110,Norbury Policy Trust,On-Prem,On-Prem,Annually,Active,USD,18500.0,172156,1.292,0.86,2020-11-03,2026-09-09,18500.0
+ATC-00111,Oakwood Mutual Services,SaaS,Pronto2,Annually,Active,USD,16500.0,36743,1.1,0.68,2021-08-29,2026-06-22,16500.0
+ATC-00112,Prescott Insurance Holdings,SaaS,eSign,Annually,Active,USD,208700.0,773413,0.319,1.14,2020-09-27,2026-02-23,296367.12
+ATC-00113,Quinby Benefits Co.,SaaS,eSign,Annually,Active,USD,2900.0,9820,1.508,2.66,2023-12-12,2026-05-28,41096.08
+ATC-00114,Ravenwood Life Partners,On-Prem,On-Prem,Annually,Stale,USD,75400.0,140100,0.847,0.5,2021-12-08,2023-12-08,75400.0
+ATC-00115,Sedgwick Insurance Services,SaaS,eSign,Monthly_in_arrears,Active,USD,44300.0,0,1.081,1.23,2021-07-04,2027-03-07,44300.0
+ATC-00116,Talbot Benefits Alliance,SaaS,Pronto2,Annually_in_arrears,Active,USD,75300.0,56454,1.775,0.86,2022-08-23,2026-08-10,75300.0
+ATC-00117,Underwood Policy Group,Embedded,eSign,Monthly_in_arrears,Active,USD,4800.0,7749,1.705,2.47,2022-06-15,2025-06-14,29261.39
+ATC-00118,Vantage Life Systems,SaaS,eSign,Annually,Active,USD,44700.0,16704,0.664,1.95,2021-02-06,2025-10-03,58109.08
+ATC-00119,Waterford Mutual Holdings,On-Prem,On-Prem,Annually,Active,USD,213100.0,1158247,0.127,0.9,2022-04-16,2025-08-11,244510.56
+ATC-00120,Axford Benefits Network,SaaS,eSign,Quarterly_in_arrears,Active,USD,64700.0,76474,0.94,1.54,2024-05-03,2026-08-24,132293.95
+ATC-00121,Buckhill Insurance Co.,On-Prem,On-Prem,Monthly_in_arrears,Active,USD,5700.0,5188,1.627,2.68,2020-12-22,2026-10-29,24295.92
+ATC-00122,Castlewood Policy Partners,SaaS,eSign,Annually,Active,USD,26400.0,186411,1.697,2.0,2021-04-18,2025-07-10,531724.81
+ATC-00123,Darnley Life Services,SaaS,Pronto2,Annually,Active,USD,10600.0,1646,1.444,2.14,2024-03-16,2027-02-08,15147.65

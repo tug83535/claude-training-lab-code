@@ -31,44 +31,80 @@ Porting select ideas from the parallel Codex build into Project A. Full tracker:
 - [ ] **4 — `RELEASE_READINESS_CHECKLIST.md`** (`RecTrial\Guide\`)
 - [ ] **5 — `TROUBLESHOOTING.md`** (`RecTrial\Guide\`)
 
-## Video 4 Replanning (2026-04-22 → 2026-04-23)
+## Video 4 Replanning — LOCKED 2026-04-28
 
-Original V4 (10 CMD-run Python scripts + ElevenLabs audio) was pulled for stronger redesign. Full proposal at `C:\Users\connor.atlee\RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md`. Master overview at `C:\Users\connor.atlee\RecTrial\PROJECT_OVERVIEW.md`.
+Original V4 (10 CMD-run Python scripts + ElevenLabs audio) was pulled 2026-04-22. Split 4a+4b plan also pulled after 5th-pass external review (2026-04-27). All 5 decisions locked by Connor 2026-04-28. 5-doc planning sprint complete 2026-04-28.
 
-### Current V4 direction (proposed, not locked)
-- [ ] **Video 4a** — "Python Shows You What Excel Can't" (6-7 min, CFO-led)
-  - Opener (~90 sec): **Workbook Dependency Scanner**
-  - Hero (~3-4 min): **SaaS ARR/MRR Waterfall Engine**
-- [ ] **Video 4b** — "Your Python Cookbook" (5-6 min, coworker-led)
-  - Recipe 1: **Finance Data Contract Checker**
-  - Recipe 2: **Exception Triage Engine**
-  - Recipe 3: **Control Evidence Pack Generator**
-- [ ] **Deliverable:** `finance_copilot.py` CLI menu wrapping all 28 existing scripts + 5 new ones
+**Locked direction:** Single chaptered V4 ("Python Automation for Finance," 9–12 min), Revenue Leakage Finder as narrative hero + ARR waterfall closing artifact, `finance_automation_launcher.py` deliverable, 5–7 supported workflow doorway, adoption-grade framing (coworkers use on own files), 50–150 coworker audience near-term.
 
-### V4 open decisions (awaiting Connor)
-- [ ] Approve 4a+4b split (vs. single video)
-- [ ] ARR Waterfall hero vs. Revenue Leakage Finder (V3 of research preferred the latter)
-- [ ] Does Connor's team own SOX evidence work (affects SOX Evidence Collector inclusion)
-- [ ] xlwings Excel Button Edition — park as v2 post-V4 vs. build into V4 itself
-
-### V4 build list (once plan locks)
-- [ ] `saas_arr_waterfall.py` (Python, M)
-- [ ] `workbook_dependency_scanner.py` (Python, M)
-- [ ] `data_contract_checker.py` (Python, S)
-- [ ] `exception_triage_engine.py` (Python, M)
-- [ ] `control_evidence_pack.py` (Python, M)
-- [ ] `finance_copilot.py` menu wrapper (Python, S)
-- [ ] Generate demo input files for each recipe
-- [ ] Write narration + shot list for 4a + 4b
-- [ ] Record + edit
+**Planning docs (source of truth — all complete 2026-04-28):**
+- [x] `RecTrial\Brainstorm\VIDEO_4_REVIEW_DECISION_MEMO.md` — 5 locks, what got cut, stale-reference table
+- [x] `RecTrial\Brainstorm\SUPPORTED_WORKFLOWS_V1.md` — 7 starter workflows mapped to modules + adoption guidance
+- [x] `RecTrial\Brainstorm\VIDEO_4_REVISED_PLAN.md` — 8-chapter outline + sample data design lock
+- [x] `RecTrial\UniversalToolkit\python\PYTHON_SAFETY.md` — 14 safety rules + adoption guidance
+- [x] `RecTrial\Brainstorm\MINIMUM_DISTRIBUTION_PLAN.md` — SharePoint zip, pilot plan, support intake, release gate
 
 ### Research foundation (complete — no further review needed)
 - [x] 14 raw research files read + 6 AI-compiled synthesis docs produced (`RecTrial\Brainstorm\NewCodeResearch\`)
 - [x] ~156 ideas inventoried, ~40-60 curated per doc
 - [x] Claude Code subagent back-check of raw files — confirmed no new findings beyond synthesis
+- [x] 5th-pass external review (`RecTrial\Brainstorm\NewCodeResearchExtra\`) — 5 pivot recommendations, all evaluated and locked
+
+### V4 build list — Claude Code builds (all in `RecTrial\UniversalToolkit\python\ZeroInstall\`)
+
+- [x] `common/safe_io.py` — DONE 2026-04-28
+- [x] `common/logging_utils.py` — DONE 2026-04-28
+- [x] `common/report_utils.py` — DONE 2026-04-28
+- [x] `common/sample_data.py` + `samples/contracts_sample.csv` + `samples/billing_sample.csv` — DONE 2026-04-28 (123 contracts, 336 billing rows, 6 embedded exception classes)
+- [x] `data_contract_checker.py` — DONE + tested (PASS sample mode, 1 failure found as expected)
+- [x] `revenue_leakage_finder.py` — DONE + tested (12/10/2/9/5 exceptions across 5 classes)
+- [x] `exception_triage_engine.py` — DONE + tested (38 exceptions scored, top-10 action list)
+- [x] `control_evidence_pack.py` — DONE + tested (5 files hashed, manifest + evidence HTML)
+- [x] `workbook_dependency_scanner.py` — DONE + tested (cross-sheet ref map, stdlib zipfile+xml)
+- [x] `finance_automation_launcher.py` — DONE (numbered menu, 14 safety rules, Explorer shortcut)
+- [x] `smoke_test_video4_python.py` — DONE (5/5 PASS)
+- [x] `README_VIDEO4_PYTHON.md` — DONE
+- [x] **Git commit** — all V4 Python files + narration script v1.1 + shot list committed 2026-04-28 (commits d9b7ea0, d9f2ad0, 48d133f)
+- [x] **Update CLAUDE.md** — mark V4 Python build complete, update status section — DONE 2026-04-28
+- [ ] `FinanceTools.xlsm` — Excel workbook with ONE VBA Shell() launcher button (Option A LOCKED 2026-04-28): single button → `finance_automation_launcher.py` → numbered CLI menu → coworker picks tool. No per-tool buttons in V1.
+  - [ ] **Connor reviews `modFinanceToolsLauncher.bas`** — VBA Shell() launcher code drafted 2026-04-28 at `RecTrial\UniversalToolkit\python\ZeroInstall\modFinanceToolsLauncher.bas`. Review and provide feedback before importing into FinanceTools.xlsm.
+- [ ] Test scripts with bundled Python 3.11 embeddable (confirm zero-install path works)
+- [x] Write narration script for V4 (8 chapters, 9–12 min) — DONE 2026-04-28 (v1.1 at `RecTrial\Video4_V1\VIDEO_4_NARRATION_SCRIPT_v1.md` + `RecTrial\Brainstorm\VIDEO_4_NARRATION_SCRIPT.md`)
+- [x] Write shot list / screen recording guide per chapter — DONE 2026-04-28 (`RecTrial\Video4_V1\VIDEO_4_SHOT_LIST_v1.md`)
+- [ ] Connor reviews narration script + adjusts wording to match natural speaking style
+- [ ] Connor generates ElevenLabs audio clips from narration script (9 clips: V4_C01 through V4_C08, with C03a + C03b)
+- [ ] Confirm coworker pip access (Connor real-world task — affects stdlib-only requirement)
+- [ ] Identify 10–20 pilot users (Connor real-world task per MINIMUM_DISTRIBUTION_PLAN.md)
+- [ ] Assemble SharePoint zip distribution package
+- [ ] Record + edit V4
 
 ### Future Automation Ideas doc (tracked separately)
 Full parking lot at `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md`. Major parked categories: AI API ideas, Outlook automation, Task Scheduler, warehouse SQL, ML libs, infrastructure, 3rd-party platforms.
+
+---
+
+## Video 5 — "Getting Started" / Python Setup (Planned — post-V4)
+
+Short supplemental video (3–5 min) covering the one-time setup experience for coworkers who want to use the Python tools after watching Video 4. Kept separate from Video 4 so V4 stays focused on the revenue leakage story without slowing down for logistics.
+
+**Status:** Planned. Content, length, and recording approach to be discussed with Connor after Video 4 is locked in.
+
+**Likely content (working idea — to be confirmed):**
+- [ ] Download the zip from SharePoint
+- [ ] Unzip it — show the folder structure
+- [ ] Open `FinanceTools.xlsm` in Excel
+- [ ] Click the Finance Tools button for the first time
+- [ ] Run in sample mode to confirm everything works
+- [ ] How to point a tool at your own file (brief example)
+- [ ] Where your results go (outputs folder)
+- [ ] Who to contact if something goes wrong (Connor)
+
+**Note:** Since bundled Python 3.11 embeddable ships in the zip, there is NO Python installation step for coworkers. The "setup" video is really just "download, unzip, open Excel, click." Keep it under 5 min.
+
+**Decisions to make when we get there:**
+- [ ] Will it use ElevenLabs AI narration (like V1–V4) or a different format?
+- [ ] Will it be a separate SharePoint video alongside V4, or linked from V4's description?
+- [ ] Does it need a title card to match V1–V4 style?
 
 ## Post-Recording Fixes (2026-03-31) — Fix Before Sharing With Coworkers
 
@@ -92,13 +128,10 @@ Full parking lot at `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md`. Major park
 - [x] **Clip 9 sheet tour misaligned with script** — Timing and sheet order now matches narration
 - [x] **Clip 10 Command Center too brief** — CC stays up 30+ seconds with slow category browsing
 
-### Video 4 — Ready to Record (Manual Recording)
-- [ ] **Install Python packages:** Open Command Prompt → `cd C:\Users\connor.atlee\RecTrial\UniversalToolkit\python` → `pip install pandas openpyxl pdfplumber thefuzz python-Levenshtein python-dateutil python-docx`
-- [ ] **Test one script:** `python compare_files.py "C:\Users\connor.atlee\RecTrial\Video4DemoFiles\Q1_Revenue_v1.xlsx" "C:\Users\connor.atlee\RecTrial\Video4DemoFiles\Q1_Revenue_v2.xlsx"` — verify it creates COMPARISON_REPORT.xlsx
-- [ ] **Check all script command-line args:** Run `python script_name.py --help` for each of the 8 scripts to verify the flags match what's in the recording guide
-- [ ] **Set up Command Prompt appearance:** Maximize, Consolas 16pt font, dark background
-- [ ] **Test run all 10 clips** following the recording guide at `RecTrial\Guide\VIDEO_4_RECORDING_GUIDE.md`
-- [ ] **Record final Video 4** with OBS
+### ~~Video 4 — Ready to Record (Original CMD-Based Plan — PULLED 2026-04-22)~~
+> **ARCHIVED 2026-04-28.** This was the original V4 recording plan (CMD-based, 10 clips, 8 Python scripts). Pulled 2026-04-22 and replaced by the locked V4 direction above. Preserved as historical reference only.
+>
+> Original demo files at `RecTrial\Video4DemoFiles\`, original audio at `RecTrial\AudioClips\Video4\`, original recording guide at `RecTrial\Guide\VIDEO_4_RECORDING_GUIDE.md`.
 
 ### Improvements for Coworker Experience (Post-Recording)
 - [ ] **Add YoY Variance Analysis to Command Center** — Not assigned an action number.
@@ -253,10 +286,10 @@ All fixes committed and pushed (commit a22dd76).
 ---
 
 ## Last Optional Adds
-- [ ] **Time Saved Calculator** — Calculate how long each of the 62 Command Center actions would take manually vs. running the macro. Build a summary table showing per-action time savings and a grand total (e.g., "Manual: 47 hours/month → Automated: 2 hours/month"). Great talking point for CFO/CEO.
+- [ ] **Time Saved Calculator** — Calculate how long each of the 62 Command Center actions would take manually vs. running the macro. Build a summary table showing per-action time savings and a grand total (e.g., "Manual: 47 hours/month → Automated: 2 hours/month"). Great talking point for managers and finance leadership.
 - [ ] **Splash Screen on Open** — When the file opens, display a branded iPipeline welcome screen (logo colors, version number, "Launch Command Center" button). Auto-dismisses after 5 seconds or on click. Makes the file feel like a product, not a spreadsheet.
 - [ ] **Animated Progress Bar for Long Macros** — Replace simple status bar messages with a UserForm progress bar showing percentage complete, estimated time remaining, and the iPipeline logo. Makes 10-second waits feel intentional instead of frozen.
-- [ ] **Live "What If" Scenario Demo** — Build a one-click scenario demo: "What if revenue drops 15%?" or "What if AWS costs increase 10%?" — runs the scenario tool and instantly shows the P&L impact. Speaks the CFO's language directly.
+- [ ] **Live "What If" Scenario Demo** — Build a one-click scenario demo: "What if revenue drops 15%?" or "What if AWS costs increase 10%?" — runs the scenario tool and instantly shows the P&L impact. Speaks the language a Finance manager will understand.
 - [ ] **Anomaly Detector with Plain English Explanations** — Instead of just flagging data issues, generate plain English insights like: "March rent expense is $47,000 — 3x higher than the 6-month average of $15,200. Possible double-booking." Turns a data check into an AI-level insight.
 - [ ] **One-Page Executive Brief Auto-Generator** — One button that scans the entire workbook and generates a plain English summary: "Revenue up 8% MoM. Three expense lines exceeded budget. Cash position strong. Two reconciliation items need attention." Ready to paste into an email or print.
 - [ ] **Power BI Connection (Mention Only)** — During the demo, mention that the same data structure could feed a live Power BI dashboard as a Phase 2 initiative. Don't build it — just plant the seed to show forward thinking.
