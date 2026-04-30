@@ -15,22 +15,27 @@ def _load_weights(path: Path) -> dict:
 
 
 def _validate_inputs(df: pd.DataFrame, required: list[str]) -> None:
-    missing = [c for c in required if c not in df.columns]
+    scoring_columns = ["impact", "confidence", "days_open"]
+    required_columns = list(dict.fromkeys([*required, *scoring_columns]))
+
+    missing = [c for c in required_columns if c not in df.columns]
     if missing:
         raise ValueError(f"Missing required columns for triage scoring: {missing}")
 
-    for col in ["impact", "confidence", "days_open"]:
+    coerced_columns: dict[str, pd.Series] = {}
+    for col in scoring_columns:
         coerced = pd.to_numeric(df[col], errors="coerce")
         if coerced.isna().any():
             raise ValueError(f"Column '{col}' contains non-numeric values")
+        coerced_columns[col] = coerced
 
-    if ((pd.to_numeric(df["impact"], errors="coerce") < 0) | (pd.to_numeric(df["impact"], errors="coerce") > 1)).any():
+    if ((coerced_columns["impact"] < 0) | (coerced_columns["impact"] > 1)).any():
         raise ValueError("Column 'impact' must be within [0, 1]")
 
-    if ((pd.to_numeric(df["confidence"], errors="coerce") < 0) | (pd.to_numeric(df["confidence"], errors="coerce") > 1)).any():
+    if ((coerced_columns["confidence"] < 0) | (coerced_columns["confidence"] > 1)).any():
         raise ValueError("Column 'confidence' must be within [0, 1]")
 
-    if (pd.to_numeric(df["days_open"], errors="coerce") < 0).any():
+    if (coerced_columns["days_open"] < 0).any():
         raise ValueError("Column 'days_open' must be non-negative")
 
 
