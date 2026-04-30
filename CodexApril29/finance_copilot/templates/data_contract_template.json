@@ -1,0 +1,16 @@
+{
+  "dataset_name": "gl_ledger",
+  "required_columns": ["entity", "account", "period", "amount"],
+  "column_types": {
+    "entity": "string",
+    "account": "string",
+    "period": "string",
+    "amount": "number"
+  },
+  "constraints": {
+    "unique_keys": ["entity", "account", "period"],
+    "non_negative_columns": [],
+    "allowed_values": {}
+  },
+  "null_threshold_pct": 5.0
+}
