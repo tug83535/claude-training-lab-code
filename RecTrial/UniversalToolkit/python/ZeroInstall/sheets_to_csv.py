@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+VERSION = "1.0.0"
+
 import argparse
 import csv
 from pathlib import Path
@@ -120,8 +122,17 @@ def extract_sheets(workbook: Path, out_dir: Path, sheet_names: list[str]) -> lis
     return outputs
 
 
+
+def require_existing_file(path: Path, label: str) -> None:
+    if path is None:
+        raise SystemExit(f"Error: missing {label} path.")
+    if not path.exists():
+        raise SystemExit(f"Error: {label} file was not found: {path}")
+
+
 def main() -> None:
     args = parse_args()
+    require_existing_file(args.workbook, "workbook")
     sheet_names = [item.strip() for item in args.sheets.split(",")]
     outputs = extract_sheets(args.workbook, args.out_dir, sheet_names)
     print(f"Extracted files: {len(outputs)}")

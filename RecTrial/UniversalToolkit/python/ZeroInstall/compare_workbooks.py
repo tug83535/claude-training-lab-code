@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+VERSION = "1.0.0"
+
 import argparse
 import csv
 from pathlib import Path
@@ -114,8 +116,18 @@ def write_diffs(out_csv: Path, diffs: list[tuple[str, str, str, str]]) -> None:
         writer.writerows(diffs)
 
 
+
+def require_existing_file(path: Path, label: str) -> None:
+    if path is None:
+        raise SystemExit(f"Error: missing {label} path.")
+    if not path.exists():
+        raise SystemExit(f"Error: {label} file was not found: {path}")
+
+
 def main() -> None:
     args = parse_args()
+    require_existing_file(args.left_workbook, "left workbook")
+    require_existing_file(args.right_workbook, "right workbook")
     diffs = compare(args.left_workbook, args.right_workbook)
     write_diffs(args.out_csv, diffs)
     print(f"Diff rows: {len(diffs)}")

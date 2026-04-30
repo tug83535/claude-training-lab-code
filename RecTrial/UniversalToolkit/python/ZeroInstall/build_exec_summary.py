@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+VERSION = "1.0.0"
+
 import argparse
 import csv
 from pathlib import Path
@@ -102,8 +104,17 @@ def build_summary(rows: list[dict[str, str]], metric_col: str, group_col: str) -
     return "\n".join(lines)
 
 
+
+def require_existing_file(path: Path, label: str) -> None:
+    if path is None:
+        raise SystemExit(f"Error: missing {label} path.")
+    if not path.exists():
+        raise SystemExit(f"Error: {label} file was not found: {path}")
+
+
 def main() -> None:
     args = parse_args()
+    require_existing_file(args.input_csv, "input CSV")
     rows = read_rows(args.input_csv)
     metric_col = pick_numeric_column(rows, args.metric_column)
 

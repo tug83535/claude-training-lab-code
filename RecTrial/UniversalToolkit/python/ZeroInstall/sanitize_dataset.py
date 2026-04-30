@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+VERSION = "1.0.0"
+
 import argparse
 import csv
 from datetime import datetime
@@ -88,8 +90,17 @@ def sanitize_csv(input_csv: Path, output_csv: Path) -> tuple[int, int]:
     return total_cells, changed_cells
 
 
+
+def require_existing_file(path: Path, label: str) -> None:
+    if path is None:
+        raise SystemExit(f"Error: missing {label} path.")
+    if not path.exists():
+        raise SystemExit(f"Error: {label} file was not found: {path}")
+
+
 def main() -> None:
     args = parse_args()
+    require_existing_file(args.input_csv, "input CSV")
     total_cells, changed_cells = sanitize_csv(args.input_csv, args.output_csv)
     print(f"Sanitized {changed_cells} of {total_cells} cells.")
     print(f"Output: {args.output_csv}")
