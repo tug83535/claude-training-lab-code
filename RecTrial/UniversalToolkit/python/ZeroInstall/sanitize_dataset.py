@@ -92,10 +92,10 @@ def sanitize_csv(input_csv: Path, output_csv: Path) -> tuple[int, int]:
 
 
 def require_existing_file(path: Path, label: str) -> None:
-    if path is None:
-        raise SystemExit(f"Error: missing {label} path.")
     if not path.exists():
         raise SystemExit(f"Error: {label} file was not found: {path}")
+    if not path.is_file():
+        raise SystemExit(f"Error: {label} path is not a file: {path}")
 
 
 def main() -> None:
