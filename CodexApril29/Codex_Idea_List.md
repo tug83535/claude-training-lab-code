@@ -316,6 +316,8 @@
 4. Reconciliation Control Tower Dashboard
 5. Monthly Close Evidence Pack Generator
 6. CFO One-Page Pulse Report
+<<<<<<< HEAD
+=======
 
 
 ---
@@ -372,3 +374,4 @@ If any answer is “no,” move the idea to template/stub or defer.
 - Intercompany Mismatch Radar
 - Excel to Power BI Semantic Bridge
 - Month-End Narrative Diff
+>>>>>>> origin/April23CLD
