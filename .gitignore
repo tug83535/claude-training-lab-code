@@ -77,3 +77,6 @@ build/
 *.avi
 *.mkv
 *.m4a
+
+# ZeroInstall generated run outputs
+RecTrial/UniversalToolkit/python/ZeroInstall/outputs/

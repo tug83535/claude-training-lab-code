@@ -1,126 +1,59 @@
 #!/usr/bin/env python3
-"""Compare two xlsx/xlsm workbooks and emit cell-level diffs."""
-
 from __future__ import annotations
-
-import argparse
-import csv
+VERSION="1.0.0"
+import argparse,csv,zipfile,re
 from pathlib import Path
-import re
 import xml.etree.ElementTree as ET
-import zipfile
+from safety_runtime import make_run_output,require_existing_file,write_run_logs
+NS_MAIN={"main":"http://schemas.openxmlformats.org/spreadsheetml/2006/main"}; NS_REL={"rel":"http://schemas.openxmlformats.org/package/2006/relationships"}
 
-NS_MAIN = {"main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-NS_REL = {"rel": "http://schemas.openxmlformats.org/package/2006/relationships"}
+def parse_args():
+ p=argparse.ArgumentParser(description="Compare two xlsx/xlsm workbooks and output cell-level diff CSV.")
+ p.add_argument("left_workbook",nargs="?",type=Path,help="Left workbook path")
+ p.add_argument("right_workbook",nargs="?",type=Path,help="Right workbook path")
+ p.add_argument("--sample",action="store_true",help="Run in sample mode (help-only for this tool)")
+ return p.parse_args()
 
+def _shared(z):
+ if "xl/sharedStrings.xml" not in z.namelist(): return []
+ root=ET.fromstring(z.read("xl/sharedStrings.xml")); vals=[]
+ for si in root.findall("main:si",NS_MAIN): vals.append("".join(n.text or "" for n in si.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t")))
+ return vals
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Compare workbook cells and export a diff CSV.")
-    parser.add_argument("left_workbook", type=Path)
-    parser.add_argument("right_workbook", type=Path)
-    parser.add_argument("out_csv", type=Path)
-    return parser.parse_args()
+def _smap(z):
+ wb=ET.fromstring(z.read("xl/workbook.xml")); rels=ET.fromstring(z.read("xl/_rels/workbook.xml.rels")); rm={r.attrib["Id"]:r.attrib["Target"] for r in rels.findall("rel:Relationship",NS_REL)}
+ m={}
+ for s in wb.find("main:sheets",NS_MAIN): m[s.attrib.get("name","")]="xl/"+rm.get(s.attrib.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id",""),"").lstrip("/")
+ return m
 
+def _cells(z,p,sh):
+ if p not in z.namelist(): return {}
+ root=ET.fromstring(z.read(p)); out={}
+ for c in root.findall('.//main:sheetData/main:row/main:c',NS_MAIN):
+  ref=c.attrib.get('r','')
+  if not re.match(r'^[A-Z]+\d+$',ref): continue
+  t=c.attrib.get('t'); v=c.find('main:v',NS_MAIN); i=c.find('main:is',NS_MAIN)
+  if i is not None: out[ref]="".join(n.text or "" for n in i.iter('{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t')); continue
+  if v is None or v.text is None: out[ref]=""; continue
+  raw=v.text; out[ref]=sh[int(raw)] if t=='s' and raw.isdigit() and int(raw)<len(sh) else raw
+ return out
 
-def shared_strings(zf: zipfile.ZipFile) -> list[str]:
-    if "xl/sharedStrings.xml" not in zf.namelist():
-        return []
-    root = ET.fromstring(zf.read("xl/sharedStrings.xml"))
-    values: list[str] = []
-    for si in root.findall("main:si", NS_MAIN):
-        text = "".join(node.text or "" for node in si.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"))
-        values.append(text)
-    return values
+def main():
+ a=parse_args(); out=make_run_output("compare_workbooks")
+ try:
+  if a.sample: raise SystemExit("Error: sample mode for compare_workbooks is help-only; provide two workbook paths.")
+  require_existing_file(a.left_workbook,"left workbook"); require_existing_file(a.right_workbook,"right workbook")
+  with zipfile.ZipFile(a.left_workbook) as zl, zipfile.ZipFile(a.right_workbook) as zr:
+   lsh,rsh=_shared(zl),_shared(zr); lm,rm=_smap(zl),_smap(zr); dif=[]
+   for name in sorted(set(lm)|set(rm)):
+    lc,rc=_cells(zl,lm.get(name,""),lsh),_cells(zr,rm.get(name,""),rsh)
+    for ref in sorted(set(lc)|set(rc)):
+      if lc.get(ref,"")!=rc.get(ref,""): dif.append((name,ref,lc.get(ref,""),rc.get(ref,"")))
+  dst=out/"workbook_diffs.csv"
+  with dst.open("w",encoding="utf-8",newline="") as f: w=csv.writer(f); w.writerow(["sheet","cell","left_value","right_value"]); w.writerows(dif)
+  summary=f"Diff rows: {len(dif)}. Output: {dst.name}"; write_run_logs(out,summary,{"tool":"compare_workbooks","diff_rows":len(dif),"output":dst.name}); print(summary); print(f"Output folder: {out}")
+ except SystemExit: raise
+ except Exception:
+  write_run_logs(out,"Run failed. Check run_log.json.",{"tool":"compare_workbooks","status":"failed"}); raise SystemExit("Error: processing failed. See run_summary.txt in output folder.")
 
-
-def sheet_map(zf: zipfile.ZipFile) -> dict[str, str]:
-    workbook = ET.fromstring(zf.read("xl/workbook.xml"))
-    rels = ET.fromstring(zf.read("xl/_rels/workbook.xml.rels"))
-    rel_map = {r.attrib["Id"]: r.attrib["Target"] for r in rels.findall("rel:Relationship", NS_REL)}
-
-    mapping: dict[str, str] = {}
-    for sheet in workbook.find("main:sheets", NS_MAIN):
-        name = sheet.attrib.get("name", "")
-        rid = sheet.attrib.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id", "")
-        target = rel_map.get(rid, "")
-        mapping[name] = "xl/" + target.lstrip("/")
-    return mapping
-
-
-def sheet_cells(zf: zipfile.ZipFile, sheet_path: str, shared: list[str]) -> dict[str, str]:
-    if sheet_path not in zf.namelist():
-        return {}
-
-    root = ET.fromstring(zf.read(sheet_path))
-    values: dict[str, str] = {}
-    for cell in root.findall(".//main:sheetData/main:row/main:c", NS_MAIN):
-        ref = cell.attrib.get("r", "")
-        if not re.match(r"^[A-Z]+\d+$", ref):
-            continue
-
-        cell_type = cell.attrib.get("t")
-        value_node = cell.find("main:v", NS_MAIN)
-        inline_node = cell.find("main:is", NS_MAIN)
-
-        if inline_node is not None:
-            text = "".join(node.text or "" for node in inline_node.iter("{http://schemas.openxmlformats.org/spreadsheetml/2006/main}t"))
-            values[ref] = text
-            continue
-
-        if value_node is None or value_node.text is None:
-            values[ref] = ""
-            continue
-
-        raw = value_node.text
-        if cell_type == "s":
-            try:
-                values[ref] = shared[int(raw)]
-            except (ValueError, IndexError):
-                values[ref] = raw
-        else:
-            values[ref] = raw
-    return values
-
-
-def compare(left: Path, right: Path) -> list[tuple[str, str, str, str]]:
-    with zipfile.ZipFile(left) as zleft, zipfile.ZipFile(right) as zright:
-        left_shared = shared_strings(zleft)
-        right_shared = shared_strings(zright)
-
-        left_sheets = sheet_map(zleft)
-        right_sheets = sheet_map(zright)
-
-        all_sheet_names = sorted(set(left_sheets) | set(right_sheets))
-        diffs: list[tuple[str, str, str, str]] = []
-
-        for name in all_sheet_names:
-            left_cells = sheet_cells(zleft, left_sheets.get(name, ""), left_shared)
-            right_cells = sheet_cells(zright, right_sheets.get(name, ""), right_shared)
-            refs = sorted(set(left_cells) | set(right_cells))
-
-            for ref in refs:
-                left_value = left_cells.get(ref, "")
-                right_value = right_cells.get(ref, "")
-                if left_value != right_value:
-                    diffs.append((name, ref, left_value, right_value))
-
-        return diffs
-
-
-def write_diffs(out_csv: Path, diffs: list[tuple[str, str, str, str]]) -> None:
-    with out_csv.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["sheet", "cell", "left_value", "right_value"])
-        writer.writerows(diffs)
-
-
-def main() -> None:
-    args = parse_args()
-    diffs = compare(args.left_workbook, args.right_workbook)
-    write_diffs(args.out_csv, diffs)
-    print(f"Diff rows: {len(diffs)}")
-    print(f"Output: {args.out_csv}")
-
-
-if __name__ == "__main__":
-    main()
+if __name__=='__main__': main()

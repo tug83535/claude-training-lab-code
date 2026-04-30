@@ -1,99 +1,42 @@
 #!/usr/bin/env python3
-"""Classify variance rows into finance-friendly categories."""
-
 from __future__ import annotations
-
-import argparse
-import csv
+VERSION="1.0.0"
+import argparse,csv
 from pathlib import Path
+from safety_runtime import make_run_output,require_existing_file,write_run_logs
 
+def parse_args():
+ p=argparse.ArgumentParser(description="Classify Actual vs Baseline variance into Direction/Materiality.")
+ p.add_argument("input_csv",nargs="?",type=Path,help="Input CSV path")
+ p.add_argument("--sample",action="store_true",help="Run with synthetic sample data")
+ return p.parse_args()
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Classify variance rows as material/non-material and favorable/unfavorable.")
-    parser.add_argument("input_csv", type=Path, help="Input CSV containing actual and baseline columns")
-    parser.add_argument("output_csv", type=Path, help="Output CSV with classification fields")
-    parser.add_argument("--actual-col", default="Actual", help="Column name for actual values")
-    parser.add_argument("--baseline-col", default="Baseline", help="Column name for baseline/plan values")
-    parser.add_argument("--materiality-abs", type=float, default=1000.0, help="Absolute materiality threshold")
-    parser.add_argument("--materiality-pct", type=float, default=0.1, help="Relative materiality threshold (decimal)")
-    return parser.parse_args()
+def pf(v):
+ try:return float(str(v).replace(',','').replace('$',''))
+ except:return None
 
+def main():
+ a=parse_args(); out=make_run_output("variance_classifier")
+ try:
+  src=out/"sample_input.csv" if a.sample else a.input_csv
+  if a.sample: src.write_text("Actual,Baseline\n110,100\n180,200\n",encoding="utf-8")
+  else: require_existing_file(src,"input CSV")
+  dst=out/"variance_classified.csv"
+  with src.open("r",encoding="utf-8-sig",newline="") as f: rows=list(csv.DictReader(f))
+  if not rows: raise SystemExit("Error: input CSV has no rows")
+  fns=list(rows[0].keys())+["Variance","VariancePct","Direction","Materiality"]
+  with dst.open("w",encoding="utf-8",newline="") as f:
+   w=csv.DictWriter(f,fieldnames=fns); w.writeheader(); cnt=0
+   for r in rows:
+    act,base=pf(r.get("Actual")),pf(r.get("Baseline"))
+    if act is None or base is None: d,m,delta,pct="unknown","insufficient_data",None,None
+    else:
+      delta=act-base; pct=None if base==0 else delta/base
+      d="favorable" if delta>=0 else "unfavorable"; m="material" if abs(delta)>=1000 or (pct is not None and abs(pct)>=0.1) else "non_material"
+    o=dict(r); o.update({"Variance":"" if delta is None else f"{delta:.2f}","VariancePct":"" if pct is None else f"{pct:.4f}","Direction":d,"Materiality":m}); w.writerow(o); cnt+=1
+  summary=f"Classified rows: {cnt}. Output: {dst.name}"; write_run_logs(out,summary,{"tool":"variance_classifier","rows":cnt,"output":dst.name}); print(summary); print(f"Output folder: {out}")
+ except SystemExit: raise
+ except Exception:
+  write_run_logs(out,"Run failed. Check run_log.json.",{"tool":"variance_classifier","status":"failed"}); raise SystemExit("Error: processing failed. See run_summary.txt in output folder.")
 
-def parse_float(value: str | None) -> float | None:
-    if value is None:
-        return None
-    cleaned = str(value).replace(",", "").replace("$", "").strip()
-    if not cleaned:
-        return None
-    try:
-        return float(cleaned)
-    except ValueError:
-        return None
-
-
-def classify_row(actual: float | None, baseline: float | None, materiality_abs: float, materiality_pct: float) -> tuple[str, str, float | None, float | None]:
-    if actual is None or baseline is None:
-        return "unknown", "insufficient_data", None, None
-
-    delta = actual - baseline
-    pct = None if baseline == 0 else delta / baseline
-
-    material_abs = abs(delta) >= materiality_abs
-    material_rel = pct is not None and abs(pct) >= materiality_pct
-    materiality = "material" if (material_abs or material_rel) else "non_material"
-
-    direction = "favorable" if delta >= 0 else "unfavorable"
-    return direction, materiality, delta, pct
-
-
-def classify_csv(
-    input_csv: Path,
-    output_csv: Path,
-    actual_col: str,
-    baseline_col: str,
-    materiality_abs: float,
-    materiality_pct: float,
-) -> int:
-    with input_csv.open("r", encoding="utf-8-sig", newline="") as f:
-        rows = list(csv.DictReader(f))
-        if not rows:
-            raise SystemExit("Input CSV has no rows")
-
-        fieldnames = list(rows[0].keys())
-        extras = ["Variance", "VariancePct", "Direction", "Materiality"]
-
-    with output_csv.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames + extras)
-        writer.writeheader()
-        count = 0
-        for row in rows:
-            actual = parse_float(row.get(actual_col))
-            baseline = parse_float(row.get(baseline_col))
-            direction, materiality, delta, pct = classify_row(actual, baseline, materiality_abs, materiality_pct)
-            out = dict(row)
-            out["Variance"] = "" if delta is None else f"{delta:.2f}"
-            out["VariancePct"] = "" if pct is None else f"{pct:.4f}"
-            out["Direction"] = direction
-            out["Materiality"] = materiality
-            writer.writerow(out)
-            count += 1
-
-    return count
-
-
-def main() -> None:
-    args = parse_args()
-    count = classify_csv(
-        args.input_csv,
-        args.output_csv,
-        args.actual_col,
-        args.baseline_col,
-        args.materiality_abs,
-        args.materiality_pct,
-    )
-    print(f"Classified rows: {count}")
-    print(f"Output: {args.output_csv}")
-
-
-if __name__ == "__main__":
-    main()
+if __name__=='__main__': main()
