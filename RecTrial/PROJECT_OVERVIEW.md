@@ -3,13 +3,13 @@
 **Owner:** Connor Atlee — Finance & Accounting, iPipeline
 **Audience of this doc:** anyone (AI or human) giving the project a second-opinion review
 **Snapshot date:** 2026-04-23
-**Project status in one sentence:** Videos 1–3 recorded and shipped, a universal toolkit + zero-install Python pack delivered, Video 4 mid-plan redesign, post-video batches 4–5 parked for after V4 records.
+**Project status in one sentence:** Videos 1–3 recorded and shipped. Universal toolkit + zero-install Python pack live. V4 planning complete + Python build complete (2026-04-28); narration script and recording are next; post-video Batches 4–5 still parked.
 
 ---
 
 ## 1. Elevator pitch
 
-A 4-video internal demo series for **2,000+ iPipeline coworkers + the CFO and CEO** showing what's possible when a Finance & Accounting team combines **Excel + VBA + Python + SQL**. Built and recorded by a non-developer Finance analyst over ~6 weeks. Ships with a plug-and-play universal toolkit (~140 Excel tools + 28 Python scripts) that any coworker can drop into their own files.
+A 4-video internal demo series for **50–150 iPipeline coworkers near-term** in Finance, Accounting, and adjacent operations, showing what's possible when a Finance & Accounting team combines **Excel + VBA + Python + SQL**. Built and recorded by a non-developer Finance analyst over ~6 weeks. Ships with an adoption-grade toolkit (~140 Excel tools + 28+ Python scripts) that coworkers can drop into their own files and use on their own data. Broader rollout and CFO/CEO showcase are deferred to v2.
 
 The underlying thesis: Finance doesn't need to be a source of manual spreadsheet work anymore. With the right patterns, everyday analysts can automate the repetitive 80% and redirect time to judgment work.
 
@@ -17,8 +17,8 @@ The underlying thesis: Finance doesn't need to be a source of manual spreadsheet
 
 ## 2. Audience & voice
 
-- **Primary viewers:** 2,000+ iPipeline coworkers (Finance, Accounting, adjacent ops) — non-developers, Excel-literate, zero Python exposure
-- **Executive viewers:** CFO + CEO — need to see enterprise-grade polish and real business value
+- **Primary viewers (near-term):** 50–150 iPipeline coworkers (Finance, Accounting, adjacent ops) — non-developers, Excel-literate, zero Python exposure. Expected to actually adopt and use the tools on their own files, not just watch.
+- **Future audience (v2):** Broader company rollout + CFO/CEO showcase — deferred, not cancelled.
 - **Voice:** plain English. Every tool must be explainable to a non-coder. Every output must be CFO-legible on one screen.
 - **Brand:** iPipeline (Blue `#0B4779`, Navy `#112E51`, Arial fonts, clean/corporate)
 
@@ -51,10 +51,11 @@ The underlying thesis: Finance doesn't need to be a source of manual spreadsheet
 - **Delivered:** sample file `Sample_Quarterly_ReportV2.xlsm` + SHOW TOOLS button on Cover sheet launching the full Command Center
 - **Title card:** `VIDEO 3 OF 4 / Universal Tools`
 
-### Video 4 — "Python Automation for Finance" 🔄 Mid-plan redesign
+### Video 4 — "Python Automation for Finance" 🔄 Python build complete — recording next
 
-- **Original plan:** 10 ElevenLabs-narrated clips, manual recording, 8 Python scripts run from Command Prompt. All audio + demo files ready.
-- **Pulled back** 2026-04-22 for a stronger redesign — see Section 8 below for current direction.
+- **Status:** Direction locked 2026-04-28. All 6 V4 Python scripts built and smoke-tested 5/5 PASS (2026-04-28). Narration script and ElevenLabs audio are the next blocking items.
+- **Delivery model:** VBA Shell() + bundled Python 3.11 embeddable + `finance_automation_launcher.py` CLI menu. Excel buttons in `FinanceTools.xlsm`. One zip on SharePoint. Zero install for coworkers.
+- **Original plan:** 10 ElevenLabs-narrated clips, manual recording, 8 Python scripts run from Command Prompt — pulled back 2026-04-22. Original audio + demo files remain on disk.
 - **Title card:** `VIDEO 4 OF 4 / Python Automation for Finance` (already generated, matches V1–V3 style)
 
 ---
@@ -173,51 +174,54 @@ At `docs\ipipeline-brand-styling.md` — official RGB values, fonts, layout rule
 
 ---
 
-## 7. Current Video 4 plan (in flight)
+## 7. Current Video 4 plan — LOCKED 2026-04-28
 
-Full details at `RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md`.
+Full details in the 5-doc planning sprint (all complete 2026-04-28). **`VIDEO_4_CURRENT_PROPOSAL.md` is now SUPERSEDED** — see `VIDEO_4_REVIEW_DECISION_MEMO.md` for the locked direction.
 
-**Direction:** Split into Video 4a + 4b.
+**Direction:** Single chaptered Video 4, 9–12 min. No 4a+4b split.
 
-### Video 4a — "Python Shows You What Excel Can't" (6–7 min, CFO-led)
-- **Opener (~90 sec):** Workbook Dependency Scanner — Python visualizes a workbook's cross-sheet formula dependencies
-- **Hero (~3–4 min):** SaaS ARR/MRR Waterfall Engine — subscription CSV → branded waterfall chart + roll-forward table (iPipeline-native SaaS story)
-- **Closer:** teaser for 4b
+### "Python Automation for Finance" — 8 chapters
 
-### Video 4b — "Your Python Cookbook" (5–6 min, coworker-led)
-- Recipe 1: Finance Data Contract Checker — red FAIL → fix → green PASS
-- Recipe 2: Exception Triage Engine — impact × confidence × recency ranking
-- Recipe 3: Control Evidence Pack Generator — audit bundle with hashes/manifest
-- **Closer:** download the Finance Copilot menu
+- **Hero:** Revenue Leakage Finder — "Python found a possible billing problem" (narrative story)
+- **Closing artifact:** ARR waterfall chart — executive-readable summary of the leakage analysis
+- **Audience:** 50–150 Finance/Accounting coworkers who will use the tools, not just watch
+- **Distribution:** Excel buttons via VBA Shell() + bundled Python 3.11 embeddable, one zip on SharePoint
+- **Pilot:** 10–20 users before broader rollout (role mix: Finance + Accounting + Billing/RevOps + managers)
 
 ### Deliverable
 
-`finance_copilot.py` — menu-driven CLI wrapping all 28 existing scripts + the 5 new ones. Optional xlwings Excel Button Edition parked as v2.
+`finance_automation_launcher.py` — simple menu launcher wrapping the V4 scripts. (NOT `finance_copilot.py` — "Copilot" implies AI this tool doesn't have.) xlwings Excel Button Edition parked as v2.
 
-### Scripts to build
+### Scripts built — ALL COMPLETE 2026-04-28 (smoke test: 5/5 PASS)
 
-| # | Script | Language | Effort |
-|---|---|---|---|
-| 1 | `saas_arr_waterfall.py` | Python | M |
-| 2 | `workbook_dependency_scanner.py` | Python | M |
-| 3 | `data_contract_checker.py` | Python | S |
-| 4 | `exception_triage_engine.py` | Python | M |
-| 5 | `control_evidence_pack.py` | Python | M |
-| 6 | `finance_copilot.py` (menu wrapper) | Python | S |
+| # | Script | Status |
+|---|---|---|
+| 1 | `common/safe_io.py` + `logging_utils.py` + `report_utils.py` + `sample_data.py` | DONE |
+| 2 | `data_contract_checker.py` | DONE |
+| 3 | `revenue_leakage_finder.py` (hero) | DONE |
+| 4 | `exception_triage_engine.py` | DONE |
+| 5 | `control_evidence_pack.py` | DONE |
+| 6 | `workbook_dependency_scanner.py` | DONE |
+| 7 | `finance_automation_launcher.py` (menu) | DONE |
+| 8 | `smoke_test_video4_python.py` + `README_VIDEO4_PYTHON.md` | DONE |
 
-**Total effort estimate:** ~5 days of focused work (build, test, record, edit).
+**Planning docs (source of truth):**
+- `RecTrial\Brainstorm\VIDEO_4_REVIEW_DECISION_MEMO.md`
+- `RecTrial\Brainstorm\SUPPORTED_WORKFLOWS_V1.md`
+- `RecTrial\Brainstorm\VIDEO_4_REVISED_PLAN.md`
+- `RecTrial\UniversalToolkit\python\PYTHON_SAFETY.md`
+- `RecTrial\Brainstorm\MINIMUM_DISTRIBUTION_PLAN.md`
 
 ---
 
-## 8. Open decisions
+## 8. Open items (remaining — not blockers for V4 build)
 
-All at `RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md`:
+All major V4 decisions are LOCKED (2026-04-28). See `RecTrial\Brainstorm\VIDEO_4_REVIEW_DECISION_MEMO.md`.
 
-1. Approve the 4a+4b split? (Yes = proceed. No = revert to single 5-8 min video.)
-2. Approve ARR Waterfall as hero vs. Revenue Leakage Finder (V3 of research recommended this instead)?
-3. Does Connor's team own SOX evidence work? (Affects whether SOX Evidence Collector is a finalist.)
-4. OK to skip xlwings for V4 and park as Excel Button Edition v2 post-V4?
-5. Ship downloadable as Python CLI menu only (simple) or CLI + xlwings button workbook (bigger lift)?
+**Remaining open items:**
+1. **Pilot user list** — 10–20 specific people by role (Connor identifies; role mix in `MINIMUM_DISTRIBUTION_PLAN.md`)
+2. **Coworker pip access** — determines whether stdlib-only is mandatory for all scripts (Connor confirms after a quick check with a coworker)
+3. **IT endpoint scanner** — bundled `python.exe` may be flagged when distributed via SharePoint zip; Connor coordinates with IT before pilot launch
 
 ---
 
@@ -263,12 +267,20 @@ Power Automate workflows, Copilot Studio custom bots, Zapier / n8n, RPA (UiPath)
 
 Full list at `claude-training-lab-code\Archive\tasks\todo.md`. Summary:
 
-### Immediate (blocking V4)
-- [ ] Lock Video 4 plan (pick between split 4a+4b or alternatives)
-- [ ] Build the 5 new Python scripts + Copilot menu wrapper
-- [ ] Generate realistic demo input files for each recipe
-- [ ] Record V4a + V4b
-- [ ] Gemini review cycle on V4 recording (if desired)
+### Immediate (blocking V4 recording)
+- [x] Lock Video 4 plan — DONE (2026-04-28)
+- [x] Build all 6 V4 Python scripts + launcher — DONE, smoke test 5/5 PASS (2026-04-28)
+- [x] Sample data built into `common/sample_data.py` — DONE
+- [ ] Git commit all V4 Python files ⚠️ NOT YET COMMITTED
+- [ ] Design and build `FinanceTools.xlsm` Excel buttons (one launcher button OR per-tool — Connor decides)
+- [ ] Test bundled Python 3.11 embeddable zero-install path on a real coworker machine
+- [ ] Write V4 narration script — 8 chapters, 9–12 min (blocking for ElevenLabs and recording)
+- [ ] Write shot list / screen recording guide per chapter
+- [ ] Connor: generate ElevenLabs audio from narration script
+- [ ] Connor: identify 10–20 pilot users (role mix in MINIMUM_DISTRIBUTION_PLAN.md)
+- [ ] Connor: confirm coworker pip access
+- [ ] Assemble SharePoint zip package
+- [ ] Record Video 4
 
 ### Post-V4 wrap-up
 - [ ] Batch 4: dual-logging pattern in demo file modules
@@ -340,12 +352,12 @@ Full list at `claude-training-lab-code\Archive\tasks\todo.md`. Summary:
 ### If you're AI (giving a second opinion)
 
 Useful angles to push on:
-1. **Is the V4 plan the right move?** Split 4a+4b vs. single video. ARR Waterfall vs. Revenue Leakage Finder as hero. Are there hero tools we missed?
+1. **V4 plan is locked.** Single video, 9–12 min, Revenue Leakage Finder hero, ARR waterfall closing artifact. Python build complete. This angle is closed — decisions already made.
 2. **Is the universal toolkit actually adopt-able?** 140 tools is a lot. Which 20 matter most for coworker day-to-day? Is the Command Center UI intuitive enough?
 3. **Cherry-pick completeness.** We ported 9 items from Codex. Are there obviously-better items we missed?
-4. **Distribution strategy.** How do coworkers actually GET the tools? File share? SharePoint? Email? Adoption plan is weak.
+4. **Distribution strategy.** Excel buttons via VBA Shell() + bundled Python 3.11 embeddable. One zip on SharePoint. Coworkers click a button in `FinanceTools.xlsm`. Adoption plan in `MINIMUM_DISTRIBUTION_PLAN.md`.
 5. **Post-demo roadmap.** The Future doc has lots of ideas. Which should happen first once V4 ships?
-6. **Risk flags.** Is xlwings realistic for 2,000 locked-down corporate laptops? Is the "no AI API" constraint the right call or limiting?
+6. **Risk flags.** Is bundled `python.exe` blocked by iPipeline IT endpoint scanner? Coworker pip access still unconfirmed. Is the "no AI API" constraint right long-term?
 
 ### If you're Connor (personal review)
 
@@ -362,7 +374,8 @@ If a reviewer wants to dig into specific pieces:
 
 | Topic | File |
 |---|---|
-| **V4 detailed plan** | `RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md` |
+| **V4 detailed plan (SUPERSEDED)** | `RecTrial\Brainstorm\VIDEO_4_CURRENT_PROPOSAL.md` — replaced by `VIDEO_4_REVIEW_DECISION_MEMO.md` |
+| **V4 locked planning docs** | `RecTrial\Brainstorm\VIDEO_4_REVIEW_DECISION_MEMO.md`, `SUPPORTED_WORKFLOWS_V1.md`, `VIDEO_4_REVISED_PLAN.md`, `MINIMUM_DISTRIBUTION_PLAN.md`, `UniversalToolkit\python\PYTHON_SAFETY.md` |
 | **V4 initial brainstorm (17 ideas)** | `RecTrial\Brainstorm\VIDEO_4_DRAFT_IDEAS.md` |
 | **Future ideas parking lot** | `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md` |
 | **Codex comparison** | `RecTrial\CodexCompare\COMPARISON_REPORT.md` |

@@ -4,8 +4,12 @@ import argparse
 from pathlib import Path
 import time
 
-from tools import cfo_pulse_report, control_evidence_pack, data_contract_checker, exception_triage_engine
-from tools.telemetry_logger import log_event
+try:
+    from .tools import cfo_pulse_report, control_evidence_pack, data_contract_checker, exception_triage_engine
+    from .tools.telemetry_logger import log_event
+except ImportError:
+    from tools import cfo_pulse_report, control_evidence_pack, data_contract_checker, exception_triage_engine
+    from tools.telemetry_logger import log_event
 
 
 def build_parser() -> argparse.ArgumentParser:
