@@ -66,17 +66,29 @@ Original V4 (10 CMD-run Python scripts + ElevenLabs audio) was pulled 2026-04-22
 - [x] `README_VIDEO4_PYTHON.md` — DONE
 - [x] **Git commit** — all V4 Python files + narration script v1.1 + shot list committed 2026-04-28 (commits d9b7ea0, d9f2ad0, 48d133f)
 - [x] **Update CLAUDE.md** — mark V4 Python build complete, update status section — DONE 2026-04-28
-- [ ] `FinanceTools.xlsm` — Excel workbook with ONE VBA Shell() launcher button (Option A LOCKED 2026-04-28): single button → `finance_automation_launcher.py` → numbered CLI menu → coworker picks tool. No per-tool buttons in V1.
-  - [ ] **Connor reviews `modFinanceToolsLauncher.bas`** — VBA Shell() launcher code drafted 2026-04-28 at `RecTrial\UniversalToolkit\python\ZeroInstall\modFinanceToolsLauncher.bas`. Review and provide feedback before importing into FinanceTools.xlsm.
-- [ ] Test scripts with bundled Python 3.11 embeddable (confirm zero-install path works)
+- [x] `FinanceTools.xlsm` — BUILT + TESTED 2026-05-01. VBA launcher button wired to `modFinanceToolsLauncher.bas`. Saved at `RecTrial\FinanceTools_v1.0\FinanceTools.xlsm`.
+- [x] `modFinanceToolsLauncher.bas` — DONE. Final version uses `FSO.FileExists` + `WScript.Shell` + `CurrentDirectory` + relative paths. Three iterations to fix OneDrive false positives and CMD quoting issues.
+- [x] Test scripts with bundled Python 3.11 embeddable — DONE 2026-05-01. All 4 demo tools confirmed PASS in package. ⚠ NOTE: `samples\` must be inside `scripts\` not at package root (safe_io.py resolves `_TOOLKIT_ROOT` as parent.parent of `common/`, which is the `scripts\` folder).
+- [x] Assemble SharePoint zip package — DONE 2026-05-01. Package at `RecTrial\FinanceTools_v1.0\`. Structure: FinanceTools.xlsm + python\python-embedded\ + scripts\ (with scripts\samples\ and scripts\common\) + outputs\ + docs\.
 - [x] Write narration script for V4 (8 chapters, 9–12 min) — DONE 2026-04-28 (v1.1 at `RecTrial\Video4_V1\VIDEO_4_NARRATION_SCRIPT_v1.md` + `RecTrial\Brainstorm\VIDEO_4_NARRATION_SCRIPT.md`)
 - [x] Write shot list / screen recording guide per chapter — DONE 2026-04-28 (`RecTrial\Video4_V1\VIDEO_4_SHOT_LIST_v1.md`)
+
+### Remaining before recording
 - [ ] Connor reviews narration script + adjusts wording to match natural speaking style
-- [ ] Connor generates ElevenLabs audio clips from narration script (9 clips: V4_C01 through V4_C08, with C03a + C03b)
-- [ ] Confirm coworker pip access (Connor real-world task — affects stdlib-only requirement)
-- [ ] Identify 10–20 pilot users (Connor real-world task per MINIMUM_DISTRIBUTION_PLAN.md)
-- [ ] Assemble SharePoint zip distribution package
-- [ ] Record + edit V4
+- [ ] Connor records ElevenLabs audio clips (9 clips: V4_C01 through V4_C08, with C03a + C03b)
+- [ ] Build title cards — Chapter 1 (two-column Excel vs Python slide) + Chapter 8 (four rules card)
+- [ ] Update `GUIDE_Assemble_SharePoint_Zip.md` — fix samples location (inside `scripts\`, not package root)
+
+### Recording + distribution
+- [ ] Screen record Video 4 following `VIDEO_4_SHOT_LIST_v1.md`
+- [ ] Edit — sync ElevenLabs narration audio with screen recording
+- [ ] Zip `FinanceTools_v1.0\` → `FinanceTools_v1.0.zip` and upload to SharePoint pilot folder
+- [ ] Connor identifies 10–20 pilot users
+- [ ] Confirm coworker pip access (affects stdlib-only / matplotlib upgrade decision)
+
+### Open questions
+- [ ] Do billing and contracts go out of sync at iPipeline, or caught automatically? (affects tool 1 pitch in video)
+- [ ] CodexApril29 folder — Connor will review when ready
 
 ### Future Automation Ideas doc (tracked separately)
 Full parking lot at `RecTrial\Brainstorm\FUTURE_AUTOMATION_IDEAS.md`. Major parked categories: AI API ideas, Outlook automation, Task Scheduler, warehouse SQL, ML libs, infrastructure, 3rd-party platforms.

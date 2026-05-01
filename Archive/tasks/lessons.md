@@ -1,5 +1,15 @@
 # Lessons Learned - APCLDmerge Project
 
+## V4 Package Build + Testing — 2026-05-01
+
+- **`Dir()` gives false positives on OneDrive Files On-Demand paths.** OneDrive's "Files On-Demand" feature makes cloud-only placeholder files appear to exist locally. `Dir("path\to\file")` returns the filename even when the file is not downloaded. This caused the VBA guard to skip the MsgBox and call `Shell()` on a non-existent python.exe. Fix: use `CreateObject("Scripting.FileSystemObject").FileExists(path)` instead of `Dir()`. FSO correctly returns False for cloud-only placeholders.
+
+- **VBA `Shell()` command string quoting breaks on complex Windows paths.** `Shell "cmd.exe /k ""path"" ""path2""", vbNormalFocus` produces "The filename, directory name, or volume label syntax is incorrect" when paths contain spaces or OneDrive-style names. Even `WScript.Shell.Run` with quoted paths can fail. Most reliable fix: use `wsh.CurrentDirectory = ThisWorkbook.Path` to set the working directory, then use relative paths with no spaces in the `Run` command: `wsh.Run "cmd.exe /k python\python-embedded\python.exe scripts\finance_automation_launcher.py"`. No quoting needed when using relative paths.
+
+- **`safe_io.py` resolves `_TOOLKIT_ROOT` as two levels up from `common/safe_io.py`.** In development (`ZeroInstall/common/safe_io.py`), two levels up = `ZeroInstall/`. In the deployed package (`scripts/common/safe_io.py`), two levels up = `scripts/`. This means `samples/` and `outputs/` land at `scripts/samples/` and `scripts/outputs/` — NOT at the package root. The assembly guide must put `samples\` inside `scripts\`, not at the `FinanceTools_v1.0\` root. Always verify Python path resolution logic before writing an assembly guide.
+
+- **Zero-install bundled Python path: always open FinanceTools.xlsm from inside the package folder.** `ThisWorkbook.Path` resolves to wherever the .xlsm is opened from. If the user opens an old copy from OneDrive or another location, the relative paths to `python\` and `scripts\` will be wrong. Confirmed: opening from `RecTrial\FinanceTools_v1.0\` with all subfolders in place gives correct behavior.
+
 ## V4 Delivery Model — VBA Shell() + Bundled Python — 2026-04-28
 
 - **VBA Shell() works on iPipeline laptops.** Confirmed during V4 planning: Excel can call `Shell()` to launch a `.py` file through a local Python executable. This eliminates the need for coworkers to open a Command Prompt. They click an Excel button and the script runs invisibly. This was not obvious at the start of V4 planning and changes the entire distribution approach.

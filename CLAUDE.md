@@ -1,8 +1,8 @@
 # Claude Training Lab - APCLDmerge Project
 
-## ⚡ CURRENT WORK (2026-04-28) — 4-VIDEO DEMO RECORDING PROJECT
+## ⚡ CURRENT WORK (2026-05-01) — 4-VIDEO DEMO RECORDING PROJECT
 
-The active work right now is preparing to record Video 4. Videos 1-3 are fully done and shipped. Video 4 planning is complete and all 6 Python scripts are built and smoke-tested — next up is the narration script, ElevenLabs audio (Connor), Excel button design, and recording.
+The active work right now is recording Video 4. Videos 1-3 are fully done and shipped. Video 4 planning, Python build, narration script, shot list, FinanceTools.xlsm, and the full SharePoint package are all complete and tested. Next: Connor finalizes narration wording, records ElevenLabs audio, title cards for C01+C08, then screen recording.
 
 ### Working Folder
 **`C:\Users\connor.atlee\RecTrial\`** — self-contained workspace with all audio clips, VBA files, sample Excel files, demo input files, and recording guides. This is NOT in the repo — it's a local working copy. The repo at this path holds the source of truth for commits.
@@ -11,7 +11,7 @@ The active work right now is preparing to record Video 4. Videos 1-3 are fully d
 - **Video 1** ("What's Possible") — DONE
 - **Video 2** ("Full Demo Walkthrough") — DONE
 - **Video 3** ("Universal Tools") — DONE (shipped 2026-04-21, Gemini 70/4 v2.4 result)
-- **Video 4** ("Python Automation for Finance") — PLANNING COMPLETE + PYTHON BUILD COMPLETE (2026-04-28). All 5 planning docs done. All 6 V4 Python scripts built and smoke-tested 5/5 PASS. Next: narration script, ElevenLabs audio (Connor), Excel button design. Do NOT touch the 8 protected Python scripts until V4 records.
+- **Video 4** ("Python Automation for Finance") — PACKAGE BUILT + TESTED (2026-05-01). All 5 planning docs done. All 6 V4 Python scripts built and smoke-tested. FinanceTools.xlsm built with VBA launcher button. FinanceTools_v1.0 package assembled and tested — all 4 demo tools pass (options 1–4 confirmed). Next: Connor finalizes narration wording → ElevenLabs audio → title cards → screen recording. Do NOT touch the 8 protected Python scripts until V4 records.
 
 ### Video 4 Locked Direction (as of 2026-04-28)
 

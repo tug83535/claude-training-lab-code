@@ -96,16 +96,21 @@ FinanceTools_v1.0\
     └── python-embedded\     ← empty for now, filled in Part 2
 ```
 
-### Step 5 — Create the common subfolder inside scripts
+### Step 5 — Create subfolders inside scripts
 1. Open the `scripts` folder
-2. Inside it, create one more folder: `common`
+2. Inside it, create two folders: `common` and `samples`
 
 Your scripts folder should now look like:
 ```
 FinanceTools_v1.0\
 └── scripts\
-    └── common\              ← empty for now, filled in Part 3
+    ├── common\              ← empty for now, filled in Part 3
+    └── samples\             ← empty for now, filled in Part 4
 ```
+
+**Why samples goes inside scripts:** The Python scripts calculate their working folder
+as two levels up from `common\safe_io.py`, which lands on the `scripts\` folder — not
+the `FinanceTools_v1.0\` root. So samples and outputs both resolve relative to `scripts\`.
 
 ---
 
@@ -194,7 +199,8 @@ All scripts are already built and ready at:
    - `contracts_sample.csv`
    - `billing_sample.csv`
 3. Right-click → **Copy**
-4. Navigate to: `C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\samples\`
+4. Navigate to: `C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\`
+   *(Note: samples goes inside scripts\, not at the package root)*
 5. Right-click → **Paste**
 
 ---
