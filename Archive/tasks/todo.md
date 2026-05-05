@@ -77,7 +77,7 @@ Original V4 (10 CMD-run Python scripts + ElevenLabs audio) was pulled 2026-04-22
 - [ ] Connor reviews narration script + adjusts wording to match natural speaking style
 - [ ] Connor records ElevenLabs audio clips (9 clips: V4_C01 through V4_C08, with C03a + C03b)
 - [ ] Build title cards — Chapter 1 (two-column Excel vs Python slide) + Chapter 8 (four rules card)
-- [ ] Update `GUIDE_Assemble_SharePoint_Zip.md` — fix samples location (inside `scripts\`, not package root)
+- [x] Update `GUIDE_Assemble_SharePoint_Zip.md` — fix samples location (inside `scripts\`, not package root) — DONE 2026-05-01 (Steps 5 + 11 corrected, committed bc03ecc)
 
 ### Recording + distribution
 - [ ] Screen record Video 4 following `VIDEO_4_SHOT_LIST_v1.md`

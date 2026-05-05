@@ -242,7 +242,43 @@ Original V4 plan (10 ElevenLabs clips, 8 Python scripts run from CMD) was pulled
 
 Original V4 ElevenLabs audio (`RecTrial\AudioClips\Video4\`) + demo files (`RecTrial\Video4DemoFiles\`) remain untouched on disk.
 
-## Session Summary — 2026-03-12 (Latest — Universal Toolkit Expansion + Bug Review + CoPilot Guides)
+## Session Summary — 2026-05-01 (Latest — V4 Package Build, Test, and Handoff)
+
+### What Was Done This Session
+Built and tested the complete Video 4 distribution package end-to-end. Wrote VBA launcher button code (3 iterations — debugged Dir() OneDrive false-positive and WScript.Shell quoting issues). Assembled FinanceTools_v1.0 package, confirmed all 4 demo tools PASS with bundled Python 3.11. Fixed assembly guide for samples path (must be scripts\samples\, not package root). Wrote two new guides (build FinanceTools.xlsm + assemble SharePoint zip), external review gameplan doc, and session handoff. Updated all tracking files and committed.
+
+**Branch:** `April23CLD` — HEAD: `bc03ecc`
+
+### Key Outcomes
+- FinanceTools.xlsm — built with working VBA launcher button
+- FinanceTools_v1.0 package — assembled + tested locally at `C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\`
+- Options 1–4 all confirmed PASS with bundled Python 3.11 embeddable
+- Zero-install delivery model confirmed working on Connor's real machine
+
+### Bugs Found and Fixed (2)
+1. **Dir() false positives on OneDrive** — OneDrive Files On-Demand makes cloud-only files appear to exist. Fixed by switching to `FSO.FileExists()` in VBA
+2. **WScript.Shell quoting failure** — complex paths with spaces failed in CMD. Fixed by setting `wsh.CurrentDirectory = ThisWorkbook.Path` and using relative paths — no quoting needed
+
+### Key Architecture Decision (confirmed working)
+- VBA launcher: `WScript.Shell` + `CurrentDirectory = ThisWorkbook.Path` + `cmd.exe /k python\python-embedded\python.exe scripts\finance_automation_launcher.py`
+- samples\ must be inside scripts\ — safe_io.py resolves `_TOOLKIT_ROOT` as `parent.parent` of `common\safe_io.py` = the `scripts\` folder
+
+### Files Added / Changed
+- `RecTrial/Video4_V1/GUIDE_Build_FinanceTools_xlsm.md` — NEW
+- `RecTrial/Video4_V1/GUIDE_Assemble_SharePoint_Zip.md` — fixed Steps 5 + 11 (samples path)
+- `RecTrial/Video4_V1/VIDEO_4_GAMEPLAN_FOR_REVIEW.md` — NEW
+- `RecTrial/HANDOFF_2026-05-02.md` — NEW
+- `RecTrial/UniversalToolkit/python/ZeroInstall/modFinanceToolsLauncher.bas` — NEW
+- `Archive/tasks/todo.md` — package tasks marked complete, recording tasks added
+- `Archive/tasks/lessons.md` — 4 new V4 package build lessons
+- `CLAUDE.md` — current status updated
+
+### What's Next
+Connor reads narration script → ElevenLabs audio (9 clips) → title cards → screen record → edit → SharePoint upload → pilot (10–20 users)
+
+---
+
+## Session Summary — 2026-03-12 (Universal Toolkit Expansion + Bug Review + CoPilot Guides)
 
 ### What Was Done This Session
 Massive universal toolkit expansion: built 9 new VBA modules (38 tools), added modUTL_WhatIf and modUTL_CommandCenter, ran bug review agent that found 8 bugs across 7 modules — all fixed. Built CoPilot Quick Start Card and VBA Module Reference List. Updated demo Command Center with What-If actions 63-65. Multiple training guides and QA docs updated.
