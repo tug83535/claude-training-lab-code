@@ -1,0 +1,22 @@
+Finance Automation Toolkit v1.0 — Run Summary
+==================================================
+Script:    data_contract_checker
+Run time:  2026-05-01 15:55:41
+Elapsed:   0.0 seconds
+
+Rows read:       123
+Rows processed:  123
+Findings:        1
+Warnings:        0
+Errors:          0
+
+input_file: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\contracts_sample.csv
+mode: sample
+
+FINDINGS:
+  [FAIL] base_quantity not zero: 2 contract(s) have base_quantity = 0. Every transaction will bill at overage rates — confirm this is intentional. Rows:  | Impact: 2 rows
+
+Output folder: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_155541_data_contract_checker
+
+If something looks wrong, check run_log.json for details.
+Questions? Contact Connor Atlee — Finance & Accounting.

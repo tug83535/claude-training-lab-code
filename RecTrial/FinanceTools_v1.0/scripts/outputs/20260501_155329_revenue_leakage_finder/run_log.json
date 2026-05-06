@@ -1,0 +1,208 @@
+{
+  "script": "revenue_leakage_finder",
+  "start": "2026-05-01T15:53:29.561996",
+  "end": "2026-05-01T15:53:29.627493",
+  "elapsed_seconds": 0.07,
+  "rows_read": 459,
+  "rows_processed": 459,
+  "findings_count": 38,
+  "warnings_count": 0,
+  "errors_count": 0,
+  "warnings": [],
+  "errors": [],
+  "findings": [
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Copperview Life Services: Possible name match: 'Pinehurst Life Services' (similarity 72%)",
+      "impact": "979,340"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Riverton Life Partners: Possible name match: 'Upton Life Partners' (similarity 83%)",
+      "impact": "126,209"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Greenlawn Benefits Co.: Possible name match: 'Pioneer Benefits Co.' (similarity 71%)",
+      "impact": "497,919"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Westfield Annuity Group: No close contract name match found.",
+      "impact": "901,396"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Brookfield Insurance Trust: Possible name match: 'Verdant Insurance Trust' (similarity 73%)",
+      "impact": "1,044,854"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Fairfield Policy Trust: No close contract name match found.",
+      "impact": "97,531"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Sunnyside Mutual Holdings: Possible name match: 'Riverdale Mutual Holdings' (similarity 76%)",
+      "impact": "1,193,127"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Ridgemont Life Systems: Possible name match: 'Yosemite Life Systems' (similarity 74%)",
+      "impact": "1,017,190"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Thornfield Policy Services: Possible name match: 'Thornbury Policy Services' (similarity 82%)",
+      "impact": "593,058"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Cloverdale Insurance Group: Possible name match: 'Cascade Insurance Group' (similarity 78%)",
+      "impact": "291,313"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Millstone Insurance Partners: Possible name match: 'Kirkland Insurance Partners' (similarity 80%)",
+      "impact": "814,353"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Marlborough Benefits Inc.: Possible name match: 'Thornwood Benefits Inc.' (similarity 71%)",
+      "impact": "830,741"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Evergreen Insurance Partners: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "516,721.70"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Pacific Crest Insurance: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "366,543.71"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Silvergate Insurance: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "81,277.89"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Jasper Policy Services: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "19,684.84"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Driftwood Annuity Group: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "5,502.87"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Kirkland Insurance Partners: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "73,977.06"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Glenwood Mutual Services: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "167,020.37"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Oakdale Benefits Group: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "1,204.13"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Ravenwood Life Partners: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "76,297.92"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Eastbrook Policy Services: Contract expired \u2014 renegotiation may unlock higher rates.",
+      "impact": "3,331.52"
+    },
+    {
+      "category": "Class3_BaseQtyZero",
+      "description": "Sedgwick Insurance Services: base_quantity = 0 means every transaction bills at overage rate. Confirm this ",
+      "impact": ""
+    },
+    {
+      "category": "Class3_BaseQtyZero",
+      "description": "Yellowrock Mutual Services: base_quantity = 0 means every transaction bills at overage rate. Confirm this ",
+      "impact": ""
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Northfield Insurance Co.: Billed 10.4% under expected. Check for overage, credit, or billing error.",
+      "impact": "63,325.17"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Pioneer Benefits Co.: Billed 30.5% under expected. Check for overage, credit, or billing error.",
+      "impact": "51,249.15"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Ironbridge Benefit: Billed 28.3% over expected. Check for overage, credit, or billing error.",
+      "impact": "48,750.32"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Union Square Benefits: Billed 10.6% over expected. Check for overage, credit, or billing error.",
+      "impact": "137,852.42"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Ironwood Policy Advisors: Billed 28.2% over expected. Check for overage, credit, or billing error.",
+      "impact": "16,763.33"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Kestrel Insurance Network: Billed 22.1% under expected. Check for overage, credit, or billing error.",
+      "impact": "57,531.64"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Vineyard Life Systems: Billed 30.6% under expected. Check for overage, credit, or billing error.",
+      "impact": "18,188.09"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Xenon Policy Partners: Billed 19.7% over expected. Check for overage, credit, or billing error.",
+      "impact": "6,870.58"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Cascade Insurance Group: Billed 18.7% under expected. Check for overage, credit, or billing error.",
+      "impact": "235,627.61"
+    },
+    {
+      "category": "Class5_NameDrift",
+      "description": "Ironbridge Benefit: Billing name 'Ironbridge Benefit' differs from contract name 'Ironbridge Benef",
+      "impact": ""
+    },
+    {
+      "category": "Class5_NameDrift",
+      "description": "Atlas Brokerage: Billing name 'Atlas Brokerage' differs from contract name 'Atlas Brokerage Net",
+      "impact": ""
+    },
+    {
+      "category": "Class5_NameDrift",
+      "description": "Meridian Life Casualty: Billing name 'Meridian Life Casualty' differs from contract name 'Meridian Lif",
+      "impact": ""
+    },
+    {
+      "category": "Class5_NameDrift",
+      "description": "Meridian Life Casualty: Billing name 'Meridian Life Casualty' differs from contract name 'Meridian Lif",
+      "impact": ""
+    },
+    {
+      "category": "Class5_NameDrift",
+      "description": "Crestview Insurance: Billing name 'Crestview Insurance' differs from contract name 'Crestview Insur",
+      "impact": ""
+    }
+  ],
+  "contracts_file": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\samples\\contracts_sample.csv",
+  "billing_file": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\samples\\billing_sample.csv",
+  "mode": "sample"
+}

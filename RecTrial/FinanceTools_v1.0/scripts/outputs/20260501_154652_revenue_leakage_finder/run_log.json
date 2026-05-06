@@ -1,0 +1,19 @@
+{
+  "script": "revenue_leakage_finder",
+  "start": "2026-05-01T15:46:52.235730",
+  "end": "2026-05-01T15:46:52.235730",
+  "elapsed_seconds": 0.0,
+  "rows_read": 0,
+  "rows_processed": 0,
+  "findings_count": 0,
+  "warnings_count": 0,
+  "errors_count": 1,
+  "warnings": [],
+  "errors": [
+    "Input file not found: C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\samples\\contracts_sample.csv\nCheck that the path is correct and the file has not been moved."
+  ],
+  "findings": [],
+  "contracts_file": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\samples\\contracts_sample.csv",
+  "billing_file": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\samples\\billing_sample.csv",
+  "mode": "sample"
+}

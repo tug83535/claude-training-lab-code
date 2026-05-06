@@ -1,0 +1,60 @@
+Finance Automation Toolkit v1.0 — Run Summary
+==================================================
+Script:    revenue_leakage_finder
+Run time:  2026-05-01 15:53:29
+Elapsed:   0.1 seconds
+
+Rows read:       459
+Rows processed:  459
+Findings:        38
+Warnings:        0
+Errors:          0
+
+contracts_file: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\contracts_sample.csv
+billing_file: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\billing_sample.csv
+mode: sample
+
+FINDINGS:
+  [Class1_NoBillingContract] Copperview Life Services: Possible name match: 'Pinehurst Life Services' (similarity 72%) | Impact: 979,340
+  [Class1_NoBillingContract] Riverton Life Partners: Possible name match: 'Upton Life Partners' (similarity 83%) | Impact: 126,209
+  [Class1_NoBillingContract] Greenlawn Benefits Co.: Possible name match: 'Pioneer Benefits Co.' (similarity 71%) | Impact: 497,919
+  [Class1_NoBillingContract] Westfield Annuity Group: No close contract name match found. | Impact: 901,396
+  [Class1_NoBillingContract] Brookfield Insurance Trust: Possible name match: 'Verdant Insurance Trust' (similarity 73%) | Impact: 1,044,854
+  [Class1_NoBillingContract] Fairfield Policy Trust: No close contract name match found. | Impact: 97,531
+  [Class1_NoBillingContract] Sunnyside Mutual Holdings: Possible name match: 'Riverdale Mutual Holdings' (similarity 76%) | Impact: 1,193,127
+  [Class1_NoBillingContract] Ridgemont Life Systems: Possible name match: 'Yosemite Life Systems' (similarity 74%) | Impact: 1,017,190
+  [Class1_NoBillingContract] Thornfield Policy Services: Possible name match: 'Thornbury Policy Services' (similarity 82%) | Impact: 593,058
+  [Class1_NoBillingContract] Cloverdale Insurance Group: Possible name match: 'Cascade Insurance Group' (similarity 78%) | Impact: 291,313
+  [Class1_NoBillingContract] Millstone Insurance Partners: Possible name match: 'Kirkland Insurance Partners' (similarity 80%) | Impact: 814,353
+  [Class1_NoBillingContract] Marlborough Benefits Inc.: Possible name match: 'Thornwood Benefits Inc.' (similarity 71%) | Impact: 830,741
+  [Class2_StaleContract] Evergreen Insurance Partners: Contract expired — renegotiation may unlock higher rates. | Impact: 516,721.70
+  [Class2_StaleContract] Pacific Crest Insurance: Contract expired — renegotiation may unlock higher rates. | Impact: 366,543.71
+  [Class2_StaleContract] Silvergate Insurance: Contract expired — renegotiation may unlock higher rates. | Impact: 81,277.89
+  [Class2_StaleContract] Jasper Policy Services: Contract expired — renegotiation may unlock higher rates. | Impact: 19,684.84
+  [Class2_StaleContract] Driftwood Annuity Group: Contract expired — renegotiation may unlock higher rates. | Impact: 5,502.87
+  [Class2_StaleContract] Kirkland Insurance Partners: Contract expired — renegotiation may unlock higher rates. | Impact: 73,977.06
+  [Class2_StaleContract] Glenwood Mutual Services: Contract expired — renegotiation may unlock higher rates. | Impact: 167,020.37
+  [Class2_StaleContract] Oakdale Benefits Group: Contract expired — renegotiation may unlock higher rates. | Impact: 1,204.13
+  [Class2_StaleContract] Ravenwood Life Partners: Contract expired — renegotiation may unlock higher rates. | Impact: 76,297.92
+  [Class2_StaleContract] Eastbrook Policy Services: Contract expired — renegotiation may unlock higher rates. | Impact: 3,331.52
+  [Class3_BaseQtyZero] Sedgwick Insurance Services: base_quantity = 0 means every transaction bills at overage rate. Confirm this 
+  [Class3_BaseQtyZero] Yellowrock Mutual Services: base_quantity = 0 means every transaction bills at overage rate. Confirm this 
+  [Class4_InvoiceDrift] Northfield Insurance Co.: Billed 10.4% under expected. Check for overage, credit, or billing error. | Impact: 63,325.17
+  [Class4_InvoiceDrift] Pioneer Benefits Co.: Billed 30.5% under expected. Check for overage, credit, or billing error. | Impact: 51,249.15
+  [Class4_InvoiceDrift] Ironbridge Benefit: Billed 28.3% over expected. Check for overage, credit, or billing error. | Impact: 48,750.32
+  [Class4_InvoiceDrift] Union Square Benefits: Billed 10.6% over expected. Check for overage, credit, or billing error. | Impact: 137,852.42
+  [Class4_InvoiceDrift] Ironwood Policy Advisors: Billed 28.2% over expected. Check for overage, credit, or billing error. | Impact: 16,763.33
+  [Class4_InvoiceDrift] Kestrel Insurance Network: Billed 22.1% under expected. Check for overage, credit, or billing error. | Impact: 57,531.64
+  [Class4_InvoiceDrift] Vineyard Life Systems: Billed 30.6% under expected. Check for overage, credit, or billing error. | Impact: 18,188.09
+  [Class4_InvoiceDrift] Xenon Policy Partners: Billed 19.7% over expected. Check for overage, credit, or billing error. | Impact: 6,870.58
+  [Class4_InvoiceDrift] Cascade Insurance Group: Billed 18.7% under expected. Check for overage, credit, or billing error. | Impact: 235,627.61
+  [Class5_NameDrift] Ironbridge Benefit: Billing name 'Ironbridge Benefit' differs from contract name 'Ironbridge Benef
+  [Class5_NameDrift] Atlas Brokerage: Billing name 'Atlas Brokerage' differs from contract name 'Atlas Brokerage Net
+  [Class5_NameDrift] Meridian Life Casualty: Billing name 'Meridian Life Casualty' differs from contract name 'Meridian Lif
+  [Class5_NameDrift] Meridian Life Casualty: Billing name 'Meridian Life Casualty' differs from contract name 'Meridian Lif
+  [Class5_NameDrift] Crestview Insurance: Billing name 'Crestview Insurance' differs from contract name 'Crestview Insur
+
+Output folder: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_155329_revenue_leakage_finder
+
+If something looks wrong, check run_log.json for details.
+Questions? Contact Connor Atlee — Finance & Accounting.

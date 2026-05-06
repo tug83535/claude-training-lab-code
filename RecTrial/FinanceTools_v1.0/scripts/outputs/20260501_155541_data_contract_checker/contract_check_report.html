@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Data Contract Checker</title><style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #F9F9F9; color: #161616; font-size: 14px; }
+.hdr { background: #0B4779; color: #fff; padding: 20px 32px; }
+.hdr h1 { font-size: 22px; font-weight: bold; }
+.hdr .sub { font-size: 13px; color: #BFF18C; margin-top: 5px; }
+.body { padding: 24px 32px; }
+.metric-row { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.card { background: #fff; border: 1px solid #dde; border-radius: 4px; padding: 16px 20px; min-width: 130px; }
+.card .val { font-size: 28px; font-weight: bold; color: #0B4779; }
+.card .lbl { font-size: 11px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: .4px; }
+.card.ok .val  { color: #1e7e1e; }
+.card.bad .val { color: #a00; }
+.card.warn .val{ color: #b05000; }
+h2 { color: #0B4779; border-bottom: 2px solid #0B4779; padding-bottom: 5px; margin: 28px 0 10px; font-size: 16px; }
+h3 { color: #112E51; margin: 18px 0 6px; font-size: 14px; }
+p  { margin: 6px 0; line-height: 1.5; }
+table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 8px; font-size: 13px; }
+th { background: #0B4779; color: #fff; padding: 8px 12px; text-align: left; font-weight: bold; }
+tr:nth-child(even) { background: #edf2f7; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+.badge-ok   { background: #BFF18C; color: #1a4a1a; }
+.badge-bad  { background: #ffd0d0; color: #700; }
+.badge-warn { background: #ffecc0; color: #7a4000; }
+.badge-info { background: #d0e8ff; color: #0B4779; }
+.footer { background: #112E51; color: #99b; font-size: 11px; padding: 10px 32px; margin-top: 40px; }
+.section-note { background: #fff8e1; border-left: 4px solid #2BCCD3; padding: 10px 14px; margin: 12px 0; font-size: 13px; }
+</style></head>
+<body>
+<div class="hdr"><h1>Data Contract Checker</h1><div class="sub">File: contracts_sample.csv &nbsp;|&nbsp; 123 rows &nbsp;|&nbsp; 14 columns</div></div>
+<div class="body"><div class="metric-row"><div class="card bad"><div class="val">FAIL</div><div class="lbl">Overall</div></div><div class="card ok"><div class="val">4</div><div class="lbl">Checks Passed</div></div><div class="card "><div class="val">0</div><div class="lbl">Warnings</div></div><div class="card bad"><div class="val">1</div><div class="lbl">Failures</div></div><div class="card "><div class="val">123</div><div class="lbl">Data Rows</div></div></div>
+<h2>Check Results</h2><table><tr><th>Check</th><th>Status</th><th>Affected Rows</th><th>Detail</th></tr><tr><td>Minimum row count</td><td><span class="badge badge-ok">PASS</span></td><td>123</td><td>123 rows found.</td></tr><tr><td>No completely blank rows</td><td><span class="badge badge-ok">PASS</span></td><td>0</td><td>No blank rows detected.</td></tr><tr><td>No exact duplicate rows</td><td><span class="badge badge-ok">PASS</span></td><td>0</td><td>No exact duplicate rows found.</td></tr><tr><td>base_quantity not zero</td><td><span class="badge badge-bad">FAIL</span></td><td>2</td><td>2 contract(s) have base_quantity = 0. Every transaction will bill at overage rates — confirm this is intentional. Rows: [96, 116]</td></tr><tr><td>Active contracts have term_end</td><td><span class="badge badge-ok">PASS</span></td><td>0</td><td>All active contracts have a term_end date.</td></tr></table>
+<div class="section-note">Safety reminder: this tool opens your file read-only. No changes have been made to the input file. All output is in the outputs/ folder.</div></div>
+<div class="footer">Finance Automation Toolkit v1.0 &nbsp;|&nbsp; iPipeline &nbsp;|&nbsp; 2026-05-01 15:55</div>
+</body></html>

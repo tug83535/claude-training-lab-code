@@ -1,0 +1,39 @@
+exception_class,customer_id,customer_name,billing_period,amount_billed,expected_for_period,drift_pct,direction,note,priority
+Class4_InvoiceDrift,ATC-00021,Cascade Insurance Group,2024-04,"235,627.61","289,983.98",-18.7%,UNDER,"Billed 18.7% under expected. Check for overage, credit, or billing error.",MEDIUM
+Class4_InvoiceDrift,ATC-00004,Pioneer Benefits Co.,2024-04,"51,249.15","73,778.11",-30.5%,UNDER,"Billed 30.5% under expected. Check for overage, credit, or billing error.",HIGH
+Class4_InvoiceDrift,ATC-00039,Union Square Benefits,2024-04,"137,852.42","124,621.34",+10.6%,OVER,"Billed 10.6% over expected. Check for overage, credit, or billing error.",MEDIUM
+Class4_InvoiceDrift,ATC-00012,Ironbridge Benefit,2024-04,"48,750.32","38,000.00",+28.3%,OVER,"Billed 28.3% over expected. Check for overage, credit, or billing error.",HIGH
+Class4_InvoiceDrift,ATC-00081,Kestrel Insurance Network,2024-04,"57,531.64","73,819.81",-22.1%,UNDER,"Billed 22.1% under expected. Check for overage, credit, or billing error.",MEDIUM
+Class1_NoBillingContract,ATC-ZZZZZ,Sunnyside Mutual Holdings,2024-04,"99,427.28",,,,Possible name match: 'Riverdale Mutual Holdings' (similarity 76%),HIGH
+Class1_NoBillingContract,ATC-ZZZZZ,Brookfield Insurance Trust,2024-04,"87,071.17",,,,Possible name match: 'Verdant Insurance Trust' (similarity 73%),HIGH
+Class1_NoBillingContract,ATC-ZZZZZ,Ridgemont Life Systems,2024-04,"84,765.84",,,,Possible name match: 'Yosemite Life Systems' (similarity 74%),HIGH
+Class1_NoBillingContract,ATC-ZZZZZ,Copperview Life Services,2024-04,"81,611.66",,,,Possible name match: 'Pinehurst Life Services' (similarity 72%),HIGH
+Class1_NoBillingContract,ATC-ZZZZZ,Westfield Annuity Group,2024-04,"75,116.30",,,,No close contract name match found.,HIGH
+Class1_NoBillingContract,ATC-ZZZZZ,Marlborough Benefits Inc.,2024-04,"69,228.44",,,,Possible name match: 'Thornwood Benefits Inc.' (similarity 71%),HIGH
+Class1_NoBillingContract,ATC-ZZZZZ,Millstone Insurance Partners,2024-04,"67,862.75",,,,Possible name match: 'Kirkland Insurance Partners' (similarity 80%),HIGH
+Class4_InvoiceDrift,ATC-00032,Northfield Insurance Co.,2024-04,"63,325.17","70,705.79",-10.4%,UNDER,"Billed 10.4% under expected. Check for overage, credit, or billing error.",MEDIUM
+Class1_NoBillingContract,ATC-ZZZZZ,Thornfield Policy Services,2024-04,"49,421.54",,,,Possible name match: 'Thornbury Policy Services' (similarity 82%),HIGH
+Class4_InvoiceDrift,ATC-00066,Vineyard Life Systems,2024-04,"18,188.09","26,200.00",-30.6%,UNDER,"Billed 30.6% under expected. Check for overage, credit, or billing error.",HIGH
+Class2_StaleContract,ATC-00101,Evergreen Insurance Partners,2024-04,"516,721.70",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class1_NoBillingContract,ATC-ZZZZZ,Greenlawn Benefits Co.,2024-04,"41,493.26",,,,Possible name match: 'Pioneer Benefits Co.' (similarity 71%),HIGH
+Class4_InvoiceDrift,ATC-00053,Ironwood Policy Advisors,2024-04,"16,763.33","13,071.39",+28.2%,OVER,"Billed 28.2% over expected. Check for overage, credit, or billing error.",HIGH
+Class2_StaleContract,ATC-00034,Pacific Crest Insurance,2024-04,"366,543.71",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class1_NoBillingContract,ATC-ZZZZZ,Cloverdale Insurance Group,2024-04,"24,276.12",,,,Possible name match: 'Cascade Insurance Group' (similarity 78%),HIGH
+Class2_StaleContract,ATC-00051,Glenwood Mutual Services,2024-04,"167,020.37",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class4_InvoiceDrift,ATC-00068,Xenon Policy Partners,2024-04,"6,870.58","5,737.72",+19.7%,OVER,"Billed 19.7% over expected. Check for overage, credit, or billing error.",MEDIUM
+Class1_NoBillingContract,ATC-ZZZZZ,Riverton Life Partners,2024-04,"10,517.45",,,,Possible name match: 'Upton Life Partners' (similarity 83%),HIGH
+Class1_NoBillingContract,ATC-ZZZZZ,Fairfield Policy Trust,2024-04,"8,127.59",,,,No close contract name match found.,HIGH
+Class2_StaleContract,ATC-00037,Silvergate Insurance,2024-04,"81,277.89",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class2_StaleContract,ATC-00114,Ravenwood Life Partners,2024-04,"76,297.92",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class2_StaleContract,ATC-00055,Kirkland Insurance Partners,2024-04,"73,977.06",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class2_StaleContract,ATC-00106,Jasper Policy Services,2024-04,"19,684.84",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class2_StaleContract,ATC-00048,Driftwood Annuity Group,2024-04,"5,502.87",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class2_StaleContract,ATC-00023,Eastbrook Policy Services,2024-04,"3,331.52",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class2_StaleContract,ATC-00033,Oakdale Benefits Group,2024-04,"1,204.13",,,,Contract expired — renegotiation may unlock higher rates.,MEDIUM
+Class3_BaseQtyZero,ATC-00115,Sedgwick Insurance Services,,,,,,base_quantity = 0 means every transaction bills at overage rate. Confirm this is intentional — may be a data entry error.,HIGH
+Class3_BaseQtyZero,ATC-00095,Yellowrock Mutual Services,,,,,,base_quantity = 0 means every transaction bills at overage rate. Confirm this is intentional — may be a data entry error.,HIGH
+Class5_NameDrift,ATC-00012,Ironbridge Benefit,2024-04,,,,,Billing name 'Ironbridge Benefit' differs from contract name 'Ironbridge Benefits' (similarity 97%). Confirm these are the same customer.,LOW
+Class5_NameDrift,ATC-00007,Atlas Brokerage,2024-04,,,,,Billing name 'Atlas Brokerage' differs from contract name 'Atlas Brokerage Network' (similarity 79%). Confirm these are the same customer.,LOW
+Class5_NameDrift,ATC-00008,Meridian Life Casualty,2024-04,,,,,Billing name 'Meridian Life Casualty' differs from contract name 'Meridian Life & Casualty' (similarity 96%). Confirm these are the same customer.,LOW
+Class5_NameDrift,ATC-00009,Meridian Life Casualty,2024-04,,,,,Billing name 'Meridian Life Casualty' differs from contract name 'Meridian Life & Casualty' (similarity 96%). Confirm these are the same customer.,LOW
+Class5_NameDrift,ATC-00011,Crestview Insurance,2024-04,,,,,Billing name 'Crestview Insurance' differs from contract name 'Crestview Insurance Partners' (similarity 81%). Confirm these are the same customer.,LOW

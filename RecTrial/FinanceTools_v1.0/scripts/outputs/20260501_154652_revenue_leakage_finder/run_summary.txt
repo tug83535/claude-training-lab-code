@@ -1,0 +1,24 @@
+Finance Automation Toolkit v1.0 — Run Summary
+==================================================
+Script:    revenue_leakage_finder
+Run time:  2026-05-01 15:46:52
+Elapsed:   0.0 seconds
+
+Rows read:       0
+Rows processed:  0
+Findings:        0
+Warnings:        0
+Errors:          1
+
+contracts_file: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\contracts_sample.csv
+billing_file: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\billing_sample.csv
+mode: sample
+
+ERRORS:
+  - Input file not found: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\contracts_sample.csv
+Check that the path is correct and the file has not been moved.
+
+Output folder: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_154652_revenue_leakage_finder
+
+If something looks wrong, check run_log.json for details.
+Questions? Contact Connor Atlee — Finance & Accounting.

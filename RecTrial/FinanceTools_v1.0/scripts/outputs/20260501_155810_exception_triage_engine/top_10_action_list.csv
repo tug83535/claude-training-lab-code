@@ -1,0 +1,11 @@
+rank,class_label,customer_id,customer_name,billing_period,amount_billed,priority_score,recommended_action
+1,Stale Contract,ATC-00101,Evergreen Insurance Partners,2024-04,"516,721.70",85.5,"Contract has expired. Confirm with the account owner whether to renew, renegotiate at current rates, or stop billing."
+2,Stale Contract,ATC-00034,Pacific Crest Insurance,2024-04,"366,543.71",72.4,"Contract has expired. Confirm with the account owner whether to renew, renegotiate at current rates, or stop billing."
+3,No Contract,ATC-ZZZZZ,Sunnyside Mutual Holdings,2024-04,"99,427.28",62.1,"No contract found for this customer. Check CRM and Salesforce for an active contract or engagement letter. If none exists, stop billing or create a contract."
+4,No Contract,ATC-ZZZZZ,Brookfield Insurance Trust,2024-04,"87,071.17",61.1,"No contract found for this customer. Check CRM and Salesforce for an active contract or engagement letter. If none exists, stop billing or create a contract."
+5,No Contract,ATC-ZZZZZ,Ridgemont Life Systems,2024-04,"84,765.84",60.9,"No contract found for this customer. Check CRM and Salesforce for an active contract or engagement letter. If none exists, stop billing or create a contract."
+6,No Contract,ATC-ZZZZZ,Copperview Life Services,2024-04,"81,611.66",60.6,"No contract found for this customer. Check CRM and Salesforce for an active contract or engagement letter. If none exists, stop billing or create a contract."
+7,No Contract,ATC-ZZZZZ,Westfield Annuity Group,2024-04,"75,116.30",60.0,"No contract found for this customer. Check CRM and Salesforce for an active contract or engagement letter. If none exists, stop billing or create a contract."
+8,No Contract,ATC-ZZZZZ,Marlborough Benefits Inc.,2024-04,"69,228.44",59.5,"No contract found for this customer. Check CRM and Salesforce for an active contract or engagement letter. If none exists, stop billing or create a contract."
+9,No Contract,ATC-ZZZZZ,Millstone Insurance Partners,2024-04,"67,862.75",59.4,"No contract found for this customer. Check CRM and Salesforce for an active contract or engagement letter. If none exists, stop billing or create a contract."
+10,Invoice Drift,ATC-00021,Cascade Insurance Group,2024-04,"235,627.61",58.0,"Invoice amount deviates from expected. Reconcile against contract terms and check for missed overage reporting, credits, or manual adjustments."

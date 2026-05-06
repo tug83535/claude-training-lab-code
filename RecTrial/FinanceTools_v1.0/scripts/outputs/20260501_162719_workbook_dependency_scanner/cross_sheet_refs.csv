@@ -1,0 +1,4 @@
+source_sheet,cell,target_sheet,formula
+Summary,B1,Data,SUM(Data!B1:B12)
+Summary,B2,Data,Data!B12-Data!B1
+Summary,B3,Data,AVERAGE(Data!B1:B12)

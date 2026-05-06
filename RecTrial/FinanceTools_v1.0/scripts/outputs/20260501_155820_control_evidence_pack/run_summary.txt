@@ -1,0 +1,27 @@
+Finance Automation Toolkit v1.0 — Run Summary
+==================================================
+Script:    control_evidence_pack
+Run time:  2026-05-01 15:58:20
+Elapsed:   0.0 seconds
+
+Rows read:       5
+Rows processed:  5
+Findings:        5
+Warnings:        0
+Errors:          0
+
+control_name: Revenue Leakage Review
+input_folder: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_155329_revenue_leakage_finder
+mode: sample
+
+FINDINGS:
+  [FILE] arr_waterfall.html | Impact: 4 KB | SHA-256: 6a27f02ac2a31ce0...
+  [FILE] exceptions_ranked.csv | Impact: 6 KB | SHA-256: 579884bea58e9991...
+  [FILE] leakage_report.html | Impact: 11 KB | SHA-256: 5f95ce4f63351fa3...
+  [FILE] run_log.json | Impact: 8 KB | SHA-256: 4267a0a76ad96cdf...
+  [FILE] run_summary.txt | Impact: 5 KB | SHA-256: 5cfdf463c14001f3...
+
+Output folder: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_155820_control_evidence_pack
+
+If something looks wrong, check run_log.json for details.
+Questions? Contact Connor Atlee — Finance & Accounting.

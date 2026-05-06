@@ -1,0 +1,16 @@
+{
+  "script": "workbook_dependency_scanner",
+  "start": "2026-05-01T16:27:19.972411",
+  "end": "2026-05-01T16:27:19.972411",
+  "elapsed_seconds": 0.0,
+  "rows_read": 2,
+  "rows_processed": 3,
+  "findings_count": 0,
+  "warnings_count": 0,
+  "errors_count": 0,
+  "warnings": [],
+  "errors": [],
+  "findings": [],
+  "input_file": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\samples\\sample_workbook.xlsx",
+  "mode": "sample"
+}

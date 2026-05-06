@@ -1,0 +1,31 @@
+Finance Automation Toolkit v1.0 — Run Summary
+==================================================
+Script:    exception_triage_engine
+Run time:  2026-05-01 15:58:10
+Elapsed:   0.0 seconds
+
+Rows read:       38
+Rows processed:  38
+Findings:        10
+Warnings:        0
+Errors:          0
+
+input_file: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_155329_revenue_leakage_finder\exceptions_ranked.csv
+mode: sample
+
+FINDINGS:
+  [Class2_StaleContract] Evergreen Insurance Partners | Period: 2024-04 | Score: 85.5 | Impact: Amount: 516,721.70 | Rank: 1
+  [Class2_StaleContract] Pacific Crest Insurance | Period: 2024-04 | Score: 72.4 | Impact: Amount: 366,543.71 | Rank: 2
+  [Class1_NoBillingContract] Sunnyside Mutual Holdings | Period: 2024-04 | Score: 62.1 | Impact: Amount: 99,427.28 | Rank: 3
+  [Class1_NoBillingContract] Brookfield Insurance Trust | Period: 2024-04 | Score: 61.1 | Impact: Amount: 87,071.17 | Rank: 4
+  [Class1_NoBillingContract] Ridgemont Life Systems | Period: 2024-04 | Score: 60.9 | Impact: Amount: 84,765.84 | Rank: 5
+  [Class1_NoBillingContract] Copperview Life Services | Period: 2024-04 | Score: 60.6 | Impact: Amount: 81,611.66 | Rank: 6
+  [Class1_NoBillingContract] Westfield Annuity Group | Period: 2024-04 | Score: 60.0 | Impact: Amount: 75,116.30 | Rank: 7
+  [Class1_NoBillingContract] Marlborough Benefits Inc. | Period: 2024-04 | Score: 59.5 | Impact: Amount: 69,228.44 | Rank: 8
+  [Class1_NoBillingContract] Millstone Insurance Partners | Period: 2024-04 | Score: 59.4 | Impact: Amount: 67,862.75 | Rank: 9
+  [Class4_InvoiceDrift] Cascade Insurance Group | Period: 2024-04 | Score: 58.0 | Impact: Amount: 235,627.61 | Rank: 10
+
+Output folder: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_155810_exception_triage_engine
+
+If something looks wrong, check run_log.json for details.
+Questions? Contact Connor Atlee — Finance & Accounting.

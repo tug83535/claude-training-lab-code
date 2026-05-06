@@ -1,0 +1,2 @@
+check,status,affected_rows,detail
+base_quantity not zero,FAIL,2,"2 contract(s) have base_quantity = 0. Every transaction will bill at overage rates — confirm this is intentional. Rows: [96, 116]"

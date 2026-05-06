@@ -1,0 +1,19 @@
+Finance Automation Toolkit v1.0 — Run Summary
+==================================================
+Script:    workbook_dependency_scanner
+Run time:  2026-05-01 16:27:11
+Elapsed:   0.0 seconds
+
+Rows read:       2
+Rows processed:  3
+Findings:        0
+Warnings:        0
+Errors:          0
+
+input_file: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\samples\sample_workbook.xlsx
+mode: sample
+
+Output folder: C:\Users\connor.atlee\RecTrial\FinanceTools_v1.0\scripts\outputs\20260501_162711_workbook_dependency_scanner
+
+If something looks wrong, check run_log.json for details.
+Questions? Contact Connor Atlee — Finance & Accounting.

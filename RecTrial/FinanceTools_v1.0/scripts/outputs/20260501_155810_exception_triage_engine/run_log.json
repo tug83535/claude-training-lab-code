@@ -1,0 +1,67 @@
+{
+  "script": "exception_triage_engine",
+  "start": "2026-05-01T15:58:10.335526",
+  "end": "2026-05-01T15:58:10.350393",
+  "elapsed_seconds": 0.01,
+  "rows_read": 38,
+  "rows_processed": 38,
+  "findings_count": 10,
+  "warnings_count": 0,
+  "errors_count": 0,
+  "warnings": [],
+  "errors": [],
+  "findings": [
+    {
+      "category": "Class2_StaleContract",
+      "description": "Evergreen Insurance Partners | Period: 2024-04 | Score: 85.5",
+      "impact": "Amount: 516,721.70 | Rank: 1"
+    },
+    {
+      "category": "Class2_StaleContract",
+      "description": "Pacific Crest Insurance | Period: 2024-04 | Score: 72.4",
+      "impact": "Amount: 366,543.71 | Rank: 2"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Sunnyside Mutual Holdings | Period: 2024-04 | Score: 62.1",
+      "impact": "Amount: 99,427.28 | Rank: 3"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Brookfield Insurance Trust | Period: 2024-04 | Score: 61.1",
+      "impact": "Amount: 87,071.17 | Rank: 4"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Ridgemont Life Systems | Period: 2024-04 | Score: 60.9",
+      "impact": "Amount: 84,765.84 | Rank: 5"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Copperview Life Services | Period: 2024-04 | Score: 60.6",
+      "impact": "Amount: 81,611.66 | Rank: 6"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Westfield Annuity Group | Period: 2024-04 | Score: 60.0",
+      "impact": "Amount: 75,116.30 | Rank: 7"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Marlborough Benefits Inc. | Period: 2024-04 | Score: 59.5",
+      "impact": "Amount: 69,228.44 | Rank: 8"
+    },
+    {
+      "category": "Class1_NoBillingContract",
+      "description": "Millstone Insurance Partners | Period: 2024-04 | Score: 59.4",
+      "impact": "Amount: 67,862.75 | Rank: 9"
+    },
+    {
+      "category": "Class4_InvoiceDrift",
+      "description": "Cascade Insurance Group | Period: 2024-04 | Score: 58.0",
+      "impact": "Amount: 235,627.61 | Rank: 10"
+    }
+  ],
+  "input_file": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\outputs\\20260501_155329_revenue_leakage_finder\\exceptions_ranked.csv",
+  "mode": "sample"
+}

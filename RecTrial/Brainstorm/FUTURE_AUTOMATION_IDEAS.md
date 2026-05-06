@@ -183,6 +183,32 @@ Constraints Connor flagged during V4 planning — keeping these out of V4 scope 
 - **Check if iPipeline enterprise Azure has OpenAI endpoint enabled** — if yes, it's the IT-approved way to get LLM access without sending data to OpenAI directly.
 - **Custom Copilot Studio bots** — Microsoft's platform for building custom AI bots with iPipeline data. Enterprise-licensed, often already available.
 
+## Phase 2 — Post-V4 Priority Tools (pandas-based)
+
+**Source:** `RecTrial\Brainstorm\CLDAI FeedbackMay5\V4_Finish_Plus_Phase2_Tools.md` (Part 2)
+**Added:** 2026-05-05
+**Build rule:** Do not start until V4 is recorded, shipped, and in the hands of 10–20 pilot users.
+
+**Dependency decision (logged 2026-05-05):** V4 itself stays stdlib-only — the 6 V4 scripts in `ZeroInstall\` do not import pandas/openpyxl, and the SharePoint zip will not vendor them. For Phase 2, Connor confirmed that `pip install pandas openpyxl` works fine on his machine and coworkers likely have the same access. Phase 2 Python tools may use pandas and openpyxl freely; the setup guide will include a one-line `pip install pandas openpyxl` step. No package vendoring needed.
+
+**Build priority order (after V4 ships and pilot runs):**
+
+| # | Tool | Type | Module / Script | Est. |
+| --- | --- | --- | --- | --- |
+| 1 | Cross-File Reconciler | VBA | `modUTL_CrossFileReconciler.bas` | 3–4 hrs |
+| 2 | Schedule Builder | Python (pandas) | `schedule_builder.py` | 2–3 hrs |
+| 3 | Pricing Exception Finder | Python (pandas) | `pricing_exception_finder.py` | 3–4 hrs |
+| 4 | Print Ready | VBA | `modUTL_PrintReady.bas` | 2 hrs |
+| 5 | Waterfall Chart Builder | VBA | `modUTL_WaterfallChart.bas` | 3–4 hrs |
+| 6 | Journal Entry Builder | Python (pandas) | `journal_entry_builder.py` | 3 hrs |
+| 7 | Version Snapshot | VBA | `modUTL_VersionSnapshot.bas` | 2 hrs |
+
+**Total Phase 2 build time:** ~18–22 hours across all 7 tools.
+
+**Priority is a starting point, not a mandate.** If pilot feedback elevates a different tool, build that one first. Full specs (gap analysis, output structure, technical details, why-it-matters) live in the source feedback doc — do not duplicate here.
+
+---
+
 ## How to use this document
 
 - Add to it freely when you have a new idea. Don't worry about where it fits — rough buckets are fine.

@@ -1,0 +1,22 @@
+{
+  "script": "data_contract_checker",
+  "start": "2026-05-01T15:55:41.832103",
+  "end": "2026-05-01T15:55:41.838318",
+  "elapsed_seconds": 0.01,
+  "rows_read": 123,
+  "rows_processed": 123,
+  "findings_count": 1,
+  "warnings_count": 0,
+  "errors_count": 0,
+  "warnings": [],
+  "errors": [],
+  "findings": [
+    {
+      "category": "FAIL",
+      "description": "base_quantity not zero: 2 contract(s) have base_quantity = 0. Every transaction will bill at overage rates \u2014 confirm this is intentional. Rows: ",
+      "impact": "2 rows"
+    }
+  ],
+  "input_file": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\samples\\contracts_sample.csv",
+  "mode": "sample"
+}

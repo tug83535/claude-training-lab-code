@@ -1,0 +1,43 @@
+{
+  "script": "control_evidence_pack",
+  "start": "2026-05-01T15:58:20.856812",
+  "end": "2026-05-01T15:58:20.874795",
+  "elapsed_seconds": 0.02,
+  "rows_read": 5,
+  "rows_processed": 5,
+  "findings_count": 5,
+  "warnings_count": 0,
+  "errors_count": 0,
+  "warnings": [],
+  "errors": [],
+  "findings": [
+    {
+      "category": "FILE",
+      "description": "arr_waterfall.html",
+      "impact": "4 KB | SHA-256: 6a27f02ac2a31ce0..."
+    },
+    {
+      "category": "FILE",
+      "description": "exceptions_ranked.csv",
+      "impact": "6 KB | SHA-256: 579884bea58e9991..."
+    },
+    {
+      "category": "FILE",
+      "description": "leakage_report.html",
+      "impact": "11 KB | SHA-256: 5f95ce4f63351fa3..."
+    },
+    {
+      "category": "FILE",
+      "description": "run_log.json",
+      "impact": "8 KB | SHA-256: 4267a0a76ad96cdf..."
+    },
+    {
+      "category": "FILE",
+      "description": "run_summary.txt",
+      "impact": "5 KB | SHA-256: 5cfdf463c14001f3..."
+    }
+  ],
+  "control_name": "Revenue Leakage Review",
+  "input_folder": "C:\\Users\\connor.atlee\\RecTrial\\FinanceTools_v1.0\\scripts\\outputs\\20260501_155329_revenue_leakage_finder",
+  "mode": "sample"
+}
